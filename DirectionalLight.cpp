@@ -174,12 +174,12 @@ void DirectionalLight::InitializeGraphicsPipeline() {
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 
 	//Shaderをコンパイルする
-	IDxcBlob* vertexShaderBlob = CompileShader(L"Object3d.VS.hlsl",
+	IDxcBlob* vertexShaderBlob = CompileShader(L"Resources/shaders/Object3d.VS.hlsl",
 		L"vs_6_0", dxcUtils, dxcompiler, includeHandler);
 	assert(vertexShaderBlob != nullptr);
 
 
-	IDxcBlob* pixelShaderBlob = CompileShader(L"Object3d.PS.hlsl",
+	IDxcBlob* pixelShaderBlob = CompileShader(L"Resources/shaders/Object3d.PS.hlsl",
 		L"ps_6_0", dxcUtils, dxcompiler, includeHandler);
 	assert(pixelShaderBlob != nullptr);
 
