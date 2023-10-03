@@ -7,10 +7,6 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg
 #include "WinApp.h"
 #include "DirectXCommon.h"
 #include "TextureManager.h"
-#include "Sprite.h"
-#include "Model.h"
-#include "Material.h"
-#include "DirectionalLight.h"
 #include "D3DResourceLeakChecker.h"
 
 /// <summary>
@@ -37,6 +33,12 @@ void GameScene::Initialize() {
 	debugCamera_ = std::make_unique<DebugCamera>();
 	debugCamera_->Initialize();
 
+	material_.reset(Material::Create());
+	model_.reset(Model::Create("Resources", "Ball.obj", dxCommon_, material_.get()));
+	worldTransform.Initialize();
+
+	directionalLight.reset(DirectionalLight::Create());
+
 }
 
 /// <summary>
@@ -44,6 +46,26 @@ void GameScene::Initialize() {
 /// </summary>
 void GameScene::Update(){
 
+	// モデル球
+
+	// マテリアル
+	TransformStructure uvTransform{
+		{1.0f,1.0f,1.0f},
+		{0.0f,0.0f,0.0f},
+		{0.0f,0.0f,0.0f},
+	};
+
+	Vector4 colorBall = { 1.0f,1.0f,1.0f,1.0f };
+	int enableLightingBall = HalfLambert;
+	material_->Update(uvTransform, colorBall, enableLightingBall);
+	model_->Update(worldTransform, viewProjection);
+
+	//光源
+	DirectionalLightData directionalLightData;
+	directionalLightData.color = { 1.0f,1.0f,1.0f,1.0f };
+	directionalLightData.direction = { 0.0f, -1.0f, 0.0f };
+	directionalLightData.intencity = 1.0f;
+	directionalLight->Update(directionalLightData);
 
 }
 
@@ -70,7 +92,10 @@ void GameScene::Draw() {
 
 	Model::PreDraw(dxCommon_->GetCommadList());
 
+	//光源
+	directionalLight->Draw(dxCommon_->GetCommadList());
 	//モデル
+	model_->Draw();
 
 	Model::PostDraw();
 

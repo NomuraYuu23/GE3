@@ -6,6 +6,10 @@
 
 #include "WorldTransform.h"
 #include "ViewProjection.h"
+#include "Sprite.h"
+#include "Model.h"
+#include "Material.h"
+#include "DirectionalLight.h"
 
 class GameScene
 {
@@ -47,5 +51,14 @@ private:
 
 	//デバッグカメラ
 	std::unique_ptr<DebugCamera> debugCamera_ = nullptr;
+
+	//マテリアル
+	std::unique_ptr<Material> material_ = nullptr;
+	//モデル
+	std::unique_ptr<Model> model_ = nullptr;
+	//ワールドトランスフォーム
+	WorldTransform worldTransform;
+	//光源
+	std::unique_ptr<DirectionalLight> directionalLight;
 
 };
