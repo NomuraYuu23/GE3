@@ -80,11 +80,6 @@ private:
 	//計算
 	static Matrix4x4Calc* matrix4x4Calc;
 
-private:
-
-	//Resource作成関数化
-	static Microsoft::WRL::ComPtr<ID3D12Resource> CreateBufferResource(Microsoft::WRL::ComPtr<ID3D12Device> device, const size_t& sizeInBytes);
-
 public:
 
 	/// <summary>
@@ -95,12 +90,12 @@ public:
 	/// <summary>
 	/// 更新
 	/// </summary>
-	void Update(const WorldTransform& transform, const ViewProjection& viewProjection);
+	void Update();
 
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw();
+	void Draw(const WorldTransform& worldTransform);
 
 	/// <summary>
 	/// メッシュデータ生成

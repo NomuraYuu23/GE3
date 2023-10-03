@@ -35,7 +35,10 @@ void GameScene::Initialize() {
 
 	material_.reset(Material::Create());
 	model_.reset(Model::Create("Resources", "Ball.obj", dxCommon_, material_.get()));
-	worldTransform.Initialize();
+	worldTransform1.Initialize(&viewProjection);
+	worldTransform2.Initialize(&viewProjection);
+	worldTransform2.transform_.translate = { 1.0f,0.0f,0.0f };
+	worldTransform2.UpdateMatrix();
 
 	directionalLight.reset(DirectionalLight::Create());
 
@@ -58,7 +61,6 @@ void GameScene::Update(){
 	Vector4 colorBall = { 1.0f,1.0f,1.0f,1.0f };
 	int enableLightingBall = HalfLambert;
 	material_->Update(uvTransform, colorBall, enableLightingBall);
-	model_->Update(worldTransform, viewProjection);
 
 	//光源
 	DirectionalLightData directionalLightData;
@@ -95,7 +97,9 @@ void GameScene::Draw() {
 	//光源
 	directionalLight->Draw(dxCommon_->GetCommadList());
 	//モデル
-	model_->Draw();
+	model_->Draw(worldTransform1);
+	//モデル
+	model_->Draw(worldTransform2);
 
 	Model::PostDraw();
 

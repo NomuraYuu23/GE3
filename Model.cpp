@@ -6,6 +6,7 @@
 #include <fstream>
 #include <sstream>
 #include <format>
+#include "BufferResource.h"
 
 using namespace DirectX;
 using namespace Microsoft::WRL;
@@ -84,36 +85,6 @@ Model* Model::Create(const std::string& directoryPath, const std::string& filena
 	object3d->Initialize(directoryPath, filename, dxCommon, material);
 
 	return object3d;
-
-}
-
-//Resource作成関数化
-Microsoft::WRL::ComPtr<ID3D12Resource> Model::CreateBufferResource(Microsoft::WRL::ComPtr<ID3D12Device> device, const size_t& sizeInBytes) {
-
-	//頂点リソース用のヒープの設定
-	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
-	uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;//UploadHeapを使う
-	//頂点リソースの設定
-	D3D12_RESOURCE_DESC vertexResourceDesc{};
-	//バッファリソース。テクスチャの場合はまた別の設定をする
-	vertexResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	vertexResourceDesc.Width = sizeInBytes;//リソースのサイズ。今回はVector4を3頂点分
-	//バッファの場合はこれらは1にする決まり
-	vertexResourceDesc.Height = 1;
-	vertexResourceDesc.DepthOrArraySize = 1;
-	vertexResourceDesc.MipLevels = 1;
-	vertexResourceDesc.SampleDesc.Count = 1;
-	//バッファの場合はこれにする決まり
-	vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-
-	//実際に頂点リソースを作る
-	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource = nullptr;
-	HRESULT hr = device->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE,
-		&vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
-		IID_PPV_ARGS(&vertexResource));
-	assert(SUCCEEDED(hr));
-
-	return vertexResource;
 
 }
 
@@ -247,18 +218,14 @@ void Model::Initialize(const std::string& directoryPath, const std::string& file
 /// <summary>
 /// 更新
 /// </summary>
-void Model::Update(const WorldTransform& transform, const ViewProjection& viewProjection) {
-
-	Matrix4x4 worldViewProjectionMatrix = matrix4x4Calc->Multiply(transform.worldMatrix_, viewProjection.viewProjectionMatrix_);
-	transformationMatrixMap->WVP = worldViewProjectionMatrix;
-	transformationMatrixMap->World = transform.worldMatrix_;
+void Model::Update() {
 
 }
 
 /// <summary>
 /// 描画
 /// </summary>
-void Model::Draw() {
+void Model::Draw(const WorldTransform& worldTransform) {
 
 	// nullptrチェック
 	assert(sDevice);
@@ -267,7 +234,7 @@ void Model::Draw() {
 	sCommandList->IASetVertexBuffers(0, 1, &vbView_); //VBVを設定
 
 	//wvp用のCBufferの場所を設定
-	sCommandList->SetGraphicsRootConstantBufferView(1, transformationMatrixBuff_->GetGPUVirtualAddress());
+	sCommandList->SetGraphicsRootConstantBufferView(1, worldTransform.transformationMatrixBuff_->GetGPUVirtualAddress());
 
 	//マテリアルCBufferの場所を設定
 	sCommandList->SetGraphicsRootConstantBufferView(0, material_->GetMaterialBuff()->GetGPUVirtualAddress());
@@ -290,7 +257,7 @@ void Model::CreateMesh(const std::string& directoryPath, const std::string& file
 	//モデル読み込み
 	modelData = LoadObjFile(directoryPath, filename);
 
-	vertBuff_ = CreateBufferResource(sDevice, sizeof(VertexData) * modelData.vertices.size());
+	vertBuff_ = BufferResource::CreateBufferResource(sDevice, sizeof(VertexData) * modelData.vertices.size());
 
 	//リソースの先頭のアドレスから使う
 	vbView_.BufferLocation = vertBuff_->GetGPUVirtualAddress();
@@ -305,7 +272,7 @@ void Model::CreateMesh(const std::string& directoryPath, const std::string& file
 	std::memcpy(vertMap, modelData.vertices.data(), sizeof(VertexData) * modelData.vertices.size());
 
 	//WVP用のリソースを作る。Matrix4x4 1つ分のサイズを用意する
-	transformationMatrixBuff_ = CreateBufferResource(sDevice, sizeof(TransformationMatrix));
+	transformationMatrixBuff_ = BufferResource::CreateBufferResource(sDevice, sizeof(TransformationMatrix));
 	//書き込むためのアドレスを取得
 	transformationMatrixBuff_->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixMap));
 	//単位行列を書き込んでおく

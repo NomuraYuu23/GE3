@@ -57,7 +57,8 @@ private:
 	//モデル
 	std::unique_ptr<Model> model_ = nullptr;
 	//ワールドトランスフォーム
-	WorldTransform worldTransform;
+	WorldTransform worldTransform1;
+	WorldTransform worldTransform2;
 	//光源
 	std::unique_ptr<DirectionalLight> directionalLight;
 
