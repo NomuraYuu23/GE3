@@ -132,17 +132,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		//ゲームシーン描画処理
 		gameScene->Draw();
-		// 背景スプライト描画前処理
-		Sprite::PreDraw(dxCommon->GetCommadList());
-
-		//背景スプライト描画
-		sprite->Draw();
-
-		// スプライト描画後処理
-		Sprite::PostDraw();
-		// 深度バッファクリア
-		dxCommon->ClearDepthBuffer();
-
 
 		// シェーダーリソースビューをセット
 		TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(dxCommon->GetCommadList(), 2, 0);
