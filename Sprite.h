@@ -33,7 +33,9 @@ public:
 	/// </summary>
 	/// <param name="device">デバイス</param>
 	static void StaticInitialize(
-		ID3D12Device* device);
+		ID3D12Device* device,
+		Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature,
+		Microsoft::WRL::ComPtr<ID3D12PipelineState> pipelineState);
 
 	/// <summary>
 	/// 静的前処理
@@ -144,24 +146,6 @@ private:
 
 
 private:
-
-	//ログ
-	static void Log(const std::string& message);
-
-	//CompileShader
-	static IDxcBlob* CompileShader(
-		//CompilerするShanderファイルへのパス
-		const std::wstring& filePath,
-		//Compilenに使用するProfile
-		const wchar_t* profile,
-		//初期化で生成したものを3つ
-		IDxcUtils* dxcUtils,
-		IDxcCompiler3* dxCompiler,
-		IDxcIncludeHandler* includeHandler);
-
-	static std::wstring ConvertString(const std::string& str);
-
-	static std::string ConvertString(const std::wstring& str);
 
 	//Resource作成関数化
 	static Microsoft::WRL::ComPtr<ID3D12Resource> CreateBufferResource(Microsoft::WRL::ComPtr<ID3D12Device> device, const size_t& sizeInBytes);

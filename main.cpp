@@ -14,7 +14,7 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg
 #include "MaterialData.h"
 #include "DirectionalLightData.h"
 #include "SafeDelete.h"
-
+#include "GraphicsPipelineState.h"
 //クラス化
 #include "WinApp.h"
 #include "DirectXCommon.h"
@@ -56,14 +56,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	input = Input::GetInstance();
 	input->Initialize(win->GetHInstance(), win->GetHwnd());
 
+
+	GraphicsPipelineState::InitializeGraphicsPipeline(dxCommon->GetDevice());
+
 	//テクスチャマネージャー
 	TextureManager::GetInstance()->Initialize(dxCommon->GetDevice());
 
 	// スプライト静的初期化
-	Sprite::StaticInitialize(dxCommon->GetDevice());
+	Sprite::StaticInitialize(dxCommon->GetDevice(), GraphicsPipelineState::sRootSignature, GraphicsPipelineState::sPipelineState);
 
 	// モデル静的初期化
-	Model::StaticInitialize(dxCommon->GetDevice());
+	Model::StaticInitialize(dxCommon->GetDevice(), GraphicsPipelineState::sRootSignature, GraphicsPipelineState::sPipelineState);
 
 	// マテリアル静的初期化
 	Material::StaticInitialize(dxCommon->GetDevice());
@@ -124,12 +127,22 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		// ゲームシーン更新
 		gameScene->Update();
 
-
 		//描画前処理
 		dxCommon->PreDraw();
 
 		//ゲームシーン描画処理
 		gameScene->Draw();
+		// 背景スプライト描画前処理
+		Sprite::PreDraw(dxCommon->GetCommadList());
+
+		//背景スプライト描画
+		sprite->Draw();
+
+		// スプライト描画後処理
+		Sprite::PostDraw();
+		// 深度バッファクリア
+		dxCommon->ClearDepthBuffer();
+
 
 		// シェーダーリソースビューをセット
 		TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(dxCommon->GetCommadList(), 2, 0);
