@@ -13,6 +13,7 @@
 
 //オブジェクト
 #include "Player.h"
+#include "FollowCamera.h"
 
 class GameScene
 {
@@ -51,7 +52,7 @@ private:
 	Audio* audio_ = nullptr;
 
 	//ビュープロジェクション
-	ViewProjection viewProjection;
+	ViewProjection viewProjection_;
 
 	//デバッグカメラ
 	std::unique_ptr<DebugCamera> debugCamera_ = nullptr;
@@ -65,6 +66,9 @@ private:
 	std::unique_ptr<Material> playerMaterial_ = nullptr;
 	//モデル
 	std::unique_ptr<Model> playerModel_ = nullptr;
+
+	//追従カメラ
+	std::unique_ptr<FollowCamera> followCamera_ = nullptr;
 		
 
 };

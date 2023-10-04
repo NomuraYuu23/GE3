@@ -36,8 +36,6 @@ void Player::Draw()
 void Player::Move()
 {
 
-	DIJOYSTATE2 joyState;
-
 	//インスタンス
 	Input* input = Input::GetInstance();
 	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
@@ -45,8 +43,6 @@ void Player::Move()
 
 	//移動
 	if (input->GetJoystickConnected()) {
-
-		joyState = input->GetJoystickState();
 
 		// 速さ
 		const float speed = 0.3f;

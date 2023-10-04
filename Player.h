@@ -33,5 +33,13 @@ public:
 	/// </summary>
 	void Move();
 
+	WorldTransform GetWorldTransform() { return worldTransform_; }
+
+	WorldTransform* GetWorldTransformAddress() { return &worldTransform_; }
+
+	void SetViewProjection(const ViewProjection* viewProjection) {
+		worldTransform_.viewProjection_ = viewProjection;
+	}
+
 };
 

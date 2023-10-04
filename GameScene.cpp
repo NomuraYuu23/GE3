@@ -31,7 +31,7 @@ void GameScene::Initialize() {
 	audio_ = Audio::GetInstance();
 
 	//ビュープロジェクション
-	viewProjection.Initialize();
+	viewProjection_.Initialize();
 
 	//デバッグカメラ
 	debugCamera_ = std::make_unique<DebugCamera>();
@@ -49,7 +49,17 @@ void GameScene::Initialize() {
 	std::vector<Model*> playerModels = { playerModel_.get() };
 	//オブジェクト
 	player_ = std::make_unique<Player>();
-	player_->Initialize(playerModels, playerMaterials, &viewProjection);
+	player_->Initialize(playerModels, playerMaterials, &viewProjection_);
+
+	// 追従カメラ生成
+	followCamera_ = std::make_unique<FollowCamera>();
+	// 追従カメラの初期化
+	followCamera_->Initialize();
+	//自キャラのワールドトランスフォームを追従カメラにセット
+	followCamera_->SetTarget(player_->GetWorldTransformAddress());
+
+	//追従カメラのビュープロジェクションを自キャラにセット
+	player_->SetViewProjection(followCamera_->GetViewProjectionAddress());
 
 }
 
@@ -64,6 +74,14 @@ void GameScene::Update(){
 	directionalLightData.direction = { 0.0f, -1.0f, 0.0f };
 	directionalLightData.intencity = 1.0f;
 	directionalLight->Update(directionalLightData);
+
+	//追従カメラの更新
+	followCamera_->Update();
+	// 追従カメラのビュープロジェクションをコピー
+	viewProjection_= followCamera_->GetViewProjection();
+	// ビュー行列の転送
+	viewProjection_.UpdateMatrix();
+
 
 	//プレイヤー
 	player_->Update();
