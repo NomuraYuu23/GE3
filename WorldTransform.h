@@ -30,7 +30,7 @@ struct WorldTransform
 	WorldTransform* parent_ = nullptr;
 
 	//初期化
-	void Initialize(ViewProjection* viewProjection);
+	void Initialize(const ViewProjection* viewProjection);
 
 	//行列更新
 	void UpdateMatrix();

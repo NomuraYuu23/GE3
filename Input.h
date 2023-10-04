@@ -175,6 +175,8 @@ public:
 	/// </summary>
 	void JoystickConnected(HWND hwnd);
 
+	bool GetJoystickConnected() { return joystickConnected; }
+
 
 private:
 

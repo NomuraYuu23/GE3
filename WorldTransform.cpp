@@ -2,7 +2,7 @@
 #include "DirectXCommon.h"
 #include "BufferResource.h"
 
-void WorldTransform::Initialize(ViewProjection* viewProjection) {
+void WorldTransform::Initialize(const ViewProjection* viewProjection) {
 
 	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
 	Matrix4x4Calc* calc = Matrix4x4Calc::GetInstance();

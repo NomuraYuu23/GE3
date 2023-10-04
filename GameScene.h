@@ -11,6 +11,9 @@
 #include "Material.h"
 #include "DirectionalLight.h"
 
+//オブジェクト
+#include "Player.h"
+
 class GameScene
 {
 
@@ -47,19 +50,21 @@ private:
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
 
+	//ビュープロジェクション
 	ViewProjection viewProjection;
 
 	//デバッグカメラ
 	std::unique_ptr<DebugCamera> debugCamera_ = nullptr;
 
-	//マテリアル
-	std::unique_ptr<Material> material_ = nullptr;
-	//モデル
-	std::unique_ptr<Model> model_ = nullptr;
-	//ワールドトランスフォーム
-	WorldTransform worldTransform1;
-	WorldTransform worldTransform2;
 	//光源
 	std::unique_ptr<DirectionalLight> directionalLight;
+
+	//Player
+	std::unique_ptr<Player> player_ = nullptr;
+	//マテリアル
+	std::unique_ptr<Material> playerMaterial_ = nullptr;
+	//モデル
+	std::unique_ptr<Model> playerModel_ = nullptr;
+		
 
 };

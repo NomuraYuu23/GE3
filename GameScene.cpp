@@ -8,6 +8,7 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg
 #include "DirectXCommon.h"
 #include "TextureManager.h"
 #include "D3DResourceLeakChecker.h"
+#include <vector>
 
 /// <summary>
 /// コンストラクタ
@@ -24,23 +25,31 @@ GameScene::~GameScene(){}
 /// </summary>
 void GameScene::Initialize() {
 
+	//機能
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
+	//ビュープロジェクション
 	viewProjection.Initialize();
 
+	//デバッグカメラ
 	debugCamera_ = std::make_unique<DebugCamera>();
 	debugCamera_->Initialize();
 
-	material_.reset(Material::Create());
-	model_.reset(Model::Create("Resources", "Ball.obj", dxCommon_, material_.get()));
-	worldTransform1.Initialize(&viewProjection);
-	worldTransform2.Initialize(&viewProjection);
-	worldTransform2.transform_.translate = { 1.0f,0.0f,0.0f };
-	worldTransform2.UpdateMatrix();
-
+	//光源
 	directionalLight.reset(DirectionalLight::Create());
+
+	//Player
+	//マテリアル
+	playerMaterial_.reset(Material::Create());
+	std::vector<Material*> playerMaterials = { playerMaterial_.get() };
+	//モデル
+	playerModel_.reset(Model::Create("Resources/AL4/player", "player.obj", dxCommon_, playerMaterial_.get()));
+	std::vector<Model*> playerModels = { playerModel_.get() };
+	//オブジェクト
+	player_ = std::make_unique<Player>();
+	player_->Initialize(playerModels, playerMaterials, &viewProjection);
 
 }
 
@@ -49,25 +58,15 @@ void GameScene::Initialize() {
 /// </summary>
 void GameScene::Update(){
 
-	// モデル球
-
-	// マテリアル
-	TransformStructure uvTransform{
-		{1.0f,1.0f,1.0f},
-		{0.0f,0.0f,0.0f},
-		{0.0f,0.0f,0.0f},
-	};
-
-	Vector4 colorBall = { 1.0f,1.0f,1.0f,1.0f };
-	int enableLightingBall = HalfLambert;
-	material_->Update(uvTransform, colorBall, enableLightingBall);
-
 	//光源
 	DirectionalLightData directionalLightData;
 	directionalLightData.color = { 1.0f,1.0f,1.0f,1.0f };
 	directionalLightData.direction = { 0.0f, -1.0f, 0.0f };
 	directionalLightData.intencity = 1.0f;
 	directionalLight->Update(directionalLightData);
+
+	//プレイヤー
+	player_->Update();
 
 }
 
@@ -96,10 +95,8 @@ void GameScene::Draw() {
 
 	//光源
 	directionalLight->Draw(dxCommon_->GetCommadList());
-	//モデル
-	model_->Draw(worldTransform1);
-	//モデル
-	model_->Draw(worldTransform2);
+	//オブジェクト
+	player_->Draw();
 
 	Model::PostDraw();
 
