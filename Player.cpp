@@ -52,7 +52,7 @@ void Player::Move()
 		const float speed = 0.3f;
 
 		// 移動量
-		Vector3 move = { float(joyState.lX), 0.0f, float(joyState.lY) };
+		Vector3 move = { input->GetLeftAnalogstick().x, 0.0f, -input->GetLeftAnalogstick().y };
 		// 移動量に速さを反映
 		move = v3Calc->Multiply(speed, v3Calc->Normalize(move));
 

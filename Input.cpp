@@ -1,5 +1,6 @@
 #include "Input.h"
 #include <cassert>
+#include <cmath>
 
 #pragma comment(lib, "dinput8.lib")
 
@@ -71,6 +72,9 @@ void Input::Initialize(HINSTANCE hInstance, HWND hwnd) {
 	else {
 		joystickConnected = false;
 	}
+
+	//デッドゾーン設定
+	deadZone = 3000.0f;
 
 }
 
@@ -392,7 +396,16 @@ Vector2 Input::GetLeftAnalogstick() const {
 		return Vector2(0.0f,0.0f);
 	}
 
-	return Vector2(float(joystick_.lX), float(joystick_.lY));
+	Vector2 result = { float(joystick_.lX) -32767.0f, float(joystick_.lY) - 32767.0f };
+
+	if (std::fabsf(result.x) < deadZone) {
+		result.x = 0.0f;
+	}
+	if (std::fabsf(result.y) < deadZone) {
+		result.y = 0.0f;
+	}
+
+	return result;
 
 }
 
@@ -406,7 +419,16 @@ Vector2 Input::GetRightAnalogstick() const {
 		return Vector2(0.0f, 0.0f);
 	}
 
-	return Vector2(float(joystick_.lRx), float(joystick_.lRy));
+	Vector2 result = { float(joystick_.lRx) - 32767.0f, float(joystick_.lRy) - 32767.0f };
+
+	if (std::fabsf(result.x) < deadZone) {
+		result.x = 0.0f;
+	}
+	if (std::fabsf(result.y) < deadZone) {
+		result.y = 0.0f;
+	}
+
+	return result;
 
 }
 

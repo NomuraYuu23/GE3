@@ -204,7 +204,10 @@ private:
 	Microsoft::WRL::ComPtr<IDirectInputDevice8> directJoystick_ = nullptr;
 	DIJOYSTATE2 joystick_;
 	DIJOYSTATE2 joystickPre_;
+	//つながっているかどうか
 	bool joystickConnected;
+	//スティックのデッドゾーン
+	float deadZone;
 
 };
 
