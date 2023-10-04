@@ -106,13 +106,6 @@ private:
 	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index);
 
 	/// <summary>
-	/// Resource作成関数化
-	/// </summary>
-	/// <param name="sizeInBytes"></param>
-	/// <returns></returns>
-	Microsoft::WRL::ComPtr<ID3D12Resource> CreateBufferResource(const size_t& sizeInBytes);
-
-	/// <summary>
 	/// テキストデータを読む
 	/// </summary>
 	ScratchImage LoadTexture(const std::string& filePath);
