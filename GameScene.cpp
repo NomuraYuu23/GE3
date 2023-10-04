@@ -61,6 +61,15 @@ void GameScene::Initialize() {
 	//追従カメラのビュープロジェクションを自キャラにセット
 	player_->SetViewProjection(followCamera_->GetViewProjectionAddress());
 
+	//skydome
+	//マテリアル
+	skydomeMaterial_.reset(Material::Create());
+	//モデル
+	skydomeModel_.reset(Model::Create("Resources/AL4/skydome", "skydome.obj", dxCommon_, skydomeMaterial_.get()));
+	//オブジェクト
+	skydome_ = std::make_unique<Skydome>();
+	skydome_->Initialize(skydomeModel_.get(), skydomeMaterial_.get(), &viewProjection_);
+
 }
 
 /// <summary>
@@ -82,9 +91,11 @@ void GameScene::Update(){
 	// ビュー行列の転送
 	viewProjection_.UpdateMatrix();
 
-
 	//プレイヤー
 	player_->Update();
+	//スカイドーム
+	skydome_->Update();
+
 
 }
 
@@ -115,6 +126,7 @@ void GameScene::Draw() {
 	directionalLight->Draw(dxCommon_->GetCommadList());
 	//オブジェクト
 	player_->Draw();
+	skydome_->Draw();
 
 	Model::PostDraw();
 

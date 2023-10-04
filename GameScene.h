@@ -14,6 +14,7 @@
 //オブジェクト
 #include "Player.h"
 #include "FollowCamera.h"
+#include "Skydome.h"
 
 class GameScene
 {
@@ -69,6 +70,12 @@ private:
 
 	//追従カメラ
 	std::unique_ptr<FollowCamera> followCamera_ = nullptr;
-		
+
+	//スカイドーム
+	std::unique_ptr<Skydome> skydome_ = nullptr;
+	//マテリアル
+	std::unique_ptr<Material> skydomeMaterial_ = nullptr;
+	//モデル
+	std::unique_ptr<Model> skydomeModel_ = nullptr;
 
 };
