@@ -32,5 +32,7 @@ void Skydome::Update() {
 /// </summary>
 /// <param name="viewProjection">ビュープロジェクション</param>
 void Skydome::Draw() {
+
 	model_->Draw(worldTransform_);
+
 }
