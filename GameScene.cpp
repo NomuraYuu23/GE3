@@ -96,8 +96,32 @@ void GameScene::Initialize() {
 	goal_ = std::make_unique<Goal>();
 	goal_->Initialize(goalModels, goalMaterials, &viewProjection_);
 
+	//エネミーの生成
+	enemy_ = std::make_unique<Enemy>();
+	enemyBodyMaterial_.reset(Material::Create());
+	enemyL_armMaterial_.reset(Material::Create());
+	enemyR_armMaterial_.reset(Material::Create());
+	std::vector<Material*> enemyMaterials = {
+		enemyBodyMaterial_.get(),
+		enemyL_armMaterial_.get(),
+		enemyR_armMaterial_.get() };
+
+	//エネミーのモデル
+	enemyBodyModel_.reset(Model::Create("Resources/AL4/enemy_Body", "enemy_Body.obj", dxCommon_, enemyBodyMaterial_.get()));
+	enemyL_armModel_.reset(Model::Create("Resources/AL4/enemy_Arm", "enemy_Arm.obj", dxCommon_, enemyL_armMaterial_.get()));
+	enemyR_armModel_.reset(Model::Create("Resources/AL4/enemy_Arm", "enemy_Arm.obj", dxCommon_, enemyR_armMaterial_.get()));
+	std::vector<Model*> enemyModels = {
+		enemyBodyModel_.get(),
+		enemyL_armModel_.get(),
+		enemyR_armModel_.get()
+	};
+
+
+	//エネミーの初期化
+	enemy_->Initialize(enemyModels, enemyMaterials, &viewProjection_);
+
 	// 衝突マネージャー
-	collisionManager_ = std::make_unique<CollisionManager>();;
+	collisionManager_ = std::make_unique<CollisionManager>();
 	collisionManager_->Initialize(player_.get(),floorManager_.get(), goal_.get());
 
 }
@@ -127,6 +151,8 @@ void GameScene::Update(){
 	skydome_->Update();
 	//フロア
 	floorManager_->Update();
+	//エネミー
+	enemy_->Update();
 	// ゴール
 	goal_->Update();
 
@@ -165,6 +191,7 @@ void GameScene::Draw() {
 	skydome_->Draw();
 	floorManager_ ->Draw();
 	goal_->Draw();
+	enemy_->Draw();
 
 	Model::PostDraw();
 

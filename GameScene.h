@@ -19,6 +19,7 @@
 #include "Program/Goal/Goal.h"
 
 #include "Program/CollisionManager/CollisionManager.h"
+#include "Program/Enemy/Enemy.h"
 
 class GameScene
 {
@@ -95,6 +96,17 @@ private:
 	std::unique_ptr<Material> goalMaterial_ = nullptr;
 	//モデル
 	std::unique_ptr<Model> goalModel_ = nullptr;
+
+	//エネミー
+	std::unique_ptr<Enemy> enemy_;
+
+	std::unique_ptr<Model> enemyBodyModel_ = nullptr;
+	std::unique_ptr<Model> enemyL_armModel_ = nullptr;
+	std::unique_ptr<Model> enemyR_armModel_ = nullptr;
+	std::unique_ptr<Material> enemyBodyMaterial_ = nullptr;
+	std::unique_ptr<Material> enemyL_armMaterial_ = nullptr;
+	std::unique_ptr<Material> enemyR_armMaterial_ = nullptr;
+
 
 	// 衝突マネージャー
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;

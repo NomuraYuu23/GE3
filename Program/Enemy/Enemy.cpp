@@ -1,0 +1,144 @@
+#include <cassert>
+#include <cmath>
+#include <numbers>
+
+#include "Enemy.h"
+/// <summary>
+/// 初期化
+/// </summary>
+/// <param name="model">モデル</param>
+/// <param name="textureHandle">テクスチャハンドル</param>
+void Enemy::Initialize(const std::vector<Model*>& models,
+	const std::vector<Material*>& materials,
+	const ViewProjection* viewProjection) {
+
+	// nullポインタチェック
+	assert(models.front());
+
+	// 基底クラスの初期化
+	BaseCharacter::Initialize(models, materials, viewProjection);
+
+	worldTransformBody_.Initialize(viewProjection);
+	worldTransformBody_.parent_ = &worldTransform_;
+	worldTransformL_arm_.Initialize(viewProjection);
+	worldTransformL_arm_.transform_.translate.x -= 2.0f;
+	worldTransformL_arm_.transform_.translate.y += 1.0f;
+	worldTransformL_arm_.transform_.rotate.x += float(std::numbers::pi) / 2.0f;
+	worldTransformL_arm_.parent_ = &worldTransformBody_;
+	worldTransformR_arm_.Initialize(viewProjection);
+	worldTransformR_arm_.transform_.translate.x += 2.0f;
+	worldTransformR_arm_.transform_.translate.y += 1.0f;
+	worldTransformR_arm_.transform_.rotate.x += float(std::numbers::pi) / 2.0f;
+	worldTransformR_arm_.parent_ = &worldTransformBody_;
+
+	// 移動用
+	// 速度
+	Velocity_ = { 0.0f, 0.0f, 0.0f };
+	// 速さ
+	kMoveSpeed = 0.0f;
+
+	// 回転用
+	// 回転速度
+	kRotateSpeed = 0.0f;
+
+	// 腕回転ギミック初期化
+	InitializeArmRotationgimmick();
+
+}
+
+/// <summary>
+/// 更新
+/// </summary>
+void Enemy::Update() {
+
+	// 回転
+	Rotation();
+
+	// 移動
+	Move();
+
+	// 腕回転ギミック
+	UpdateArmRotationgimmick();
+
+	//ワールド変換データ更新
+	worldTransform_.UpdateMatrix();
+
+	worldTransformBody_.UpdateMatrix();
+	worldTransformL_arm_.UpdateMatrix();
+	worldTransformR_arm_.UpdateMatrix();
+
+}
+
+/// <summary>
+/// 描画
+/// </summary>
+/// <param name="viewProjection">ビュープロジェクション</param>
+void Enemy::Draw() {
+
+	models_[0]->Draw(worldTransformBody_);
+	models_[1]->Draw(worldTransformL_arm_);
+	models_[2]->Draw(worldTransformR_arm_);
+
+}
+
+/// <summary>
+/// 移動
+/// </summary>
+void Enemy::Move() {
+
+	/*
+	//移動速度
+	Vector3 velocity(0.0f, 0.0f, kMoveSpeed);
+
+	//速度ベクトルを向きに合わせて回転させる
+	Velocity_ = Matrix4x4Calc::TransformNormal(velocity, worldTransform_.matWorld_);
+
+	//移動
+	worldTransform_.translation_.x += Velocity_.x;
+	worldTransform_.translation_.y += Velocity_.y;
+	worldTransform_.translation_.z += Velocity_.z;
+	*/
+
+}
+
+/// <summary>
+/// 回転
+/// </summary>
+void Enemy::Rotation() {
+
+	/*
+	worldTransform_.rotation_.y += kRotateSpeed;
+	if (worldTransform_.rotation_.y >= 2.0f * float(std::numbers::pi)) {
+		worldTransform_.rotation_.y -= 2.0f * float(std::numbers::pi);
+	}
+	*/
+
+}
+
+/// <summary>
+/// 腕回転ギミック初期化
+/// </summary>
+void Enemy::InitializeArmRotationgimmick() {
+
+	// 腕回転ギミックの媒介変数
+	armRotationParameter_ = 0.0f;
+	// 腕回転ギミックのサイクル<frame>
+	armRotationPeriod_ = 60;
+
+}
+
+/// <summary>
+/// 腕回転ギミック
+/// </summary>
+void Enemy::UpdateArmRotationgimmick() {
+
+	// 1フレームでのパラメータ加算値
+	const float step = 2.0f * float(std::numbers::pi) / armRotationPeriod_;
+
+	armRotationParameter_ += step;
+	armRotationParameter_ = std::fmod(armRotationParameter_, 2.0f * float(std::numbers::pi));
+
+	worldTransformL_arm_.transform_.rotate.x = armRotationParameter_;
+	worldTransformR_arm_.transform_.rotate.x = armRotationParameter_;
+
+}
