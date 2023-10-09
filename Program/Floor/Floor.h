@@ -1,9 +1,9 @@
 #pragma once
-#include "Model.h"
-#include "Material.h"
-#include "WorldTransform.h"
+#include "../../Model.h"
+#include "../../Material.h"
+#include "../../WorldTransform.h"
 
-class floor
+class Floor
 {
 public:
 
@@ -24,6 +24,9 @@ public:
 	/// <param name="viewProjection">ビュープロジェクション</param>
 	void Draw();
 
+	/// <summary>
+	/// 移動
+	/// </summary>
 	void Move();
 
 private:

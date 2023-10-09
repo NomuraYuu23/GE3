@@ -28,6 +28,15 @@
     <Filter Include="ヘッダー ファイル\Math">
       <UniqueIdentifier>{0a5ca261-462f-45f8-ae63-0b454dfc7ef9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="AL">
+      <UniqueIdentifier>{77dd3382-ae74-443a-8ae5-436ec4fb6795}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AL\ソースファイル">
+      <UniqueIdentifier>{0d73316e-d245-4ecc-a65b-f3aa33c7ecd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AL\ヘッダーファイル">
+      <UniqueIdentifier>{fc979200-3a7d-417b-9df3-acf5b50d287d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -105,20 +114,23 @@
     <ClCompile Include="Vector3.cpp">
       <Filter>ソース ファイル\Math</Filter>
     </ClCompile>
-    <ClCompile Include="BaseCharacter.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Program\BaseCharacter\BaseCharacter.cpp">
+      <Filter>AL\ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Program\Floor\Floor.cpp">
+      <Filter>AL\ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="FollowCamera.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Program\FollowCamera\FollowCamera.cpp">
+      <Filter>AL\ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Skydome.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Program\Gool\Gool.cpp">
+      <Filter>AL\ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="floor.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Program\Player\Player.cpp">
+      <Filter>AL\ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\Skydome\Skydome.cpp">
+      <Filter>AL\ソースファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -221,20 +233,23 @@
     <ClInclude Include="Matrix4x4.h">
       <Filter>ヘッダー ファイル\Math</Filter>
     </ClInclude>
-    <ClInclude Include="BaseCharacter.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Program\BaseCharacter\BaseCharacter.h">
+      <Filter>AL\ヘッダーファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Program\Floor\Floor.h">
+      <Filter>AL\ヘッダーファイル</Filter>
     </ClInclude>
-    <ClInclude Include="FollowCamera.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Program\FollowCamera\FollowCamera.h">
+      <Filter>AL\ヘッダーファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Skydome.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Program\Gool\Gool.h">
+      <Filter>AL\ヘッダーファイル</Filter>
     </ClInclude>
-    <ClInclude Include="floor.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Program\Player\Player.h">
+      <Filter>AL\ヘッダーファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\Skydome\Skydome.h">
+      <Filter>AL\ヘッダーファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

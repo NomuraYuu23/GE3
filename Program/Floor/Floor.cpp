@@ -1,6 +1,6 @@
-#include "floor.h"
+#include "Floor.h"
 
-void floor::Initialize(Model* model, Material* material, ViewProjection* viewProjection)
+void Floor::Initialize(Model* model, Material* material, ViewProjection* viewProjection)
 {
 
 	// nullポインタチェック
@@ -15,16 +15,20 @@ void floor::Initialize(Model* model, Material* material, ViewProjection* viewPro
 
 }
 
-void floor::Update()
+void Floor::Update()
 {
 
 	worldTransform_.UpdateMatrix();
 
 }
 
-void floor::Draw()
+void Floor::Draw()
 {
 
 	model_->Draw(worldTransform_);
 
+}
+
+void Floor::Move()
+{
 }

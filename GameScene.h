@@ -12,9 +12,9 @@
 #include "DirectionalLight.h"
 
 //オブジェクト
-#include "Player.h"
-#include "FollowCamera.h"
-#include "Skydome.h"
+#include "Program/Player/Player.h"
+#include "Program/FollowCamera/FollowCamera.h"
+#include "Program/Skydome/Skydome.h"
 
 class GameScene
 {
