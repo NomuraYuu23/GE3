@@ -31,6 +31,10 @@ void Player::Update()
 	//行列を定数バッファに転送
 	worldTransform_.UpdateMatrix();
 
+	if (worldTransform_.worldMatrix_.m[3][1] <= -10.0f) {
+		Restart();
+	}
+
 }
 
 void Player::Draw()
@@ -48,7 +52,6 @@ void Player::Move()
 	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
 	worldTransform_.transform_.translate = v3Calc->Add(worldTransform_.transform_.translate, velocity_);
 
-
 }
 
 void Player::Walk()
@@ -65,12 +68,15 @@ void Player::Walk()
 		// 移動量
 		Vector3 move = { input->GetLeftAnalogstick().x, 0.0f, -input->GetLeftAnalogstick().y };
 		// 移動量に速さを反映
-		move = v3Calc->Multiply(kSpeed, v3Calc->Normalize(move));
+		move = v3Calc->Multiply(kWalkSpeed, v3Calc->Normalize(move));
 
 		// カメラの角度から回転行列を計算する
 		Matrix4x4 rotateMatrixX = m4Calc->MakeRotateXMatrix(worldTransform_.viewProjection_->transform_.rotate.x);
 		Matrix4x4 rotateMatrixY = m4Calc->MakeRotateYMatrix(worldTransform_.viewProjection_->transform_.rotate.y);
 		Matrix4x4 rotateMatrixZ = m4Calc->MakeRotateZMatrix(worldTransform_.viewProjection_->transform_.rotate.z);
+		if (worldTransform_.parent_) {
+			rotateMatrixY = m4Calc->MakeRotateYMatrix(worldTransform_.viewProjection_->transform_.rotate.y - worldTransform_.parent_->transform_.rotate.y);
+		}
 
 		Matrix4x4 rotateMatrix = m4Calc->Multiply(
 			rotateMatrixX, m4Calc->Multiply(rotateMatrixY, rotateMatrixZ));
@@ -143,28 +149,41 @@ void Player::Restart()
 
 void Player::OnCollision(WorldTransform* worldTransform)
 {
-	GotParent(worldTransform);
+	if (!worldTransform_.parent_) {
+		GotParent(worldTransform);
+	}
 	worldTransform_.transform_.translate.y = 0.0f;
 	isLanding = true;
+
 }
 
 void Player::GotParent(WorldTransform* parent)
 {
 
+	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
+	Matrix4x4Calc* m4Calc = Matrix4x4Calc::GetInstance();
+
 	if (worldTransform_.parent_) {
 		LostParent();
 	}
 
-	Vector3 position = { worldTransform_.transform_.translate.x - parent->transform_.translate.x,
-						worldTransform_.transform_.translate.y - parent->transform_.translate.y,
-						worldTransform_.transform_.translate.z - parent->transform_.translate.z };
-
-	Vector3 rotate = { worldTransform_.transform_.rotate.x - parent->transform_.rotate.x,
-						worldTransform_.transform_.rotate.y - parent->transform_.rotate.y,
-						worldTransform_.transform_.rotate.z - parent->transform_.rotate.z };
+	//位置
+	Vector3 position = { worldTransform_.worldMatrix_.m[3][0] - parent->worldMatrix_.m[3][0],
+						worldTransform_.worldMatrix_.m[3][1] - parent->worldMatrix_.m[3][1],
+						worldTransform_.worldMatrix_.m[3][2] - parent->worldMatrix_.m[3][2] };
 	
+	// 親の角度から回転行列を計算する
+	Matrix4x4 rotateMatrixX = m4Calc->MakeRotateXMatrix(-parent->transform_.rotate.x);
+	Matrix4x4 rotateMatrixY = m4Calc->MakeRotateYMatrix(-parent->transform_.rotate.y);
+	Matrix4x4 rotateMatrixZ = m4Calc->MakeRotateZMatrix(-parent->transform_.rotate.z);
+
+	Matrix4x4 rotateMatrix = m4Calc->Multiply(
+		rotateMatrixX, m4Calc->Multiply(rotateMatrixY, rotateMatrixZ));
+
+	// 位置を親の角度だけ回転する
+	position = m4Calc->TransformNormal(position, rotateMatrix);
+
 	worldTransform_.transform_.translate = position;
-	worldTransform_.transform_.rotate = rotate;
 	worldTransform_.parent_ = parent;
 	worldTransform_.UpdateMatrix();
 
@@ -174,12 +193,8 @@ void Player::LostParent()
 {
 
 	Vector3 position = { worldTransform_.worldMatrix_.m[3][0] ,worldTransform_.worldMatrix_.m[3][1] ,worldTransform_.worldMatrix_.m[3][2] };
-	Vector3 rotate = { worldTransform_.transform_.rotate.x + worldTransform_.parent_->transform_.rotate.x,
-						worldTransform_.transform_.rotate.y + worldTransform_.parent_->transform_.rotate.y,
-						worldTransform_.transform_.rotate.z + worldTransform_.parent_->transform_.rotate.z };
 
 	worldTransform_.transform_.translate = position;
-	worldTransform_.transform_.rotate = rotate;
 	worldTransform_.parent_ = nullptr;
 	worldTransform_.UpdateMatrix();
 

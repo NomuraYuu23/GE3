@@ -80,9 +80,9 @@ void GameScene::Initialize() {
 	floorManager_->Initialize(floorModel_.get(), floorMaterial_.get(), &viewProjection_);
 	// 床生成
 	floorManager_->AddFloor(Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 0.0f), false);
-	floorManager_->AddFloor(Vector3(0.0f, 0.0f, 30.0f), Vector3(0.0f, 0.0f, 0.0f), false);
+	floorManager_->AddFloor(Vector3(0.0f, 0.0f, 30.0f), Vector3(0.0f, 0.0f, 0.0f), true);
 	floorManager_->AddFloor(Vector3(0.0f, 0.0f, 60.0f), Vector3(0.0f, 0.0f, 0.0f), false);
-	floorManager_->AddFloor(Vector3(30.0f, 0.0f, 60.0f), Vector3(0.0f, 0.0f, 0.0f), false);
+	floorManager_->AddFloor(Vector3(30.0f, 0.0f, 60.0f), Vector3(0.0f, -1.57f, 0.0f), true);
 	floorManager_->AddFloor(Vector3(60.0f, 0.0f, 60.0f), Vector3(0.0f, 0.0f, 0.0f), false);
 
 	// 衝突マネージャー

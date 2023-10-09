@@ -101,14 +101,14 @@ private: // メンバ定数
 	// 初期角度
 	const Vector3 kInitialRotate = {};
 
-	// 速さ
-	const float kSpeed = 0.3f;
-
 	// ジャンプ初期速さ
 	const float kJumpSpeed = 1.0f;
 
 	// 落下加速
 	const float kFallAcceleration = 0.05f;
+
+	// 歩行速度
+	const float kWalkSpeed = 0.6f;
 
 	// コライダーサイズ(半径)
 	const float kColliderSize = 5.0f;

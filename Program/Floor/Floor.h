@@ -49,8 +49,14 @@ private:
 	// 動くか
 	bool isMoving_;
 
+	// 移動用タイマー
+	float moveTimer_;
+
 	// サイズ
 	Vector3 colliderSize_ = {10.0f,1.0f, 10.0f};
+
+	// position
+	Vector3 position_;
 
 };
 
