@@ -64,7 +64,7 @@ public:
 	/// <summary>
 	/// 衝突
 	/// </summary>
-	void OnCollision();
+	void OnCollision(WorldTransform* worldTransform);
 
 	/// <summary>
 	/// 親を得た
@@ -81,6 +81,8 @@ public: // アクセッサ
 	WorldTransform* GetWorldTransformAddress() { return &worldTransform_; }
 
 	void SetViewProjection(const ViewProjection* viewProjection) {	worldTransform_.viewProjection_ = viewProjection;}
+
+	float GetColliderRadius() { return kColliderSize; }
 
 private: // メンバ変数
 
@@ -103,10 +105,13 @@ private: // メンバ定数
 	const float kSpeed = 0.3f;
 
 	// ジャンプ初期速さ
-	const float kJumpSpeed = 5.0f;
+	const float kJumpSpeed = 1.0f;
 
 	// 落下加速
-	const float kFallAcceleration = 0.1f;
+	const float kFallAcceleration = 0.05f;
+
+	// コライダーサイズ(半径)
+	const float kColliderSize = 5.0f;
 
 
 };

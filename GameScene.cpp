@@ -70,6 +70,25 @@ void GameScene::Initialize() {
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize(skydomeModel_.get(), skydomeMaterial_.get(), &viewProjection_);
 
+	// フロアマネージャー
+	//マテリアル
+	floorMaterial_.reset(Material::Create());
+	//モデル
+	floorModel_.reset(Model::Create("Resources/AL4/floor", "floor.obj", dxCommon_, floorMaterial_.get()));
+	//オブジェクト
+	floorManager_ = std::make_unique<FloorManager>();
+	floorManager_->Initialize(floorModel_.get(), floorMaterial_.get(), &viewProjection_);
+	// 床生成
+	floorManager_->AddFloor(Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 0.0f), false);
+	floorManager_->AddFloor(Vector3(0.0f, 0.0f, 30.0f), Vector3(0.0f, 0.0f, 0.0f), false);
+	floorManager_->AddFloor(Vector3(0.0f, 0.0f, 60.0f), Vector3(0.0f, 0.0f, 0.0f), false);
+	floorManager_->AddFloor(Vector3(30.0f, 0.0f, 60.0f), Vector3(0.0f, 0.0f, 0.0f), false);
+	floorManager_->AddFloor(Vector3(60.0f, 0.0f, 60.0f), Vector3(0.0f, 0.0f, 0.0f), false);
+
+	// 衝突マネージャー
+	collisionManager_ = std::make_unique<CollisionManager>();;
+	collisionManager_->Initialize(player_.get(),floorManager_.get());
+
 }
 
 /// <summary>
@@ -95,7 +114,11 @@ void GameScene::Update(){
 	player_->Update();
 	//スカイドーム
 	skydome_->Update();
+	//フロア
+	floorManager_->Update();
 
+	// 衝突処理
+	collisionManager_->Collision();
 
 }
 
@@ -127,6 +150,7 @@ void GameScene::Draw() {
 	//オブジェクト
 	player_->Draw();
 	skydome_->Draw();
+	floorManager_ ->Draw();
 
 	Model::PostDraw();
 

@@ -15,6 +15,9 @@
 #include "Program/Player/Player.h"
 #include "Program/FollowCamera/FollowCamera.h"
 #include "Program/Skydome/Skydome.h"
+#include "Program/FloorManager/FloorManager.h"
+
+#include "Program/CollisionManager/CollisionManager.h"
 
 class GameScene
 {
@@ -77,5 +80,15 @@ private:
 	std::unique_ptr<Material> skydomeMaterial_ = nullptr;
 	//モデル
 	std::unique_ptr<Model> skydomeModel_ = nullptr;
+
+	// フロアマネージャー
+	std::unique_ptr<FloorManager> floorManager_ = nullptr;
+	//マテリアル
+	std::unique_ptr<Material> floorMaterial_ = nullptr;
+	//モデル
+	std::unique_ptr<Model> floorModel_ = nullptr;
+
+	// 衝突マネージャー
+	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
 
 };

@@ -110,6 +110,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="GraphicsPipelineState.cpp" />
     <ClCompile Include="Program\BaseCharacter\BaseCharacter.cpp" />
+    <ClCompile Include="Program\CollisionManager\CollisionManager.cpp" />
+    <ClCompile Include="Program\FloorManager\FloorManager.cpp" />
     <ClCompile Include="Program\Floor\Floor.cpp" />
     <ClCompile Include="Program\FollowCamera\FollowCamera.cpp" />
     <ClCompile Include="Program\Gool\Gool.cpp" />
@@ -145,6 +147,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Model.h" />
     <ClInclude Include="GraphicsPipelineState.h" />
     <ClInclude Include="Program\BaseCharacter\BaseCharacter.h" />
+    <ClInclude Include="Program\CollisionManager\CollisionManager.h" />
+    <ClInclude Include="Program\FloorManager\FloorManager.h" />
     <ClInclude Include="Program\Floor\Floor.h" />
     <ClInclude Include="Program\FollowCamera\FollowCamera.h" />
     <ClInclude Include="Program\Gool\Gool.h" />

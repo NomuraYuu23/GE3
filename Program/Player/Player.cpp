@@ -11,6 +11,10 @@ void Player::Initialize(const std::vector<Model*>& models,
 	//基底クラスの初期化
 	BaseCharacter::Initialize(models, materials, viewProjection);
 
+	velocity_ = {0.0f,0.0f,0.0f};
+
+	isLanding = false;
+
 }
 
 void Player::Update()
@@ -20,6 +24,8 @@ void Player::Update()
 	Jump();
 	Fall();
 	Move();
+	//行列を定数バッファに転送
+	worldTransform_.UpdateMatrix();
 
 	Landing();
 	//行列を定数バッファに転送
@@ -31,7 +37,7 @@ void Player::Draw()
 {
 
 	for (Model* model : models_) {
-	model->Draw(worldTransform_);
+		model->Draw(worldTransform_);
 	}
 
 }
@@ -73,7 +79,8 @@ void Player::Walk()
 		move = m4Calc->TransformNormal(move, rotateMatrix);
 
 		// 移動
-		velocity_ = v3Calc->Add(velocity_, move);
+		velocity_.x = move.x;
+		velocity_.z = move.z;
 
 		// 移動方向に見た目を合わせる(Y軸)
 		if (std::fabsf(move.x) > 0.1 || std::fabsf(move.z) > 0.1) {
@@ -94,11 +101,10 @@ void Player::Jump()
 		
 		if (input->TriggerJoystick(0) && isLanding) {
 			velocity_.y += kJumpSpeed;
+			isLanding = false;
 		}
 
 	}
-
-
 
 }
 
@@ -114,13 +120,15 @@ void Player::Fall()
 void Player::Landing()
 {
 
-	if (worldTransform_.parent_) {
-		isLanding = true;
+	if (!isLanding) {
+		if (worldTransform_.parent_) {
+			LostParent();
+		}
 	}
 	else {
-		isLanding = false;
+		velocity_.y = 0.0f;
 	}
-
+	isLanding = false;
 }
 
 void Player::Restart()
@@ -133,9 +141,11 @@ void Player::Restart()
 
 }
 
-void Player::OnCollision()
+void Player::OnCollision(WorldTransform* worldTransform)
 {
-
+	GotParent(worldTransform);
+	worldTransform_.transform_.translate.y = 0.0f;
+	isLanding = true;
 }
 
 void Player::GotParent(WorldTransform* parent)

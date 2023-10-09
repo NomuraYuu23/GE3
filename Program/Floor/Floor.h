@@ -5,13 +5,13 @@
 
 class Floor
 {
-public:
+public: //メンバ関数
 
 	/// <summary>
 	/// 初期化
 	/// </summary>
 	/// <param name="model">モデル</param>
-	void Initialize(Model* model, Material* material, ViewProjection* viewProjection);
+	void Initialize(Model* model, Material* material, ViewProjection* viewProjection, Vector3 position, Vector3 rotate, bool isMovig);
 
 	/// <summary>
 	/// 更新
@@ -29,6 +29,14 @@ public:
 	/// </summary>
 	void Move();
 
+public: // アクセッサ
+
+	WorldTransform GetWorldTransform() { return worldTransform_; }
+
+	WorldTransform* GetWorldTransformAdress() { return &worldTransform_; }
+
+	Vector3 GetColliderSize() { return colliderSize_; }
+
 private:
 
 	// ワールド変換データ
@@ -37,6 +45,12 @@ private:
 	Model* model_ = nullptr;
 	//マテリアル
 	Material* material_ = nullptr;
+
+	// 動くか
+	bool isMoving_;
+
+	// サイズ
+	Vector3 colliderSize_ = {10.0f,1.0f, 10.0f};
 
 };
 

@@ -132,6 +132,12 @@
     <ClCompile Include="Program\Skydome\Skydome.cpp">
       <Filter>AL\ソースファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Program\FloorManager\FloorManager.cpp">
+      <Filter>AL\ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\CollisionManager\CollisionManager.cpp">
+      <Filter>AL\ソースファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imgui.h">
@@ -249,6 +255,12 @@
       <Filter>AL\ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="Program\Skydome\Skydome.h">
+      <Filter>AL\ヘッダーファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\FloorManager\FloorManager.h">
+      <Filter>AL\ヘッダーファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\CollisionManager\CollisionManager.h">
       <Filter>AL\ヘッダーファイル</Filter>
     </ClInclude>
   </ItemGroup>
