@@ -85,9 +85,20 @@ void GameScene::Initialize() {
 	floorManager_->AddFloor(Vector3(30.0f, 0.0f, 60.0f), Vector3(0.0f, -1.57f, 0.0f), true);
 	floorManager_->AddFloor(Vector3(60.0f, 0.0f, 60.0f), Vector3(0.0f, 0.0f, 0.0f), false);
 
+	// ゴール
+	//マテリアル
+	goalMaterial_.reset(Material::Create());
+	std::vector<Material*> goalMaterials = { goalMaterial_.get() };
+	//モデル
+	goalModel_.reset(Model::Create("Resources/AL4/goal", "goal.obj", dxCommon_, goalMaterial_.get()));
+	std::vector<Model*> goalModels = { goalModel_.get() };
+	//オブジェクト
+	goal_ = std::make_unique<Goal>();
+	goal_->Initialize(goalModels, goalMaterials, &viewProjection_);
+
 	// 衝突マネージャー
 	collisionManager_ = std::make_unique<CollisionManager>();;
-	collisionManager_->Initialize(player_.get(),floorManager_.get());
+	collisionManager_->Initialize(player_.get(),floorManager_.get(), goal_.get());
 
 }
 
@@ -116,6 +127,8 @@ void GameScene::Update(){
 	skydome_->Update();
 	//フロア
 	floorManager_->Update();
+	// ゴール
+	goal_->Update();
 
 	// 衝突処理
 	collisionManager_->Collision();
@@ -151,6 +164,7 @@ void GameScene::Draw() {
 	player_->Draw();
 	skydome_->Draw();
 	floorManager_ ->Draw();
+	goal_->Draw();
 
 	Model::PostDraw();
 

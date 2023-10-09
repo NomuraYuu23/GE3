@@ -16,6 +16,7 @@
 #include "Program/FollowCamera/FollowCamera.h"
 #include "Program/Skydome/Skydome.h"
 #include "Program/FloorManager/FloorManager.h"
+#include "Program/Goal/Goal.h"
 
 #include "Program/CollisionManager/CollisionManager.h"
 
@@ -87,6 +88,13 @@ private:
 	std::unique_ptr<Material> floorMaterial_ = nullptr;
 	//モデル
 	std::unique_ptr<Model> floorModel_ = nullptr;
+
+	// ゴール
+	std::unique_ptr<Goal> goal_ = nullptr;
+	//マテリアル
+	std::unique_ptr<Material> goalMaterial_ = nullptr;
+	//モデル
+	std::unique_ptr<Model> goalModel_ = nullptr;
 
 	// 衝突マネージャー
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;

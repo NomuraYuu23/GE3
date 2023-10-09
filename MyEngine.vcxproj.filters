@@ -123,9 +123,6 @@
     <ClCompile Include="Program\FollowCamera\FollowCamera.cpp">
       <Filter>AL\ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\Gool\Gool.cpp">
-      <Filter>AL\ソースファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Program\Player\Player.cpp">
       <Filter>AL\ソースファイル</Filter>
     </ClCompile>
@@ -136,6 +133,9 @@
       <Filter>AL\ソースファイル</Filter>
     </ClCompile>
     <ClCompile Include="Program\CollisionManager\CollisionManager.cpp">
+      <Filter>AL\ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\Goal\Goal.cpp">
       <Filter>AL\ソースファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -248,9 +248,6 @@
     <ClInclude Include="Program\FollowCamera\FollowCamera.h">
       <Filter>AL\ヘッダーファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Program\Gool\Gool.h">
-      <Filter>AL\ヘッダーファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Program\Player\Player.h">
       <Filter>AL\ヘッダーファイル</Filter>
     </ClInclude>
@@ -261,6 +258,9 @@
       <Filter>AL\ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="Program\CollisionManager\CollisionManager.h">
+      <Filter>AL\ヘッダーファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\Goal\Goal.h">
       <Filter>AL\ヘッダーファイル</Filter>
     </ClInclude>
   </ItemGroup>
