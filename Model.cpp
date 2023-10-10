@@ -79,14 +79,14 @@ void Model::PostDraw() {
 /// 3Dモデル生成
 /// </summary>
 /// <returns></returns>
-Model* Model::Create(const std::string& directoryPath, const std::string& filename, DirectXCommon* dxCommon, Material* material) {
+Model* Model::Create(const std::string& directoryPath, const std::string& filename, DirectXCommon* dxCommon) {
 
 	// 3Dオブジェクトのインスタンスを生成
 	Model* object3d = new Model();
 	assert(object3d);
 
 	// 初期化
-	object3d->Initialize(directoryPath, filename, dxCommon, material);
+	object3d->Initialize(directoryPath, filename, dxCommon);
 
 	return object3d;
 
@@ -219,7 +219,7 @@ Model::ModelData Model::LoadObjFile(const std::string& directoryPath, const std:
 /// <summary>
 /// 初期化
 /// </summary>
-void Model::Initialize(const std::string& directoryPath, const std::string& filename, DirectXCommon* dxCommon, Material* material) {
+void Model::Initialize(const std::string& directoryPath, const std::string& filename, DirectXCommon* dxCommon) {
 
 	assert(sDevice);
 
@@ -230,7 +230,7 @@ void Model::Initialize(const std::string& directoryPath, const std::string& file
 
 	resourceDesc_ = TextureManager::GetInstance()->GetResourceDesc(textureHandle_);
 
-	material_ = material;
+	material_->Create();
 
 }
 
@@ -302,14 +302,6 @@ void Model::CreateMesh(const std::string& directoryPath, const std::string& file
 	vertBuff_->Map(0, nullptr, reinterpret_cast<void**>(&vertMap));
 	//頂点データをリソースにコピー
 	std::memcpy(vertMap, modelData.vertices.data(), sizeof(VertexData) * modelData.vertices.size());
-
-	//WVP用のリソースを作る。Matrix4x4 1つ分のサイズを用意する
-	//transformationMatrixBuff_ = BufferResource::CreateBufferResource(sDevice, sizeof(TransformationMatrix));
-	//書き込むためのアドレスを取得
-	//transformationMatrixBuff_->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixMap));
-	//単位行列を書き込んでおく
-	//transformationMatrixMap->World = matrix4x4Calc->MakeIdentity4x4();
-	//transformationMatrixMap->WVP = matrix4x4Calc->MakeIdentity4x4();
 
 }
 

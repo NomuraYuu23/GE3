@@ -50,15 +50,20 @@ public:
 	/// </summary>
 	void Update(const TransformStructure& transform, const Vector4& color, int enableLighting);
 
+public: //アクセッサ
+
 	Microsoft::WRL::ComPtr<ID3D12Resource> GetMaterialBuff() { return materialBuff_; }
 
+	MaterialData* GetMaterialMap() { return materialMap_; }
+
+	void SetMaterialMap(MaterialData* materialMap) { materialMap_ = materialMap; }
 
 private:
 
 	//Sprite用のマテリアルリソースを作る
 	Microsoft::WRL::ComPtr<ID3D12Resource> materialBuff_;
 
-	MaterialData* materialMap = nullptr;
+	MaterialData* materialMap_ = nullptr;
 
 	TransformStructure uvTransform;
 

@@ -1,10 +1,6 @@
 #pragma once
 #include "TransformStructure.h"
 #include "Matrix4x4.h"
-#include <wrl.h>
-#include "ViewProjection.h"
-#include <d3d12.h>
-#include "TransformationMatrix.h"
 
 struct WorldTransform
 {

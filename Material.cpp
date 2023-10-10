@@ -49,12 +49,12 @@ void Material::Initialize() {
 	//Sprite用のマテリアルリソースを作る
 	materialBuff_ = BufferResource::CreateBufferResource(sDevice, sizeof(Material));
 	//書き込むためのアドレスを取得
-	materialBuff_->Map(0, nullptr, reinterpret_cast<void**>(&materialMap));
+	materialBuff_->Map(0, nullptr, reinterpret_cast<void**>(&materialMap_));
 	//白を書き込んでみる
-	materialMap->color = { 1.0f, 1.0f, 1.0f, 1.0f };
+	materialMap_->color = { 1.0f, 1.0f, 1.0f, 1.0f };
 	//SpriteはLightingしないのでfalseを設定する
-	materialMap->enableLighting = None;	//UVTransfome初期化
-	materialMap->uvTransform = Matrix4x4Calc::GetInstance()->MakeIdentity4x4();
+	materialMap_->enableLighting = None;	//UVTransfome初期化
+	materialMap_->uvTransform = Matrix4x4Calc::GetInstance()->MakeIdentity4x4();
 
 	uvTransform = {
 		{1.0f,1.0f,1.0f},
@@ -73,10 +73,10 @@ void Material::Update(const TransformStructure& transform, const Vector4& color,
 
 	//UVTransfome用
 	Matrix4x4 uvTransformMatrix = Matrix4x4Calc::GetInstance()->MakeAffineMatrix(uvTransform.scale, uvTransform.rotate, uvTransform.translate);
-	materialMap->uvTransform = uvTransformMatrix;
+	materialMap_->uvTransform = uvTransformMatrix;
 
-	materialMap->color = color;
+	materialMap_->color = color;
 
-	materialMap->enableLighting = enableLighting;
+	materialMap_->enableLighting = enableLighting;
 
 }

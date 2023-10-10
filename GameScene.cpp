@@ -34,7 +34,9 @@ void GameScene::Initialize() {
 	debugCamera_->Initialize();
 
 	material_.reset(Material::Create());
-	model_.reset(Model::Create("Resources", "Ball.obj", dxCommon_, material_.get()));
+	model_.reset(Model::Create("Resources", "Ball.obj", dxCommon_));
+	model_->SetMaterial(material_.get());
+
 	worldTransform1.Initialize();
 	worldTransform2.Initialize();
 	worldTransform2.transform_.translate = { 1.0f,0.0f,0.0f };

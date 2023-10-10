@@ -65,7 +65,7 @@ public:
 	/// 3Dモデル生成
 	/// </summary>
 	/// <returns></returns>
-	static Model* Create(const std::string& directoryPath, const std::string& filename, DirectXCommon* dxCommon, Material* material);
+	static Model* Create(const std::string& directoryPath, const std::string& filename, DirectXCommon* dxCommon);
 
 	/// <summary>
 	/// TransformationMatrix用のリソースを消去
@@ -97,7 +97,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(const std::string& directoryPath, const std::string& filename, DirectXCommon* dxCommon, Material* material);
+	void Initialize(const std::string& directoryPath, const std::string& filename, DirectXCommon* dxCommon);
 
 	/// <summary>
 	/// 更新
@@ -127,6 +127,8 @@ public:
 	void SetTextureHandle(uint32_t textureHandle);
 
 	uint32_t GetTevtureHandle() { return textureHandle_; }
+
+	void SetMaterial(Material* material) { material_ = material; }
 
 private:
 	// 頂点バッファ
