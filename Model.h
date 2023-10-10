@@ -92,7 +92,6 @@ private:
 	//データを書き込む
 	static std::list <TransformationMatrix*> transformationMatrixMaps_;
 
-
 public:
 
 	/// <summary>
@@ -108,7 +107,7 @@ public:
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw(const WorldTransform& worldTransform);
+	void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection);
 
 	/// <summary>
 	/// メッシュデータ生成

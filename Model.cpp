@@ -101,7 +101,7 @@ void Model::TransformationMatrixDelete()
 	});
 
 	transformationMatrixMaps_.remove_if([](TransformationMatrix* transformationMatrixMap) {
-		delete transformationMatrixMap;
+		transformationMatrixMap;
 		return true;
 	});
 
@@ -244,7 +244,7 @@ void Model::Update() {
 /// <summary>
 /// 描画
 /// </summary>
-void Model::Draw(const WorldTransform& worldTransform) {
+void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection) {
 
 	// nullptrチェック
 	assert(sDevice);
@@ -257,8 +257,8 @@ void Model::Draw(const WorldTransform& worldTransform) {
 	//書き込むためのアドレスを取得
 	TransformationMatrix* transformationMatrixMap{};
 	transformationMatrixBuff->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixMap));
-	transformationMatrixMap->World = worldTransform.transformationMatrixMap_->World;
-	transformationMatrixMap->WVP = worldTransform.transformationMatrixMap_->WVP;
+	transformationMatrixMap->World = worldTransform.worldMatrix_;
+	transformationMatrixMap->WVP = matrix4x4Calc->Multiply(worldTransform.worldMatrix_,viewProjection.viewProjectionMatrix_);
 
 	transformationMatrixBuffs_.push_back(transformationMatrixBuff);
 	transformationMatrixMaps_.push_back(transformationMatrixMap);

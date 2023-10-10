@@ -35,8 +35,8 @@ void GameScene::Initialize() {
 
 	material_.reset(Material::Create());
 	model_.reset(Model::Create("Resources", "Ball.obj", dxCommon_, material_.get()));
-	worldTransform1.Initialize(&viewProjection);
-	worldTransform2.Initialize(&viewProjection);
+	worldTransform1.Initialize();
+	worldTransform2.Initialize();
 	worldTransform2.transform_.translate = { 1.0f,0.0f,0.0f };
 	worldTransform2.UpdateMatrix();
 
@@ -97,9 +97,9 @@ void GameScene::Draw() {
 	//光源
 	directionalLight->Draw(dxCommon_->GetCommadList());
 	//モデル
-	model_->Draw(worldTransform1);
+	model_->Draw(worldTransform1, viewProjection);
 	//モデル
-	model_->Draw(worldTransform2);
+	model_->Draw(worldTransform2, viewProjection);
 
 	Model::PostDraw();
 

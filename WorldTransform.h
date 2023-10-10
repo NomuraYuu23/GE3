@@ -15,17 +15,10 @@ struct WorldTransform
 	//ワールド行列
 	Matrix4x4 worldMatrix_;
 
-	// TransformationMatrix用のリソースを作る。Matrix4x4 1つ分のサイズ
-	Microsoft::WRL::ComPtr<ID3D12Resource> transformationMatrixBuff_;
-	//データを書き込む
-	TransformationMatrix* transformationMatrixMap_ = nullptr;
-
-	ViewProjection* viewProjection_;
-
 	//親
 	WorldTransform* parent_ = nullptr;
 
-	void Initialize(ViewProjection* viewProjection);
+	void Initialize();
 
 	void UpdateMatrix();
 
