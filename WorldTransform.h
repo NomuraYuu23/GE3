@@ -6,9 +6,6 @@
 #include <d3d12.h>
 #include "TransformationMatrix.h"
 
-/// <summary>
-/// ワールドトランスフォーム
-/// </summary>
 struct WorldTransform
 {
 
@@ -23,16 +20,13 @@ struct WorldTransform
 	//データを書き込む
 	TransformationMatrix* transformationMatrixMap_ = nullptr;
 
-	//ビュープロジェクション
-	const ViewProjection* viewProjection_;
+	ViewProjection* viewProjection_;
 
 	//親
 	WorldTransform* parent_ = nullptr;
 
-	//初期化
 	void Initialize(ViewProjection* viewProjection);
 
-	//行列更新
 	void UpdateMatrix();
 
 };
