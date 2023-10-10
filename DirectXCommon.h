@@ -81,8 +81,8 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12CommandAllocator> commandAllocator_;
 	Microsoft::WRL::ComPtr<ID3D12CommandQueue> commandQueue_;
 	Microsoft::WRL::ComPtr<IDXGISwapChain4> swapChain_;
-	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> backBuffers_;
-	Microsoft::WRL::ComPtr<ID3D12Resource> depthBuffer_;
+	Microsoft::WRL::ComPtr<ID3D12Resource> swapChainResources[2];
+	Microsoft::WRL::ComPtr<ID3D12Resource> depthStencilResource;
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> rtvHeap_;
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> dsvHeap_;
 	Microsoft::WRL::ComPtr<ID3D12Fence> fence_;
@@ -95,6 +95,33 @@ private:
 	~DirectXCommon() = default;
 	DirectXCommon(const DirectXCommon&) = delete;
 	const DirectXCommon& operator=(const DirectXCommon&) = delete;
+
+	/// <summary>
+	/// ログ
+	/// </summary>
+	/// <param name="message"></param>
+	void Log(const std::string& message);
+
+	/// <summary>
+	/// コンバートストリング
+	/// </summary>
+	/// <param name="message"></param>
+	std::wstring ConvertString(const std::string& str);
+
+	/// <summary>
+	/// コンバートストリング
+	/// </summary>
+	/// <param name="message"></param>
+	std::string ConvertString(const std::wstring& str);
+
+	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index);
+
+	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index);
+
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> CreateDescriptorHeap(
+		Microsoft::WRL::ComPtr<ID3D12Device> device, const D3D12_DESCRIPTOR_HEAP_TYPE& heapType, UINT numDescriptors, bool shaderVisible);
+
+	Microsoft::WRL::ComPtr<ID3D12Resource> CreateDepthStencilTextureResource(Microsoft::WRL::ComPtr<ID3D12Device> device, int32_t width, int32_t height);
 
 	/// <summary>
 	/// DXGIデバイス初期化
@@ -114,7 +141,7 @@ private:
 	/// <summary>
 	/// レンダーターゲット生成
 	/// </summary>
-	void CreateFinalRenderTargets();
+	void CreateFinalRenderTarget();
 
 	/// <summary>
 	/// 深度バッファ生成
