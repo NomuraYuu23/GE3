@@ -33,14 +33,14 @@ void GameScene::Initialize() {
 	debugCamera_ = std::make_unique<DebugCamera>();
 	debugCamera_->Initialize();
 
-	//material_.reset(Material::Create());
-	//model_.reset(Model::Create("Resources", "Ball.obj", dxCommon_, material_.get()));
-	//worldTransform1.Initialize(&viewProjection);
-	//worldTransform2.Initialize(&viewProjection);
-	//worldTransform2.transform_.translate = { 1.0f,0.0f,0.0f };
-	//worldTransform2.UpdateMatrix();
+	material_.reset(Material::Create());
+	model_.reset(Model::Create("Resources", "Ball.obj", dxCommon_, material_.get()));
+	worldTransform1.Initialize(&viewProjection);
+	worldTransform2.Initialize(&viewProjection);
+	worldTransform2.transform_.translate = { 1.0f,0.0f,0.0f };
+	worldTransform2.UpdateMatrix();
 
-	//directionalLight.reset(DirectionalLight::Create());
+	directionalLight.reset(DirectionalLight::Create());
 
 }
 
@@ -52,22 +52,22 @@ void GameScene::Update(){
 	// モデル球
 
 	// マテリアル
-	//TransformStructure uvTransform{
-	//	{1.0f,1.0f,1.0f},
-	//	{0.0f,0.0f,0.0f},
-	//	{0.0f,0.0f,0.0f},
-	//};
+	TransformStructure uvTransform{
+		{1.0f,1.0f,1.0f},
+		{0.0f,0.0f,0.0f},
+		{0.0f,0.0f,0.0f},
+	};
 
-	//Vector4 colorBall = { 1.0f,1.0f,1.0f,1.0f };
-	//int enableLightingBall = HalfLambert;
-	//material_->Update(uvTransform, colorBall, enableLightingBall);
+	Vector4 colorBall = { 1.0f,1.0f,1.0f,1.0f };
+	int enableLightingBall = HalfLambert;
+	material_->Update(uvTransform, colorBall, enableLightingBall);
 
 	//光源
-	//DirectionalLightData directionalLightData;
-	//directionalLightData.color = { 1.0f,1.0f,1.0f,1.0f };
-	//directionalLightData.direction = { 0.0f, -1.0f, 0.0f };
-	//directionalLightData.intencity = 1.0f;
-	//directionalLight->Update(directionalLightData);
+	DirectionalLightData directionalLightData;
+	directionalLightData.color = { 1.0f,1.0f,1.0f,1.0f };
+	directionalLightData.direction = { 0.0f, -1.0f, 0.0f };
+	directionalLightData.intencity = 1.0f;
+	directionalLight->Update(directionalLightData);
 
 }
 
@@ -95,11 +95,11 @@ void GameScene::Draw() {
 	Model::PreDraw(dxCommon_->GetCommadList());
 
 	//光源
-	//directionalLight->Draw(dxCommon_->GetCommadList());
+	directionalLight->Draw(dxCommon_->GetCommadList());
 	//モデル
-	//model_->Draw(worldTransform1);
+	model_->Draw(worldTransform1);
 	//モデル
-	//model_->Draw(worldTransform2);
+	model_->Draw(worldTransform2);
 
 	Model::PostDraw();
 

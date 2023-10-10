@@ -138,9 +138,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//実際のcommandListのImGuiの描画コマンドを積む
 		ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), dxCommon->GetCommadList());
 
-
 		//描画後処理
 		dxCommon->PostDraw();
+		Model::TransformationMatrixDelete();
 
 	}
 

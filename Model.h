@@ -24,6 +24,8 @@
 #include "WorldTransform.h"
 #include "ViewProjection.h"
 
+#include <list>
+
 class Model
 {
 
@@ -65,6 +67,11 @@ public:
 	/// <returns></returns>
 	static Model* Create(const std::string& directoryPath, const std::string& filename, DirectXCommon* dxCommon, Material* material);
 
+	/// <summary>
+	/// TransformationMatrix用のリソースを消去
+	/// </summary>
+	static void TransformationMatrixDelete();
+
 private:
 
 	// デバイス
@@ -79,6 +86,12 @@ private:
 	static Microsoft::WRL::ComPtr<ID3D12PipelineState> sPipelineState;
 	//計算
 	static Matrix4x4Calc* matrix4x4Calc;
+
+
+	static std::list <Microsoft::WRL::ComPtr<ID3D12Resource>> transformationMatrixBuffs_;
+	//データを書き込む
+	static std::list <TransformationMatrix*> transformationMatrixMaps_;
+
 
 public:
 
@@ -123,12 +136,7 @@ private:
 	VertexData* vertMap = nullptr;
 	// 頂点バッファビュー
 	D3D12_VERTEX_BUFFER_VIEW vbView_{};
-
-	// TransformationMatrix用のリソースを作る。Matrix4x4 1つ分のサイズ
-	Microsoft::WRL::ComPtr<ID3D12Resource> transformationMatrixBuff_;
-	//データを書き込む
-	TransformationMatrix* transformationMatrixMap = nullptr;
-
+	
 	//モデル読み込み
 	Model::ModelData modelData;
 

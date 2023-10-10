@@ -24,6 +24,10 @@ ComPtr<ID3D12PipelineState> Model::sPipelineState;
 //計算
 Matrix4x4Calc* Model::matrix4x4Calc = nullptr;
 
+std::list<Microsoft::WRL::ComPtr<ID3D12Resource>> Model::transformationMatrixBuffs_;
+//データを書き込む
+std::list <TransformationMatrix*> Model::transformationMatrixMaps_;
+
 /// <summary>
 /// 静的初期化
 /// </summary>
@@ -85,6 +89,21 @@ Model* Model::Create(const std::string& directoryPath, const std::string& filena
 	object3d->Initialize(directoryPath, filename, dxCommon, material);
 
 	return object3d;
+
+}
+
+void Model::TransformationMatrixDelete()
+{
+
+	transformationMatrixBuffs_.remove_if([](Microsoft::WRL::ComPtr<ID3D12Resource> transformationMatrixBuff) {
+		transformationMatrixBuff.ReleaseAndGetAddressOf();
+		return true;
+	});
+
+	transformationMatrixMaps_.remove_if([](TransformationMatrix* transformationMatrixMap) {
+		delete transformationMatrixMap;
+		return true;
+	});
 
 }
 
@@ -231,10 +250,23 @@ void Model::Draw(const WorldTransform& worldTransform) {
 	assert(sDevice);
 	assert(sCommandList);
 
+	// バッファ
+
+	//WVP用のリソースを作る。Matrix4x4 1つ分のサイズを用意する
+	Microsoft::WRL::ComPtr<ID3D12Resource> transformationMatrixBuff = BufferResource::CreateBufferResource(sDevice, sizeof(TransformationMatrix));
+	//書き込むためのアドレスを取得
+	TransformationMatrix* transformationMatrixMap{};
+	transformationMatrixBuff->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixMap));
+	transformationMatrixMap->World = worldTransform.transformationMatrixMap_->World;
+	transformationMatrixMap->WVP = worldTransform.transformationMatrixMap_->WVP;
+
+	transformationMatrixBuffs_.push_back(transformationMatrixBuff);
+	transformationMatrixMaps_.push_back(transformationMatrixMap);
+
 	sCommandList->IASetVertexBuffers(0, 1, &vbView_); //VBVを設定
 
 	//wvp用のCBufferの場所を設定
-	sCommandList->SetGraphicsRootConstantBufferView(1, worldTransform.transformationMatrixBuff_->GetGPUVirtualAddress());
+	sCommandList->SetGraphicsRootConstantBufferView(1, transformationMatrixBuff->GetGPUVirtualAddress());
 
 	//マテリアルCBufferの場所を設定
 	sCommandList->SetGraphicsRootConstantBufferView(0, material_->GetMaterialBuff()->GetGPUVirtualAddress());
@@ -272,12 +304,12 @@ void Model::CreateMesh(const std::string& directoryPath, const std::string& file
 	std::memcpy(vertMap, modelData.vertices.data(), sizeof(VertexData) * modelData.vertices.size());
 
 	//WVP用のリソースを作る。Matrix4x4 1つ分のサイズを用意する
-	transformationMatrixBuff_ = BufferResource::CreateBufferResource(sDevice, sizeof(TransformationMatrix));
+	//transformationMatrixBuff_ = BufferResource::CreateBufferResource(sDevice, sizeof(TransformationMatrix));
 	//書き込むためのアドレスを取得
-	transformationMatrixBuff_->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixMap));
+	//transformationMatrixBuff_->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixMap));
 	//単位行列を書き込んでおく
-	transformationMatrixMap->World = matrix4x4Calc->MakeIdentity4x4();
-	transformationMatrixMap->WVP = matrix4x4Calc->MakeIdentity4x4();
+	//transformationMatrixMap->World = matrix4x4Calc->MakeIdentity4x4();
+	//transformationMatrixMap->WVP = matrix4x4Calc->MakeIdentity4x4();
 
 }
 
