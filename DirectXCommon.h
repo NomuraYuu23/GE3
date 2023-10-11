@@ -101,7 +101,7 @@ private:
 	/// </summary>
 	/// <param name="message"></param>
 	void Log(const std::string& message);
-	
+
 	/// <summary>
 	/// コンバートストリング
 	/// </summary>

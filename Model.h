@@ -24,6 +24,8 @@
 #include "WorldTransform.h"
 #include "ViewProjection.h"
 
+#include <list>
+
 class Model
 {
 
@@ -63,7 +65,12 @@ public:
 	/// 3Dモデル生成
 	/// </summary>
 	/// <returns></returns>
-	static Model* Create(const std::string& directoryPath, const std::string& filename, DirectXCommon* dxCommon, Material* material);
+	static Model* Create(const std::string& directoryPath, const std::string& filename, DirectXCommon* dxCommon);
+
+	/// <summary>
+	/// TransformationMatrix用のリソースを消去
+	/// </summary>
+	static void TransformationMatrixDelete();
 
 private:
 
@@ -80,12 +87,17 @@ private:
 	//計算
 	static Matrix4x4Calc* matrix4x4Calc;
 
+
+	static std::list <Microsoft::WRL::ComPtr<ID3D12Resource>> transformationMatrixBuffs_;
+	//データを書き込む
+	static std::list <TransformationMatrix*> transformationMatrixMaps_;
+
 public:
 
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(const std::string& directoryPath, const std::string& filename, DirectXCommon* dxCommon, Material* material);
+	void Initialize(const std::string& directoryPath, const std::string& filename, DirectXCommon* dxCommon);
 
 	/// <summary>
 	/// 更新
@@ -95,7 +107,7 @@ public:
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw(const WorldTransform& worldTransform);
+	void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection);
 
 	/// <summary>
 	/// メッシュデータ生成
@@ -116,6 +128,8 @@ public:
 
 	uint32_t GetTevtureHandle() { return textureHandle_; }
 
+	void SetMaterial(Material* material) { material_ = material; }
+
 private:
 	// 頂点バッファ
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertBuff_;
@@ -123,12 +137,7 @@ private:
 	VertexData* vertMap = nullptr;
 	// 頂点バッファビュー
 	D3D12_VERTEX_BUFFER_VIEW vbView_{};
-
-	// TransformationMatrix用のリソースを作る。Matrix4x4 1つ分のサイズ
-	Microsoft::WRL::ComPtr<ID3D12Resource> transformationMatrixBuff_;
-	//データを書き込む
-	TransformationMatrix* transformationMatrixMap = nullptr;
-
+	
 	//モデル読み込み
 	Model::ModelData modelData;
 

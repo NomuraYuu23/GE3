@@ -24,6 +24,10 @@ ComPtr<ID3D12PipelineState> Model::sPipelineState;
 //計算
 Matrix4x4Calc* Model::matrix4x4Calc = nullptr;
 
+std::list<Microsoft::WRL::ComPtr<ID3D12Resource>> Model::transformationMatrixBuffs_;
+//データを書き込む
+std::list <TransformationMatrix*> Model::transformationMatrixMaps_;
+
 /// <summary>
 /// 静的初期化
 /// </summary>
@@ -75,16 +79,31 @@ void Model::PostDraw() {
 /// 3Dモデル生成
 /// </summary>
 /// <returns></returns>
-Model* Model::Create(const std::string& directoryPath, const std::string& filename, DirectXCommon* dxCommon, Material* material) {
+Model* Model::Create(const std::string& directoryPath, const std::string& filename, DirectXCommon* dxCommon) {
 
 	// 3Dオブジェクトのインスタンスを生成
 	Model* object3d = new Model();
 	assert(object3d);
 
 	// 初期化
-	object3d->Initialize(directoryPath, filename, dxCommon, material);
+	object3d->Initialize(directoryPath, filename, dxCommon);
 
 	return object3d;
+
+}
+
+void Model::TransformationMatrixDelete()
+{
+
+	transformationMatrixBuffs_.remove_if([](Microsoft::WRL::ComPtr<ID3D12Resource> transformationMatrixBuff) {
+		transformationMatrixBuff.ReleaseAndGetAddressOf();
+		return true;
+	});
+
+	transformationMatrixMaps_.remove_if([](TransformationMatrix* transformationMatrixMap) {
+		transformationMatrixMap;
+		return true;
+	});
 
 }
 
@@ -200,7 +219,7 @@ Model::ModelData Model::LoadObjFile(const std::string& directoryPath, const std:
 /// <summary>
 /// 初期化
 /// </summary>
-void Model::Initialize(const std::string& directoryPath, const std::string& filename, DirectXCommon* dxCommon, Material* material) {
+void Model::Initialize(const std::string& directoryPath, const std::string& filename, DirectXCommon* dxCommon) {
 
 	assert(sDevice);
 
@@ -211,7 +230,7 @@ void Model::Initialize(const std::string& directoryPath, const std::string& file
 
 	resourceDesc_ = TextureManager::GetInstance()->GetResourceDesc(textureHandle_);
 
-	material_ = material;
+	material_->Create();
 
 }
 
@@ -225,16 +244,29 @@ void Model::Update() {
 /// <summary>
 /// 描画
 /// </summary>
-void Model::Draw(const WorldTransform& worldTransform) {
+void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection) {
 
 	// nullptrチェック
 	assert(sDevice);
 	assert(sCommandList);
 
+	// バッファ
+
+	//WVP用のリソースを作る。Matrix4x4 1つ分のサイズを用意する
+	Microsoft::WRL::ComPtr<ID3D12Resource> transformationMatrixBuff = BufferResource::CreateBufferResource(sDevice, sizeof(TransformationMatrix));
+	//書き込むためのアドレスを取得
+	TransformationMatrix* transformationMatrixMap{};
+	transformationMatrixBuff->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixMap));
+	transformationMatrixMap->World = worldTransform.worldMatrix_;
+	transformationMatrixMap->WVP = matrix4x4Calc->Multiply(worldTransform.worldMatrix_,viewProjection.viewProjectionMatrix_);
+
+	transformationMatrixBuffs_.push_back(transformationMatrixBuff);
+	transformationMatrixMaps_.push_back(transformationMatrixMap);
+
 	sCommandList->IASetVertexBuffers(0, 1, &vbView_); //VBVを設定
 
 	//wvp用のCBufferの場所を設定
-	sCommandList->SetGraphicsRootConstantBufferView(1, worldTransform.transformationMatrixBuff_->GetGPUVirtualAddress());
+	sCommandList->SetGraphicsRootConstantBufferView(1, transformationMatrixBuff->GetGPUVirtualAddress());
 
 	//マテリアルCBufferの場所を設定
 	sCommandList->SetGraphicsRootConstantBufferView(0, material_->GetMaterialBuff()->GetGPUVirtualAddress());
@@ -270,14 +302,6 @@ void Model::CreateMesh(const std::string& directoryPath, const std::string& file
 	vertBuff_->Map(0, nullptr, reinterpret_cast<void**>(&vertMap));
 	//頂点データをリソースにコピー
 	std::memcpy(vertMap, modelData.vertices.data(), sizeof(VertexData) * modelData.vertices.size());
-
-	//WVP用のリソースを作る。Matrix4x4 1つ分のサイズを用意する
-	transformationMatrixBuff_ = BufferResource::CreateBufferResource(sDevice, sizeof(TransformationMatrix));
-	//書き込むためのアドレスを取得
-	transformationMatrixBuff_->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixMap));
-	//単位行列を書き込んでおく
-	transformationMatrixMap->World = matrix4x4Calc->MakeIdentity4x4();
-	transformationMatrixMap->WVP = matrix4x4Calc->MakeIdentity4x4();
 
 }
 

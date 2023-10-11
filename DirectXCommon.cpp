@@ -113,7 +113,7 @@ void DirectXCommon::PreDraw() {
 	viewport.MinDepth = 0.0f;
 	viewport.MaxDepth = 1.0f;
 	commandList_->RSSetViewports(1, &viewport);//Viewportを設定
-	
+
 	//シザー矩形
 	D3D12_RECT scissorRect{};
 	//基本的にビューポートと同じ矩形が構成されるようにする
