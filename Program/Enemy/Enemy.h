@@ -46,6 +46,8 @@ public:
 	/// </summary>
 	void UpdateArmRotationgimmick();
 
+	float GetColliderRadius() { return kColliderSize; }
+
 private:
 
 	// ワールド変換データ
@@ -53,15 +55,18 @@ private:
 	WorldTransform worldTransformL_arm_;
 	WorldTransform worldTransformR_arm_;
 
+	// ポジション
+	Vector3 position_;
+
 	// 移動用
 	// 速度
-	Vector3 Velocity_ = { 0.0f, 0.0f, 0.0f };
+	Vector3 velocity_ = { 0.0f, 0.0f, 0.0f };
 	// 速さ
-	float kMoveSpeed = 0.0f;
+	float kMoveSpeed;
 
 	// 回転用
 	// 回転速度
-	float kRotateSpeed = 0.0f;
+	float kRotateSpeed;
 
 	// 腕回転ギミック用
 	// 腕回転ギミックの媒介変数
@@ -69,5 +74,8 @@ private:
 
 	// 腕回転ギミックのサイクル<frame>
 	uint16_t armRotationPeriod_ = 1;
+
+	// コライダーサイズ
+	const float kColliderSize = 1.0f;
 
 };

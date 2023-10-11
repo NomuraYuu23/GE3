@@ -31,15 +31,19 @@ void Enemy::Initialize(const std::vector<Model*>& models,
 	worldTransformR_arm_.transform_.rotate.x += float(std::numbers::pi) / 2.0f;
 	worldTransformR_arm_.parent_ = &worldTransformBody_;
 
+	// ポジション
+	position_ = { -0.2f, 0.0f, 60.0f};
+	worldTransform_.transform_.translate = position_;
+
 	// 移動用
 	// 速度
-	Velocity_ = { 0.0f, 0.0f, 0.0f };
+	velocity_ = { 0.0f, 0.0f, 0.0f };
 	// 速さ
-	kMoveSpeed = 0.0f;
+	kMoveSpeed = -0.2f;
 
 	// 回転用
 	// 回転速度
-	kRotateSpeed = 0.0f;
+	kRotateSpeed = 0.05f;
 
 	// 腕回転ギミック初期化
 	InitializeArmRotationgimmick();
@@ -86,18 +90,18 @@ void Enemy::Draw() {
 /// </summary>
 void Enemy::Move() {
 
-	/*
+
+	Matrix4x4Calc* m4Calc = Matrix4x4Calc::GetInstance();
+	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
+	
 	//移動速度
 	Vector3 velocity(0.0f, 0.0f, kMoveSpeed);
 
 	//速度ベクトルを向きに合わせて回転させる
-	Velocity_ = Matrix4x4Calc::TransformNormal(velocity, worldTransform_.matWorld_);
+	velocity_ = m4Calc->TransformNormal(velocity, worldTransform_.worldMatrix_);
 
 	//移動
-	worldTransform_.translation_.x += Velocity_.x;
-	worldTransform_.translation_.y += Velocity_.y;
-	worldTransform_.translation_.z += Velocity_.z;
-	*/
+	worldTransform_.transform_.translate = v3Calc->Add(worldTransform_.transform_.translate, velocity_);
 
 }
 
@@ -106,12 +110,12 @@ void Enemy::Move() {
 /// </summary>
 void Enemy::Rotation() {
 
-	/*
-	worldTransform_.rotation_.y += kRotateSpeed;
-	if (worldTransform_.rotation_.y >= 2.0f * float(std::numbers::pi)) {
-		worldTransform_.rotation_.y -= 2.0f * float(std::numbers::pi);
+	
+	worldTransform_.transform_.rotate.y += kRotateSpeed;
+	if (worldTransform_.transform_.rotate.y >= 2.0f * float(std::numbers::pi)) {
+		worldTransform_.transform_.rotate.y -= 2.0f * float(std::numbers::pi);
 	}
-	*/
+	
 
 }
 

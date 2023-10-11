@@ -149,7 +149,8 @@ void Player::Restart()
 
 void Player::OnCollision(WorldTransform* worldTransform)
 {
-	if (!worldTransform_.parent_) {
+	if (!worldTransform_.parent_ || 
+		(worldTransform_.parent_ != worldTransform)) {
 		GotParent(worldTransform);
 	}
 	worldTransform_.transform_.translate.y = 0.0f;

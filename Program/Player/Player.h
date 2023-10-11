@@ -96,7 +96,7 @@ private: // メンバ変数
 private: // メンバ定数
 
 	// 初期位置
-	const Vector3 kInitialPosition = {};
+	const Vector3 kInitialPosition = {0.0f,0.5f,0.0f};
 
 	// 初期角度
 	const Vector3 kInitialRotate = {};
@@ -111,7 +111,7 @@ private: // メンバ定数
 	const float kWalkSpeed = 0.6f;
 
 	// コライダーサイズ(半径)
-	const float kColliderSize = 5.0f;
+	const float kColliderSize = 2.0f;
 
 
 };

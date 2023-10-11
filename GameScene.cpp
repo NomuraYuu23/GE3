@@ -80,9 +80,9 @@ void GameScene::Initialize() {
 	floorManager_->Initialize(floorModel_.get(), floorMaterial_.get(), &viewProjection_);
 	// 床生成
 	floorManager_->AddFloor(Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 0.0f), false);
-	floorManager_->AddFloor(Vector3(0.0f, 0.0f, 30.0f), Vector3(0.0f, 0.0f, 0.0f), true);
+	floorManager_->AddFloor(Vector3(0.0f, 0.0f, 30.0f), Vector3(0.0f, -1.57f, 0.0f), true);
 	floorManager_->AddFloor(Vector3(0.0f, 0.0f, 60.0f), Vector3(0.0f, 0.0f, 0.0f), false);
-	floorManager_->AddFloor(Vector3(30.0f, 0.0f, 60.0f), Vector3(0.0f, -1.57f, 0.0f), true);
+	floorManager_->AddFloor(Vector3(30.0f, 0.0f, 60.0f), Vector3(0.0f, 0.0f, 0.0f), true);
 	floorManager_->AddFloor(Vector3(60.0f, 0.0f, 60.0f), Vector3(0.0f, 0.0f, 0.0f), false);
 
 	// ゴール
@@ -116,13 +116,12 @@ void GameScene::Initialize() {
 		enemyR_armModel_.get()
 	};
 
-
 	//エネミーの初期化
 	enemy_->Initialize(enemyModels, enemyMaterials, &viewProjection_);
 
 	// 衝突マネージャー
 	collisionManager_ = std::make_unique<CollisionManager>();
-	collisionManager_->Initialize(player_.get(),floorManager_.get(), goal_.get());
+	collisionManager_->Initialize(player_.get(),floorManager_.get(), goal_.get(), enemy_.get());
 
 }
 
