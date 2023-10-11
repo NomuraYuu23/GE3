@@ -64,33 +64,50 @@ void Player::Walk()
 	//移動
 	if (input->GetJoystickConnected()) {
 
+		const float kThreshold = 0.7f;
+		bool isMoving = false;
+
 		// 移動量
 		Vector3 move = { input->GetLeftAnalogstick().x, 0.0f, -input->GetLeftAnalogstick().y };
-		// 移動量に速さを反映
-		move = v3Calc->Multiply(kWalkSpeed, v3Calc->Normalize(move));
-
-		// カメラの角度から回転行列を計算する
-		Matrix4x4 rotateMatrixX = m4Calc->MakeRotateXMatrix(viewProjection_->transform_.rotate.x);
-		Matrix4x4 rotateMatrixY = m4Calc->MakeRotateYMatrix(viewProjection_->transform_.rotate.y);
-		Matrix4x4 rotateMatrixZ = m4Calc->MakeRotateZMatrix(viewProjection_->transform_.rotate.z);
-		if (worldTransform_.parent_) {
-			rotateMatrixY = m4Calc->MakeRotateYMatrix(viewProjection_->transform_.rotate.y - worldTransform_.parent_->transform_.rotate.y);
+		if (v3Calc->Length(move) > kThreshold) {
+			isMoving = true;
 		}
 
-		Matrix4x4 rotateMatrix = m4Calc->Multiply(
-			rotateMatrixX, m4Calc->Multiply(rotateMatrixY, rotateMatrixZ));
+		if (isMoving) {
 
-		// 移動ベクトルをカメラの角度だけ回転する
-		move = m4Calc->TransformNormal(move, rotateMatrix);
+			// 移動量に速さを反映
+			move = v3Calc->Multiply(kWalkSpeed, v3Calc->Normalize(move));
 
-		// 移動
-		velocity_.x = move.x;
-		velocity_.z = move.z;
+			// カメラの角度から回転行列を計算する
+			Matrix4x4 rotateMatrixX = m4Calc->MakeRotateXMatrix(viewProjection_->transform_.rotate.x);
+			Matrix4x4 rotateMatrixY = m4Calc->MakeRotateYMatrix(viewProjection_->transform_.rotate.y);
+			Matrix4x4 rotateMatrixZ = m4Calc->MakeRotateZMatrix(viewProjection_->transform_.rotate.z);
+			if (worldTransform_.parent_) {
+				rotateMatrixY = m4Calc->MakeRotateYMatrix(viewProjection_->transform_.rotate.y - worldTransform_.parent_->transform_.rotate.y);
+			}
 
-		// 移動方向に見た目を合わせる(Y軸)
-		if (std::fabsf(move.x) > 0.1 || std::fabsf(move.z) > 0.1) {
-			worldTransform_.transform_.rotate.y = std::atan2f(move.x, move.z);
+			Matrix4x4 rotateMatrix = m4Calc->Multiply(
+				rotateMatrixX, m4Calc->Multiply(rotateMatrixY, rotateMatrixZ));
+
+			// 移動ベクトルをカメラの角度だけ回転する
+			move = m4Calc->TransformNormal(move, rotateMatrix);
+
+			// 移動
+			velocity_.x = move.x;
+			velocity_.z = move.z;
+
+			// 移動方向に見た目を合わせる(Y軸)
+			if (std::fabsf(move.x) > 0.1 || std::fabsf(move.z) > 0.1) {
+				worldTransform_.transform_.rotate.y = std::atan2f(move.x, move.z);
+			}
+
 		}
+		else {
+			// 移動
+			velocity_.x = 0.0f;
+			velocity_.z = 0.0f;
+		}
+
 	}
 
 }
