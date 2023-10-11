@@ -5,7 +5,7 @@
 /// 初期化
 /// </summary>
 /// <param name="model">モデル</param>
-void Skydome::Initialize(Model* model, Material* material, ViewProjection* viewProjection) {
+void Skydome::Initialize(Model* model, Material* material) {
 
 	// nullポインタチェック
 	assert(model);
@@ -15,7 +15,7 @@ void Skydome::Initialize(Model* model, Material* material, ViewProjection* viewP
 	material_ = material;
 
 	// ワールド変換データの初期化
-	worldTransform_.Initialize(viewProjection);
+	worldTransform_.Initialize();
 }
 
 /// <summary>
@@ -31,8 +31,8 @@ void Skydome::Update() {
 /// 描画
 /// </summary>
 /// <param name="viewProjection">ビュープロジェクション</param>
-void Skydome::Draw() {
+void Skydome::Draw(const ViewProjection& viewProjection) {
 
-	model_->Draw(worldTransform_);
+	model_->Draw(worldTransform_, viewProjection);
 
 }

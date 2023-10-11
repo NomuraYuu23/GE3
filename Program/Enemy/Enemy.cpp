@@ -9,23 +9,22 @@
 /// <param name="model">モデル</param>
 /// <param name="textureHandle">テクスチャハンドル</param>
 void Enemy::Initialize(const std::vector<Model*>& models,
-	const std::vector<Material*>& materials,
-	const ViewProjection* viewProjection) {
+	const std::vector<Material*>& materials) {
 
 	// nullポインタチェック
 	assert(models.front());
 
 	// 基底クラスの初期化
-	BaseCharacter::Initialize(models, materials, viewProjection);
+	BaseCharacter::Initialize(models, materials);
 
-	worldTransformBody_.Initialize(viewProjection);
+	worldTransformBody_.Initialize();
 	worldTransformBody_.parent_ = &worldTransform_;
-	worldTransformL_arm_.Initialize(viewProjection);
+	worldTransformL_arm_.Initialize();
 	worldTransformL_arm_.transform_.translate.x -= 2.0f;
 	worldTransformL_arm_.transform_.translate.y += 1.0f;
 	worldTransformL_arm_.transform_.rotate.x += float(std::numbers::pi) / 2.0f;
 	worldTransformL_arm_.parent_ = &worldTransformBody_;
-	worldTransformR_arm_.Initialize(viewProjection);
+	worldTransformR_arm_.Initialize();
 	worldTransformR_arm_.transform_.translate.x += 2.0f;
 	worldTransformR_arm_.transform_.translate.y += 1.0f;
 	worldTransformR_arm_.transform_.rotate.x += float(std::numbers::pi) / 2.0f;
@@ -77,11 +76,11 @@ void Enemy::Update() {
 /// 描画
 /// </summary>
 /// <param name="viewProjection">ビュープロジェクション</param>
-void Enemy::Draw() {
+void Enemy::Draw(const ViewProjection& viewProjection) {
 
-	models_[0]->Draw(worldTransformBody_);
-	models_[1]->Draw(worldTransformL_arm_);
-	models_[2]->Draw(worldTransformR_arm_);
+	models_[0]->Draw(worldTransformBody_, viewProjection);
+	models_[1]->Draw(worldTransformL_arm_, viewProjection);
+	models_[2]->Draw(worldTransformR_arm_, viewProjection);
 
 }
 

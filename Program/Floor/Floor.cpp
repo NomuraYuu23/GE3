@@ -1,7 +1,7 @@
 #include "Floor.h"
 #include <cmath>
 
-void Floor::Initialize(Model* model, Material* material, ViewProjection* viewProjection, Vector3 position, Vector3 rotate, bool isMoving)
+void Floor::Initialize(Model* model, Material* material, Vector3 position, Vector3 rotate, bool isMoving)
 {
 
 	// nullポインタチェック
@@ -12,7 +12,7 @@ void Floor::Initialize(Model* model, Material* material, ViewProjection* viewPro
 	material_ = material;
 
 	// ワールド変換データの初期化
-	worldTransform_.Initialize(viewProjection);
+	worldTransform_.Initialize();
 	worldTransform_.transform_.translate = position;
 	worldTransform_.transform_.rotate = rotate;
 	worldTransform_.UpdateMatrix();
@@ -36,10 +36,10 @@ void Floor::Update()
 
 }
 
-void Floor::Draw()
+void Floor::Draw(const ViewProjection& viewProjection)
 {
 
-	model_->Draw(worldTransform_);
+	model_->Draw(worldTransform_, viewProjection);
 
 }
 

@@ -2,8 +2,7 @@
 #include "../../ViewProjection.h"
 
 void BaseCharacter::Initialize(const std::vector<Model*>& models,
-	const std::vector<Material*>& materials,
-	const ViewProjection* viewProjection)
+	const std::vector<Material*>& materials)
 {
 
 	//モデルデータ配列
@@ -11,7 +10,7 @@ void BaseCharacter::Initialize(const std::vector<Model*>& models,
 	//マテリアルデータ配列
 	materials_ = materials;
 	//ワールド変換データの初期化
-	worldTransform_.Initialize(viewProjection);
+	worldTransform_.Initialize();
 
 }
 
@@ -23,12 +22,12 @@ void BaseCharacter::Update()
 
 }
 
-void BaseCharacter::Draw()
+void BaseCharacter::Draw(const ViewProjection& viewProjection)
 {
 
 	//モデル描画
 	for (Model* model : models_) {
-		model->Draw(worldTransform_);
+		model->Draw(worldTransform_, viewProjection);
 	}
 
 }

@@ -11,7 +11,7 @@ public: //メンバ関数
 	/// 初期化
 	/// </summary>
 	/// <param name="model">モデル</param>
-	void Initialize(Model* model, Material* material, ViewProjection* viewProjection, Vector3 position, Vector3 rotate, bool isMovig);
+	void Initialize(Model* model, Material* material, Vector3 position, Vector3 rotate, bool isMoving);
 
 	/// <summary>
 	/// 更新
@@ -22,7 +22,7 @@ public: //メンバ関数
 	/// 描画
 	/// </summary>
 	/// <param name="viewProjection">ビュープロジェクション</param>
-	void Draw();
+	void Draw(const ViewProjection& viewProjection);
 
 	/// <summary>
 	/// 移動

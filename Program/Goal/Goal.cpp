@@ -1,6 +1,6 @@
 #include "Goal.h"
 
-void Goal::Initialize(const std::vector<Model*>& models, const std::vector<Material*>& materials, const ViewProjection* viewProjection)
+void Goal::Initialize(const std::vector<Model*>& models, const std::vector<Material*>& materials)
 {
 
 	//モデルデータ配列
@@ -8,7 +8,7 @@ void Goal::Initialize(const std::vector<Model*>& models, const std::vector<Mater
 	//マテリアルデータ配列
 	materials_ = materials;
 	//ワールド変換データの初期化
-	worldTransform_.Initialize(viewProjection);
+	worldTransform_.Initialize();
 	worldTransform_.transform_.translate = kPosition;
 	worldTransform_.UpdateMatrix();
 
@@ -21,11 +21,11 @@ void Goal::Update()
 
 }
 
-void Goal::Draw()
+void Goal::Draw(const ViewProjection& viewProjection)
 {
 
 	for (Model* model : models_) {
-		model->Draw(worldTransform_);
+		model->Draw(worldTransform_, viewProjection);
 	}
 
 }

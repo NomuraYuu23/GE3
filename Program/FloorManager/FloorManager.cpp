@@ -10,7 +10,7 @@ FloorManager::~FloorManager()
 
 }
 
-void FloorManager::Initialize(Model* model, Material* material, ViewProjection* viewProjection)
+void FloorManager::Initialize(Model* model, Material* material)
 {
 
 	// nullポインタチェック
@@ -19,9 +19,6 @@ void FloorManager::Initialize(Model* model, Material* material, ViewProjection* 
 	model_ = model;
 
 	material_ = material;
-
-	// ワールド変換データの初期化
-	viewProjection_ = viewProjection;
 
 }
 
@@ -34,11 +31,11 @@ void FloorManager::Update()
 
 }
 
-void FloorManager::Draw()
+void FloorManager::Draw(const ViewProjection& viewProjection)
 {
 
 	for (Floor* floor : floors_) {
-		floor->Draw();
+		floor->Draw(viewProjection);
 	}
 
 }
@@ -47,7 +44,7 @@ void FloorManager::AddFloor(Vector3 position, Vector3 rotate, bool isMoving)
 {
 
 	Floor* floor = new Floor();
-	floor->Initialize(model_, material_, viewProjection_, position, rotate, isMoving);
+	floor->Initialize(model_, material_, position, rotate, isMoving);
 
 	floors_.push_back(floor);
 

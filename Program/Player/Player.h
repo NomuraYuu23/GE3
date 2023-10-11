@@ -17,8 +17,7 @@ public:
 	/// <param name="model">モデル</param>
 	/// <param name="textureHandle">テクスチャハンドル</param>
 	void Initialize(const std::vector<Model*>& models,
-		const std::vector<Material*>& materials,
-		const ViewProjection* viewProjection);
+		const std::vector<Material*>& materials);
 
 	/// <summary>
 	/// 更新
@@ -29,7 +28,7 @@ public:
 	/// 描画
 	/// </summary>
 	/// <param name="viewProjection">ビュープロジェクション</param>
-	void Draw() override;
+	void Draw(const ViewProjection& viewProjection) override;
 
 	/// <summary>
 	/// 移動
@@ -80,7 +79,7 @@ public: // アクセッサ
 
 	WorldTransform* GetWorldTransformAddress() { return &worldTransform_; }
 
-	void SetViewProjection(const ViewProjection* viewProjection) {	worldTransform_.viewProjection_ = viewProjection;}
+	void SetViewProjection(ViewProjection* viewProjection) {	viewProjection_ = viewProjection;}
 
 	float GetColliderRadius() { return kColliderSize; }
 
@@ -91,6 +90,9 @@ private: // メンバ変数
 
 	// 着地しているか
 	bool isLanding;
+
+	// ビュープロジェクション
+	ViewProjection* viewProjection_ = nullptr;
 
 
 private: // メンバ定数

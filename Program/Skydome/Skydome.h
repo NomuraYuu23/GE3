@@ -11,7 +11,7 @@ public:
 	/// 初期化
 	/// </summary>
 	/// <param name="model">モデル</param>
-	void Initialize(Model* model, Material* material, ViewProjection* viewProjection);
+	void Initialize(Model* model, Material* material);
 
 	/// <summary>
 	/// 更新
@@ -22,7 +22,7 @@ public:
 	/// 描画
 	/// </summary>
 	/// <param name="viewProjection">ビュープロジェクション</param>
-	void Draw();
+	void Draw(const ViewProjection& viewProjection);
 
 private:
 

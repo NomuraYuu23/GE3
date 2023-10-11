@@ -20,7 +20,7 @@ public: // メンバ関数
 	/// 初期化
 	/// </summary>
 	/// <param name="model">モデル</param>
-	void Initialize(Model* model, Material* material, ViewProjection* viewProjection);
+	void Initialize(Model* model, Material* material);
 
 	/// <summary>
 	/// 更新
@@ -31,7 +31,7 @@ public: // メンバ関数
 	/// 描画
 	/// </summary>
 	/// <param name="viewProjection">ビュープロジェクション</param>
-	void Draw();
+	void Draw(const ViewProjection& viewProjection);
 
 	/// <summary>
 	/// 床追加
@@ -52,8 +52,6 @@ private:
 	Model* model_ = nullptr;
 	// マテリアル
 	Material* material_ = nullptr;
-	// ビュー
-	ViewProjection* viewProjection_ = nullptr;
 
 	// 床リスト
 	std::vector<Floor*> floors_;

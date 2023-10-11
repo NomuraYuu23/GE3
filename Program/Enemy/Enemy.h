@@ -14,8 +14,7 @@ public:
 	/// <param name="model">モデル</param>
 	/// <param name="textureHandle">テクスチャハンドル</param>
 	void Initialize(const std::vector<Model*>& models,
-		const std::vector<Material*>& materials,
-		const ViewProjection* viewProjection);
+		const std::vector<Material*>& materials);
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -24,7 +23,7 @@ public:
 	/// 描画
 	/// </summary>
 	/// <param name="viewProjection">ビュープロジェクション</param>
-	void Draw();
+	void Draw(const ViewProjection& viewProjection);
 
 	/// <summary>
 	/// 移動

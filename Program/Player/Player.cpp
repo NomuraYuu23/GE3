@@ -2,14 +2,13 @@
 #include "../../Input.h"
 
 void Player::Initialize(const std::vector<Model*>& models,
-	const std::vector<Material*>& materials,
-	const ViewProjection* viewProjection)
+	const std::vector<Material*>& materials)
 {
 
 	//nullポインタチェック
 	assert(models.front());
 	//基底クラスの初期化
-	BaseCharacter::Initialize(models, materials, viewProjection);
+	BaseCharacter::Initialize(models, materials);
 
 	velocity_ = {0.0f,0.0f,0.0f};
 
@@ -37,11 +36,11 @@ void Player::Update()
 
 }
 
-void Player::Draw()
+void Player::Draw(const ViewProjection& viewProjection)
 {
 
 	for (Model* model : models_) {
-		model->Draw(worldTransform_);
+		model->Draw(worldTransform_, viewProjection);
 	}
 
 }
@@ -71,11 +70,11 @@ void Player::Walk()
 		move = v3Calc->Multiply(kWalkSpeed, v3Calc->Normalize(move));
 
 		// カメラの角度から回転行列を計算する
-		Matrix4x4 rotateMatrixX = m4Calc->MakeRotateXMatrix(worldTransform_.viewProjection_->transform_.rotate.x);
-		Matrix4x4 rotateMatrixY = m4Calc->MakeRotateYMatrix(worldTransform_.viewProjection_->transform_.rotate.y);
-		Matrix4x4 rotateMatrixZ = m4Calc->MakeRotateZMatrix(worldTransform_.viewProjection_->transform_.rotate.z);
+		Matrix4x4 rotateMatrixX = m4Calc->MakeRotateXMatrix(viewProjection_->transform_.rotate.x);
+		Matrix4x4 rotateMatrixY = m4Calc->MakeRotateYMatrix(viewProjection_->transform_.rotate.y);
+		Matrix4x4 rotateMatrixZ = m4Calc->MakeRotateZMatrix(viewProjection_->transform_.rotate.z);
 		if (worldTransform_.parent_) {
-			rotateMatrixY = m4Calc->MakeRotateYMatrix(worldTransform_.viewProjection_->transform_.rotate.y - worldTransform_.parent_->transform_.rotate.y);
+			rotateMatrixY = m4Calc->MakeRotateYMatrix(viewProjection_->transform_.rotate.y - worldTransform_.parent_->transform_.rotate.y);
 		}
 
 		Matrix4x4 rotateMatrix = m4Calc->Multiply(

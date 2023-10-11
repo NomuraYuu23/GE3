@@ -45,11 +45,12 @@ void GameScene::Initialize() {
 	playerMaterial_.reset(Material::Create());
 	std::vector<Material*> playerMaterials = { playerMaterial_.get() };
 	//モデル
-	playerModel_.reset(Model::Create("Resources/AL4/player", "player.obj", dxCommon_, playerMaterial_.get()));
+	playerModel_.reset(Model::Create("Resources/AL4/player", "player.obj", dxCommon_));
+	playerModel_.get()->SetMaterial(playerMaterial_.get());
 	std::vector<Model*> playerModels = { playerModel_.get() };
 	//オブジェクト
 	player_ = std::make_unique<Player>();
-	player_->Initialize(playerModels, playerMaterials, &viewProjection_);
+	player_->Initialize(playerModels, playerMaterials);
 
 	// 追従カメラ生成
 	followCamera_ = std::make_unique<FollowCamera>();
@@ -65,19 +66,21 @@ void GameScene::Initialize() {
 	//マテリアル
 	skydomeMaterial_.reset(Material::Create());
 	//モデル
-	skydomeModel_.reset(Model::Create("Resources/AL4/skydome", "skydome.obj", dxCommon_, skydomeMaterial_.get()));
+	skydomeModel_.reset(Model::Create("Resources/AL4/skydome", "skydome.obj", dxCommon_));
+	skydomeModel_.get()->SetMaterial(skydomeMaterial_.get());
 	//オブジェクト
 	skydome_ = std::make_unique<Skydome>();
-	skydome_->Initialize(skydomeModel_.get(), skydomeMaterial_.get(), &viewProjection_);
+	skydome_->Initialize(skydomeModel_.get(), skydomeMaterial_.get());
 
 	// フロアマネージャー
 	//マテリアル
 	floorMaterial_.reset(Material::Create());
 	//モデル
-	floorModel_.reset(Model::Create("Resources/AL4/floor", "floor.obj", dxCommon_, floorMaterial_.get()));
+	floorModel_.reset(Model::Create("Resources/AL4/floor", "floor.obj", dxCommon_));
+	floorModel_.get()->SetMaterial(floorMaterial_.get());
 	//オブジェクト
 	floorManager_ = std::make_unique<FloorManager>();
-	floorManager_->Initialize(floorModel_.get(), floorMaterial_.get(), &viewProjection_);
+	floorManager_->Initialize(floorModel_.get(), floorMaterial_.get());
 	// 床生成
 	floorManager_->AddFloor(Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 0.0f), false);
 	floorManager_->AddFloor(Vector3(0.0f, 0.0f, 30.0f), Vector3(0.0f, -1.57f, 0.0f), true);
@@ -90,11 +93,12 @@ void GameScene::Initialize() {
 	goalMaterial_.reset(Material::Create());
 	std::vector<Material*> goalMaterials = { goalMaterial_.get() };
 	//モデル
-	goalModel_.reset(Model::Create("Resources/AL4/goal", "goal.obj", dxCommon_, goalMaterial_.get()));
+	goalModel_.reset(Model::Create("Resources/AL4/goal", "goal.obj", dxCommon_));
+	goalModel_.get()->SetMaterial(goalMaterial_.get());
 	std::vector<Model*> goalModels = { goalModel_.get() };
 	//オブジェクト
 	goal_ = std::make_unique<Goal>();
-	goal_->Initialize(goalModels, goalMaterials, &viewProjection_);
+	goal_->Initialize(goalModels, goalMaterials);
 
 	//エネミーの生成
 	enemy_ = std::make_unique<Enemy>();
@@ -107,9 +111,13 @@ void GameScene::Initialize() {
 		enemyR_armMaterial_.get() };
 
 	//エネミーのモデル
-	enemyBodyModel_.reset(Model::Create("Resources/AL4/enemy_Body", "enemy_Body.obj", dxCommon_, enemyBodyMaterial_.get()));
-	enemyL_armModel_.reset(Model::Create("Resources/AL4/enemy_Arm", "enemy_Arm.obj", dxCommon_, enemyL_armMaterial_.get()));
-	enemyR_armModel_.reset(Model::Create("Resources/AL4/enemy_Arm", "enemy_Arm.obj", dxCommon_, enemyR_armMaterial_.get()));
+	enemyBodyModel_.reset(Model::Create("Resources/AL4/enemy_Body", "enemy_Body.obj", dxCommon_));
+	enemyBodyModel_.get()->SetMaterial(enemyBodyMaterial_.get());
+	enemyL_armModel_.reset(Model::Create("Resources/AL4/enemy_Arm", "enemy_Arm.obj", dxCommon_));
+	enemyL_armModel_.get()->SetMaterial(enemyL_armMaterial_.get());
+	enemyR_armModel_.reset(Model::Create("Resources/AL4/enemy_Arm", "enemy_Arm.obj", dxCommon_));
+	enemyR_armModel_.get()->SetMaterial(enemyR_armMaterial_.get());
+	
 	std::vector<Model*> enemyModels = {
 		enemyBodyModel_.get(),
 		enemyL_armModel_.get(),
@@ -117,7 +125,7 @@ void GameScene::Initialize() {
 	};
 
 	//エネミーの初期化
-	enemy_->Initialize(enemyModels, enemyMaterials, &viewProjection_);
+	enemy_->Initialize(enemyModels, enemyMaterials);
 
 	// 衝突マネージャー
 	collisionManager_ = std::make_unique<CollisionManager>();
@@ -186,11 +194,11 @@ void GameScene::Draw() {
 	//光源
 	directionalLight->Draw(dxCommon_->GetCommadList());
 	//オブジェクト
-	player_->Draw();
-	skydome_->Draw();
-	floorManager_ ->Draw();
-	goal_->Draw();
-	enemy_->Draw();
+	player_->Draw(viewProjection_);
+	skydome_->Draw(viewProjection_);
+	floorManager_ ->Draw(viewProjection_);
+	goal_->Draw(viewProjection_);
+	enemy_->Draw(viewProjection_);
 
 	Model::PostDraw();
 
