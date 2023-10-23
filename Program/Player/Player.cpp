@@ -9,10 +9,14 @@ void Player::Initialize(const std::vector<Model*>& models,
 	assert(models.front());
 	//基底クラスの初期化
 	BaseCharacter::Initialize(models, materials);
+	worldTransform_.transform_.translate = kInitialPosition;
+	worldTransform_.UpdateMatrix();
 
 	velocity_ = {0.0f,0.0f,0.0f};
 
 	isLanding = false;
+
+	collider_.Initialize(worldTransform_.transform_.translate, kColliderSize);
 
 }
 

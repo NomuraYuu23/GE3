@@ -419,6 +419,18 @@ Matrix4x4 Matrix4x4Calc::MakeRotateZMatrix(float radian) {
 
 }
 
+Matrix4x4 Matrix4x4Calc::MakeRotateXYZMatrix(Vector3 rotate)
+{
+	
+	Matrix4x4 rotateXMatrix = MakeRotateXMatrix(rotate.x);
+	Matrix4x4 rotateYMatrix = MakeRotateYMatrix(rotate.y);
+	Matrix4x4 rotateZMatrix = MakeRotateZMatrix(rotate.z);
+	Matrix4x4 rotateXYZMatrix = Multiply(rotateXMatrix, Multiply(rotateYMatrix, rotateZMatrix));
+
+	return rotateXYZMatrix;
+
+}
+
 //3次元アフィン変換行列
 Matrix4x4 Matrix4x4Calc::MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate) {
 

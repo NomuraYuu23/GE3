@@ -6,6 +6,7 @@
 #include <optional>
 
 #include "../BaseCharacter/BaseCharacter.h"
+#include "../Sphere/Sphere.h"
 
 class Player : public BaseCharacter
 {
@@ -83,6 +84,8 @@ public: // アクセッサ
 
 	float GetColliderRadius() { return kColliderSize; }
 
+	Sphere& GetCollider() { return collider_; }
+
 private: // メンバ変数
 
 	// 速度
@@ -94,11 +97,14 @@ private: // メンバ変数
 	// ビュープロジェクション
 	ViewProjection* viewProjection_ = nullptr;
 
+	// コライダー
+	Sphere collider_;
+
 
 private: // メンバ定数
 
 	// 初期位置
-	const Vector3 kInitialPosition = {0.0f,0.5f,0.0f};
+	const Vector3 kInitialPosition = {1.0f, 10.5f, 1.0f};
 
 	// 初期角度
 	const Vector3 kInitialRotate = {};

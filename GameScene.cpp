@@ -164,7 +164,7 @@ void GameScene::Update(){
 	goal_->Update();
 
 	// 衝突処理
-	collisionManager_->Collision();
+	collisionManager_->AllCollision();
 
 }
 
