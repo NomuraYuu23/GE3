@@ -6,7 +6,7 @@
 #include <optional>
 
 #include "../BaseCharacter/BaseCharacter.h"
-#include "../Sphere/Sphere.h"
+#include "../Collider/Sphere/Sphere.h"
 
 class Player : public BaseCharacter
 {

@@ -144,10 +144,22 @@
     <ClCompile Include="Program\Collider\Collider.cpp">
       <Filter>AL</Filter>
     </ClCompile>
-    <ClCompile Include="Program\Sphere\Sphere.cpp">
+    <ClCompile Include="Program\Collider\Sphere\Sphere.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\Plane\Plane.cpp">
+    <ClCompile Include="Program\Collider\Plane\Plane.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\CollisionManager\Collision.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\Collider\Triangle\Triangle.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\Collider\AABB\AABB.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\Collider\OBB\OBB.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -281,10 +293,22 @@
     <ClInclude Include="Program\Collider\Collider.h">
       <Filter>AL</Filter>
     </ClInclude>
-    <ClInclude Include="Program\Sphere\Sphere.h">
+    <ClInclude Include="Program\Collider\Sphere\Sphere.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Program\Plane\Plane.h">
+    <ClInclude Include="Program\Collider\Plane\Plane.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\CollisionManager\Collision.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\Collider\Triangle\Triangle.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\Collider\AABB\AABB.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\Collider\OBB\OBB.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

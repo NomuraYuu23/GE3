@@ -198,9 +198,9 @@ Model::ModelData Model::LoadObjFile(const std::string& directoryPath, const std:
 				triangle[faceVertex] = { position, texcoord, normal };
 			}
 			//頂点を逆順で登録することで、回り順を逆にする
-			modelData.vertices.push_back(triangle[2]);
-			modelData.vertices.push_back(triangle[1]);
-			modelData.vertices.push_back(triangle[0]);
+			modelData.vertices_.push_back(triangle[2]);
+			modelData.vertices_.push_back(triangle[1]);
+			modelData.vertices_.push_back(triangle[0]);
 		}
 		else if (identifier == "mtllib") {
 			//materialTemplateLibrayファイルの名前を取得する
@@ -275,7 +275,7 @@ void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& vie
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(sCommandList, 2, textureHandle_);
 
 	//描画
-	sCommandList->DrawInstanced(UINT(modelData.vertices.size()), 1, 0, 0);
+	sCommandList->DrawInstanced(UINT(modelData.vertices_.size()), 1, 0, 0);
 
 }
 
@@ -289,19 +289,19 @@ void Model::CreateMesh(const std::string& directoryPath, const std::string& file
 	//モデル読み込み
 	modelData = LoadObjFile(directoryPath, filename);
 
-	vertBuff_ = BufferResource::CreateBufferResource(sDevice, sizeof(VertexData) * modelData.vertices.size());
+	vertBuff_ = BufferResource::CreateBufferResource(sDevice, sizeof(VertexData) * modelData.vertices_.size());
 
 	//リソースの先頭のアドレスから使う
 	vbView_.BufferLocation = vertBuff_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点3つ分のサイズ
-	vbView_.SizeInBytes = UINT(sizeof(VertexData) * modelData.vertices.size());
+	vbView_.SizeInBytes = UINT(sizeof(VertexData) * modelData.vertices_.size());
 	//1頂点あたりのサイズ
 	vbView_.StrideInBytes = sizeof(VertexData);
 
 	//書き込むためのアドレスを取得
 	vertBuff_->Map(0, nullptr, reinterpret_cast<void**>(&vertMap));
 	//頂点データをリソースにコピー
-	std::memcpy(vertMap, modelData.vertices.data(), sizeof(VertexData) * modelData.vertices.size());
+	std::memcpy(vertMap, modelData.vertices_.data(), sizeof(VertexData) * modelData.vertices_.size());
 
 }
 

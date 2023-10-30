@@ -1,5 +1,5 @@
 #pragma once
-#include "../Collider/Collider.h"
+#include "../Collider.h"
 class Plane :
     public Collider
 {
@@ -11,11 +11,11 @@ public: // メンバ関数
 	/// </summary>
 	/// <param name="center">センター</param>
 	/// <param name="radius">半径</param>
-	void Initialize(Vector3 normal, float distance);
+	void Initialize(const Vector3& normal, float distance);
 
 public: // アクセッサ
 
-	void SetNormal(Vector3 normal) { normal_ = normal; }
+	void SetNormal(const Vector3& normal) { normal_ = normal; }
 
 	Vector3 GetNormal() { return normal_; }
 

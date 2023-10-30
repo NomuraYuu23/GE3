@@ -1,5 +1,5 @@
 #pragma once
-#include "../Collider/Collider.h"
+#include "../Collider.h"
 class Sphere : public Collider
 {
 
@@ -10,11 +10,11 @@ public: // メンバ関数
 	/// </summary>
 	/// <param name="center">センター</param>
 	/// <param name="radius">半径</param>
-	void Initialize(Vector3 center, float radius);
+	void Initialize(const Vector3& center, float radius);
 
 public: // アクセッサ
 
-	void SetCenter(Vector3 center) { center_ = center; }
+	void SetCenter(const Vector3& center) { center_ = center; }
 
 	Vector3 GetCenter() { return center_; }
 

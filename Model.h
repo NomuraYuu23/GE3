@@ -37,7 +37,7 @@ public:
 
 	struct ModelData {
 
-		std::vector<VertexData> vertices;
+		std::vector<VertexData> vertices_;
 		MaterialData material;
 	
 	};
