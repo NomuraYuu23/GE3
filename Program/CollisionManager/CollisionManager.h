@@ -1,7 +1,5 @@
 #pragma once
 // コライダー
-#include "../Sphere/Sphere.h"
-#include "../Plane/Plane.h"
 
 #include "../Player/Player.h"
 #include "../FloorManager/FloorManager.h"
@@ -41,22 +39,6 @@ private: // メンバ関数
 	/// </summary>
 	/// <returns></returns>
 	bool PlayerAndEnemy();
-
-	/// <summary>
-	/// 球と球
-	/// </summary>
-	/// <param name="s1"></param>
-	/// <param name="s2"></param>
-	/// <returns></returns>
-	bool IsCollision(Sphere& s1, Sphere& s2);
-
-	/// <summary>
-	/// 球と平面
-	/// </summary>
-	/// <param name="sphere"></param>
-	/// <param name="plane"></param>
-	/// <returns></returns>
-	bool IsCollision(Sphere& sphere, Plane& plane);
 
 private: // メンバ変数
 

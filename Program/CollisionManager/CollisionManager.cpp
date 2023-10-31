@@ -1,4 +1,5 @@
 #include "CollisionManager.h"
+#include "Collision.h"
 
 void CollisionManager::Initialize(Player* player, FloorManager* floorManager, Goal* goal, Enemy* enemy)
 {
@@ -89,34 +90,6 @@ bool CollisionManager::PlayerAndEnemy()
 
 	//半径の合計よりも短ければ衝突
 	if (distance <= player_->GetColliderRadius() + enemy_->GetColliderRadius()) {
-		return true;
-	}
-
-	return false;
-
-}
-
-bool CollisionManager::IsCollision(Sphere& s1, Sphere& s2)
-{
-
-	//2つの球の中心点間の距離を求める
-	float distance = v3Calc->Length(v3Calc->Subtract(s2.GetCenter(), s1.GetCenter()));
-	//半径の合計よりも短ければ衝突
-	if (distance <= s1.GetRadius() + s2.GetRadius()) {
-		return true;
-	}
-
-	return false;
-
-}
-
-bool CollisionManager::IsCollision(Sphere& sphere, Plane& plane)
-{
-
-	//1.平面と球の中心点との距離を求める
-	float distance = std::fabsf(v3Calc->Dot(plane.GetNormal(), sphere.GetCenter()) - plane.GetDistance());
-	//2.1の距離 <= 球の半径なら衝突
-	if (distance <= sphere.GetRadius()) {
 		return true;
 	}
 
