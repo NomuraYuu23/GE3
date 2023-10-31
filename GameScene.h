@@ -71,7 +71,11 @@ private:
 	//マテリアル
 	std::unique_ptr<Material> playerMaterial_ = nullptr;
 	//モデル
-	std::unique_ptr<Model> playerModel_ = nullptr;
+	std::unique_ptr<Model> playerBodyModel_ = nullptr;
+	std::unique_ptr<Model> playerHeadModel_ = nullptr;
+	std::unique_ptr<Model> playerL_armModel_ = nullptr;
+	std::unique_ptr<Model> playerR_armModel_ = nullptr;
+	std::unique_ptr<Model> playerWeaponModel_ = nullptr;
 
 	//追従カメラ
 	std::unique_ptr<FollowCamera> followCamera_ = nullptr;

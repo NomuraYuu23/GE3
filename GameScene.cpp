@@ -45,9 +45,25 @@ void GameScene::Initialize() {
 	playerMaterial_.reset(Material::Create());
 	std::vector<Material*> playerMaterials = { playerMaterial_.get() };
 	//モデル
-	playerModel_.reset(Model::Create("Resources/AL4/player", "player.obj", dxCommon_));
-	playerModel_.get()->SetMaterial(playerMaterial_.get());
-	std::vector<Model*> playerModels = { playerModel_.get() };
+	// 自キャラのモデル
+	playerBodyModel_.reset(Model::Create("Resources/AL4/float_Body", "float_Body.obj", dxCommon_));
+	playerBodyModel_->SetMaterial(playerMaterial_.get());
+	playerHeadModel_.reset(Model::Create("Resources/AL4/float_Head", "float_Head.obj", dxCommon_));
+	playerHeadModel_->SetMaterial(playerMaterial_.get());
+	playerL_armModel_.reset(Model::Create("Resources/AL4/float_L_arm", "float_L_arm.obj", dxCommon_));
+	playerL_armModel_->SetMaterial(playerMaterial_.get());
+	playerR_armModel_.reset(Model::Create("Resources/AL4/float_R_arm", "float_R_arm.obj", dxCommon_));
+	playerR_armModel_->SetMaterial(playerMaterial_.get());
+	playerWeaponModel_.reset(Model::Create("Resources/AL4/player_Weapon", "player_Weapon.obj", dxCommon_));
+	playerWeaponModel_->SetMaterial(playerMaterial_.get());
+
+	std::vector<Model*> playerModels = {
+		playerBodyModel_.get(),
+		playerHeadModel_.get(),
+		playerL_armModel_.get(),
+		playerR_armModel_.get(),
+		playerWeaponModel_.get(),
+	};
 	//オブジェクト
 	player_ = std::make_unique<Player>();
 	player_->Initialize(playerModels, playerMaterials);
