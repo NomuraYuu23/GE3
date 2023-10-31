@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 #include "../BaseCharacter/BaseCharacter.h"
+#include "../Collider/Sphere/Sphere.h"
 
 class Enemy : public BaseCharacter {
 
@@ -45,7 +46,11 @@ public:
 	/// </summary>
 	void UpdateArmRotationgimmick();
 
+public:
+
 	float GetColliderRadius() { return kColliderSize; }
+
+	Sphere& GetCollider() { return collider_; }
 
 private:
 
@@ -76,5 +81,8 @@ private:
 
 	// コライダーサイズ
 	const float kColliderSize = 1.0f;
+
+	// コライダー
+	Sphere collider_;
 
 };

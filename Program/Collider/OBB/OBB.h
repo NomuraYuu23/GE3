@@ -12,6 +12,8 @@ public: // メンバ関数
 		const Vector3& otientatuons1, const Vector3& otientatuons2, const Vector3& otientatuons3,
 		const Vector3& size);
 
+	void SetOtientatuons(const Vector3& otientatuons1, const Vector3& otientatuons2, const Vector3& otientatuons3);
+
 public: // メンバ変数
 
 	Vector3 center_;//中心

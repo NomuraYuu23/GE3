@@ -1,5 +1,6 @@
 #pragma once
 #include "../BaseCharacter/BaseCharacter.h"
+#include "../Collider/Sphere/Sphere.h"
 class Goal : public BaseCharacter
 {
 
@@ -32,6 +33,8 @@ public: // アクセッサ
 	/// <returns></returns>
 	float GetRadius() { return kRadius; }
 
+	Sphere& GetCollider() { return collider_; }
+
 private: // メンバ変数
 
 	// 位置
@@ -39,6 +42,9 @@ private: // メンバ変数
 
 	// 半径
 	const float kRadius = 2.0f;
+
+	// コライダー
+	Sphere collider_;
 
 };
 

@@ -23,6 +23,11 @@ void Floor::Initialize(Model* model, Material* material, Vector3 position, Vecto
 
 	moveTimer_ = 0.0f;
 
+	Vector3 colliderMax_ = { position_.x + size_.x, position_.y + size_.y, position_.z + size_.z };
+	Vector3 colliderMin_ = { position_.x - size_.x, position_.y - size_.y, position_.z - size_.z };
+
+	collider_.Initialize(colliderMin_, colliderMax_);
+
 }
 
 void Floor::Update()
@@ -30,6 +35,9 @@ void Floor::Update()
 
 	if (isMoving_) {
 		Move();
+		Vector3 WorldPosition = { worldTransform_.worldMatrix_.m[3][0] , worldTransform_.worldMatrix_.m[3][1] , worldTransform_.worldMatrix_.m[3][2] };
+		collider_.max_ = { WorldPosition.x + size_.x, WorldPosition.y + size_.y, WorldPosition.z + size_.z};
+		collider_.min_ = { WorldPosition.x - size_.x, WorldPosition.y - size_.y, WorldPosition.z - size_.z };
 	}
 
 	worldTransform_.UpdateMatrix();

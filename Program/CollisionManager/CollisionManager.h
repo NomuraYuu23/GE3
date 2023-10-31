@@ -23,23 +23,6 @@ public: // メンバ関数
 
 private: // メンバ関数
 
-	/// <summary>
-	/// プレイヤーと床
-	/// </summary>
-	bool PlayerAndFloor(Floor* floor);
-
-	/// <summary>
-	/// プレイヤーとゴール
-	/// </summary>
-	/// <returns></returns>
-	bool PlayerAndGoal();
-
-	/// <summary>
-	/// プレイヤーとエネミー
-	/// </summary>
-	/// <returns></returns>
-	bool PlayerAndEnemy();
-
 private: // メンバ変数
 
 	// 計算

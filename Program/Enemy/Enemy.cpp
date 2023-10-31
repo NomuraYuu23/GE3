@@ -47,6 +47,8 @@ void Enemy::Initialize(const std::vector<Model*>& models,
 	// 腕回転ギミック初期化
 	InitializeArmRotationgimmick();
 
+	collider_.Initialize(worldTransform_.transform_.translate, kColliderSize);
+
 }
 
 /// <summary>
@@ -69,6 +71,8 @@ void Enemy::Update() {
 	worldTransformBody_.UpdateMatrix();
 	worldTransformL_arm_.UpdateMatrix();
 	worldTransformR_arm_.UpdateMatrix();
+
+	collider_.center_  = { worldTransform_.worldMatrix_.m[3][0],worldTransform_.worldMatrix_.m[3][1], worldTransform_.worldMatrix_.m[3][2] };
 
 }
 

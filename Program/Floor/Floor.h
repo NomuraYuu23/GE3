@@ -2,6 +2,7 @@
 #include "../../Model.h"
 #include "../../Material.h"
 #include "../../WorldTransform.h"
+#include "../Collider/AABB/AABB.h"
 
 class Floor
 {
@@ -35,7 +36,9 @@ public: // アクセッサ
 
 	WorldTransform* GetWorldTransformAdress() { return &worldTransform_; }
 
-	Vector3 GetColliderSize() { return colliderSize_; }
+	Vector3 GetSize() { return size_; }
+
+	AABB& GetCollider() { return collider_; }
 
 private:
 
@@ -53,10 +56,12 @@ private:
 	float moveTimer_;
 
 	// サイズ
-	Vector3 colliderSize_ = {10.0f,1.0f, 10.0f};
+	Vector3 size_ = {10.0f,1.0f, 10.0f};
 
 	// position
 	Vector3 position_;
+
+	AABB collider_;
 
 };
 

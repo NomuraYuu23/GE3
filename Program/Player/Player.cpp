@@ -38,6 +38,8 @@ void Player::Update()
 		Restart();
 	}
 
+	collider_.center_ = { worldTransform_.worldMatrix_.m[3][0], worldTransform_.worldMatrix_.m[3][1], worldTransform_.worldMatrix_.m[3][2] };
+
 }
 
 void Player::Draw(const ViewProjection& viewProjection)
@@ -169,12 +171,14 @@ void Player::Restart()
 
 void Player::OnCollision(WorldTransform* worldTransform)
 {
-	if (!worldTransform_.parent_ || 
-		(worldTransform_.parent_ != worldTransform)) {
-		GotParent(worldTransform);
+	if (velocity_.y <= 0.0f) {
+		if (!worldTransform_.parent_ ||
+			(worldTransform_.parent_ != worldTransform)) {
+			GotParent(worldTransform);
+		}
+		worldTransform_.transform_.translate.y = 0.0f;
+		isLanding = true;
 	}
-	worldTransform_.transform_.translate.y = 0.0f;
-	isLanding = true;
 
 }
 

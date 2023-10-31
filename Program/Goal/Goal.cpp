@@ -12,6 +12,8 @@ void Goal::Initialize(const std::vector<Model*>& models, const std::vector<Mater
 	worldTransform_.transform_.translate = kPosition;
 	worldTransform_.UpdateMatrix();
 
+	collider_.Initialize(kPosition, kRadius);
+
 }
 
 void Goal::Update()
