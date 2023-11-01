@@ -29,13 +29,63 @@ public: // サブクラス
 		kDash, // ダッシュ中
 	};
 
+	// 通常用ワーク
+	struct WorkRoot {
+		// 初期位置
+		const Vector3 kInitialPosition = { 1.0f, 10.5f, 1.0f };
+		// 初期角度
+		const Vector3 kInitialRotate = {};
+		// ジャンプ初期速さ
+		const float kJumpSpeed = 1.0f;
+		// 落下加速
+		const float kFallAcceleration = 0.05f;
+		// 歩行速度
+		const float kWalkSpeed = 0.6f;
+		// コライダーサイズ(半径)
+		const float kColliderSize = 2.0f;
+	};
+
+	// 攻撃用ワーク
+	struct WorkAttack {
+		// コライダー
+		Sphere attackCollider_;
+		// プレイヤーと攻撃コライダーの中心までの距離
+		Vector3 attackCenterAdd_;
+		// 攻撃半径
+		float attackRadius_;
+		// あたり判定を取るか
+		bool isAttackJudgment_;
+
+		//攻撃行動用の媒介変数
+		float behaviorAttackParameter_ = 0.0f;
+		// 攻撃行動用のサイクル<frame>
+		int32_t behaviorAttackPeriod_ = 60;
+
+	};
+
 	// ダッシュ用ワーク
-	struct WorkDash
-	{
+	struct WorkDash{
 		// ダッシュ用の媒介変数
 		uint32_t deshPrameter_ = 0;
 	};
 
+	//浮遊ギミック用ワーク
+	struct WorkFloating {
+		//浮遊ギミックの媒介変数
+		float floatingParameter_ = 0.0f;
+		// 浮遊移動のサイクル<frame>
+		int32_t floatingPeriod_ = 60;
+		// 浮遊の振幅<m>
+		float floatingAmplitude_ = 0.5f;
+	};
+
+	// ぶらぶらギミック用ワーク
+	struct WorkSwing {
+		//ぶらぶらギミックの媒介変数
+		float swingParameter_ = 0.0f;
+		//ぶらぶらギミックのサイクル<frame>
+		int32_t swingPeriod_ = 60;
+	};
 
 public: // メンバ関数
 	/// <summary>
@@ -173,15 +223,15 @@ public: // アクセッサ
 
 	WorldTransform* GetWorldTransformAddress() { return &worldTransform_; }
 
-	void SetViewProjection(ViewProjection* viewProjection) {	viewProjection_ = viewProjection;}
+	void SetViewProjection(ViewProjection* viewProjection) { viewProjection_ = viewProjection;}
 
-	float GetColliderRadius() { return kColliderSize; }
+	float GetColliderRadius() { return workRoot_.kColliderSize; }
 
 	Sphere& GetCollider() { return collider_; }
 
-	Sphere& GetAttackCollider() { return attackCollider_; }
+	Sphere& GetAttackCollider() { return workAttack_.attackCollider_; }
 
-	bool GetIsAttackJudgment() { return isAttackJudgment_; }
+	bool GetIsAttackJudgment() { return workAttack_.isAttackJudgment_; }
 
 private: // メンバ変数
 
@@ -209,60 +259,20 @@ private: // メンバ変数
 	//次の振るまいリクエスト
 	std::optional<Behavior> behaviorRequest_ = std::nullopt;
 
+	// 通常
+	WorkRoot workRoot_;
+
+	// 攻撃
+	WorkAttack workAttack_;
+
 	// ダッシュ
 	WorkDash workDash_;
 
-private: // メンバ変数(ギミック)
+	// 浮遊
+	WorkFloating workFloating_;
 
-	//浮遊ギミックの媒介変数
-	float floatingParameter_ = 0.0f;
-	// 浮遊移動のサイクル<frame>
-	int32_t floatingPeriod_ = 60;
-	// 浮遊の振幅<m>
-	float floatingAmplitude_ = 0.5f;
-
-	//ぶらぶらギミックの媒介変数
-	float swingParameter_ = 0.0f;
-	//ぶらぶらギミックのサイクル<frame>
-	int32_t swingPeriod_ = 60;
-
-	//攻撃行動用の媒介変数
-	float behaviorAttackParameter_ = 0.0f;
-	// 攻撃行動用のサイクル<frame>
-	int32_t behaviorAttackPeriod_ = 60;
-
-private: // メンバ関数(攻撃)
-	
-	// コライダー
-	Sphere attackCollider_;
-
-	Vector3 attackCenterAdd_;
-
-	float attackRadius_;
-
-	// あたり判定を取るか
-	bool isAttackJudgment_;
-
-private: // メンバ定数
-
-	// 初期位置
-	const Vector3 kInitialPosition = {1.0f, 10.5f, 1.0f};
-
-	// 初期角度
-	const Vector3 kInitialRotate = {};
-
-	// ジャンプ初期速さ
-	const float kJumpSpeed = 1.0f;
-
-	// 落下加速
-	const float kFallAcceleration = 0.05f;
-
-	// 歩行速度
-	const float kWalkSpeed = 0.6f;
-
-	// コライダーサイズ(半径)
-	const float kColliderSize = 2.0f;
-
+	// ぶらぶら
+	WorkSwing workSwing_;
 
 };
 

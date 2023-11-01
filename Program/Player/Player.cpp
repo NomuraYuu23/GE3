@@ -9,7 +9,7 @@ void Player::Initialize(const std::vector<Model*>& models,
 	assert(models.front());
 	//基底クラスの初期化
 	BaseCharacter::Initialize(models, materials);
-	worldTransform_.transform_.translate = kInitialPosition;
+	worldTransform_.transform_.translate = workRoot_.kInitialPosition;
 	worldTransform_.UpdateMatrix();
 
 	//nullポインタチェック
@@ -46,19 +46,19 @@ void Player::Initialize(const std::vector<Model*>& models,
 
 	isLanding = false;
 
-	collider_.Initialize(worldTransform_.transform_.translate, kColliderSize);
+	collider_.Initialize(worldTransform_.transform_.translate, workRoot_.kColliderSize);
 
 	// 攻撃
 	
-	attackCenterAdd_ = {0.0f,0.0,5.0f};
+	workAttack_.attackCenterAdd_ = {0.0f,0.0,5.0f};
 
-	attackRadius_ = 5.0f;
+	workAttack_.attackRadius_ = 5.0f;
 
 	// コライダー
-	attackCollider_.Initialize(attackCenterAdd_, attackRadius_);
+	workAttack_.attackCollider_.Initialize(workAttack_.attackCenterAdd_, workAttack_.attackRadius_);
 
 	// あたり判定を取るか
-	isAttackJudgment_ = false;
+	workAttack_.isAttackJudgment_ = false;
 
 	// グローバル
 
@@ -171,7 +171,7 @@ void Player::BehaviorAttackInitialize()
 {
 
 	// 攻撃行動用の媒介変数
-	behaviorAttackParameter_ = 0.0f;
+	workAttack_.behaviorAttackParameter_ = 0.0f;
 
 }
 
@@ -186,16 +186,16 @@ void Player::BehaviorAttackUpdate()
 	const float pi = 3.14f;
 
 	// 1フレームでのパラメータ加算値
-	const float step = 2.0f * pi / behaviorAttackPeriod_;
+	const float step = 2.0f * pi / workAttack_.behaviorAttackPeriod_;
 
 	// パラメータを1ステップ分加算
-	behaviorAttackParameter_ += step;
-	if (behaviorAttackParameter_ >= 0.8f * pi &&
-		behaviorAttackParameter_ <= 1.5f * pi) {
+	workAttack_.behaviorAttackParameter_ += step;
+	if (workAttack_.behaviorAttackParameter_ >= 0.8f * pi &&
+		workAttack_.behaviorAttackParameter_ <= 1.5f * pi) {
 
-		worldTransformL_arm_.transform_.rotate.x = behaviorAttackParameter_;
-		worldTransformR_arm_.transform_.rotate.x = behaviorAttackParameter_;
-		worldTransformWeapon_.transform_.rotate.x = behaviorAttackParameter_ + pi;
+		worldTransformL_arm_.transform_.rotate.x = workAttack_.behaviorAttackParameter_;
+		worldTransformR_arm_.transform_.rotate.x = workAttack_.behaviorAttackParameter_;
+		worldTransformWeapon_.transform_.rotate.x = workAttack_.behaviorAttackParameter_ + pi;
 
 		// 速さ
 		const float speed = 0.3f;
@@ -224,21 +224,21 @@ void Player::BehaviorAttackUpdate()
 			worldTransform_.transform_.rotate.y = std::atan2f(move.x, move.z);
 		}
 	}
-	else if (behaviorAttackParameter_ < 0.8f * pi) {
+	else if (workAttack_.behaviorAttackParameter_ < 0.8f * pi) {
 		//	振りかぶり
-		worldTransformL_arm_.transform_.rotate.x = -behaviorAttackParameter_;
-		worldTransformR_arm_.transform_.rotate.x = -behaviorAttackParameter_;
+		worldTransformL_arm_.transform_.rotate.x = -workAttack_.behaviorAttackParameter_;
+		worldTransformR_arm_.transform_.rotate.x = -workAttack_.behaviorAttackParameter_;
 
 	}
-	else if (behaviorAttackParameter_ >= 2.0f * pi) {
+	else if (workAttack_.behaviorAttackParameter_ >= 2.0f * pi) {
 		// 2πを超えたら振るまい変更
 		behaviorRequest_ = Behavior::kRoot;
 
-		isAttackJudgment_ = false;
+		workAttack_.isAttackJudgment_ = false;
 	}
 	else {
 		// 攻撃のあたり判定をだす
-		isAttackJudgment_ = true;
+		workAttack_.isAttackJudgment_ = true;
 
 		// カメラの角度から回転行列を計算する
 		Matrix4x4 rotateMatrixX = m4Calc->MakeRotateXMatrix(worldTransform_.transform_.rotate.x);
@@ -248,9 +248,9 @@ void Player::BehaviorAttackUpdate()
 		Matrix4x4 rotateMatrix = m4Calc->Multiply(
 			rotateMatrixX, m4Calc->Multiply(rotateMatrixY, rotateMatrixZ));
 
-		Vector3 attackCenterAdd = m4Calc->TransformNormal(attackCenterAdd_, rotateMatrix);
+		Vector3 attackCenterAdd = m4Calc->TransformNormal(workAttack_.attackCenterAdd_, rotateMatrix);
 
-		attackCollider_.center_ = { worldTransform_.worldMatrix_.m[3][0] + attackCenterAdd.x,
+		workAttack_.attackCollider_.center_ = { worldTransform_.worldMatrix_.m[3][0] + attackCenterAdd.x,
 		worldTransform_.worldMatrix_.m[3][1] + attackCenterAdd.y,
 		worldTransform_.worldMatrix_.m[3][2] + attackCenterAdd.z };
 	}
@@ -273,11 +273,11 @@ void Player::InitializeFloatinggimmick()
 {
 
 	// 浮遊ギミックの媒介変数
-	floatingParameter_ = 0.0f;
+	workFloating_.floatingParameter_ = 0.0f;
 	// 浮遊移動のサイクル<frame>
-	floatingPeriod_ = 60;
+	workFloating_.floatingPeriod_ = 60;
 	// 浮遊の振幅<m>
-	floatingAmplitude_ = 0.5f;
+	workFloating_.floatingAmplitude_ = 0.5f;
 
 }
 
@@ -288,16 +288,16 @@ void Player::UpdateFloatinggimmick()
 	const float pi = 3.14f;
 
 	// 1フレームでのパラメータ加算値
-	const float step = 2.0f * pi / floatingPeriod_;
+	const float step = 2.0f * pi / workFloating_.floatingPeriod_;
 
 	// パラメータを1ステップ分加算
-	floatingParameter_ += step;
+	workFloating_.floatingParameter_ += step;
 	//2πを超えたら0に戻す
-	floatingParameter_ = std::fmod(floatingParameter_, 2.0f * pi);
+	workFloating_.floatingParameter_ = std::fmod(workFloating_.floatingParameter_, 2.0f * pi);
 
 
 	//浮遊を座標に反映
-	worldTransformBody_.transform_.translate.y = std::sin(floatingParameter_) * floatingAmplitude_ + 1.0f;
+	worldTransformBody_.transform_.translate.y = std::sin(workFloating_.floatingParameter_) * workFloating_.floatingAmplitude_ + 1.0f;
 
 }
 
@@ -305,9 +305,9 @@ void Player::InitializeSwinggimmick()
 {
 
 	// ぶらぶらアニメーションの媒介変数
-	swingParameter_ = 0.0f;
+	workSwing_.swingParameter_ = 0.0f;
 	// ぶらぶらアニメーションのサイクル<frame>
-	swingPeriod_ = 60;
+	workSwing_.swingPeriod_ = 60;
 
 }
 
@@ -318,14 +318,14 @@ void Player::UpdateSwinggimmick()
 	const float pi = 3.14f;
 
 	// 1フレームでのパラメータ加算値
-	const float step = 2.0f * pi / swingPeriod_;
+	const float step = 2.0f * pi / workSwing_.swingPeriod_;
 	// パラメータを1ステップ分加算
-	swingParameter_ += step;
+	workSwing_.swingParameter_ += step;
 	// 2πを超えたら0に戻す
-	swingParameter_ = std::fmod(swingParameter_, 2.0f * pi);
+	workSwing_.swingParameter_ = std::fmod(workSwing_.swingParameter_, 2.0f * pi);
 
-	worldTransformL_arm_.transform_.rotate.x = std::sinf(swingParameter_) / 2.0f;
-	worldTransformR_arm_.transform_.rotate.x = std::sinf(swingParameter_) / 2.0f;
+	worldTransformL_arm_.transform_.rotate.x = std::sinf(workSwing_.swingParameter_) / 2.0f;
+	worldTransformR_arm_.transform_.rotate.x = std::sinf(workSwing_.swingParameter_) / 2.0f;
 
 
 }
@@ -361,7 +361,7 @@ void Player::Walk()
 		if (isMoving) {
 
 			// 移動量に速さを反映
-			move = v3Calc->Multiply(kWalkSpeed, v3Calc->Normalize(move));
+			move = v3Calc->Multiply(workRoot_.kWalkSpeed, v3Calc->Normalize(move));
 
 			// カメラの角度から回転行列を計算する
 			Matrix4x4 rotateMatrixX = m4Calc->MakeRotateXMatrix(viewProjection_->transform_.rotate.x);
@@ -407,7 +407,7 @@ void Player::Jump()
 	if (input->GetJoystickConnected()) {
 		
 		if (input->TriggerJoystick(0) && isLanding) {
-			velocity_.y += kJumpSpeed;
+			velocity_.y += workRoot_.kJumpSpeed;
 			isLanding = false;
 		}
 
@@ -419,7 +419,7 @@ void Player::Fall()
 {
 
 	if (!isLanding) {
-		velocity_.y -= kFallAcceleration;
+		velocity_.y -= workRoot_.kFallAcceleration;
 	}
 
 }
@@ -461,8 +461,8 @@ void Player::DashStart()
 void Player::Restart()
 {
 
-	worldTransform_.transform_.translate = kInitialPosition;
-	worldTransform_.transform_.rotate = kInitialRotate;
+	worldTransform_.transform_.translate = workRoot_.kInitialPosition;
+	worldTransform_.transform_.rotate = workRoot_.kInitialRotate;
 	worldTransform_.parent_ = nullptr;
 	worldTransform_.UpdateMatrix();
 
