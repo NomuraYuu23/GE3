@@ -47,15 +47,10 @@ void GameScene::Initialize() {
 	//モデル
 	// 自キャラのモデル
 	playerBodyModel_.reset(Model::Create("Resources/AL4/float_Body", "float_Body.obj", dxCommon_));
-	playerBodyModel_->SetMaterial(playerMaterial_.get());
 	playerHeadModel_.reset(Model::Create("Resources/AL4/float_Head", "float_Head.obj", dxCommon_));
-	playerHeadModel_->SetMaterial(playerMaterial_.get());
 	playerL_armModel_.reset(Model::Create("Resources/AL4/float_L_arm", "float_L_arm.obj", dxCommon_));
-	playerL_armModel_->SetMaterial(playerMaterial_.get());
 	playerR_armModel_.reset(Model::Create("Resources/AL4/float_R_arm", "float_R_arm.obj", dxCommon_));
-	playerR_armModel_->SetMaterial(playerMaterial_.get());
 	playerWeaponModel_.reset(Model::Create("Resources/AL4/player_Weapon", "player_Weapon.obj", dxCommon_));
-	playerWeaponModel_->SetMaterial(playerMaterial_.get());
 
 	std::vector<Model*> playerModels = {
 		playerBodyModel_.get(),
@@ -83,7 +78,6 @@ void GameScene::Initialize() {
 	skydomeMaterial_.reset(Material::Create());
 	//モデル
 	skydomeModel_.reset(Model::Create("Resources/AL4/skydome", "skydome.obj", dxCommon_));
-	skydomeModel_.get()->SetMaterial(skydomeMaterial_.get());
 	//オブジェクト
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize(skydomeModel_.get(), skydomeMaterial_.get());
@@ -93,7 +87,6 @@ void GameScene::Initialize() {
 	floorMaterial_.reset(Material::Create());
 	//モデル
 	floorModel_.reset(Model::Create("Resources/AL4/floor", "floor.obj", dxCommon_));
-	floorModel_.get()->SetMaterial(floorMaterial_.get());
 	//オブジェクト
 	floorManager_ = std::make_unique<FloorManager>();
 	floorManager_->Initialize(floorModel_.get(), floorMaterial_.get());
@@ -110,7 +103,6 @@ void GameScene::Initialize() {
 	std::vector<Material*> goalMaterials = { goalMaterial_.get() };
 	//モデル
 	goalModel_.reset(Model::Create("Resources/AL4/goal", "goal.obj", dxCommon_));
-	goalModel_.get()->SetMaterial(goalMaterial_.get());
 	std::vector<Model*> goalModels = { goalModel_.get() };
 	//オブジェクト
 	goal_ = std::make_unique<Goal>();
@@ -128,11 +120,8 @@ void GameScene::Initialize() {
 
 	//エネミーのモデル
 	enemyBodyModel_.reset(Model::Create("Resources/AL4/enemy_Body", "enemy_Body.obj", dxCommon_));
-	enemyBodyModel_.get()->SetMaterial(enemyBodyMaterial_.get());
 	enemyL_armModel_.reset(Model::Create("Resources/AL4/enemy_Arm", "enemy_Arm.obj", dxCommon_));
-	enemyL_armModel_.get()->SetMaterial(enemyL_armMaterial_.get());
 	enemyR_armModel_.reset(Model::Create("Resources/AL4/enemy_Arm", "enemy_Arm.obj", dxCommon_));
-	enemyR_armModel_.get()->SetMaterial(enemyR_armMaterial_.get());
 	
 	std::vector<Model*> enemyModels = {
 		enemyBodyModel_.get(),

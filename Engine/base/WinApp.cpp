@@ -1,4 +1,5 @@
 #include "WinApp.h"
+#pragma comment(lib, "winmm.lib")
 
 //#ifdef _DEBUG
 #include "../../externals/imgui/imgui_impl_win32.h"
@@ -76,6 +77,9 @@ void WinApp::CreateGameWindow(const wchar_t* title, UINT windowStyle, int32_t cl
 
 	//ウィンドウを表示する
 	ShowWindow(hwnd_, SW_SHOW);
+
+	// システムタイマーの分解度を上げる
+	timeBeginPeriod(1);
 
 }
 

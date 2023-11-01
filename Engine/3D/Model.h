@@ -14,7 +14,6 @@
 #include "../Math/Vector3.h"
 #include "../Math/Vector4.h"
 #include "../Math/Matrix4x4.h"
-
 #include "VertexData.h"
 #include "TransformationMatrix.h"
 #include "TransformStructure.h"
@@ -37,9 +36,9 @@ public:
 
 	struct ModelData {
 
-		std::vector<VertexData> vertices_;
+		std::vector<VertexData> vertices;
 		MaterialData material;
-	
+
 	};
 
 	/// <summary>
@@ -67,11 +66,6 @@ public:
 	/// <returns></returns>
 	static Model* Create(const std::string& directoryPath, const std::string& filename, DirectXCommon* dxCommon);
 
-	/// <summary>
-	/// TransformationMatrix用のリソースを消去
-	/// </summary>
-	static void TransformationMatrixDelete();
-
 private:
 
 	// デバイス
@@ -86,11 +80,6 @@ private:
 	static Microsoft::WRL::ComPtr<ID3D12PipelineState> sPipelineState;
 	//計算
 	static Matrix4x4Calc* matrix4x4Calc;
-
-
-	static std::list <Microsoft::WRL::ComPtr<ID3D12Resource>> transformationMatrixBuffs_;
-	//データを書き込む
-	static std::list <TransformationMatrix*> transformationMatrixMaps_;
 
 public:
 
@@ -107,7 +96,8 @@ public:
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection);
+	void Draw(WorldTransform& worldTransform, const ViewProjection& viewProjection);
+	void Draw(WorldTransform& worldTransform, const ViewProjection& viewProjection, Material* material);
 
 	/// <summary>
 	/// メッシュデータ生成
@@ -128,8 +118,6 @@ public:
 
 	uint32_t GetTevtureHandle() { return textureHandle_; }
 
-	void SetMaterial(Material* material) { material_ = material; }
-
 private:
 	// 頂点バッファ
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertBuff_;
@@ -137,7 +125,7 @@ private:
 	VertexData* vertMap = nullptr;
 	// 頂点バッファビュー
 	D3D12_VERTEX_BUFFER_VIEW vbView_{};
-	
+
 	//モデル読み込み
 	Model::ModelData modelData;
 
@@ -146,8 +134,8 @@ private:
 	// リソース設定
 	D3D12_RESOURCE_DESC resourceDesc_;
 
-	// マテリアル
-	Material* material_ = nullptr;
+
+	// デフォルトマテリアル
+	std::unique_ptr<Material> defaultMaterial_;
 
 };
-

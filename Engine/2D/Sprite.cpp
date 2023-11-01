@@ -79,8 +79,19 @@ void Sprite::PostDraw() {
 /// <param name="isFlipX">左右反転</param>
 /// <param name="isFlipY">上下反転</param>
 /// <returns>生成されたスプライト</returns>
+
+/// <summary>
+/// スプライト生成
+/// </summary>
+/// <param name="textureHandle">テクスチャハンドル</param>
+/// <param name="position">座標</param>
+/// <param name="color">色</param>
+/// <param name="anchorpoint">アンカーポイント</param>
+/// <param name="isFlipX">左右反転</param>
+/// <param name="isFlipY">上下反転</param>
+/// <returns>生成されたスプライト</returns>
 Sprite* Sprite::Create(
-	uint32_t textureHandle, const TransformStructure& transform, Material* material) {
+	uint32_t textureHandle, const Vector2& position, const Vector4& color) {
 
 	// 仮サイズ
 	Vector2 size = { 100.0f, 100.0f };
@@ -91,7 +102,7 @@ Sprite* Sprite::Create(
 	size = { (float)resDesc.Width, (float)resDesc.Height };
 
 	// Spriteのインスタンスを生成
-	Sprite* sprite = new Sprite(textureHandle, transform, size, material);
+	Sprite* sprite = new Sprite(textureHandle, position, size, color);
 	if (sprite == nullptr) {
 		return nullptr;
 	}
@@ -116,17 +127,30 @@ Sprite::Sprite() {}
 /// コンストラクタ
 /// </summary>
 Sprite::Sprite(
-	uint32_t textureHandle, const TransformStructure& transform, const Vector2& size, Material* material) {
-
+	uint32_t textureHandle, const Vector2& position, const Vector2& size, const Vector4& color) {
 
 	textureHandle_ = textureHandle;
-	//CPUで動かす用のTransformを作る
-	transform_ = transform;
+
+	// 位置
+	position_ = position;
+	// 回転
+	rotate_ = 0.0f;
 	//大きさ
 	size_ = size;
+	// ワールドトランスフォーム
+	worldTransform_.Initialize();
 
 	// マテリアル
-	material_ = material;
+	material_ = std::make_unique<Material>();
+	material_->Initialize();
+
+	uvTransform_ = { 1.0f, 1.0f, 1.0f,
+					 0.0f, 0.0f, 0.0f,
+					 0.0f, 0.0f, 0.0f };
+	color_ = color;
+	enableLighting_ = EnableLighting::None;
+
+	material_->Update(uvTransform_, color_, enableLighting_);
 
 }
 
@@ -198,18 +222,6 @@ bool Sprite::Initialize() {
 	indexMap[4] = 3;
 	indexMap[5] = 2;
 
-	//Sprite用のTransformationMatrix用のリソースを作る。Matrix4x4 1つ分のサイズ
-	transformationMatrixBuff_ = BufferResource::CreateBufferResource(sDevice, sizeof(TransformationMatrix));
-
-	//書き込むためのアドレスを取得
-	transformationMatrixBuff_->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixMap));
-	//単位行列を書き込んでおく
-	transformationMatrixMap->World = matrix4x4Calc->MakeIdentity4x4();
-	transformationMatrixMap->WVP = matrix4x4Calc->MakeIdentity4x4();
-
-	//CPUで動かす用のTransformを作る
-	transform_ = { {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f} };
-
 	return true;
 
 }
@@ -217,17 +229,7 @@ bool Sprite::Initialize() {
 /// <summary>
 /// 更新
 /// </summary>
-void Sprite::Update(const TransformStructure& transform) {
-
-	transform_ = transform;
-
-	//Sprite用のWorldViewProjectionMatrixを作る
-	Matrix4x4 WorldMatrixSprite = matrix4x4Calc->MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
-	Matrix4x4 viewMatrixSprite = matrix4x4Calc->MakeIdentity4x4();
-	Matrix4x4 projectionMatrixSprite = matrix4x4Calc->MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::kWindowWidth), float(WinApp::kWindowHeight), 0.0f, 100.0f);
-	Matrix4x4 worldViewProjectionMatrixSprite = matrix4x4Calc->Multiply(WorldMatrixSprite, matrix4x4Calc->Multiply(viewMatrixSprite, projectionMatrixSprite));
-	transformationMatrixMap->WVP = worldViewProjectionMatrixSprite;
-	transformationMatrixMap->World = WorldMatrixSprite;
+void Sprite::Update() {
 
 }
 
@@ -242,8 +244,6 @@ void Sprite::SetTextureHandle(uint32_t textureHandle) {
 
 }
 
-
-
 /// <summary>
 /// 描画
 /// </summary>
@@ -254,8 +254,10 @@ void Sprite::Draw() {
 	//IBVを設定
 	sCommandList->IASetIndexBuffer(&ibView_);
 
+	worldTransform_.MapSprite();
+
 	//TransformationMatrixCBufferの場所を設定
-	sCommandList->SetGraphicsRootConstantBufferView(1, transformationMatrixBuff_->GetGPUVirtualAddress());
+	sCommandList->SetGraphicsRootConstantBufferView(1, worldTransform_.transformationMatrixBuff_->GetGPUVirtualAddress());
 
 	//マテリアルCBufferの場所を設定
 	sCommandList->SetGraphicsRootConstantBufferView(0, material_->GetMaterialBuff()->GetGPUVirtualAddress());
@@ -265,5 +267,74 @@ void Sprite::Draw() {
 
 	//描画
 	sCommandList->DrawIndexedInstanced(kVertNum, 1, 0, 0, 0);
+
+}
+
+void Sprite::SetPosition(const Vector2& position)
+{
+
+	position_ = position;
+
+	worldTransform_.transform_.translate.x = position_.x;
+	worldTransform_.transform_.translate.y = position_.y;
+	worldTransform_.UpdateMatrix();
+
+}
+
+void Sprite::SetRotate(float rotate)
+{
+
+	rotate_ = rotate;
+	worldTransform_.transform_.rotate.z = rotate_;
+	worldTransform_.UpdateMatrix();
+
+}
+
+void Sprite::SetSize(const Vector2& size)
+{
+
+	size_ = size;
+
+	worldTransform_.transform_.scale.x = size_.x;
+	worldTransform_.transform_.scale.y = size_.y;
+	worldTransform_.UpdateMatrix();
+
+}
+
+void Sprite::SetUvTransform(const TransformStructure& uvTransform)
+{
+
+	uvTransform_ = uvTransform;
+
+	material_->Update(uvTransform_, color_, enableLighting_);
+
+}
+
+void Sprite::SetUvTransform(const Vector3& scale, const Vector3& rotate, const Vector3& translate)
+{
+
+	uvTransform_.scale = scale;
+	uvTransform_.rotate = rotate;
+	uvTransform_.translate = translate;
+
+	material_->Update(uvTransform_, color_, enableLighting_);
+
+}
+
+void Sprite::SetColor(const Vector4& color)
+{
+
+	color_ = color;
+
+	material_->Update(uvTransform_, color_, enableLighting_);
+
+}
+
+void Sprite::SetEnableLighting(int enableLighting)
+{
+
+	enableLighting_ = enableLighting;
+
+	material_->Update(uvTransform_, color_, enableLighting_);
 
 }

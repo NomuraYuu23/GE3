@@ -140,7 +140,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		//描画後処理
 		dxCommon->PostDraw();
-		Model::TransformationMatrixDelete();
 
 	}
 

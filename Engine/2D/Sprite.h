@@ -6,6 +6,8 @@
 #include <string>
 #include <wrl.h>
 #include <dxcapi.h>
+#include <list>
+#include <memory>
 
 #pragma comment(lib, "dxcompiler.lib")
 
@@ -19,6 +21,7 @@
 #include "../3D/TransformStructure.h"
 
 #include "../3D/Material.h"
+#include "../3D/WorldTransform.h"
 
 /// <summary>
 /// スプライト
@@ -55,7 +58,7 @@ public:
 
 	/// <returns>生成されたスプライト</returns>
 	static Sprite* Create(
-		uint32_t textureHandle, const TransformStructure& transform, Material* material);
+		uint32_t textureHandle, const Vector2& position, const Vector4& color);
 
 private:
 
@@ -80,10 +83,9 @@ public:
 	/// </summary>
 	Sprite();
 	/// <summary>
-	/// コンストラクタ
+	/// コンストラクタs
 	/// </summary>
-	Sprite(
-		uint32_t textureHandle, const TransformStructure& transform, const Vector2& size, Material* material);
+	Sprite(uint32_t textureHandle, const Vector2& position, const Vector2& size, const Vector4& color);
 
 	/// <summary>
 	/// 初期化
@@ -94,7 +96,7 @@ public:
 	/// <summary>
 	/// 更新
 	/// </summary>
-	void Update(const TransformStructure& transform);
+	void Update();
 
 	/// <summary>
 	/// テクスチャハンドルの設定
@@ -102,7 +104,7 @@ public:
 	/// <param name="textureHandle"></param>
 	void SetTextureHandle(uint32_t textureHandle);
 
-	uint32_t GetTevtureHandle() { return textureHandle_;}
+	uint32_t GetTevtureHandle() { return textureHandle_; }
 
 	/// <summary>
 	/// 描画
@@ -125,24 +127,47 @@ private:
 	//インデックスリソースにデータを書き込む
 	uint32_t* indexMap = nullptr;
 
-	//Sprite用のTransformationMatrix用のリソースを作る。Matrix4x4 1つ分のサイズ
-	Microsoft::WRL::ComPtr<ID3D12Resource> transformationMatrixBuff_;
-	//データを書き込む
-	TransformationMatrix* transformationMatrixMap = nullptr;
-
-	//CPUで動かす用のTransformを作る
-	TransformStructure transform_;
-
-
 	//テクスチャ番号
 	UINT textureHandle_ = 0;
 	// リソース設定
 	D3D12_RESOURCE_DESC resourceDesc_;
+
+public: // アクセッサ(ワールドトランスフォーム)
+
+	void SetPosition(const Vector2& position);
+
+	void SetRotate(float rotate);
+
+	void SetSize(const Vector2& size);
+
+private: // メンバ変数(ワールドトランスフォーム)
+
+	// 位置
+	Vector2 position_;
+	// 回転
+	float rotate_;
 	// サイズ
 	Vector2 size_;
+	// ワールドトランスフォーム
+	WorldTransform worldTransform_;
+
+public: // アクセッサ(マテリアル)
+
+	void SetUvTransform(const TransformStructure& uvTransform);
+	void SetUvTransform(const Vector3& scale, const Vector3& rotate, const Vector3& translate);
+
+	void SetColor(const Vector4& color);
+
+	void SetEnableLighting(int enableLighting);
+
+private: // メンバ変数(マテリアル)
 
 	// マテリアル
-	Material* material_ = nullptr;
+	std::unique_ptr<Material> material_;
+
+	TransformStructure uvTransform_;
+	Vector4 color_;
+	int enableLighting_;
 
 };
 

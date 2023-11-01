@@ -7,7 +7,6 @@
 #include <sstream>
 #include <format>
 #include "../base/BufferResource.h"
-
 using namespace DirectX;
 using namespace Microsoft::WRL;
 
@@ -23,10 +22,6 @@ ComPtr<ID3D12RootSignature> Model::sRootSignature;
 ComPtr<ID3D12PipelineState> Model::sPipelineState;
 //計算
 Matrix4x4Calc* Model::matrix4x4Calc = nullptr;
-
-std::list<Microsoft::WRL::ComPtr<ID3D12Resource>> Model::transformationMatrixBuffs_;
-//データを書き込む
-std::list <TransformationMatrix*> Model::transformationMatrixMaps_;
 
 /// <summary>
 /// 静的初期化
@@ -89,21 +84,6 @@ Model* Model::Create(const std::string& directoryPath, const std::string& filena
 	object3d->Initialize(directoryPath, filename, dxCommon);
 
 	return object3d;
-
-}
-
-void Model::TransformationMatrixDelete()
-{
-
-	transformationMatrixBuffs_.remove_if([](Microsoft::WRL::ComPtr<ID3D12Resource> transformationMatrixBuff) {
-		transformationMatrixBuff.ReleaseAndGetAddressOf();
-		return true;
-	});
-
-	transformationMatrixMaps_.remove_if([](TransformationMatrix* transformationMatrixMap) {
-		transformationMatrixMap;
-		return true;
-	});
 
 }
 
@@ -198,9 +178,9 @@ Model::ModelData Model::LoadObjFile(const std::string& directoryPath, const std:
 				triangle[faceVertex] = { position, texcoord, normal };
 			}
 			//頂点を逆順で登録することで、回り順を逆にする
-			modelData.vertices_.push_back(triangle[2]);
-			modelData.vertices_.push_back(triangle[1]);
-			modelData.vertices_.push_back(triangle[0]);
+			modelData.vertices.push_back(triangle[2]);
+			modelData.vertices.push_back(triangle[1]);
+			modelData.vertices.push_back(triangle[0]);
 		}
 		else if (identifier == "mtllib") {
 			//materialTemplateLibrayファイルの名前を取得する
@@ -230,7 +210,8 @@ void Model::Initialize(const std::string& directoryPath, const std::string& file
 
 	resourceDesc_ = TextureManager::GetInstance()->GetResourceDesc(textureHandle_);
 
-	material_->Create();
+	// マテリアル
+	defaultMaterial_.reset(Material::Create());
 
 }
 
@@ -244,38 +225,54 @@ void Model::Update() {
 /// <summary>
 /// 描画
 /// </summary>
-void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection) {
+void Model::Draw(WorldTransform& worldTransform, const ViewProjection& viewProjection) {
 
 	// nullptrチェック
 	assert(sDevice);
 	assert(sCommandList);
 
-	// バッファ
-
-	//WVP用のリソースを作る。Matrix4x4 1つ分のサイズを用意する
-	Microsoft::WRL::ComPtr<ID3D12Resource> transformationMatrixBuff = BufferResource::CreateBufferResource(sDevice, sizeof(TransformationMatrix));
-	//書き込むためのアドレスを取得
-	TransformationMatrix* transformationMatrixMap{};
-	transformationMatrixBuff->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixMap));
-	transformationMatrixMap->World = worldTransform.worldMatrix_;
-	transformationMatrixMap->WVP = matrix4x4Calc->Multiply(worldTransform.worldMatrix_,viewProjection.viewProjectionMatrix_);
-
-	transformationMatrixBuffs_.push_back(transformationMatrixBuff);
-	transformationMatrixMaps_.push_back(transformationMatrixMap);
+	worldTransform.Map(viewProjection);
 
 	sCommandList->IASetVertexBuffers(0, 1, &vbView_); //VBVを設定
 
 	//wvp用のCBufferの場所を設定
-	sCommandList->SetGraphicsRootConstantBufferView(1, transformationMatrixBuff->GetGPUVirtualAddress());
+	sCommandList->SetGraphicsRootConstantBufferView(1, worldTransform.transformationMatrixBuff_->GetGPUVirtualAddress());
 
 	//マテリアルCBufferの場所を設定
-	sCommandList->SetGraphicsRootConstantBufferView(0, material_->GetMaterialBuff()->GetGPUVirtualAddress());
+	sCommandList->SetGraphicsRootConstantBufferView(0, defaultMaterial_->GetMaterialBuff()->GetGPUVirtualAddress());
 
 	//SRVのDescriptorTableの先頭を設定。2はrootParamenter[2]である
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(sCommandList, 2, textureHandle_);
 
 	//描画
-	sCommandList->DrawInstanced(UINT(modelData.vertices_.size()), 1, 0, 0);
+	sCommandList->DrawInstanced(UINT(modelData.vertices.size()), 1, 0, 0);
+
+}
+
+/// <summary>
+/// 描画
+/// </summary>
+void Model::Draw(WorldTransform& worldTransform, const ViewProjection& viewProjection, Material* material) {
+
+	// nullptrチェック
+	assert(sDevice);
+	assert(sCommandList);
+
+	worldTransform.Map(viewProjection);
+
+	sCommandList->IASetVertexBuffers(0, 1, &vbView_); //VBVを設定
+
+	//wvp用のCBufferの場所を設定
+	sCommandList->SetGraphicsRootConstantBufferView(1, worldTransform.transformationMatrixBuff_->GetGPUVirtualAddress());
+
+	//マテリアルCBufferの場所を設定
+	sCommandList->SetGraphicsRootConstantBufferView(0, material->GetMaterialBuff()->GetGPUVirtualAddress());
+
+	//SRVのDescriptorTableの先頭を設定。2はrootParamenter[2]である
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(sCommandList, 2, textureHandle_);
+
+	//描画
+	sCommandList->DrawInstanced(UINT(modelData.vertices.size()), 1, 0, 0);
 
 }
 
@@ -289,19 +286,19 @@ void Model::CreateMesh(const std::string& directoryPath, const std::string& file
 	//モデル読み込み
 	modelData = LoadObjFile(directoryPath, filename);
 
-	vertBuff_ = BufferResource::CreateBufferResource(sDevice, sizeof(VertexData) * modelData.vertices_.size());
+	vertBuff_ = BufferResource::CreateBufferResource(sDevice, sizeof(VertexData) * modelData.vertices.size());
 
 	//リソースの先頭のアドレスから使う
 	vbView_.BufferLocation = vertBuff_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点3つ分のサイズ
-	vbView_.SizeInBytes = UINT(sizeof(VertexData) * modelData.vertices_.size());
+	vbView_.SizeInBytes = UINT(sizeof(VertexData) * modelData.vertices.size());
 	//1頂点あたりのサイズ
 	vbView_.StrideInBytes = sizeof(VertexData);
 
 	//書き込むためのアドレスを取得
 	vertBuff_->Map(0, nullptr, reinterpret_cast<void**>(&vertMap));
 	//頂点データをリソースにコピー
-	std::memcpy(vertMap, modelData.vertices_.data(), sizeof(VertexData) * modelData.vertices_.size());
+	std::memcpy(vertMap, modelData.vertices.data(), sizeof(VertexData) * modelData.vertices.size());
 
 }
 
