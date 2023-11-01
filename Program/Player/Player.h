@@ -1,12 +1,12 @@
 #pragma once
-#include "../../Model.h"
-#include "../../WorldTransform.h"
+#include "../../Engine/3D/Model.h"
+#include "../../Engine/3D/WorldTransform.h"
 #include <memory>
 #include <vector>
 #include <optional>
 
 #include "../BaseCharacter/BaseCharacter.h"
-#include "../Collider/Sphere/Sphere.h"
+#include "../../Engine/Collider/Sphere/Sphere.h"
 
 class Player : public BaseCharacter
 {
@@ -26,6 +26,14 @@ public: // サブクラス
 	enum class Behavior {
 		kRoot, // 通常状態
 		kAttack, //攻撃中
+		kDash, // ダッシュ中
+	};
+
+	// ダッシュ用ワーク
+	struct WorkDash
+	{
+		// ダッシュ用の媒介変数
+		uint32_t deshPrameter_ = 0;
 	};
 
 
@@ -71,6 +79,16 @@ public: // メンバ関数(行動)
 	/// 攻撃行動更新
 	/// </summary>
 	void BehaviorAttackUpdate();
+
+	/// <summary>
+	/// ダッシュ行動初期化
+	/// </summary>
+	void BehaviorDashInitialize();
+
+	/// <summary>
+	/// ダッシュ行動更新
+	/// </summary>
+	void BehaviorDashUpdate();
 
 private: // メンバ関数(ギミック)
 
@@ -125,6 +143,11 @@ public: // メンバ関数
 	/// 攻撃開始
 	/// </summary>
 	void AttackStart();
+
+	/// <summary>
+	/// ダッシュ開始
+	/// </summary>
+	void DashStart();
 
 	/// <summary>
 	/// リスタート
@@ -185,6 +208,9 @@ private: // メンバ変数
 	Behavior behavior_ = Behavior::kRoot;
 	//次の振るまいリクエスト
 	std::optional<Behavior> behaviorRequest_ = std::nullopt;
+
+	// ダッシュ
+	WorkDash workDash_;
 
 private: // メンバ変数(ギミック)
 

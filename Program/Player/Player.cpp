@@ -1,5 +1,5 @@
 #include "../Player/Player.h"
-#include "../../Input.h"
+#include "../../Engine/Input/Input.h"
 
 void Player::Initialize(const std::vector<Model*>& models,
 	const std::vector<Material*>& materials)
@@ -79,6 +79,9 @@ void Player::Update()
 		case Behavior::kAttack:
 			BehaviorAttackInitialize();
 			break;
+		case Behavior::kDash:
+			BehaviorDashInitialize();
+			break;
 		}
 		//振るまいリクエストをリセット
 		behaviorRequest_ = std::nullopt;
@@ -92,6 +95,9 @@ void Player::Update()
 		break;
 	case Behavior::kAttack:
 		BehaviorAttackUpdate();
+		break;
+	case Behavior::kDash:
+		BehaviorDashUpdate();
 		break;
 	}
 
@@ -150,6 +156,8 @@ void Player::BehaviorRootUpdate()
 	Landing();
 
 	AttackStart();
+
+	DashStart();
 
 	// 浮遊ギミック
 	UpdateFloatinggimmick();
@@ -247,6 +255,18 @@ void Player::BehaviorAttackUpdate()
 		worldTransform_.worldMatrix_.m[3][2] + attackCenterAdd.z };
 	}
 
+}
+
+void Player::BehaviorDashInitialize()
+{
+
+	workDash_.deshPrameter_ = 0;
+	//worldTransform_.transform_.rotate.y = d
+
+}
+
+void Player::BehaviorDashUpdate()
+{
 }
 
 void Player::InitializeFloatinggimmick()
@@ -424,6 +444,16 @@ void Player::AttackStart()
 	//攻撃
 	if (Input::GetInstance()->TriggerJoystick(1)) {
 		behaviorRequest_ = Behavior::kAttack;
+	}
+
+}
+
+void Player::DashStart()
+{
+
+	//ダッシュ
+	if (Input::GetInstance()->TriggerJoystick(2)) {
+		behaviorRequest_ = Behavior::kDash;
 	}
 
 }

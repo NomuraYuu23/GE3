@@ -1,10 +1,10 @@
 #pragma once
-#include "../../Model.h"
-#include "../../WorldTransform.h"
+#include "../../Engine/3D/Model.h"
+#include "../../Engine/3D/WorldTransform.h"
 #include <memory>
 #include <vector>
 #include "../BaseCharacter/BaseCharacter.h"
-#include "../Collider/Sphere/Sphere.h"
+#include "../../Engine/Collider/Sphere/Sphere.h"
 
 class Enemy : public BaseCharacter {
 

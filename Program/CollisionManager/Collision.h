@@ -1,11 +1,11 @@
 #pragma once
 
-#include "../Collider/Sphere/Sphere.h"
-#include "../Collider/Plane/Plane.h"
-#include "../Collider/Triangle/Triangle.h"
-#include "../Collider/AABB/AABB.h"
-#include "../Collider/OBB/OBB.h"
-#include "../../Matrix4x4.h"
+#include "../../Engine/Collider/Sphere/Sphere.h"
+#include "../../Engine/Collider/Plane/Plane.h"
+#include "../../Engine/Collider/Triangle/Triangle.h"
+#include "../../Engine/Collider/AABB/AABB.h"
+#include "../../Engine/Collider/OBB/OBB.h"
+#include "../../Engine/Math/Matrix4x4.h"
 
 
 class Collision

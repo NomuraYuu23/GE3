@@ -1,6 +1,6 @@
 #pragma once
 #include "../BaseCharacter/BaseCharacter.h"
-#include "../Collider/Sphere/Sphere.h"
+#include "../../Engine/Collider/Sphere/Sphere.h"
 class Goal : public BaseCharacter
 {
 

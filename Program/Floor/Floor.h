@@ -1,8 +1,8 @@
 #pragma once
-#include "../../Model.h"
-#include "../../Material.h"
-#include "../../WorldTransform.h"
-#include "../Collider/AABB/AABB.h"
+#include "../../Engine/3D/Model.h"
+#include "../../Engine/3D/Material.h"
+#include "../../Engine/3D/WorldTransform.h"
+#include "../../Engine/Collider/AABB/AABB.h"
 
 class Floor
 {

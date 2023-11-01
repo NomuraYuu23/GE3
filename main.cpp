@@ -4,36 +4,36 @@
 #include "externals/imgui/imgui_impl_win32.h"
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-#include "Vector2.h"
-#include "Vector3.h"
-#include "Vector4.h"
-#include "Matrix4x4.h"
-#include "VertexData.h"
-#include "TransformationMatrix.h"
-#include "TransformStructure.h"
-#include "MaterialData.h"
-#include "DirectionalLightData.h"
-#include "SafeDelete.h"
-#include "GraphicsPipelineState.h"
+#include "Engine/Math/Vector2.h"
+#include "Engine/Math/Vector3.h"
+#include "Engine/Math/Vector4.h"
+#include "Engine/Math/Matrix4x4.h"
+#include "Engine/3D/VertexData.h"
+#include "Engine/3D/TransformationMatrix.h"
+#include "Engine/3D/TransformStructure.h"
+#include "Engine/3D/MaterialData.h"
+#include "Engine/3D/DirectionalLightData.h"
+#include "Engine/base/SafeDelete.h"
+#include "Engine/base/GraphicsPipelineState.h"
 //クラス化
-#include "WinApp.h"
-#include "DirectXCommon.h"
-#include "TextureManager.h"
-#include "Sprite.h"
-#include "Model.h"
-#include "Material.h"
-#include "DirectionalLight.h"
-#include "D3DResourceLeakChecker.h"
+#include "Engine/base/WinApp.h"
+#include "Engine/base/DirectXCommon.h"
+#include "Engine/base/TextureManager.h"
+#include "Engine/2D/Sprite.h"
+#include "Engine/3D/Model.h"
+#include "Engine/3D/Material.h"
+#include "Engine/3D/DirectionalLight.h"
+#include "Engine/base/D3DResourceLeakChecker.h"
 
 // サウンド再生
-#include "Audio.h"
+#include "Engine/Audio/Audio.h"
 
 //入力デバイス
-#include "Input.h"
+#include "Engine/Input/Input.h"
 
 //デバッグカメラ
-#include "DebugCamera.h"
-#include "GameScene.h"
+#include "Engine/Camera/DebugCamera.h"
+#include "Engine/Scene/GameScene.h"
 
 //Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {

@@ -1,5 +1,5 @@
 #include "BaseCharacter.h"
-#include "../../ViewProjection.h"
+#include "../../Engine/3D/ViewProjection.h"
 
 void BaseCharacter::Initialize(const std::vector<Model*>& models,
 	const std::vector<Material*>& materials)

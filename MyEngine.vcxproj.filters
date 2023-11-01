@@ -63,55 +63,55 @@
     <ClCompile Include="externals\imgui\imgui_widgets.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="GameScene.cpp">
+    <ClCompile Include="Engine\Scene\GameScene.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="WorldTransform.cpp">
+    <ClCompile Include="Engine\3D\WorldTransform.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="ViewProjection.cpp">
+    <ClCompile Include="Engine\3D\ViewProjection.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="BufferResource.cpp">
+    <ClCompile Include="Engine\base\BufferResource.cpp">
       <Filter>ソース ファイル\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="WinApp.cpp">
+    <ClCompile Include="Engine\base\WinApp.cpp">
       <Filter>ソース ファイル\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="TextureManager.cpp">
+    <ClCompile Include="Engine\base\TextureManager.cpp">
       <Filter>ソース ファイル\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Sprite.cpp">
+    <ClCompile Include="Engine\2D\Sprite.cpp">
       <Filter>ソース ファイル\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Model.cpp">
+    <ClCompile Include="Engine\3D\Model.cpp">
       <Filter>ソース ファイル\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Material.cpp">
+    <ClCompile Include="Engine\3D\Material.cpp">
       <Filter>ソース ファイル\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="GraphicsPipelineState.cpp">
+    <ClCompile Include="Engine\base\GraphicsPipelineState.cpp">
       <Filter>ソース ファイル\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="DirectXCommon.cpp">
+    <ClCompile Include="Engine\base\DirectXCommon.cpp">
       <Filter>ソース ファイル\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Audio.cpp">
+    <ClCompile Include="Engine\Audio\Audio.cpp">
       <Filter>ソース ファイル\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="DirectionalLight.cpp">
+    <ClCompile Include="Engine\3D\DirectionalLight.cpp">
       <Filter>ソース ファイル\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="DebugCamera.cpp">
+    <ClCompile Include="Engine\Camera\DebugCamera.cpp">
       <Filter>ソース ファイル\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Input.cpp">
+    <ClCompile Include="Engine\Input\Input.cpp">
       <Filter>ソース ファイル\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Matrix4x4.cpp">
+    <ClCompile Include="Engine\Math\Matrix4x4.cpp">
       <Filter>ソース ファイル\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Vector3.cpp">
+    <ClCompile Include="Engine\Math\Vector3.cpp">
       <Filter>ソース ファイル\Math</Filter>
     </ClCompile>
     <ClCompile Include="Program\BaseCharacter\BaseCharacter.cpp">
@@ -120,7 +120,7 @@
     <ClCompile Include="Program\Floor\Floor.cpp">
       <Filter>AL\ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\FollowCamera\FollowCamera.cpp">
+    <ClCompile Include="Engine\Camera\FollowCamera\FollowCamera.cpp">
       <Filter>AL\ソースファイル</Filter>
     </ClCompile>
     <ClCompile Include="Program\Player\Player.cpp">
@@ -141,25 +141,25 @@
     <ClCompile Include="Program\Enemy\Enemy.cpp">
       <Filter>AL\ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\Collider\Collider.cpp">
+    <ClCompile Include="Engine\Collider\Collider.cpp">
       <Filter>AL</Filter>
     </ClCompile>
-    <ClCompile Include="Program\Collider\Sphere\Sphere.cpp">
+    <ClCompile Include="Engine\Collider\Sphere\Sphere.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\Collider\Plane\Plane.cpp">
+    <ClCompile Include="Engine\Collider\Plane\Plane.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Program\CollisionManager\Collision.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\Collider\Triangle\Triangle.cpp">
+    <ClCompile Include="Engine\Collider\Triangle\Triangle.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\Collider\AABB\AABB.cpp">
+    <ClCompile Include="Engine\Collider\AABB\AABB.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\Collider\OBB\OBB.cpp">
+    <ClCompile Include="Engine\Collider\OBB\OBB.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -185,82 +185,82 @@
     <ClInclude Include="externals\imgui\imstb_truetype.h">
       <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="TransformStructure.h">
+    <ClInclude Include="Engine\3D\TransformStructure.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="GameScene.h">
+    <ClInclude Include="Engine\Scene\GameScene.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="WorldTransform.h">
+    <ClInclude Include="Engine\3D\WorldTransform.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="ViewProjection.h">
+    <ClInclude Include="Engine\3D\ViewProjection.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Audio.h">
+    <ClInclude Include="Engine\Audio\Audio.h">
       <Filter>ヘッダー ファイル\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="BufferResource.h">
+    <ClInclude Include="Engine\base\BufferResource.h">
       <Filter>ヘッダー ファイル\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="D3DResourceLeakChecker.h">
+    <ClInclude Include="Engine\base\D3DResourceLeakChecker.h">
       <Filter>ヘッダー ファイル\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="DebugCamera.h">
+    <ClInclude Include="Engine\Camera\DebugCamera.h">
       <Filter>ヘッダー ファイル\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="DirectionalLight.h">
+    <ClInclude Include="Engine\3D\DirectionalLight.h">
       <Filter>ヘッダー ファイル\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="DirectionalLightData.h">
+    <ClInclude Include="Engine\3D\DirectionalLightData.h">
       <Filter>ヘッダー ファイル\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="DirectXCommon.h">
+    <ClInclude Include="Engine\base\DirectXCommon.h">
       <Filter>ヘッダー ファイル\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="GraphicsPipelineState.h">
+    <ClInclude Include="Engine\base\GraphicsPipelineState.h">
       <Filter>ヘッダー ファイル\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Input.h">
+    <ClInclude Include="Engine\Input\Input.h">
       <Filter>ヘッダー ファイル\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Material.h">
+    <ClInclude Include="Engine\3D\Material.h">
       <Filter>ヘッダー ファイル\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="MaterialData.h">
+    <ClInclude Include="Engine\3D\MaterialData.h">
       <Filter>ヘッダー ファイル\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Model.h">
+    <ClInclude Include="Engine\3D\Model.h">
       <Filter>ヘッダー ファイル\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="SafeDelete.h">
+    <ClInclude Include="Engine\base\SafeDelete.h">
       <Filter>ヘッダー ファイル\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Sprite.h">
+    <ClInclude Include="Engine\2D\Sprite.h">
       <Filter>ヘッダー ファイル\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="TextureManager.h">
+    <ClInclude Include="Engine\base\TextureManager.h">
       <Filter>ヘッダー ファイル\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="TransformationMatrix.h">
+    <ClInclude Include="Engine\3D\TransformationMatrix.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="WinApp.h">
+    <ClInclude Include="Engine\base\WinApp.h">
       <Filter>ヘッダー ファイル\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Vector2.h">
+    <ClInclude Include="Engine\Math\Vector2.h">
       <Filter>ヘッダー ファイル\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Vector3.h">
+    <ClInclude Include="Engine\Math\Vector3.h">
       <Filter>ヘッダー ファイル\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Vector4.h">
+    <ClInclude Include="Engine\Math\Vector4.h">
       <Filter>ヘッダー ファイル\Math</Filter>
     </ClInclude>
-    <ClInclude Include="VertexData.h">
+    <ClInclude Include="Engine\3D\VertexData.h">
       <Filter>ヘッダー ファイル\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Matrix4x4.h">
+    <ClInclude Include="Engine\Math\Matrix4x4.h">
       <Filter>ヘッダー ファイル\Math</Filter>
     </ClInclude>
     <ClInclude Include="Program\BaseCharacter\BaseCharacter.h">
@@ -269,7 +269,7 @@
     <ClInclude Include="Program\Floor\Floor.h">
       <Filter>AL\ヘッダーファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Program\FollowCamera\FollowCamera.h">
+    <ClInclude Include="Engine\Camera\FollowCamera\FollowCamera.h">
       <Filter>AL\ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="Program\Player\Player.h">
@@ -290,25 +290,25 @@
     <ClInclude Include="Program\Enemy\Enemy.h">
       <Filter>AL\ヘッダーファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Program\Collider\Collider.h">
+    <ClInclude Include="Engine\Collider\Collider.h">
       <Filter>AL</Filter>
     </ClInclude>
-    <ClInclude Include="Program\Collider\Sphere\Sphere.h">
+    <ClInclude Include="Engine\Collider\Sphere\Sphere.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Program\Collider\Plane\Plane.h">
+    <ClInclude Include="Engine\Collider\Plane\Plane.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Program\CollisionManager\Collision.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Program\Collider\Triangle\Triangle.h">
+    <ClInclude Include="Engine\Collider\Triangle\Triangle.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Program\Collider\AABB\AABB.h">
+    <ClInclude Include="Engine\Collider\AABB\AABB.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Program\Collider\OBB\OBB.h">
+    <ClInclude Include="Engine\Collider\OBB\OBB.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
