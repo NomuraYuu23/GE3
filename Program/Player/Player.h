@@ -156,6 +156,10 @@ public: // アクセッサ
 
 	Sphere& GetCollider() { return collider_; }
 
+	Sphere& GetAttackCollider() { return attackCollider_; }
+
+	bool GetIsAttackJudgment() { return isAttackJudgment_; }
+
 private: // メンバ変数
 
 	// 速度
@@ -200,6 +204,18 @@ private: // メンバ変数(ギミック)
 	float behaviorAttackParameter_ = 0.0f;
 	// 攻撃行動用のサイクル<frame>
 	int32_t behaviorAttackPeriod_ = 60;
+
+private: // メンバ関数(攻撃)
+	
+	// コライダー
+	Sphere attackCollider_;
+
+	Vector3 attackCenterAdd_;
+
+	float attackRadius_;
+
+	// あたり判定を取るか
+	bool isAttackJudgment_;
 
 private: // メンバ定数
 

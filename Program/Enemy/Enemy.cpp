@@ -49,6 +49,8 @@ void Enemy::Initialize(const std::vector<Model*>& models,
 
 	collider_.Initialize(worldTransform_.transform_.translate, kColliderSize);
 
+	isDead_ = false;
+
 }
 
 /// <summary>
@@ -56,24 +58,26 @@ void Enemy::Initialize(const std::vector<Model*>& models,
 /// </summary>
 void Enemy::Update() {
 
-	// 回転
-	Rotation();
+	if (!isDead_) {
+		// 回転
+		Rotation();
 
-	// 移動
-	Move();
+		// 移動
+		//Move();
 
-	// 腕回転ギミック
-	UpdateArmRotationgimmick();
+		// 腕回転ギミック
+		UpdateArmRotationgimmick();
 
-	//ワールド変換データ更新
-	worldTransform_.UpdateMatrix();
+		//ワールド変換データ更新
+		worldTransform_.UpdateMatrix();
 
-	worldTransformBody_.UpdateMatrix();
-	worldTransformL_arm_.UpdateMatrix();
-	worldTransformR_arm_.UpdateMatrix();
+		worldTransformBody_.UpdateMatrix();
+		worldTransformL_arm_.UpdateMatrix();
+		worldTransformR_arm_.UpdateMatrix();
 
-	collider_.center_  = { worldTransform_.worldMatrix_.m[3][0],worldTransform_.worldMatrix_.m[3][1], worldTransform_.worldMatrix_.m[3][2] };
+		collider_.center_ = { worldTransform_.worldMatrix_.m[3][0],worldTransform_.worldMatrix_.m[3][1], worldTransform_.worldMatrix_.m[3][2] };
 
+	}
 }
 
 /// <summary>
@@ -82,9 +86,11 @@ void Enemy::Update() {
 /// <param name="viewProjection">ビュープロジェクション</param>
 void Enemy::Draw(const ViewProjection& viewProjection) {
 
-	models_[0]->Draw(worldTransformBody_, viewProjection);
-	models_[1]->Draw(worldTransformL_arm_, viewProjection);
-	models_[2]->Draw(worldTransformR_arm_, viewProjection);
+	if (!isDead_) {
+		models_[0]->Draw(worldTransformBody_, viewProjection);
+		models_[1]->Draw(worldTransformL_arm_, viewProjection);
+		models_[2]->Draw(worldTransformR_arm_, viewProjection);
+	}
 
 }
 

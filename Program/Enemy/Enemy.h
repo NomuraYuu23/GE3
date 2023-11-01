@@ -52,6 +52,10 @@ public:
 
 	Sphere& GetCollider() { return collider_; }
 
+	bool GetIsDead() { return isDead_; }
+
+	void SetIsDead(bool isDead) { isDead_ = isDead; }
+
 private:
 
 	// ワールド変換データ
@@ -84,5 +88,8 @@ private:
 
 	// コライダー
 	Sphere collider_;
+
+	// 死亡フラグ
+	bool isDead_;
 
 };

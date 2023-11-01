@@ -48,6 +48,18 @@ void Player::Initialize(const std::vector<Model*>& models,
 
 	collider_.Initialize(worldTransform_.transform_.translate, kColliderSize);
 
+	// 攻撃
+	
+	attackCenterAdd_ = {0.0f,0.0,5.0f};
+
+	attackRadius_ = 5.0f;
+
+	// コライダー
+	attackCollider_.Initialize(attackCenterAdd_, attackRadius_);
+
+	// あたり判定を取るか
+	isAttackJudgment_ = false;
+
 	// グローバル
 
 }
@@ -213,6 +225,26 @@ void Player::BehaviorAttackUpdate()
 	else if (behaviorAttackParameter_ >= 2.0f * pi) {
 		// 2πを超えたら振るまい変更
 		behaviorRequest_ = Behavior::kRoot;
+
+		isAttackJudgment_ = false;
+	}
+	else {
+		// 攻撃のあたり判定をだす
+		isAttackJudgment_ = true;
+
+		// カメラの角度から回転行列を計算する
+		Matrix4x4 rotateMatrixX = m4Calc->MakeRotateXMatrix(worldTransform_.transform_.rotate.x);
+		Matrix4x4 rotateMatrixY = m4Calc->MakeRotateYMatrix(worldTransform_.transform_.rotate.y);
+		Matrix4x4 rotateMatrixZ = m4Calc->MakeRotateZMatrix(worldTransform_.transform_.rotate.z);
+
+		Matrix4x4 rotateMatrix = m4Calc->Multiply(
+			rotateMatrixX, m4Calc->Multiply(rotateMatrixY, rotateMatrixZ));
+
+		Vector3 attackCenterAdd = m4Calc->TransformNormal(attackCenterAdd_, rotateMatrix);
+
+		attackCollider_.center_ = { worldTransform_.worldMatrix_.m[3][0] + attackCenterAdd.x,
+		worldTransform_.worldMatrix_.m[3][1] + attackCenterAdd.y,
+		worldTransform_.worldMatrix_.m[3][2] + attackCenterAdd.z };
 	}
 
 }

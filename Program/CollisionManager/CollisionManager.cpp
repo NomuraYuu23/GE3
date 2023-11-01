@@ -31,8 +31,15 @@ void CollisionManager::AllCollision()
 	}
 
 	if (Collision::IsCollision(goal_->GetCollider(), player_->GetCollider()) || 
-		Collision::IsCollision(enemy_->GetCollider(), player_->GetCollider())) {
+		(Collision::IsCollision(enemy_->GetCollider(), player_->GetCollider()) &&
+			!enemy_->GetIsDead())) {
 		player_->Restart();
+		enemy_->SetIsDead(false);
+	}
+
+	if (Collision::IsCollision(enemy_->GetCollider(), player_->GetAttackCollider()) &&
+		player_->GetIsAttackJudgment()) {
+		enemy_->SetIsDead(true);
 	}
 
 }
