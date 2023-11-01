@@ -1,5 +1,6 @@
 #include "../Player/Player.h"
 #include "../../Engine/Input/Input.h"
+#include "../../Engine/Math/Math.h"
 
 void Player::Initialize(const std::vector<Model*>& models,
 	const std::vector<Material*>& materials)
@@ -382,9 +383,7 @@ void Player::Walk()
 			velocity_.z = move.z;
 
 			// 移動方向に見た目を合わせる(Y軸)
-			if (std::fabsf(move.x) > 0.1 || std::fabsf(move.z) > 0.1) {
-				worldTransform_.transform_.rotate.y = std::atan2f(move.x, move.z);
-			}
+			workRoot_.targetAngle_ = std::atan2f(move.x, move.z);
 
 		}
 		else {
@@ -393,6 +392,8 @@ void Player::Walk()
 			velocity_.z = 0.0f;
 		}
 
+		// 角度補間
+		worldTransform_.transform_.rotate.y = Math::LerpShortAngle(worldTransform_.transform_.rotate.y, workRoot_.targetAngle_, workRoot_.targetAngleT_);
 	}
 
 }

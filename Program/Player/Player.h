@@ -43,6 +43,13 @@ public: // サブクラス
 		const float kWalkSpeed = 0.6f;
 		// コライダーサイズ(半径)
 		const float kColliderSize = 2.0f;
+
+		// 目標角度
+		float targetAngle_;
+
+		// 補間レート
+		float targetAngleT_ = 0.1f;
+	
 	};
 
 	// 攻撃用ワーク
