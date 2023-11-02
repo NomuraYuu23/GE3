@@ -66,10 +66,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	TextureManager::GetInstance()->Initialize(dxCommon->GetDevice());
 
 	// スプライト静的初期化
-	Sprite::StaticInitialize(dxCommon->GetDevice(), GraphicsPipelineState::sRootSignature, GraphicsPipelineState::sPipelineState);
+	Sprite::StaticInitialize(dxCommon->GetDevice(), GraphicsPipelineState::sRootSignature, GraphicsPipelineState::sPipelineState[GraphicsPipelineState::Sprite]);
 
 	// モデル静的初期化
-	Model::StaticInitialize(dxCommon->GetDevice(), GraphicsPipelineState::sRootSignature, GraphicsPipelineState::sPipelineState);
+	Model::StaticInitialize(dxCommon->GetDevice(), GraphicsPipelineState::sRootSignature, GraphicsPipelineState::sPipelineState[GraphicsPipelineState::Model]);
 
 	// マテリアル静的初期化
 	Material::StaticInitialize(dxCommon->GetDevice());

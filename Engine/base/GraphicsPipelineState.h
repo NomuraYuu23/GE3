@@ -8,6 +8,14 @@
 class GraphicsPipelineState
 {
 
+public: 
+
+	enum PipelineStateName {
+		Model, // モデル
+		Sprite, //スプライト
+		End // 使わない
+	};
+
 public:
 
 	static void InitializeGraphicsPipeline(ID3D12Device* sDevice);
@@ -15,7 +23,7 @@ public:
 	// ルートシグネチャ
 	static Microsoft::WRL::ComPtr<ID3D12RootSignature> sRootSignature;
 	// パイプラインステートオブジェクト
-	static Microsoft::WRL::ComPtr<ID3D12PipelineState> sPipelineState;
+	static Microsoft::WRL::ComPtr<ID3D12PipelineState> sPipelineState[End];
 
 private:
 
