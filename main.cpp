@@ -90,19 +90,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	std::unique_ptr<GameScene> gameScene = std::make_unique<GameScene>();
 	gameScene->Initialize();
 
-	//ImGuiの初期化。
-
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGui::StyleColorsDark();
-	ImGui_ImplWin32_Init(win->GetHwnd());
-	ImGui_ImplDX12_Init(dxCommon->GetDevice(),
-		2,								 // ダブルバッファ
-		DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, // SRGB
-		TextureManager::StaticGetDescriptorHeap(),
-		TextureManager::StaticGetCPUDescriptorHandle(),
-		TextureManager::StaticGetGPUDescriptorHandle());
-
 	//ウィンドウののボタンが押されるまでループ
 	while (true) {
 		//Windowにメッセージが来てたら最優先で処理させる
