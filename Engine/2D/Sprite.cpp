@@ -143,6 +143,20 @@ Sprite::Sprite(
 	//アンカーポイント
 	anchorPoint_ = { 0.5f, 0.5f };
 
+	// フリップ
+	isFlipX_ = false;
+	isFlipY_ = false;
+
+	// 非表示フラグ
+	isInvisible_ = false;
+
+	// テクスチャのサイズ
+	textureSize_ = size_;
+	// 描画する
+	textureLeftTop_ = {0.0f,0.0f};
+	// テクスチャ初期サイズ
+	textureInitSize_ = size_;
+
 	// マテリアル
 	material_ = std::make_unique<Material>();
 	material_->Initialize();
@@ -251,6 +265,18 @@ void Sprite::Draw() {
 
 }
 
+void Sprite::SetTextureRange()
+{
+
+	uvTransform_.translate.x = textureLeftTop_.x / textureInitSize_.x;
+	uvTransform_.translate.y = textureLeftTop_.y / textureInitSize_.y;
+
+	uvTransform_.scale.x = textureSize_.x / textureInitSize_.x;
+	uvTransform_.scale.y = textureSize_.y / textureInitSize_.y;
+
+	material_->Update(uvTransform_, color_, enableLighting_);
+}
+
 void Sprite::SetPosition(const Vector2& position)
 {
 
@@ -344,6 +370,17 @@ void Sprite::SetIsFlipY(bool isFlipY)
 {
 	isFlipY_ = isFlipY;
 	SetAnchorPoint(anchorPoint_);
+}
+
+void Sprite::SetTextureSize(const Vector2& textureSize)
+{
+	textureSize_ = textureSize;
+	SetTextureRange();
+}
+void Sprite::SetTextureLeftTop(const Vector2& textureLeftTop)
+{
+	textureLeftTop_ = textureLeftTop;
+	SetTextureRange();
 }
 
 void Sprite::SetUvTransform(const TransformStructure& uvTransform)

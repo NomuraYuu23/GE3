@@ -111,6 +111,11 @@ public:
 	/// </summary>
 	void Draw();
 
+	/// <summary>
+	/// テクスチャの範囲
+	/// </summary>
+	void SetTextureRange();
+
 private:
 	// 頂点バッファ
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertBuff_;
@@ -147,8 +152,12 @@ public: // アクセッサ(ワールドトランスフォーム)
 	void SetIsFlipX(bool isFlipX);
 
 	void SetIsFlipY(bool isFlipY);
-
+	
 	void SetIsInvisible(bool isInvisible) { isInvisible_ = isInvisible; }
+	
+	void SetTextureSize(const Vector2& textureSize);
+
+	void SetTextureLeftTop(const Vector2& textureLeftTop);
 
 private: // メンバ変数(ワールドトランスフォーム)
 
@@ -170,6 +179,13 @@ private: // メンバ変数(ワールドトランスフォーム)
 
 	// 非表示フラグ
 	bool isInvisible_ = false;
+
+	// テクスチャのサイズ
+	Vector2 textureSize_;
+	// 描画する
+	Vector2 textureLeftTop_;
+	// テクスチャ初期サイズ
+	Vector2 textureInitSize_;
 
 public: // アクセッサ(マテリアル)
 
