@@ -65,6 +65,8 @@ private:
 	std::unique_ptr<Model> floorModel_;
 	std::unique_ptr<Material> floorMaterial_;
 
+	bool isFloorMove_ = false;
+
 	//床の生成のトランスフォームとか
 	TransformStructure floorTransform_{};
 

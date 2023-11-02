@@ -176,8 +176,9 @@ void GameScene::ImguiDraw(){
 	ImGui::Begin("床の生成");
 	ImGui::DragFloat3("床の座標", &floorTransform_.translate.x, 0.1f);
 	ImGui::DragFloat3("床の回転", &floorTransform_.rotate.x, 0.01f);
+	ImGui::Checkbox("動く床にする", &isFloorMove_);
 	if (ImGui::Button("床の追加")){
-		floorManager_->AddFloor(floorTransform_.translate, floorTransform_.rotate, false);
+		floorManager_->AddFloor(floorTransform_.translate, floorTransform_.rotate, isFloorMove_);
 	}
 	ImGui::End();
 

@@ -36,9 +36,9 @@ public: // サブクラス
 		// 初期角度
 		const Vector3 kInitialRotate = {};
 		// ジャンプ初期速さ
-		const float kJumpSpeed = 1.0f;
+		const float kJumpSpeed = 0.5f;
 		// 落下加速
-		const float kFallAcceleration = 0.05f;
+		const float kFallAcceleration = 0.02f;
 		// 歩行速度
 		const float kWalkSpeed = 0.6f;
 		// コライダーサイズ(半径)

@@ -114,7 +114,7 @@ void Player::Update()
 		Restart();
 	}
 
-	collider_.center_ = { worldTransform_.worldMatrix_.m[3][0], worldTransform_.worldMatrix_.m[3][1], worldTransform_.worldMatrix_.m[3][2] };
+	collider_.center_ = { worldTransform_.worldMatrix_.m[3][0], worldTransform_.worldMatrix_.m[3][1]+collider_.radius_, worldTransform_.worldMatrix_.m[3][2] };
 
 }
 
@@ -477,6 +477,7 @@ void Player::OnCollision(WorldTransform* worldTransform)
 			GotParent(worldTransform);
 		}
 		worldTransform_.transform_.translate.y = 0;
+		worldTransform_.UpdateMatrix();
 		isLanding = true;
 	}
 
