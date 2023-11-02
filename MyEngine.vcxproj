@@ -90,11 +90,13 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\2D\ImguiManager.cpp" />
     <ClCompile Include="Engine\Audio\Audio.cpp" />
     <ClCompile Include="Engine\base\BufferResource.cpp" />
     <ClCompile Include="Engine\Camera\DebugCamera.cpp" />
     <ClCompile Include="Engine\3D\DirectionalLight.cpp" />
     <ClCompile Include="Engine\base\DirectXCommon.cpp" />
+    <ClCompile Include="Engine\GlobalVariables\GlobalVariables.cpp" />
     <ClCompile Include="Engine\Math\Ease.cpp" />
     <ClCompile Include="Engine\Math\Math.cpp" />
     <ClCompile Include="externals\imgui\imgui.cpp" />
@@ -135,6 +137,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3D\WorldTransform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\2D\ImguiManager.h" />
     <ClInclude Include="Engine\Audio\Audio.h" />
     <ClInclude Include="Engine\base\BufferResource.h" />
     <ClInclude Include="Engine\base\D3DResourceLeakChecker.h" />
@@ -142,6 +145,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\3D\DirectionalLight.h" />
     <ClInclude Include="Engine\3D\DirectionalLightData.h" />
     <ClInclude Include="Engine\base\DirectXCommon.h" />
+    <ClInclude Include="Engine\GlobalVariables\GlobalVariables.h" />
     <ClInclude Include="Engine\Math\Ease.h" />
     <ClInclude Include="Engine\Math\Math.h" />
     <ClInclude Include="externals\imgui\imgui.h" />
