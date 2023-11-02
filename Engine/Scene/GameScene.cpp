@@ -44,7 +44,8 @@ void GameScene::Initialize() {
 	///bbbbb
 	uint32_t textureHandle = TextureManager::Load("Resources/defalt/uvChecker.png",dxCommon_);
 	sprite_.reset(Sprite::Create(textureHandle,Vector2{0.0f,0.0f},Vector4{1.0f,1.0f,1.0f,1.0f}));
-	sprite_->SetAnchorPoint(Vector2{ 0.0f,0.0f });
+	sprite_->SetAnchorPoint(Vector2{ 0.5f,0.5f });
+	sprite_->SetIsFlipY(true);
 }
 
 /// <summary>

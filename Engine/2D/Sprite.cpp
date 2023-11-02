@@ -287,6 +287,16 @@ void Sprite::SetAnchorPoint(const Vector2& anchorPoint)
 	float top = (0.0f - anchorPoint_.y) * size_.y;
 	float bottom = (1.0f - anchorPoint_.y) * size_.y;
 
+	// 反転するか
+	if (isFlipX_) {
+		left = -left;
+		right = -right;
+	}
+	if (isFlipY_) {
+		top = -top;
+		bottom = -bottom;
+	}
+
 	//一枚目の三角形
 	vertMap[0].position = { left, bottom, 0.0f, 1.0f };//左下
 	vertMap[0].texcoord = { 0.0f, 1.0f };
@@ -316,6 +326,19 @@ void Sprite::SetAnchorPoint(const Vector2& anchorPoint)
 	indexMap[4] = 3;
 	indexMap[5] = 2;
 
+}
+
+void Sprite::SetIsFlipX(bool isFlipX)
+{
+	isFlipX_ = isFlipX;
+	SetAnchorPoint(anchorPoint_);
+
+}
+
+void Sprite::SetIsFlipY(bool isFlipY)
+{
+	isFlipY_ = isFlipY;
+	SetAnchorPoint(anchorPoint_);
 }
 
 void Sprite::SetUvTransform(const TransformStructure& uvTransform)

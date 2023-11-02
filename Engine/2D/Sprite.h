@@ -144,6 +144,10 @@ public: // アクセッサ(ワールドトランスフォーム)
 
 	Vector2 GetAnchorPoint() { return anchorPoint_; }
 
+	void SetIsFlipX(bool isFlipX);
+
+	void SetIsFlipY(bool isFlipY);
+
 private: // メンバ変数(ワールドトランスフォーム)
 
 	// 位置
@@ -157,6 +161,10 @@ private: // メンバ変数(ワールドトランスフォーム)
 
 	// アンカーポイント
 	Vector2 anchorPoint_;
+
+	// フリップ
+	bool isFlipX_ = false;
+	bool isFlipY_ = false;
 
 
 public: // アクセッサ(マテリアル)
