@@ -36,9 +36,9 @@ public: // サブクラス
 		// 初期角度
 		const Vector3 kInitialRotate = {};
 		// ジャンプ初期速さ
-		const float kJumpSpeed = 0.5f;
+		const float kJumpSpeed = 1.0f;
 		// 落下加速
-		const float kFallAcceleration = 0.02f;
+		const float kFallAcceleration = 0.05f;
 		// 歩行速度
 		const float kWalkSpeed = 0.6f;
 		// コライダーサイズ(半径)
@@ -239,6 +239,10 @@ public: // アクセッサ
 	Sphere& GetAttackCollider() { return workAttack_.attackCollider_; }
 
 	bool GetIsAttackJudgment() { return workAttack_.isAttackJudgment_; }
+
+private:
+	//全てのオブジェのUpdateMatrixをまとめたもの
+	void allUpdateMatrix();
 
 private: // メンバ変数
 

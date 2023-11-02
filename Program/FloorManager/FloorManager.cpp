@@ -40,11 +40,11 @@ void FloorManager::Draw(const ViewProjection& viewProjection)
 
 }
 
-void FloorManager::AddFloor(Vector3 position, Vector3 rotate, bool isMoving)
+void FloorManager::AddFloor(Vector3 position, Vector3 rotate, bool isMoving, bool isVertical)
 {
 
 	Floor* floor = new Floor();
-	floor->Initialize(model_, material_, position, rotate, isMoving);
+	floor->Initialize(model_, material_, position, rotate, isMoving, isVertical);
 
 	floors_.push_back(floor);
 

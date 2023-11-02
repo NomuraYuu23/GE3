@@ -103,12 +103,7 @@ void Player::Update()
 	}
 
 	//行列を定数バッファに転送
-	worldTransform_.UpdateMatrix();
-	worldTransformBody_.UpdateMatrix();
-	worldTransformHead_.UpdateMatrix();
-	worldTransformL_arm_.UpdateMatrix();
-	worldTransformR_arm_.UpdateMatrix();
-	worldTransformWeapon_.UpdateMatrix();
+	allUpdateMatrix();
 
 	if (worldTransform_.worldMatrix_.m[3][1] <= -10.0f) {
 		Restart();
@@ -161,7 +156,7 @@ void Player::BehaviorRootUpdate()
 	DashStart();
 
 	// 浮遊ギミック
-	UpdateFloatinggimmick();
+	//UpdateFloatinggimmick();
 
 	// ぶらぶらギミック
 	UpdateSwinggimmick();
@@ -477,7 +472,8 @@ void Player::OnCollision(WorldTransform* worldTransform)
 			GotParent(worldTransform);
 		}
 		worldTransform_.transform_.translate.y = 0;
-		worldTransform_.UpdateMatrix();
+		allUpdateMatrix();
+
 		isLanding = true;
 	}
 
@@ -524,4 +520,13 @@ void Player::LostParent()
 	worldTransform_.parent_ = nullptr;
 	worldTransform_.UpdateMatrix();
 
+}
+
+void Player::allUpdateMatrix(){
+	worldTransform_.UpdateMatrix();
+	worldTransformBody_.UpdateMatrix();
+	worldTransformHead_.UpdateMatrix();
+	worldTransformL_arm_.UpdateMatrix();
+	worldTransformR_arm_.UpdateMatrix();
+	worldTransformWeapon_.UpdateMatrix();
 }

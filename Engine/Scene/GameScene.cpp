@@ -48,7 +48,7 @@ void GameScene::Initialize() {
 
 	floorManager_->Initialize(floorModel_.get(), floorMaterial_.get());
 
-	floorManager_->AddFloor({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, false);
+	floorManager_->AddFloor({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, false, false);
 
 	//ビュープロジェクション
 	viewProjection_.Initialize();
@@ -105,15 +105,17 @@ void GameScene::Update(){
 	directionalLightData.intencity = 1.0f;
 	directionalLight->Update(directionalLightData);
 
-	followCamera_->Update();
-
-	debugCamera_->Update(viewProjection_.transform_);
+	
 
 	floorManager_->Update();
 
 	player_->Update();
 
 	collisionManager_->AllCollision();	
+
+	followCamera_->Update();
+
+	debugCamera_->Update(viewProjection_.transform_);
 
 	viewProjection_ = followCamera_->GetViewProjection();
 
@@ -177,8 +179,14 @@ void GameScene::ImguiDraw(){
 	ImGui::DragFloat3("床の座標", &floorTransform_.translate.x, 0.1f);
 	ImGui::DragFloat3("床の回転", &floorTransform_.rotate.x, 0.01f);
 	ImGui::Checkbox("動く床にする", &isFloorMove_);
+	if (isFloorMove_){
+		ImGui::Checkbox("縦移動にする", &isVertical_);
+	}
+	else {
+		isVertical_ = false;
+	}
 	if (ImGui::Button("床の追加")){
-		floorManager_->AddFloor(floorTransform_.translate, floorTransform_.rotate, isFloorMove_);
+		floorManager_->AddFloor(floorTransform_.translate, floorTransform_.rotate, isFloorMove_, isVertical_);
 	}
 	ImGui::End();
 

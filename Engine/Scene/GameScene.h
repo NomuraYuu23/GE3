@@ -67,6 +67,7 @@ private:
 
 	bool isFloorMove_ = false;
 
+	bool isVertical_ = false;
 	//床の生成のトランスフォームとか
 	TransformStructure floorTransform_{};
 
