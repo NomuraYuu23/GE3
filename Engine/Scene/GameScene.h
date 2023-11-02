@@ -43,6 +43,11 @@ public:
 	/// 描画処理
 	/// </summary>
 	void Draw();
+
+public: //メンバ関数
+
+	void DebugCameraUpdate();
+
 	//テスト
 private:
 
@@ -55,6 +60,7 @@ private:
 
 	//デバッグカメラ
 	std::unique_ptr<DebugCamera> debugCamera_ = nullptr;
+	bool isDebugCameraActive_;
 
 	//光源
 	std::unique_ptr<DirectionalLight> directionalLight;

@@ -37,6 +37,8 @@ void GameScene::Initialize() {
 	debugCamera_ = std::make_unique<DebugCamera>();
 	debugCamera_->Initialize();
 
+	isDebugCameraActive_ = false;
+
 	//光源
 	directionalLight.reset(DirectionalLight::Create());
 
@@ -61,6 +63,9 @@ void GameScene::Update(){
 	directionalLightData.direction = { 0.0f, -1.0f, 0.0f };
 	directionalLightData.intencity = 1.0f;
 	directionalLight->Update(directionalLightData);
+
+	// デバッグカメラ
+	DebugCameraUpdate();
 
 }
 
@@ -103,5 +108,31 @@ void GameScene::Draw() {
 	Sprite::PostDraw();
 
 #pragma endregion
+
+}
+
+void GameScene::DebugCameraUpdate()
+{
+
+#ifdef _DEBUG
+	if (input_->TriggerKey(DIK_RETURN)) {
+		if (isDebugCameraActive_) {
+			isDebugCameraActive_ = false;
+		}
+		else {
+			isDebugCameraActive_ = true;
+		}
+	}
+
+	// カメラの処理
+	if (isDebugCameraActive_) {
+		// デバッグカメラの更新
+		debugCamera_->Update();
+		// デバッグカメラのビュー行列をコピー
+		viewProjection_ = debugCamera_->GetViewProjection();
+		// ビュー行列の転送
+		viewProjection_.UpdateMatrix();
+	}
+#endif
 
 }
