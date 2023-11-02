@@ -65,7 +65,4 @@ private:
 	//光源
 	std::unique_ptr<DirectionalLight> directionalLight;
 
-	// スプライト
-	std::unique_ptr<Sprite> sprite_;
-
 };

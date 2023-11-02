@@ -42,14 +42,6 @@ void GameScene::Initialize() {
 	//光源
 	directionalLight.reset(DirectionalLight::Create());
 
-	/// aaaaa
-	///bbbbb
-	uint32_t textureHandle = TextureManager::Load("Resources/defalt/uvChecker.png",dxCommon_);
-	sprite_.reset(Sprite::Create(textureHandle,Vector2{0.0f,0.0f},Vector4{1.0f,1.0f,1.0f,1.0f}));
-	sprite_->SetAnchorPoint(Vector2{ 0.0f,0.0f });
-	sprite_->SetTextureSize(Vector2{ 64.0f,64.0f });
-	sprite_->SetTextureLeftTop(Vector2{ 64.0f,64.0f });
-	sprite_->SetSize(Vector2{ 0.5f,0.5f });
 }
 
 /// <summary>
@@ -79,9 +71,6 @@ void GameScene::Draw() {
 #pragma region 背景スプライト描画
 	// 背景スプライト描画前処理
 	Sprite::PreDraw(dxCommon_->GetCommadList());
-
-	//背景スプライト描画
-	sprite_->Draw();
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
