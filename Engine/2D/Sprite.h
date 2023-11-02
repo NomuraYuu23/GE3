@@ -148,6 +148,8 @@ public: // アクセッサ(ワールドトランスフォーム)
 
 	void SetIsFlipY(bool isFlipY);
 
+	void SetIsInvisible(bool isInvisible) { isInvisible_ = isInvisible; }
+
 private: // メンバ変数(ワールドトランスフォーム)
 
 	// 位置
@@ -166,6 +168,8 @@ private: // メンバ変数(ワールドトランスフォーム)
 	bool isFlipX_ = false;
 	bool isFlipY_ = false;
 
+	// 非表示フラグ
+	bool isInvisible_ = false;
 
 public: // アクセッサ(マテリアル)
 

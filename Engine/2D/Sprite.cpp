@@ -225,6 +225,11 @@ void Sprite::SetTextureHandle(uint32_t textureHandle) {
 /// </summary>
 void Sprite::Draw() {
 
+	// 非表示
+	if (isInvisible_) {
+		return;
+	}
+
 	// 頂点バッファの設定
 	sCommandList->IASetVertexBuffers(0, 1, &vbView_);
 	//IBVを設定
