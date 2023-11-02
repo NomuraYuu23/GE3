@@ -140,6 +140,10 @@ public: // アクセッサ(ワールドトランスフォーム)
 
 	void SetSize(const Vector2& size);
 
+	void SetAnchorPoint(const Vector2& anchorPoint) { anchorPoint_ = anchorPoint; }
+
+	Vector2 GetAnchorPoint() { return anchorPoint_; }
+
 private: // メンバ変数(ワールドトランスフォーム)
 
 	// 位置
@@ -150,6 +154,10 @@ private: // メンバ変数(ワールドトランスフォーム)
 	Vector2 size_;
 	// ワールドトランスフォーム
 	WorldTransform worldTransform_;
+
+	// アンカーポイント
+	Vector2 anchorPoint_;
+
 
 public: // アクセッサ(マテリアル)
 

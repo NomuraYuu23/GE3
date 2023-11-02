@@ -140,6 +140,9 @@ Sprite::Sprite(
 	// ワールドトランスフォーム
 	worldTransform_.Initialize();
 
+	//アンカーポイント
+	anchorPoint_ = { 0.5f, 0.5f };
+
 	// マテリアル
 	material_ = std::make_unique<Material>();
 	material_->Initialize();
@@ -193,24 +196,30 @@ bool Sprite::Initialize() {
 	//インデックスリソースにデータを書き込む
 	indexBuff_->Map(0, nullptr, reinterpret_cast<void**>(&indexMap));
 
+	// 頂点データ
+	float left = (0.0f - anchorPoint_.x) * size_.x;
+	float right = (1.0f - anchorPoint_.x) * size_.x;
+	float top = (0.0f - anchorPoint_.y) * size_.y;
+	float bottom = (1.0f - anchorPoint_.y) * size_.y;
+
 	//一枚目の三角形
-	vertMap[0].position = { 0.0f, size_.y, 0.0f, 1.0f };//左下
+	vertMap[0].position = { left, bottom, 0.0f, 1.0f };//左下
 	vertMap[0].texcoord = { 0.0f, 1.0f };
 	vertMap[0].normal = { 0.0f, 0.0f, -1.0f };
-	vertMap[1].position = { 0.0f, 0.0f, 0.0f, 1.0f };//左上
+	vertMap[1].position = { left, top, 0.0f, 1.0f };//左上
 	vertMap[1].texcoord = { 0.0f, 0.0f };
 	vertMap[1].normal = { 0.0f, 0.0f, -1.0f };
-	vertMap[2].position = { size_.x, size_.y, 0.0f, 1.0f };//右下
+	vertMap[2].position = { right, bottom, 0.0f, 1.0f };//右下
 	vertMap[2].texcoord = { 1.0f, 1.0f };
 	vertMap[2].normal = { 0.0f, 0.0f, -1.0f };
 	//ニ枚目の三角形
-	vertMap[3].position = { size_.x, 0.0f, 0.0f, 1.0f };//右上
+	vertMap[3].position = { right, top, 0.0f, 1.0f };//右上
 	vertMap[3].texcoord = { 1.0f, 0.0f };
 	vertMap[3].normal = { 0.0f, 0.0f, -1.0f };
-	vertMap[4].position = { 0.0f, 0.0f, 0.0f, 1.0f };//左上
+	vertMap[4].position = { left, top, 0.0f, 1.0f };//左上
 	vertMap[4].texcoord = { 0.0f, 0.0f };
 	vertMap[4].normal = { 0.0f, 0.0f, -1.0f };
-	vertMap[5].position = { size_.x, size_.y, 0.0f, 1.0f };//右下
+	vertMap[5].position = { right, bottom, 0.0f, 1.0f };//右下
 	vertMap[5].texcoord = { 1.0f, 1.0f };
 	vertMap[5].normal = { 0.0f, 0.0f, -1.0f };
 
