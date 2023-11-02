@@ -1,9 +1,5 @@
 #include <Windows.h>
 
-#include "externals/imgui/imgui_impl_dx12.h"
-#include "externals/imgui/imgui_impl_win32.h"
-extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
 #include "Engine/Math/Vector2.h"
 #include "Engine/Math/Vector3.h"
 #include "Engine/Math/Vector4.h"
@@ -35,6 +31,9 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg
 #include "Engine/Camera/DebugCamera.h"
 #include "Engine/Scene/GameScene.h"
 
+// ImGui
+#include "Engine/2D/ImGuiManager.h"
+
 //Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
@@ -43,6 +42,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	Audio* audio = nullptr;
 	Input* input = nullptr;
+
+	ImGuiManager* imGuiManager = nullptr;
 
 	//ゲームウィンドウの作成
 	win = WinApp::GetInstance();
@@ -78,25 +79,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	audio = Audio::GetInstance();
 	audio->Initialize();
 
+	// ImGuiマネージャー
+	imGuiManager = ImGuiManager::GetInstance();
+	imGuiManager->Initialize(win,dxCommon, TextureManager::GetInstance());
+
 	// リリースチェッカー
 	D3DResourceLeakChecker leakChecker;
 
 	//ゲームシーン
 	std::unique_ptr<GameScene> gameScene = std::make_unique<GameScene>();
 	gameScene->Initialize();
-
-	//ImGuiの初期化。
-
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGui::StyleColorsDark();
-	ImGui_ImplWin32_Init(win->GetHwnd());
-	ImGui_ImplDX12_Init(dxCommon->GetDevice(),
-		2,								 // ダブルバッファ
-		DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, // SRGB
-		TextureManager::StaticGetDescriptorHeap(),
-		TextureManager::StaticGetCPUDescriptorHandle(),
-		TextureManager::StaticGetGPUDescriptorHandle());
 
 	//ウィンドウののボタンが押されるまでループ
 	while (true) {
@@ -113,16 +105,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		//ゲームの処理 
 		//ImGui
-		ImGui_ImplDX12_NewFrame();
-		ImGui_ImplWin32_NewFrame();
-		ImGui::NewFrame();
-
+		imGuiManager->Begin();
 
 		//開発用UIの処理。実際に開発用のUIを出す場合はここをゲーム固有の処理に置き換える
 		ImGui::ShowDemoWindow();
-
-		//ImGuiの内部コマンドを生成する
-		ImGui::Render();
 
 		// ゲームシーン更新
 		gameScene->Update();
@@ -133,10 +119,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//ゲームシーン描画処理
 		gameScene->Draw();
 
+		imGuiManager->End();
+
 		// シェーダーリソースビューをセット
 		TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(dxCommon->GetCommadList(), 2, 0);
 		//実際のcommandListのImGuiの描画コマンドを積む
-		ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), dxCommon->GetCommadList());
+		imGuiManager->Draw();
 
 		//描画後処理
 		dxCommon->PostDraw();
@@ -150,9 +138,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	audio->Finalize();
 
 	//色々な解放処理の前に書く
-	ImGui_ImplDX12_Shutdown();
-	ImGui_ImplWin32_Shutdown();
-	ImGui::DestroyContext();
+	imGuiManager->Finalize();
 
 	//ゲームウィンドウの破棄
 	win->TerminateGameWindow();

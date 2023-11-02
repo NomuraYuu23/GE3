@@ -1,395 +1,395 @@
-#include "GlobalVariables.h"
-//#include <ImGuiManager.h>
-//#include <json.hpp>
-#include <fstream>
-
-/// <summary>
-/// ƒCƒ“ƒXƒ^ƒ“ƒX‚Ìæ“¾
-/// </summary>
-/// <returns></returns>
-GlobalVariables* GlobalVariables::GetInstance() {
-	static GlobalVariables instance;
-	return &instance;
-}
-
-/// <summary>
-/// ƒOƒ‹[ƒv‚Ìì¬
-/// </summary>
-/// <param name="groupName">ƒOƒ‹[ƒv–¼</param>
-void GlobalVariables::CreateGroup(const std::string& groupName) {
-
-	//w’è–¼‚ÌƒIƒuƒWƒFƒNƒg‚ª‚È‚¯‚ê‚Î’Ç‰Á‚·‚é
-	datas_[groupName];
-
-}
-
-/// <summary>
-/// ƒtƒ@ƒCƒ‹‚É‘‚«o‚µ
-/// </summary>
-/// <param name="groupName">ƒOƒ‹[ƒv</param>
-void GlobalVariables::SaveFile(const std::string& groupName) {
-
-	//ƒOƒ‹[ƒv‚ğŒŸõ
-	std::map<std::string, Group>::iterator itGroup = datas_.find(groupName);
-
-	//–¢“o˜^ƒ`ƒFƒbƒN
-	assert(itGroup != datas_.end());
-
-	//ƒOƒ‹[ƒv“o˜^Šm”F
-	nlohmann::json root;
-
-	root = nlohmann::json::object();
-
-	// jsonƒIƒuƒWƒFƒNƒg“o˜^
-	root[groupName] = nlohmann::json::object();
-
-	//Še€–Ú‚É‚Â‚¢‚Ä
-	for (std::map<std::string, Item>::iterator itItem = itGroup->second.begin();
-		itItem != itGroup->second.end(); ++itItem) {
-
-		//€–Ú–¼‚ğæ“¾
-		const std::string& itemName = itItem->first;
-		//€–Ú‚ÌQÆ‚ğæ“¾
-		Item& item = itItem->second;
-
-		// int32_tŒ^‚Ì’l‚ğ•Û‚µ‚Ä‚¢‚ê‚Î
-		if (std::holds_alternative<int32_t>(item)) {
-			// int32_tŒ^‚Ì’l‚ğ“o˜^
-			root[groupName][itemName] = std::get<int32_t>(item);
-		}
-
-		// floatŒ^‚Ì’l‚ğ•Û‚µ‚Ä‚¢‚ê‚Î
-		else if (std::holds_alternative<float>(item)) {
-			// floatŒ^‚Ì’l‚ğ“o˜^
-			root[groupName][itemName] = std::get<float>(item);
-		}
-
-		// Vector3Œ^‚Ì’l‚ğ•Û‚µ‚Ä‚¢‚ê‚Î
-		else if (std::holds_alternative<Vector3>(item)) {
-			// floatŒ^‚Ì’l‚ğ“o˜^
-			Vector3 value = std::get<Vector3>(item);
-			root[groupName][itemName] = nlohmann::json::array({ value.x, value.y, value.z });
-		}
-
-		//ƒfƒBƒŒƒNƒgƒŠ‚ª‚È‚¯‚ê‚Îì¬‚·‚é
-		std::filesystem::path dir(kDirectoryPath);
-		if (!std::filesystem::exists(dir)) {
-			std::filesystem::create_directory(dir);
-		}
-
-		// ‘‚«‚ŞJSONƒtƒ@ƒCƒ‹‚Ìƒtƒ‹ƒpƒX‚ğ‡¬‚·‚é
-		std::string filePath = kDirectoryPath + groupName + ".json";
-		// ‘‚«‚Ş—pƒtƒ@ƒCƒ‹ƒXƒgƒŠ[ƒ€
-		std::ofstream ofs;
-		// ƒtƒ@ƒCƒ‹‚ğ‘‚«‚İ—p‚ÉŠJ‚­
-		ofs.open(filePath);
-		// ƒtƒ@ƒCƒ‹ƒI[ƒvƒ“¸”s
-		if (ofs.fail()) {
-			std::string message = "Failed open data file for write.";
-			MessageBoxA(nullptr, message.c_str(), "GlobalVariables", 0);
-			assert(0);
-			return;
-		}
-
-		// ƒtƒ@ƒCƒ‹‚Éjson•¶š—ñ‚ğ‘‚«‚Ş(ƒCƒ“ƒfƒ“ƒg•4)
-		ofs << std::setw(4) << root << std::endl;
-		// ƒtƒ@ƒCƒ‹‚ğ•Â‚¶‚é
-		ofs.close();
-
-	}
-
-}
-
-/// <summary>
-/// ’l‚ÌƒZƒbƒg
-/// </summary>
-/// <param name="groupName">ƒOƒ‹[ƒv–¼</param>
-/// <param name="key">€–Ú–¼</param>
-/// <param name="value">’l</param>
-void GlobalVariables::SetValue(
-	const std::string& groupName, const std::string& key, int32_t value) {
-
-	// ƒOƒ‹[ƒv‚ÌQÆ‚ğæ“¾
-	Group& group = datas_[groupName];
-	// V‚µ‚¢€–Ú‚Ìƒf[ƒ^‚ğİ’è
-	Item newItem{};
-	newItem = value;
-	// İ’è‚µ‚½€–Ú‚ğstd::map‚É’Ç‰Á
-	group[key] = newItem;
-
-}
-
-/// <summary>
-/// ’l‚ÌƒZƒbƒg
-/// </summary>
-/// <param name="groupName">ƒOƒ‹[ƒv–¼</param>
-/// <param name="key">€–Ú–¼</param>
-/// <param name="value">’l</param>
-void GlobalVariables::SetValue(const std::string& groupName, const std::string& key, float value) {
-
-	// ƒOƒ‹[ƒv‚ÌQÆ‚ğæ“¾
-	Group& group = datas_[groupName];
-	// V‚µ‚¢€–Ú‚Ìƒf[ƒ^‚ğİ’è
-	Item newItem{};
-	newItem = value;
-	// İ’è‚µ‚½€–Ú‚ğstd::map‚É’Ç‰Á
-	group[key] = newItem;
-
-}
-
-/// <summary>
-/// ’l‚ÌƒZƒbƒg
-/// </summary>
-/// <param name="groupName">ƒOƒ‹[ƒv–¼</param>
-/// <param name="key">€–Ú–¼</param>
-/// <param name="value">’l</param>
-void GlobalVariables::SetValue(
-	const std::string& groupName, const std::string& key, const Vector3& value) {
-
-	// ƒOƒ‹[ƒv‚ÌQÆ‚ğæ“¾
-	Group& group = datas_[groupName];
-	// V‚µ‚¢€–Ú‚Ìƒf[ƒ^‚ğİ’è
-	Item newItem{};
-	newItem = value;
-	// İ’è‚µ‚½€–Ú‚ğstd::map‚É’Ç‰Á
-	group[key] = newItem;
-
-}
-
-/// <summary>
-/// –ˆƒtƒŒ[ƒ€ˆ—
-/// </summary>
-void GlobalVariables::Update() {
-
-	if (!ImGui::Begin("Global Variables", nullptr, ImGuiWindowFlags_MenuBar)) {
-		ImGui::End();
-		return;
-	}
-	if (!ImGui::BeginMenuBar())
-		return;
-
-	//ŠeƒOƒ‹[ƒv‚É‚Â‚¢‚Ä
-	for (std::map<std::string, Group>::iterator itGroup = datas_.begin(); itGroup != datas_.end();
-		++itGroup) {
-		// ƒOƒ‹[ƒv–¼‚ğæ“¾
-		const std::string& groupName = itGroup->first;
-		// ƒOƒ‹[ƒv‚ÌQÆ‚ğæ“¾
-		Group& group = itGroup->second;
-
-		if (!ImGui::BeginMenu(groupName.c_str()))
-			continue;
-
-		//Še€–Ú‚É‚Â‚¢‚Ä
-		for (std::map<std::string, Item>::iterator itItem = group.begin();
-			itItem != group.end(); ++itItem) {
-
-			//€–Ú–¼‚ğæ“¾
-			const std::string& itemName = itItem->first;
-			//€–Ú‚ÌQÆ‚ğæ“¾
-			Item& item = itItem->second;
-
-			// int32_tŒ^‚Ì’l‚ğ•Û‚µ‚Ä‚¢‚ê‚Î
-			if (std::holds_alternative<int32_t>(item)) {
-				int32_t* ptr = std::get_if<int32_t>(&item);
-				ImGui::SliderInt(itemName.c_str(), ptr, 0, 100);
-			}
-
-			// floatŒ^‚Ì’l‚ğ•Û‚µ‚Ä‚¢‚ê‚Î
-			if (std::holds_alternative<float>(item)) {
-				float* ptr = std::get_if<float>(&item);
-				ImGui::SliderFloat(itemName.c_str(), ptr, -100.0f, 100.0f);
-			}
-
-			// Vector3Œ^‚Ì’l‚ğ•Û‚µ‚Ä‚¢‚ê‚Î
-			if (std::holds_alternative<Vector3>(item)) {
-				Vector3* ptr = std::get_if<Vector3>(&item);
-				ImGui::SliderFloat3(itemName.c_str(), reinterpret_cast<float*>(ptr), -10.0f, 10.0f);
-			}
-
-		}
-
-		//‰üs
-		ImGui::Text("\n");
-
-		if (ImGui::Button("Save")) {
-			SaveFile(groupName);
-			std::string message = std::format("{}.json saved.", groupName);
-			MessageBoxA(nullptr, message.c_str(), "GlobalVariables", 0);
-		}
-
-
-		ImGui::EndMenu();
-
-	}
-
-	ImGui::EndMenuBar();
-	ImGui::End();
-
-}
-
-/// <summary>
-/// ƒfƒBƒŒƒNƒgƒŠ‚Ì‘Sƒtƒ@ƒCƒ‹“Ç‚İ‚İ
-/// </summary>
-void GlobalVariables::LoadFiles() {
-
-	// •Û‘¶æƒfƒBƒŒƒNƒgƒŠ‚ÌƒpƒX‚ğƒ[ƒJƒ‹•Ï”‚ÅéŒ¾‚·‚é
-	std::filesystem::path dir(kDirectoryPath);
-	// ƒfƒBƒŒƒNƒgƒŠ‚ª‚È‚¯‚ê‚ÎƒXƒLƒbƒv‚·‚é
-	if (!std::filesystem::exists(dir)) {
-		return;
-	}
-
-	//Šeƒtƒ@ƒCƒ‹‚Ìˆ—
-	std::filesystem::directory_iterator dir_it(kDirectoryPath);
-	for (const std::filesystem::directory_entry& entry : dir_it) {
-
-		// ƒtƒ@ƒCƒ‹ƒpƒX‚ğæ“¾
-		const std::filesystem::path& filePath = entry.path();
-
-		// ƒtƒ@ƒCƒ‹Šg’£q‚ğæ“¾
-		std::string extension = filePath.extension().string();
-		// .jsonƒtƒ@ƒCƒ‹ˆÈŠO‚ÍƒXƒLƒbƒv
-		if (extension.compare(".json") != 0) {
-			continue;
-		}
-
-		// ƒtƒ@ƒCƒ‹“Ç‚İ‚İ
-		LoadFile(filePath.stem().string());
-
-	}
-
-
-}
-
-/// <summary>
-/// ƒtƒ@ƒCƒ‹‚©‚ç“Ç‚İ‚Ş
-/// </summary>
-/// <param name="groupName">ƒOƒ‹[ƒv</param>
-void GlobalVariables::LoadFile(const std::string& groupName) {
-
-	// “Ç‚İ‚ŞJSONƒtƒ@ƒCƒ‹‚Ìƒtƒ‹ƒpƒX‚ğ‡¬‚·‚é
-	std::string filePath = kDirectoryPath + groupName + ".json";
-	// “Ç‚İ‚İ—pƒtƒ@ƒCƒ‹ƒXƒgƒŠ[ƒ€
-	std::ifstream ifs;
-	// ƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚İ—p‚É•·‚­
-	ifs.open(filePath);
-
-	// ƒtƒ@ƒCƒ‹ƒI[ƒvƒ“¸”s?
-	if (ifs.fail()) {
-		std::string message = "Failed open data file for write.";
-		MessageBoxA(nullptr, message.c_str(), "GlobalVariables", 0);
-		assert(0);
-		return;
-	}
-
-	nlohmann::json root;
-
-	// json•¶š—ñ‚©‚çjson‚Ìƒf[ƒ^\‘¢‚É“WŠJ
-	ifs >> root;
-	// ƒtƒ@ƒCƒ‹‚ğ•Â‚¶‚é
-	ifs.close();
-
-	// ƒOƒ‹[ƒv‚ğŒŸõ
-	nlohmann::json::iterator itGroup = root.find(groupName);
-
-	// –¢“o˜^ƒ`ƒFƒbƒN
-	assert(itGroup != root.end());
-
-	// ŠeƒAƒCƒeƒ€‚É‚Â‚¢‚Ä
-	for (nlohmann::json::iterator itItem = itGroup->begin(); itItem != itGroup->end(); ++itItem) {
-
-		// ƒAƒCƒeƒ€–¼‚ğæ“¾
-		const std::string& itemName = itItem.key();
-
-		// int32_tŒ^‚Ì’l‚ğ•Û‚µ‚Ä‚¢‚ê‚Î
-		if (itItem->is_number_integer()) {
-			// intŒ^‚Ì’l‚ğ“o˜^
-			int32_t value = itItem->get<int32_t>();
-			SetValue(groupName, itemName, value);
-		}
-
-		// floatŒ^‚Ì’l‚ğ•Û‚µ‚Ä‚¢‚ê‚Î
-		else if (itItem->is_number_float()) {
-			// intŒ^‚Ì’l‚ğ“o˜^
-			double value = itItem->get<double>();
-			SetValue(groupName, itemName, static_cast<float>(value));
-		}
-		// —v‘f”3‚Ì”z—ñ‚Å‚ ‚ê‚Î
-		else if (itItem->is_array() && itItem->size() == 3) {
-			// floatŒ^‚Ìjson”z—ñ“o˜^
-			Vector3 value = { itItem->at(0), itItem->at(1), itItem->at(2) };
-			SetValue(groupName, itemName, value);
-		}
-
-	}
-
-
-}
-
-
-// €–Ú‚Ì’Ç‰Á(int)
-void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, int32_t value) {
-
-	// €–Ú‚ª–¢“o˜^‚È‚ç
-	if (datas_[groupName].find(key) == datas_[groupName].end()) {
-		SetValue(groupName, key, value);
-	}
-
-}
-
-// €–Ú‚Ì’Ç‰Á(float)
-void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, float value) {
-
-	// €–Ú‚ª–¢“o˜^‚È‚ç
-	if (datas_[groupName].find(key) == datas_[groupName].end()) {
-		SetValue(groupName, key, value);
-	}
-}
-// €–Ú‚Ì’Ç‰Á(Vector3)
-void GlobalVariables::AddItem(
-	const std::string& groupName, const std::string& key, const Vector3& value) {
-
-	// €–Ú‚ª–¢“o˜^‚È‚ç
-	if (datas_[groupName].find(key) == datas_[groupName].end()) {
-		SetValue(groupName, key, value);
-	}
-
-}
-
-// ’l‚Ìæ“¾(int)
-int32_t GlobalVariables::GetIntValue(const std::string& groupName, const std::string& key) {
-
-	assert(datas_.find(groupName) != datas_.end());
-	//ƒOƒ‹[ƒv‚ÌQÆ‚ğæ“¾
-	Group& group = datas_[groupName];
-
-	assert(group.find(key) != group.end());
-
-	return std::get<0>(group[key]);
-}
-
-// ’l‚Ìæ“¾(float)
-float GlobalVariables::GetFloatValue(const std::string& groupName, const std::string& key) {
-
-	assert(datas_.find(groupName) != datas_.end());
-	// ƒOƒ‹[ƒv‚ÌQÆ‚ğæ“¾
-	Group& group = datas_[groupName];
-
-	assert(group.find(key) != group.end());
-
-	return std::get<1>(group[key]);
-
-}
-
-// ’l‚Ìæ“¾(Vector3)
-Vector3 GlobalVariables::GetVector3Value(const std::string& groupName, const std::string& key) {
-
-	assert(datas_.find(groupName) != datas_.end());
-	// ƒOƒ‹[ƒv‚ÌQÆ‚ğæ“¾
-	Group& group = datas_[groupName];
-
-	assert(group.find(key) != group.end());
-
-	return std::get<2>(group[key]);
-
-}
+ï»¿//#include "GlobalVariables.h"
+////#include <ImGuiManager.h>
+////#include <json.hpp>
+//#include <fstream>
+//
+///// <summary>
+///// ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®å–å¾—
+///// </summary>
+///// <returns></returns>
+//GlobalVariables* GlobalVariables::GetInstance() {
+//	static GlobalVariables instance;
+//	return &instance;
+//}
+//
+///// <summary>
+///// ã‚°ãƒ«ãƒ¼ãƒ—ã®ä½œæˆ
+///// </summary>
+///// <param name="groupName">ã‚°ãƒ«ãƒ¼ãƒ—å</param>
+//void GlobalVariables::CreateGroup(const std::string& groupName) {
+//
+//	//æŒ‡å®šåã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒãªã‘ã‚Œã°è¿½åŠ ã™ã‚‹
+//	datas_[groupName];
+//
+//}
+//
+///// <summary>
+///// ãƒ•ã‚¡ã‚¤ãƒ«ã«æ›¸ãå‡ºã—
+///// </summary>
+///// <param name="groupName">ã‚°ãƒ«ãƒ¼ãƒ—</param>
+//void GlobalVariables::SaveFile(const std::string& groupName) {
+//
+//	//ã‚°ãƒ«ãƒ¼ãƒ—ã‚’æ¤œç´¢
+//	std::map<std::string, Group>::iterator itGroup = datas_.find(groupName);
+//
+//	//æœªç™»éŒ²ãƒã‚§ãƒƒã‚¯
+//	assert(itGroup != datas_.end());
+//
+//	//ã‚°ãƒ«ãƒ¼ãƒ—ç™»éŒ²ç¢ºèª
+//	nlohmann::json root;
+//
+//	root = nlohmann::json::object();
+//
+//	// jsonã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç™»éŒ²
+//	root[groupName] = nlohmann::json::object();
+//
+//	//å„é …ç›®ã«ã¤ã„ã¦
+//	for (std::map<std::string, Item>::iterator itItem = itGroup->second.begin();
+//		itItem != itGroup->second.end(); ++itItem) {
+//
+//		//é …ç›®åã‚’å–å¾—
+//		const std::string& itemName = itItem->first;
+//		//é …ç›®ã®å‚ç…§ã‚’å–å¾—
+//		Item& item = itItem->second;
+//
+//		// int32_tå‹ã®å€¤ã‚’ä¿æŒã—ã¦ã„ã‚Œã°
+//		if (std::holds_alternative<int32_t>(item)) {
+//			// int32_tå‹ã®å€¤ã‚’ç™»éŒ²
+//			root[groupName][itemName] = std::get<int32_t>(item);
+//		}
+//
+//		// floatå‹ã®å€¤ã‚’ä¿æŒã—ã¦ã„ã‚Œã°
+//		else if (std::holds_alternative<float>(item)) {
+//			// floatå‹ã®å€¤ã‚’ç™»éŒ²
+//			root[groupName][itemName] = std::get<float>(item);
+//		}
+//
+//		// Vector3å‹ã®å€¤ã‚’ä¿æŒã—ã¦ã„ã‚Œã°
+//		else if (std::holds_alternative<Vector3>(item)) {
+//			// floatå‹ã®å€¤ã‚’ç™»éŒ²
+//			Vector3 value = std::get<Vector3>(item);
+//			root[groupName][itemName] = nlohmann::json::array({ value.x, value.y, value.z });
+//		}
+//
+//		//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãŒãªã‘ã‚Œã°ä½œæˆã™ã‚‹
+//		std::filesystem::path dir(kDirectoryPath);
+//		if (!std::filesystem::exists(dir)) {
+//			std::filesystem::create_directory(dir);
+//		}
+//
+//		// æ›¸ãè¾¼ã‚€JSONãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ•ãƒ«ãƒ‘ã‚¹ã‚’åˆæˆã™ã‚‹
+//		std::string filePath = kDirectoryPath + groupName + ".json";
+//		// æ›¸ãè¾¼ã‚€ç”¨ãƒ•ã‚¡ã‚¤ãƒ«ã‚¹ãƒˆãƒªãƒ¼ãƒ 
+//		std::ofstream ofs;
+//		// ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ›¸ãè¾¼ã¿ç”¨ã«é–‹ã
+//		ofs.open(filePath);
+//		// ãƒ•ã‚¡ã‚¤ãƒ«ã‚ªãƒ¼ãƒ—ãƒ³å¤±æ•—
+//		if (ofs.fail()) {
+//			std::string message = "Failed open data file for write.";
+//			MessageBoxA(nullptr, message.c_str(), "GlobalVariables", 0);
+//			assert(0);
+//			return;
+//		}
+//
+//		// ãƒ•ã‚¡ã‚¤ãƒ«ã«jsonæ–‡å­—åˆ—ã‚’æ›¸ãè¾¼ã‚€(ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆå¹…4)
+//		ofs << std::setw(4) << root << std::endl;
+//		// ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‰ã˜ã‚‹
+//		ofs.close();
+//
+//	}
+//
+//}
+//
+///// <summary>
+///// å€¤ã®ã‚»ãƒƒãƒˆ
+///// </summary>
+///// <param name="groupName">ã‚°ãƒ«ãƒ¼ãƒ—å</param>
+///// <param name="key">é …ç›®å</param>
+///// <param name="value">å€¤</param>
+//void GlobalVariables::SetValue(
+//	const std::string& groupName, const std::string& key, int32_t value) {
+//
+//	// ã‚°ãƒ«ãƒ¼ãƒ—ã®å‚ç…§ã‚’å–å¾—
+//	Group& group = datas_[groupName];
+//	// æ–°ã—ã„é …ç›®ã®ãƒ‡ãƒ¼ã‚¿ã‚’è¨­å®š
+//	Item newItem{};
+//	newItem = value;
+//	// è¨­å®šã—ãŸé …ç›®ã‚’std::mapã«è¿½åŠ 
+//	group[key] = newItem;
+//
+//}
+//
+///// <summary>
+///// å€¤ã®ã‚»ãƒƒãƒˆ
+///// </summary>
+///// <param name="groupName">ã‚°ãƒ«ãƒ¼ãƒ—å</param>
+///// <param name="key">é …ç›®å</param>
+///// <param name="value">å€¤</param>
+//void GlobalVariables::SetValue(const std::string& groupName, const std::string& key, float value) {
+//
+//	// ã‚°ãƒ«ãƒ¼ãƒ—ã®å‚ç…§ã‚’å–å¾—
+//	Group& group = datas_[groupName];
+//	// æ–°ã—ã„é …ç›®ã®ãƒ‡ãƒ¼ã‚¿ã‚’è¨­å®š
+//	Item newItem{};
+//	newItem = value;
+//	// è¨­å®šã—ãŸé …ç›®ã‚’std::mapã«è¿½åŠ 
+//	group[key] = newItem;
+//
+//}
+//
+///// <summary>
+///// å€¤ã®ã‚»ãƒƒãƒˆ
+///// </summary>
+///// <param name="groupName">ã‚°ãƒ«ãƒ¼ãƒ—å</param>
+///// <param name="key">é …ç›®å</param>
+///// <param name="value">å€¤</param>
+//void GlobalVariables::SetValue(
+//	const std::string& groupName, const std::string& key, const Vector3& value) {
+//
+//	// ã‚°ãƒ«ãƒ¼ãƒ—ã®å‚ç…§ã‚’å–å¾—
+//	Group& group = datas_[groupName];
+//	// æ–°ã—ã„é …ç›®ã®ãƒ‡ãƒ¼ã‚¿ã‚’è¨­å®š
+//	Item newItem{};
+//	newItem = value;
+//	// è¨­å®šã—ãŸé …ç›®ã‚’std::mapã«è¿½åŠ 
+//	group[key] = newItem;
+//
+//}
+//
+///// <summary>
+///// æ¯ãƒ•ãƒ¬ãƒ¼ãƒ å‡¦ç†
+///// </summary>
+//void GlobalVariables::Update() {
+//
+//	if (!ImGui::Begin("Global Variables", nullptr, ImGuiWindowFlags_MenuBar)) {
+//		ImGui::End();
+//		return;
+//	}
+//	if (!ImGui::BeginMenuBar())
+//		return;
+//
+//	//å„ã‚°ãƒ«ãƒ¼ãƒ—ã«ã¤ã„ã¦
+//	for (std::map<std::string, Group>::iterator itGroup = datas_.begin(); itGroup != datas_.end();
+//		++itGroup) {
+//		// ã‚°ãƒ«ãƒ¼ãƒ—åã‚’å–å¾—
+//		const std::string& groupName = itGroup->first;
+//		// ã‚°ãƒ«ãƒ¼ãƒ—ã®å‚ç…§ã‚’å–å¾—
+//		Group& group = itGroup->second;
+//
+//		if (!ImGui::BeginMenu(groupName.c_str()))
+//			continue;
+//
+//		//å„é …ç›®ã«ã¤ã„ã¦
+//		for (std::map<std::string, Item>::iterator itItem = group.begin();
+//			itItem != group.end(); ++itItem) {
+//
+//			//é …ç›®åã‚’å–å¾—
+//			const std::string& itemName = itItem->first;
+//			//é …ç›®ã®å‚ç…§ã‚’å–å¾—
+//			Item& item = itItem->second;
+//
+//			// int32_tå‹ã®å€¤ã‚’ä¿æŒã—ã¦ã„ã‚Œã°
+//			if (std::holds_alternative<int32_t>(item)) {
+//				int32_t* ptr = std::get_if<int32_t>(&item);
+//				ImGui::SliderInt(itemName.c_str(), ptr, 0, 100);
+//			}
+//
+//			// floatå‹ã®å€¤ã‚’ä¿æŒã—ã¦ã„ã‚Œã°
+//			if (std::holds_alternative<float>(item)) {
+//				float* ptr = std::get_if<float>(&item);
+//				ImGui::SliderFloat(itemName.c_str(), ptr, -100.0f, 100.0f);
+//			}
+//
+//			// Vector3å‹ã®å€¤ã‚’ä¿æŒã—ã¦ã„ã‚Œã°
+//			if (std::holds_alternative<Vector3>(item)) {
+//				Vector3* ptr = std::get_if<Vector3>(&item);
+//				ImGui::SliderFloat3(itemName.c_str(), reinterpret_cast<float*>(ptr), -10.0f, 10.0f);
+//			}
+//
+//		}
+//
+//		//æ”¹è¡Œ
+//		ImGui::Text("\n");
+//
+//		if (ImGui::Button("Save")) {
+//			SaveFile(groupName);
+//			std::string message = std::format("{}.json saved.", groupName);
+//			MessageBoxA(nullptr, message.c_str(), "GlobalVariables", 0);
+//		}
+//
+//
+//		ImGui::EndMenu();
+//
+//	}
+//
+//	ImGui::EndMenuBar();
+//	ImGui::End();
+//
+//}
+//
+///// <summary>
+///// ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®å…¨ãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿è¾¼ã¿
+///// </summary>
+//void GlobalVariables::LoadFiles() {
+//
+//	// ä¿å­˜å…ˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ãƒ‘ã‚¹ã‚’ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ã§å®£è¨€ã™ã‚‹
+//	std::filesystem::path dir(kDirectoryPath);
+//	// ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãŒãªã‘ã‚Œã°ã‚¹ã‚­ãƒƒãƒ—ã™ã‚‹
+//	if (!std::filesystem::exists(dir)) {
+//		return;
+//	}
+//
+//	//å„ãƒ•ã‚¡ã‚¤ãƒ«ã®å‡¦ç†
+//	std::filesystem::directory_iterator dir_it(kDirectoryPath);
+//	for (const std::filesystem::directory_entry& entry : dir_it) {
+//
+//		// ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ã‚’å–å¾—
+//		const std::filesystem::path& filePath = entry.path();
+//
+//		// ãƒ•ã‚¡ã‚¤ãƒ«æ‹¡å¼µå­ã‚’å–å¾—
+//		std::string extension = filePath.extension().string();
+//		// .jsonãƒ•ã‚¡ã‚¤ãƒ«ä»¥å¤–ã¯ã‚¹ã‚­ãƒƒãƒ—
+//		if (extension.compare(".json") != 0) {
+//			continue;
+//		}
+//
+//		// ãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿è¾¼ã¿
+//		LoadFile(filePath.stem().string());
+//
+//	}
+//
+//
+//}
+//
+///// <summary>
+///// ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰èª­ã¿è¾¼ã‚€
+///// </summary>
+///// <param name="groupName">ã‚°ãƒ«ãƒ¼ãƒ—</param>
+//void GlobalVariables::LoadFile(const std::string& groupName) {
+//
+//	// èª­ã¿è¾¼ã‚€JSONãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ•ãƒ«ãƒ‘ã‚¹ã‚’åˆæˆã™ã‚‹
+//	std::string filePath = kDirectoryPath + groupName + ".json";
+//	// èª­ã¿è¾¼ã¿ç”¨ãƒ•ã‚¡ã‚¤ãƒ«ã‚¹ãƒˆãƒªãƒ¼ãƒ 
+//	std::ifstream ifs;
+//	// ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã¿ç”¨ã«èã
+//	ifs.open(filePath);
+//
+//	// ãƒ•ã‚¡ã‚¤ãƒ«ã‚ªãƒ¼ãƒ—ãƒ³å¤±æ•—?
+//	if (ifs.fail()) {
+//		std::string message = "Failed open data file for write.";
+//		MessageBoxA(nullptr, message.c_str(), "GlobalVariables", 0);
+//		assert(0);
+//		return;
+//	}
+//
+//	nlohmann::json root;
+//
+//	// jsonæ–‡å­—åˆ—ã‹ã‚‰jsonã®ãƒ‡ãƒ¼ã‚¿æ§‹é€ ã«å±•é–‹
+//	ifs >> root;
+//	// ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‰ã˜ã‚‹
+//	ifs.close();
+//
+//	// ã‚°ãƒ«ãƒ¼ãƒ—ã‚’æ¤œç´¢
+//	nlohmann::json::iterator itGroup = root.find(groupName);
+//
+//	// æœªç™»éŒ²ãƒã‚§ãƒƒã‚¯
+//	assert(itGroup != root.end());
+//
+//	// å„ã‚¢ã‚¤ãƒ†ãƒ ã«ã¤ã„ã¦
+//	for (nlohmann::json::iterator itItem = itGroup->begin(); itItem != itGroup->end(); ++itItem) {
+//
+//		// ã‚¢ã‚¤ãƒ†ãƒ åã‚’å–å¾—
+//		const std::string& itemName = itItem.key();
+//
+//		// int32_tå‹ã®å€¤ã‚’ä¿æŒã—ã¦ã„ã‚Œã°
+//		if (itItem->is_number_integer()) {
+//			// intå‹ã®å€¤ã‚’ç™»éŒ²
+//			int32_t value = itItem->get<int32_t>();
+//			SetValue(groupName, itemName, value);
+//		}
+//
+//		// floatå‹ã®å€¤ã‚’ä¿æŒã—ã¦ã„ã‚Œã°
+//		else if (itItem->is_number_float()) {
+//			// intå‹ã®å€¤ã‚’ç™»éŒ²
+//			double value = itItem->get<double>();
+//			SetValue(groupName, itemName, static_cast<float>(value));
+//		}
+//		// è¦ç´ æ•°3ã®é…åˆ—ã§ã‚ã‚Œã°
+//		else if (itItem->is_array() && itItem->size() == 3) {
+//			// floatå‹ã®jsoné…åˆ—ç™»éŒ²
+//			Vector3 value = { itItem->at(0), itItem->at(1), itItem->at(2) };
+//			SetValue(groupName, itemName, value);
+//		}
+//
+//	}
+//
+//
+//}
+//
+//
+//// é …ç›®ã®è¿½åŠ (int)
+//void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, int32_t value) {
+//
+//	// é …ç›®ãŒæœªç™»éŒ²ãªã‚‰
+//	if (datas_[groupName].find(key) == datas_[groupName].end()) {
+//		SetValue(groupName, key, value);
+//	}
+//
+//}
+//
+//// é …ç›®ã®è¿½åŠ (float)
+//void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, float value) {
+//
+//	// é …ç›®ãŒæœªç™»éŒ²ãªã‚‰
+//	if (datas_[groupName].find(key) == datas_[groupName].end()) {
+//		SetValue(groupName, key, value);
+//	}
+//}
+//// é …ç›®ã®è¿½åŠ (Vector3)
+//void GlobalVariables::AddItem(
+//	const std::string& groupName, const std::string& key, const Vector3& value) {
+//
+//	// é …ç›®ãŒæœªç™»éŒ²ãªã‚‰
+//	if (datas_[groupName].find(key) == datas_[groupName].end()) {
+//		SetValue(groupName, key, value);
+//	}
+//
+//}
+//
+//// å€¤ã®å–å¾—(int)
+//int32_t GlobalVariables::GetIntValue(const std::string& groupName, const std::string& key) {
+//
+//	assert(datas_.find(groupName) != datas_.end());
+//	//ã‚°ãƒ«ãƒ¼ãƒ—ã®å‚ç…§ã‚’å–å¾—
+//	Group& group = datas_[groupName];
+//
+//	assert(group.find(key) != group.end());
+//
+//	return std::get<0>(group[key]);
+//}
+//
+//// å€¤ã®å–å¾—(float)
+//float GlobalVariables::GetFloatValue(const std::string& groupName, const std::string& key) {
+//
+//	assert(datas_.find(groupName) != datas_.end());
+//	// ã‚°ãƒ«ãƒ¼ãƒ—ã®å‚ç…§ã‚’å–å¾—
+//	Group& group = datas_[groupName];
+//
+//	assert(group.find(key) != group.end());
+//
+//	return std::get<1>(group[key]);
+//
+//}
+//
+//// å€¤ã®å–å¾—(Vector3)
+//Vector3 GlobalVariables::GetVector3Value(const std::string& groupName, const std::string& key) {
+//
+//	assert(datas_.find(groupName) != datas_.end());
+//	// ã‚°ãƒ«ãƒ¼ãƒ—ã®å‚ç…§ã‚’å–å¾—
+//	Group& group = datas_[groupName];
+//
+//	assert(group.find(key) != group.end());
+//
+//	return std::get<2>(group[key]);
+//
+//}

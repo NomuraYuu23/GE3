@@ -1,110 +1,110 @@
-#pragma once
-#include <iostream>
-#include <variant>
-#include <string>
-#include <map>
-#include "../Math/Vector3.h"
-
-class GlobalVariables {
-
-public:
-
-	/// <summary>
-	/// ƒCƒ“ƒXƒ^ƒ“ƒX‚Ìæ“¾
-	/// </summary>
-	/// <returns></returns>
-	static GlobalVariables* GetInstance();
-
-	/// <summary>
-	/// ƒOƒ‹[ƒv‚Ìì¬
-	/// </summary>
-	/// <param name="groupName">ƒOƒ‹[ƒv–¼</param>
-	void CreateGroup(const std::string& groupName);
-
-	/// <summary>
-	/// ƒtƒ@ƒCƒ‹‚É‘‚«o‚µ
-	/// </summary>
-	/// <param name="groupName">ƒOƒ‹[ƒv</param>
-	void SaveFile(const std::string& groupName);
-
-	/// <summary>
-	/// ’l‚ÌƒZƒbƒg
-	/// </summary>
-	/// <param name="groupName">ƒOƒ‹[ƒv–¼</param>
-	/// <param name="key">€–Ú–¼</param>
-	/// <param name="value">’l</param>
-	void SetValue(const std::string& groupName, const std::string& key, int32_t value);
-
-	/// <summary>
-	/// ’l‚ÌƒZƒbƒg
-	/// </summary>
-	/// <param name="groupName">ƒOƒ‹[ƒv–¼</param>
-	/// <param name="key">€–Ú–¼</param>
-	/// <param name="value">’l</param>
-	void SetValue(const std::string& groupName, const std::string& key, float value);
-
-	/// <summary>
-	/// ’l‚ÌƒZƒbƒg
-	/// </summary>
-	/// <param name="groupName">ƒOƒ‹[ƒv–¼</param>
-	/// <param name="key">€–Ú–¼</param>
-	/// <param name="value">’l</param>
-	void SetValue(const std::string& groupName, const std::string& key, const Vector3& value);
-
-	/// <summary>
-	/// –ˆƒtƒŒ[ƒ€ˆ—
-	/// </summary>
-	void Update();
-
-	/// <summary>
-	/// ƒfƒBƒŒƒNƒgƒŠ‚Ì‘Sƒtƒ@ƒCƒ‹“Ç‚İ‚İ
-	/// </summary>
-	void LoadFiles();
-
-	/// <summary>
-	/// ƒtƒ@ƒCƒ‹‚©‚ç“Ç‚İ‚Ş
-	/// </summary>
-	/// <param name="groupName">ƒOƒ‹[ƒv</param>
-	void LoadFile(const std::string& groupName);
-
-	// €–Ú‚Ì’Ç‰Á(int)
-	void AddItem(const std::string& groupName, const std::string& key, int32_t value);
-	// €–Ú‚Ì’Ç‰Á(float)
-	void AddItem(const std::string& groupName, const std::string& key, float value);
-	// €–Ú‚Ì’Ç‰Á(Vector3)
-	void AddItem(const std::string& groupName, const std::string& key, const Vector3& value);
-
-	// ’l‚Ìæ“¾(int)
-	int32_t GetIntValue(const std::string& groupName, const std::string& key);
-	// ’l‚Ìæ“¾(float)
-	float GetFloatValue(const std::string& groupName, const std::string& key);
-	// ’l‚Ìæ“¾(Vector3)
-	Vector3 GetVector3Value(const std::string& groupName, const std::string& key);
-
-private:
-	GlobalVariables() = default;
-	~GlobalVariables() = default;
-	GlobalVariables(const GlobalVariables&) = delete;
-	const GlobalVariables& operator=(const GlobalVariables&) = delete;
-
-	//€–Ú
-	//struct Item {
-		// €–Ú‚Ì’l
-	//	std::variant<int32_t, float, Vector3> value;
-	//};
-
-	//ƒOƒ‹[ƒv
-	//struct Group {
-	//	std::map<std::string, Item> items;
-	//};
-
-	using Item = std::variant<int32_t, float, Vector3>;
-	using Group = std::map<std::string, Item>;
-
-	// ‘Sƒf[ƒ^
-	std::map<std::string, Group> datas_;
-
-	// ƒOƒ[ƒoƒ‹•Ï”‚Ì•Û‘¶æƒtƒ@ƒCƒ‹ƒpƒX
-	const std::string kDirectoryPath = "Resources/GlobalVariables/";
-
-};
+ï»¿//#pragma once
+//#include <iostream>
+//#include <variant>
+//#include <string>
+//#include <map>
+//#include "../Math/Vector3.h"
+//
+//class GlobalVariables {
+//
+//public:
+//
+//	/// <summary>
+//	/// ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®å–å¾—
+//	/// </summary>
+//	/// <returns></returns>
+//	static GlobalVariables* GetInstance();
+//
+//	/// <summary>
+//	/// ã‚°ãƒ«ãƒ¼ãƒ—ã®ä½œæˆ
+//	/// </summary>
+//	/// <param name="groupName">ã‚°ãƒ«ãƒ¼ãƒ—å</param>
+//	void CreateGroup(const std::string& groupName);
+//
+//	/// <summary>
+//	/// ãƒ•ã‚¡ã‚¤ãƒ«ã«æ›¸ãå‡ºã—
+//	/// </summary>
+//	/// <param name="groupName">ã‚°ãƒ«ãƒ¼ãƒ—</param>
+//	void SaveFile(const std::string& groupName);
+//
+//	/// <summary>
+//	/// å€¤ã®ã‚»ãƒƒãƒˆ
+//	/// </summary>
+//	/// <param name="groupName">ã‚°ãƒ«ãƒ¼ãƒ—å</param>
+//	/// <param name="key">é …ç›®å</param>
+//	/// <param name="value">å€¤</param>
+//	void SetValue(const std::string& groupName, const std::string& key, int32_t value);
+//
+//	/// <summary>
+//	/// å€¤ã®ã‚»ãƒƒãƒˆ
+//	/// </summary>
+//	/// <param name="groupName">ã‚°ãƒ«ãƒ¼ãƒ—å</param>
+//	/// <param name="key">é …ç›®å</param>
+//	/// <param name="value">å€¤</param>
+//	void SetValue(const std::string& groupName, const std::string& key, float value);
+//
+//	/// <summary>
+//	/// å€¤ã®ã‚»ãƒƒãƒˆ
+//	/// </summary>
+//	/// <param name="groupName">ã‚°ãƒ«ãƒ¼ãƒ—å</param>
+//	/// <param name="key">é …ç›®å</param>
+//	/// <param name="value">å€¤</param>
+//	void SetValue(const std::string& groupName, const std::string& key, const Vector3& value);
+//
+//	/// <summary>
+//	/// æ¯ãƒ•ãƒ¬ãƒ¼ãƒ å‡¦ç†
+//	/// </summary>
+//	void Update();
+//
+//	/// <summary>
+//	/// ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®å…¨ãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿è¾¼ã¿
+//	/// </summary>
+//	void LoadFiles();
+//
+//	/// <summary>
+//	/// ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰èª­ã¿è¾¼ã‚€
+//	/// </summary>
+//	/// <param name="groupName">ã‚°ãƒ«ãƒ¼ãƒ—</param>
+//	void LoadFile(const std::string& groupName);
+//
+//	// é …ç›®ã®è¿½åŠ (int)
+//	void AddItem(const std::string& groupName, const std::string& key, int32_t value);
+//	// é …ç›®ã®è¿½åŠ (float)
+//	void AddItem(const std::string& groupName, const std::string& key, float value);
+//	// é …ç›®ã®è¿½åŠ (Vector3)
+//	void AddItem(const std::string& groupName, const std::string& key, const Vector3& value);
+//
+//	// å€¤ã®å–å¾—(int)
+//	int32_t GetIntValue(const std::string& groupName, const std::string& key);
+//	// å€¤ã®å–å¾—(float)
+//	float GetFloatValue(const std::string& groupName, const std::string& key);
+//	// å€¤ã®å–å¾—(Vector3)
+//	Vector3 GetVector3Value(const std::string& groupName, const std::string& key);
+//
+//private:
+//	GlobalVariables() = default;
+//	~GlobalVariables() = default;
+//	GlobalVariables(const GlobalVariables&) = delete;
+//	const GlobalVariables& operator=(const GlobalVariables&) = delete;
+//
+//	//é …ç›®
+//	//struct Item {
+//		// é …ç›®ã®å€¤
+//	//	std::variant<int32_t, float, Vector3> value;
+//	//};
+//
+//	//ã‚°ãƒ«ãƒ¼ãƒ—
+//	//struct Group {
+//	//	std::map<std::string, Item> items;
+//	//};
+//
+//	using Item = std::variant<int32_t, float, Vector3>;
+//	using Group = std::map<std::string, Item>;
+//
+//	// å…¨ãƒ‡ãƒ¼ã‚¿
+//	std::map<std::string, Group> datas_;
+//
+//	// ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°ã®ä¿å­˜å…ˆãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹
+//	const std::string kDirectoryPath = "Resources/GlobalVariables/";
+//
+//};
