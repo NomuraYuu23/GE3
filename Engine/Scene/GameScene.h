@@ -43,7 +43,7 @@ public:
 	/// 描画処理
 	/// </summary>
 	void Draw();
-
+	//テスト
 private:
 
 	DirectXCommon* dxCommon_ = nullptr;
