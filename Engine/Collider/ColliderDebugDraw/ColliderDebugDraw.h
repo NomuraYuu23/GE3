@@ -35,7 +35,7 @@ public:
 	/// </summary>
 	/// <param name="models"></param>
 	/// <param name="material"></param>
-	void Initialize(const std::vector<Model*> models, const Material* material);
+	void Initialize(const std::vector<Model*> models, Material* material);
 
 	/// <summary>
 	/// 更新
@@ -46,27 +46,39 @@ public:
 	/// 描画
 	/// </summary>
 	/// <param name="viewProjection"></param>
-	void Draw(const ViewProjection* viewProjection);
+	void Draw(const ViewProjection& viewProjection);
+
+	/// <summary>
+	/// コライダー追加
+	/// </summary>
+	void AddCollider(Sphere* sphere);
+	//void AddCollider(Plane* plane);
+	//void AddCollider(Triangle* triangle);
+	void AddCollider(AABB* aabb);
+	void AddCollider(OBB* obb);
+
+private: // メンバ関数
+
+
 
 private: // メンバ変数
 
 	// 球
 	std::list<Sphere*> spheres_;
 	// 平面
-	std::list<Plane*> planes;
+	//std::list<Plane*> planes_;
 	// 三角形
-	std::list<Triangle*> triangle;
+	//std::list<Triangle*> triangles_;
 	// AABB
-	std::list<AABB*> AABBs_;
+	std::list<AABB*> aabbs_;
 	// OBB
-	std::list<OBB*> OBBs_;
+	std::list<OBB*> obbs_;
 
 	// モデル
 	std::vector<Model*> models_;
 
 	// マテリアル
 	Material* material_;
-
 
 };
 
