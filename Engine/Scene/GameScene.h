@@ -10,6 +10,7 @@
 #include "../3D/Model.h"
 #include "../3D/Material.h"
 #include "../3D/DirectionalLight.h"
+#include"../../Program/FloorManager/FloorManager.h"
 
 //オブジェクト
 
@@ -43,12 +44,26 @@ public:
 	/// 描画処理
 	/// </summary>
 	void Draw();
-	//テスト
+
+	/// <summary>
+	/// imgui描画処理
+	/// </summary>
+	void ImguiDraw();
+	
 private:
 
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
+
+	//床全体
+	std::unique_ptr<FloorManager> floorManager_;
+
+	std::unique_ptr<Model> floorModel_;
+	std::unique_ptr<Material> floorMaterial_;
+
+	//床の生成のトランスフォームとか
+	TransformStructure floorTransform_{};
 
 	//ビュープロジェクション
 	ViewProjection viewProjection_;
@@ -58,5 +73,7 @@ private:
 
 	//光源
 	std::unique_ptr<DirectionalLight> directionalLight;
+
+	
 
 };
