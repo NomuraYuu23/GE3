@@ -40,6 +40,8 @@ void GameScene::Initialize() {
 	//光源
 	directionalLight.reset(DirectionalLight::Create());
 
+	/// aaaaa
+
 }
 
 /// <summary>
