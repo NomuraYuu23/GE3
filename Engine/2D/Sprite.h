@@ -140,7 +140,7 @@ public: // アクセッサ(ワールドトランスフォーム)
 
 	void SetSize(const Vector2& size);
 
-	void SetAnchorPoint(const Vector2& anchorPoint) { anchorPoint_ = anchorPoint; }
+	void SetAnchorPoint(const Vector2& anchorPoint);
 
 	Vector2 GetAnchorPoint() { return anchorPoint_; }
 

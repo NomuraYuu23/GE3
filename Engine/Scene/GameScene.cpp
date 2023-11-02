@@ -42,6 +42,9 @@ void GameScene::Initialize() {
 
 	/// aaaaa
 	///bbbbb
+	uint32_t textureHandle = TextureManager::Load("Resources/defalt/uvChecker.png",dxCommon_);
+	sprite_.reset(Sprite::Create(textureHandle,Vector2{0.0f,0.0f},Vector4{1.0f,1.0f,1.0f,1.0f}));
+	sprite_->SetAnchorPoint(Vector2{ 0.0f,0.0f });
 }
 
 /// <summary>
@@ -70,6 +73,7 @@ void GameScene::Draw() {
 	Sprite::PreDraw(dxCommon_->GetCommadList());
 
 	//背景スプライト描画
+	sprite_->Draw();
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
