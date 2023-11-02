@@ -32,7 +32,7 @@ public: // サブクラス
 	// 通常用ワーク
 	struct WorkRoot {
 		// 初期位置
-		const Vector3 kInitialPosition = { 1.0f, 10.5f, 1.0f };
+		const Vector3 kInitialPosition = { 0.0f, 0.0f, 0.0f };
 		// 初期角度
 		const Vector3 kInitialRotate = {};
 		// ジャンプ初期速さ

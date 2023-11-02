@@ -37,29 +37,29 @@ void Player::Initialize(const std::vector<Model*>& models,
 	worldTransformWeapon_.transform_.translate.y += 3.0f;
 	worldTransformWeapon_.parent_ = &worldTransform_;
 
-	//浮遊ギミック
-	InitializeFloatinggimmick();
+	////浮遊ギミック
+	//InitializeFloatinggimmick();
 
-	//ぶらぶらギミック
-	InitializeSwinggimmick();
+	////ぶらぶらギミック
+	//InitializeSwinggimmick();
 
 	velocity_ = {0.0f,0.0f,0.0f};
 
-	isLanding = false;
+	isLanding = true;
 
 	collider_.Initialize(worldTransform_.transform_.translate, workRoot_.kColliderSize);
 
-	// 攻撃
-	
-	workAttack_.attackCenterAdd_ = {0.0f,0.0,5.0f};
+	//// 攻撃
+	//
+	//workAttack_.attackCenterAdd_ = {0.0f,0.0,5.0f};
 
-	workAttack_.attackRadius_ = 5.0f;
+	//workAttack_.attackRadius_ = 5.0f;
 
-	// コライダー
-	workAttack_.attackCollider_.Initialize(workAttack_.attackCenterAdd_, workAttack_.attackRadius_);
+	//// コライダー
+	//workAttack_.attackCollider_.Initialize(workAttack_.attackCenterAdd_, workAttack_.attackRadius_);
 
-	// あたり判定を取るか
-	workAttack_.isAttackJudgment_ = false;
+	//// あたり判定を取るか
+	//workAttack_.isAttackJudgment_ = false;
 
 	// グローバル
 
@@ -407,7 +407,7 @@ void Player::Jump()
 	//移動
 	if (input->GetJoystickConnected()) {
 		
-		if (input->TriggerJoystick(0) && isLanding) {
+		if (Input::GetInstance()->TriggerJoystick(0) && isLanding) {
 			velocity_.y += workRoot_.kJumpSpeed;
 			isLanding = false;
 		}
@@ -476,7 +476,7 @@ void Player::OnCollision(WorldTransform* worldTransform)
 			(worldTransform_.parent_ != worldTransform)) {
 			GotParent(worldTransform);
 		}
-		worldTransform_.transform_.translate.y = 0.0f;
+		worldTransform_.transform_.translate.y = 0;
 		isLanding = true;
 	}
 

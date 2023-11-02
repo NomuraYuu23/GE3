@@ -11,9 +11,9 @@
 #include "../3D/Material.h"
 #include "../3D/DirectionalLight.h"
 #include"../../Program/FloorManager/FloorManager.h"
-
-//オブジェクト
-
+#include"../../Program/Player/Player.h"
+#include"../../Program/CollisionManager/CollisionManager.h"
+#include"../../Engine/Camera/FollowCamera/FollowCamera.h"
 
 class GameScene
 {
@@ -56,6 +56,9 @@ private:
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
 
+	//コリジョンマネージャー
+	std::unique_ptr<CollisionManager> collisionManager_;
+
 	//床全体
 	std::unique_ptr<FloorManager> floorManager_;
 
@@ -70,10 +73,16 @@ private:
 
 	//デバッグカメラ
 	std::unique_ptr<DebugCamera> debugCamera_ = nullptr;
+	//フォローカメラ
+	std::unique_ptr<FollowCamera> followCamera_ = nullptr;
 
 	//光源
 	std::unique_ptr<DirectionalLight> directionalLight;
 
-	
+	//自機
+	std::unique_ptr<Player> player_;
+	//自機のモデルとか
+	std::vector<Model*> playerModels_;
+	std::vector<Material*> playerMaterials_;
 
 };

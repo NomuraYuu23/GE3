@@ -22,6 +22,14 @@ void FollowCamera::Update() {
 	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
 	Matrix4x4Calc* m4Calc = Matrix4x4Calc::GetInstance();
 
+	if (input->GetJoystickConnected()) {
+
+		const float RotateSpeed = 0.000001f;
+
+		viewProjection_.transform_.rotate.y += input->GetRightAnalogstick().x * RotateSpeed;
+		viewProjection_.transform_.rotate.x += input->GetRightAnalogstick().y * RotateSpeed;
+	}
+
 	//追従対象がいれば
 	if (target_) {
 		//追従対象からカメラまでのオフセット
@@ -44,16 +52,8 @@ void FollowCamera::Update() {
 
 	}
 
-	if (input->GetJoystickConnected()) {
-
-		const float RotateSpeed = 0.000001f;
-
-		viewProjection_.transform_.rotate.y += input->GetRightAnalogstick().x * RotateSpeed;
-
-	}
-
 	//y固定
-	viewProjection_.transform_.translate.y = 10.0f;
+	//viewProjection_.transform_.translate.y = 10.0f;
 
 	//ビュー更新
 	viewProjection_.UpdateMatrix();

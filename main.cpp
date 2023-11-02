@@ -93,7 +93,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//ウィンドウののボタンが押されるまでループ
 	while (true) {
 		//Windowにメッセージが来てたら最優先で処理させる
-		if (win->ProcessMessage()) {
+		if (win->ProcessMessage()||input->TriggerKey(DIK_ESCAPE)) {
 			break;
 		}
 
@@ -109,13 +109,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		//開発用UIの処理。実際に開発用のUIを出す場合はここをゲーム固有の処理に置き換える
 		ImGui::ShowDemoWindow();
-
-		
-
-
-
-
-
 
 		// ゲームシーン更新
 		gameScene->Update();

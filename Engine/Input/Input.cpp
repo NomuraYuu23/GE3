@@ -74,7 +74,7 @@ void Input::Initialize(HINSTANCE hInstance, HWND hwnd) {
 	}
 
 	//デッドゾーン設定
-	deadZone = 3000.0f;
+	deadZone = 15000.0f;
 
 }
 

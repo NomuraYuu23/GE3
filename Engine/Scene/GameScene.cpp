@@ -20,17 +20,25 @@ GameScene::GameScene(){
 /// <summary>
 /// デストラクタ
 /// </summary>
-GameScene::~GameScene(){}
+GameScene::~GameScene(){
+	for (size_t i = 0; i < playerModels_.size(); i++){
+		delete playerModels_[i];
+		delete playerMaterials_[i];
+	}
+}
 
 /// <summary>
 /// 初期化
 /// </summary>
 void GameScene::Initialize() {
 	
+	
 	//機能
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
+
+	
 
 	floorManager_ = std::make_unique<FloorManager>();
 
@@ -52,9 +60,35 @@ void GameScene::Initialize() {
 	debugCamera_ = std::make_unique<DebugCamera>();
 	debugCamera_->Initialize();
 
+	//フォローカメラ
+	followCamera_ = std::make_unique<FollowCamera>();
+	followCamera_->Initialize();
+
 	//光源
 	directionalLight.reset(DirectionalLight::Create());
 
+	//プレイヤー関連
+	playerModels_.push_back(Model::Create("Resources/AL4/float_Body/", "float_Body.obj", dxCommon_));
+	playerModels_.push_back(Model::Create("Resources/AL4/float_Head/", "float_Head.obj", dxCommon_));
+	playerModels_.push_back(Model::Create("Resources/AL4/float_L_arm/", "float_L_arm.obj", dxCommon_));
+	playerModels_.push_back(Model::Create("Resources/AL4/float_R_arm/", "float_R_arm.obj", dxCommon_));
+	playerModels_.push_back(Model::Create("Resources/AL4/player_Weapon/", "player_Weapon.obj", dxCommon_));
+
+	for (size_t i = 0; i < playerModels_.size(); i++){
+		playerMaterials_.push_back(Material::Create());
+	}
+	
+
+	player_ = std::make_unique<Player>();
+	player_->Initialize(playerModels_, playerMaterials_);
+	player_->SetViewProjection(followCamera_->GetViewProjectionAddress());
+
+	followCamera_->SetTarget(player_->GetWorldTransformAddress());
+
+	collisionManager_ = std::make_unique<CollisionManager>();
+	collisionManager_->Initialize(player_.get(), floorManager_.get());
+
+	
 	/// aaaaa
 	///bbbbb
 }
@@ -71,14 +105,19 @@ void GameScene::Update(){
 	directionalLightData.intencity = 1.0f;
 	directionalLight->Update(directionalLightData);
 
-	floorManager_->Update();
-
-
-
-	viewProjection_.UpdateMatrix();
+	followCamera_->Update();
 
 	debugCamera_->Update(viewProjection_.transform_);
 
+	floorManager_->Update();
+
+	player_->Update();
+
+	collisionManager_->AllCollision();	
+
+	viewProjection_ = followCamera_->GetViewProjection();
+
+	viewProjection_.UpdateMatrix();
 }
 
 /// <summary>
@@ -108,7 +147,7 @@ void GameScene::Draw() {
 	directionalLight->Draw(dxCommon_->GetCommadList());
 	/*3Dオブジェクトはここ*/
 	floorManager_->Draw(viewProjection_);
-	
+	player_->Draw(viewProjection_);
 
 	Model::PostDraw();
 

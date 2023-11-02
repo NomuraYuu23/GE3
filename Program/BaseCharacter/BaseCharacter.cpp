@@ -22,8 +22,7 @@ void BaseCharacter::Update()
 
 }
 
-void BaseCharacter::Draw(const ViewProjection& viewProjection)
-{
+void BaseCharacter::Draw(const ViewProjection& viewProjection){
 
 	//モデル描画
 	for (Model* model : models_) {
