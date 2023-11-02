@@ -59,6 +59,7 @@ void GameScene::Initialize() {
 	//デバッグカメラ
 	debugCamera_ = std::make_unique<DebugCamera>();
 	debugCamera_->Initialize();
+	isDebugCameraActive_ = false;
 
 	//フォローカメラ
 	followCamera_ = std::make_unique<FollowCamera>();
@@ -115,11 +116,13 @@ void GameScene::Update(){
 
 	followCamera_->Update();
 
-	debugCamera_->Update(viewProjection_.transform_);
-
 	viewProjection_ = followCamera_->GetViewProjection();
 
 	viewProjection_.UpdateMatrix();
+
+	// デバッグカメラ
+	DebugCameraUpdate();
+
 }
 
 /// <summary>
@@ -132,8 +135,6 @@ void GameScene::Draw() {
 #pragma region 背景スプライト描画
 	// 背景スプライト描画前処理
 	Sprite::PreDraw(dxCommon_->GetCommadList());
-
-	//背景スプライト描画
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
@@ -189,5 +190,31 @@ void GameScene::ImguiDraw(){
 		floorManager_->AddFloor(floorTransform_.translate, floorTransform_.rotate, isFloorMove_, isVertical_);
 	}
 	ImGui::End();
+
+}
+
+void GameScene::DebugCameraUpdate()
+{
+
+#ifdef _DEBUG
+	if (input_->TriggerKey(DIK_RETURN)) {
+		if (isDebugCameraActive_) {
+			isDebugCameraActive_ = false;
+		}
+		else {
+			isDebugCameraActive_ = true;
+		}
+	}
+
+	// カメラの処理
+	if (isDebugCameraActive_) {
+		// デバッグカメラの更新
+		debugCamera_->Update();
+		// デバッグカメラのビュー行列をコピー
+		viewProjection_ = debugCamera_->GetViewProjection();
+		// ビュー行列の転送
+		viewProjection_.UpdateMatrix();
+	}
+#endif
 
 }

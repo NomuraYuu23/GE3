@@ -34,6 +34,9 @@
 // ImGui
 #include "Engine/2D/ImGuiManager.h"
 
+// グローバル変数
+#include "Engine/GlobalVariables/GlobalVariables.h"
+
 //Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
@@ -57,17 +60,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	input = Input::GetInstance();
 	input->Initialize(win->GetHInstance(), win->GetHwnd());
 
-
 	GraphicsPipelineState::InitializeGraphicsPipeline(dxCommon->GetDevice());
 
 	//テクスチャマネージャー
 	TextureManager::GetInstance()->Initialize(dxCommon->GetDevice());
 
 	// スプライト静的初期化
-	Sprite::StaticInitialize(dxCommon->GetDevice(), GraphicsPipelineState::sRootSignature, GraphicsPipelineState::sPipelineState);
+	Sprite::StaticInitialize(dxCommon->GetDevice(), GraphicsPipelineState::sRootSignature, GraphicsPipelineState::sPipelineState[GraphicsPipelineState::Sprite]);
 
 	// モデル静的初期化
-	Model::StaticInitialize(dxCommon->GetDevice(), GraphicsPipelineState::sRootSignature, GraphicsPipelineState::sPipelineState);
+	Model::StaticInitialize(dxCommon->GetDevice(), GraphicsPipelineState::sRootSignature, GraphicsPipelineState::sPipelineState[GraphicsPipelineState::Model]);
 
 	// マテリアル静的初期化
 	Material::StaticInitialize(dxCommon->GetDevice());
@@ -82,6 +84,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// ImGuiマネージャー
 	imGuiManager = ImGuiManager::GetInstance();
 	imGuiManager->Initialize(win,dxCommon, TextureManager::GetInstance());
+
+	//グローバル変数ファイル読み込み
+	GlobalVariables::GetInstance()->LoadFiles();
 
 	// リリースチェッカー
 	D3DResourceLeakChecker leakChecker;
@@ -109,6 +114,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		//開発用UIの処理。実際に開発用のUIを出す場合はここをゲーム固有の処理に置き換える
 		ImGui::ShowDemoWindow();
+		// グローバル変数の更新
+		GlobalVariables::GetInstance()->Update();
 
 		// ゲームシーン更新
 		gameScene->Update();

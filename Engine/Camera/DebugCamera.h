@@ -1,10 +1,11 @@
 #pragma once
-#include "../3D/TransformStructure.h"
+#include "../../Engine/3D/ViewProjection.h"
 
 class DebugCamera
 {
 
 public:
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -13,12 +14,29 @@ public:
 	/// <summary>
 	/// 更新
 	/// </summary>
-	TransformStructure Update(const TransformStructure& releaseCameratransform);
+	void Update();
+
+	/// <summary>
+	/// ビュープロジェクションゲッター
+	/// </summary>
+	/// <returns></returns>
+	ViewProjection GetViewProjection() { return viewProjection_; }
+
+	/// <summary>
+	/// ビュープロジェクションアドレスゲッター
+	/// </summary>
+	/// <returns></returns>
+	ViewProjection* GetViewProjectionAddress() { return &viewProjection_; }
 
 private:
 
-	TransformStructure transform_;
-	bool debugCameraUsed;
+	//ビュープロジェクション
+	ViewProjection viewProjection_;
+
+	// 移動速度
+	float moveSpeed_;
+	// 回転速度
+	float rotateSpeed_;
 
 };
 

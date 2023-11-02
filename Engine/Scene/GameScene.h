@@ -50,6 +50,12 @@ public:
 	/// </summary>
 	void ImguiDraw();
 	
+
+public: //メンバ関数
+
+	void DebugCameraUpdate();
+
+	//テスト
 private:
 
 	DirectXCommon* dxCommon_ = nullptr;
@@ -76,6 +82,7 @@ private:
 
 	//デバッグカメラ
 	std::unique_ptr<DebugCamera> debugCamera_ = nullptr;
+	bool isDebugCameraActive_;
 	//フォローカメラ
 	std::unique_ptr<FollowCamera> followCamera_ = nullptr;
 

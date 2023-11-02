@@ -5,7 +5,7 @@ using namespace Microsoft::WRL;
 // ルートシグネチャ
 ComPtr<ID3D12RootSignature> GraphicsPipelineState::sRootSignature;
 // パイプラインステートオブジェクト
-ComPtr<ID3D12PipelineState> GraphicsPipelineState::sPipelineState;
+ComPtr<ID3D12PipelineState> GraphicsPipelineState::sPipelineState[End];
 
 void GraphicsPipelineState::InitializeGraphicsPipeline(ID3D12Device* sDevice)
 {
@@ -164,7 +164,17 @@ void GraphicsPipelineState::InitializeGraphicsPipeline(ID3D12Device* sDevice)
 
 	//実際に生成
 	hr = sDevice->CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
-		IID_PPV_ARGS(&sPipelineState));
+		IID_PPV_ARGS(&sPipelineState[Model]));
+	assert(SUCCEEDED(hr));
+
+
+	// スプライト
+	rasterizerDesc.CullMode = D3D12_CULL_MODE_NONE;
+	graphicsPipelineStateDesc.RasterizerState = rasterizerDesc;//RasterizerState
+
+	//実際に生成
+	hr = sDevice->CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
+		IID_PPV_ARGS(&sPipelineState[Sprite]));
 	assert(SUCCEEDED(hr));
 
 }
