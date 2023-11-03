@@ -38,7 +38,14 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
-	
+	// デバッグ描画
+	colliderDebugDraw_ = std::make_unique<ColliderDebugDraw>();
+	colliderSphereModel_.reset(Model::Create("Resources/TD2_November/collider/sphere/", "sphere.obj", dxCommon_));
+	colliderBoxModel_.reset(Model::Create("Resources/TD2_November/collider/box/", "box.obj", dxCommon_));
+	std::vector<Model*> colliderModels = { colliderSphereModel_.get(),colliderBoxModel_.get(),colliderBoxModel_.get() };
+	colliderMaterial_.reset(Material::Create());
+	colliderDebugDraw_->Initialize(colliderModels, colliderMaterial_.get());
+
 
 	floorManager_ = std::make_unique<FloorManager>();
 
@@ -48,6 +55,7 @@ void GameScene::Initialize() {
 
 	floorManager_->Initialize(floorModel_.get(), floorMaterial_.get());
 
+	floorManager_->SetColliderDebugDraw(colliderDebugDraw_.get());
 	floorManager_->AddFloor({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, false, false);
 
 	//ビュープロジェクション
@@ -64,14 +72,6 @@ void GameScene::Initialize() {
 	//フォローカメラ
 	followCamera_ = std::make_unique<FollowCamera>();
 	followCamera_->Initialize();
-
-	// デバッグ描画
-	colliderDebugDraw_ = std::make_unique<ColliderDebugDraw>();
-	colliderSphereModel_.reset(Model::Create("Resources/TD2_November/collider/sphere/","sphere.obj",dxCommon_));
-	colliderBoxModel_.reset(Model::Create("Resources/TD2_November/collider/box/", "box.obj", dxCommon_));
-	std::vector<Model*> colliderModels = { colliderSphereModel_.get(),colliderBoxModel_.get(),colliderBoxModel_.get() };
-	colliderMaterial_.reset(Material::Create());
-	colliderDebugDraw_->Initialize(colliderModels, colliderMaterial_.get());
 
 	//光源
 	directionalLight.reset(DirectionalLight::Create());

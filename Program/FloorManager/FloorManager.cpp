@@ -48,4 +48,6 @@ void FloorManager::AddFloor(Vector3 position, Vector3 rotate, bool isMoving, boo
 
 	floors_.push_back(floor);
 
+	colliderDebugDraw_->AddCollider(&floor->GetCollider());
+
 }

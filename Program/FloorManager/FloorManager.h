@@ -5,6 +5,7 @@
 #include "../Floor/Floor.h"
 
 #include <vector>
+#include "../../Engine/Collider/ColliderDebugDraw/ColliderDebugDraw.h"// コライダーデバッグ描画
 
 class FloorManager
 {
@@ -46,6 +47,12 @@ public: // アクセッサ
 	/// <returns></returns>
 	std::vector<Floor*> GetFloors() { return floors_; }
 
+	/// <summary>
+	/// デバッグ描画セッター
+	/// </summary>
+	/// <param name="colliderDebugDraw"></param>
+	void SetColliderDebugDraw(ColliderDebugDraw* colliderDebugDraw) { colliderDebugDraw_ = colliderDebugDraw; }
+
 private:
 
 	// モデル
@@ -55,5 +62,8 @@ private:
 
 	// 床リスト
 	std::vector<Floor*> floors_;
+
+	// デバッグ描画
+	ColliderDebugDraw* colliderDebugDraw_ = nullptr;
 
 };
