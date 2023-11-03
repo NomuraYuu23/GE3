@@ -14,6 +14,11 @@ public: // メンバ関数
 
 	void SetOtientatuons(const Vector3& otientatuons1, const Vector3& otientatuons2, const Vector3& otientatuons3);
 
+	/// <summary>
+	/// ワールドトランスフォーム更新
+	/// </summary>
+	void worldTransformUpdate() override;
+
 public: // メンバ変数
 
 	Vector3 center_;//中心

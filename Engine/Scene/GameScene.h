@@ -3,6 +3,7 @@
 #include "../Audio/Audio.h"// サウンド再生
 #include "../Input/Input.h"//入力デバイス
 #include "../Camera/DebugCamera.h"//デバッグカメラ
+#include "../Collider/ColliderDebugDraw/ColliderDebugDraw.h"// コライダーデバッグ描画
 
 #include "../3D/WorldTransform.h"
 #include "../3D/ViewProjection.h"
@@ -85,6 +86,12 @@ private:
 	bool isDebugCameraActive_;
 	//フォローカメラ
 	std::unique_ptr<FollowCamera> followCamera_ = nullptr;
+
+	// デバッグ描画
+	std::unique_ptr<ColliderDebugDraw> colliderDebugDraw_ = nullptr;
+	std::unique_ptr<Model> colliderSphereModel_ = nullptr;
+	std::unique_ptr<Model> colliderBoxModel_ = nullptr;
+	std::unique_ptr<Material> colliderMaterial_ = nullptr;
 
 	//光源
 	std::unique_ptr<DirectionalLight> directionalLight;

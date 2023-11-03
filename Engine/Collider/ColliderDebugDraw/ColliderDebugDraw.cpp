@@ -7,6 +7,14 @@ void ColliderDebugDraw::Initialize(const std::vector<Model*> models, Material* m
 
 	material_ = material;
 
+	TransformStructure uvTransform = {
+	{1.0f,1.0f,1.0f},
+	{0.0f,0.0f,0.0f},
+	{0.0f,0.0f,0.0f},
+	};
+	Vector4 color = { 1.0f, 1.0f, 1.0f, 0.5f };
+	material_->Update(uvTransform, color, None);
+
 	spheres_.clear();
 
 	aabbs_.clear();
@@ -19,26 +27,25 @@ void ColliderDebugDraw::Update()
 {
 
 	spheres_.remove_if([](Sphere* sphere) {
-		if (sphere) {
+		if (!sphere) {
 			return true;
 		}
 		return false;
 	});
 
 	aabbs_.remove_if([](AABB* aabb) {
-		if (aabb) {
+		if (!aabb) {
 			return true;
 		}
 		return false;
 	});
 
 	obbs_.remove_if([](OBB* obb) {
-		if (obb) {
+		if (!obb) {
 			return true;
 		}
 		return false;
 	});
-
 
 }
 
@@ -47,31 +54,18 @@ void ColliderDebugDraw::Draw(const ViewProjection& viewProjection)
 
 	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
 
-	WorldTransform worldTransform;
-	worldTransform.Initialize();
-
 	// 球
 	for (Sphere* sphere : spheres_) {
-		worldTransform.transform_.translate = sphere->center_;
-		worldTransform.transform_.scale = { sphere->radius_ * 2.0f,sphere->radius_ * 2.0f, sphere->radius_ * 2.0f };
-		worldTransform.UpdateMatrix();
-		models_[static_cast<size_t>(ModelNo::kSphere)]->Draw(worldTransform, viewProjection, material_);
+		models_[static_cast<size_t>(ModelNo::kSphere)]->Draw(sphere->worldTransform_, viewProjection, material_);
 	}
 
 	// AABB
 	for (AABB* aabb : aabbs_) {
-		worldTransform.transform_.translate = v3Calc->Multiply(0.5f, v3Calc->Add(aabb->max_, aabb->min_));
-		worldTransform.transform_.scale = v3Calc->Subtract(aabb->max_, aabb->min_);
-		worldTransform.UpdateMatrix();
-		models_[static_cast<size_t>(ModelNo::kSphere)]->Draw(worldTransform, viewProjection, material_);
+		models_[static_cast<size_t>(ModelNo::kSphere)]->Draw(aabb->worldTransform_, viewProjection, material_);
 	}
 	// OBB
-	std::list<OBB*> obbs_;
 	for (OBB* obb : obbs_) {
-		worldTransform.transform_.translate = obb->center_;
-		worldTransform.transform_.scale = v3Calc->Multiply(2.0f, obb->size_);
-		worldTransform.UpdateMatrix();
-		models_[static_cast<size_t>(ModelNo::kSphere)]->Draw(worldTransform, viewProjection, material_);
+		models_[static_cast<size_t>(ModelNo::kSphere)]->Draw(obb->worldTransform_, viewProjection, material_);
 	}
 
 }

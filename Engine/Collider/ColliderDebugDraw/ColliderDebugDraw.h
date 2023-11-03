@@ -21,8 +21,8 @@ public: // サブクラス
 
 	enum class ModelNo {
 		kSphere,
-		kPlane,
-		kTriangle,
+		//kPlane,
+		//kTriangle,
 		kAABB,
 		kOBB,
 		kEnd // 使わない

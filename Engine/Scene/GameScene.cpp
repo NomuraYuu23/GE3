@@ -65,6 +65,14 @@ void GameScene::Initialize() {
 	followCamera_ = std::make_unique<FollowCamera>();
 	followCamera_->Initialize();
 
+	// デバッグ描画
+	colliderDebugDraw_ = std::make_unique<ColliderDebugDraw>();
+	colliderSphereModel_.reset(Model::Create("Resources/TD2_November/collider/sphere/","sphere.obj",dxCommon_));
+	colliderBoxModel_.reset(Model::Create("Resources/TD2_November/collider/box/", "box.obj", dxCommon_));
+	std::vector<Model*> colliderModels = { colliderSphereModel_.get(),colliderBoxModel_.get(),colliderBoxModel_.get() };
+	colliderMaterial_.reset(Material::Create());
+	colliderDebugDraw_->Initialize(colliderModels, colliderMaterial_.get());
+
 	//光源
 	directionalLight.reset(DirectionalLight::Create());
 
@@ -89,7 +97,8 @@ void GameScene::Initialize() {
 	collisionManager_ = std::make_unique<CollisionManager>();
 	collisionManager_->Initialize(player_.get(), floorManager_.get());
 
-	
+	colliderDebugDraw_->AddCollider(&player_->GetCollider());
+
 	/// aaaaa
 	///bbbbb
 }
@@ -122,6 +131,9 @@ void GameScene::Update(){
 
 	// デバッグカメラ
 	DebugCameraUpdate();
+	
+	// デバッグ描画
+	colliderDebugDraw_->Update();
 
 }
 
@@ -151,6 +163,13 @@ void GameScene::Draw() {
 	/*3Dオブジェクトはここ*/
 	floorManager_->Draw(viewProjection_);
 	player_->Draw(viewProjection_);
+
+#ifdef _DEBUG
+
+	// デバッグ描画
+	colliderDebugDraw_->Draw(viewProjection_);
+
+#endif // _DEBUG
 
 	Model::PostDraw();
 

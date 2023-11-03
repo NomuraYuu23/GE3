@@ -13,6 +13,11 @@ public: // メンバ関数
 	/// <param name="radius">半径</param>
 	void Initialize(const Vector3& normal, float distance);
 
+	/// <summary>
+	/// ワールドトランスフォーム更新
+	/// </summary>
+	void worldTransformUpdate() override;
+
 public: // メンバ変数
 
 	Vector3 normal_;//法線

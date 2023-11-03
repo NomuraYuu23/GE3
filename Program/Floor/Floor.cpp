@@ -48,6 +48,7 @@ void Floor::Update()
 	}
 
 	worldTransform_.UpdateMatrix();
+	collider_.worldTransformUpdate();
 
 }
 
