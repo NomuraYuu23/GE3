@@ -12,9 +12,7 @@ void ColliderDebugDraw::Initialize(const std::vector<Model*> models, Material* m
 	{0.0f,0.0f,0.0f},
 	{0.0f,0.0f,0.0f},
 	};
-
 	Vector4 color = { 1.0f, 1.0f, 1.0f, 0.5f };
-
 	material_->Update(uvTransform, color, None);
 
 	spheres_.clear();
