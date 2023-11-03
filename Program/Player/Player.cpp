@@ -1,6 +1,7 @@
 #include "../Player/Player.h"
 #include "../../Engine/Input/Input.h"
 #include "../../Engine/Math/Math.h"
+#include"../../Engine/2D/ImguiManager.h"
 
 void Player::Initialize(const std::vector<Model*>& models,
 	const std::vector<Material*>& materials)
@@ -48,7 +49,11 @@ void Player::Initialize(const std::vector<Model*>& models,
 	isLanding = true;
 
 	collider_.Initialize(worldTransform_.transform_.translate, workRoot_.kColliderSize);
+	explosionCollider_.Initialize(Vector3(0.0f, 0.0f, 0.0f), 0.0f);
 
+	explosionSpeed_ = 1.0f;
+
+	isExplosion_ = false;
 	//// 攻撃
 	//
 	//workAttack_.attackCenterAdd_ = {0.0f,0.0,5.0f};
@@ -111,11 +116,13 @@ void Player::Update()
 
 	collider_.center_ = { worldTransform_.worldMatrix_.m[3][0], worldTransform_.worldMatrix_.m[3][1]+collider_.radius_, worldTransform_.worldMatrix_.m[3][2] };
 	collider_.worldTransformUpdate();
+	explosionCollider_.worldTransformUpdate();
 
 }
 
 void Player::Draw(const ViewProjection& viewProjection)
 {
+	DrawImgui();
 
 	models_[int(ModelIndex::kModelIndexBody)]->Draw(worldTransformBody_, viewProjection);
 	models_[int(ModelIndex::kModelIndexHead)]->Draw(worldTransformHead_, viewProjection);
@@ -262,8 +269,8 @@ void Player::BehaviorDashInitialize()
 
 }
 
-void Player::BehaviorDashUpdate()
-{
+void Player::BehaviorDashUpdate(){
+
 }
 
 void Player::InitializeFloatinggimmick()
@@ -404,12 +411,41 @@ void Player::Jump()
 	if (input->GetJoystickConnected()) {
 		
 		if (Input::GetInstance()->TriggerJoystick(0) && isLanding) {
+			Explosion();
 			velocity_.y += workRoot_.kJumpSpeed;
 			isLanding = false;
+			
 		}
 
 	}
 
+	ExplosionMove();
+
+}
+
+void Player::Explosion(){
+	isExplosion_ = true;
+	explosionCollider_.center_ = { worldTransform_.worldMatrix_.m[3][0], worldTransform_.worldMatrix_.m[3][1], worldTransform_.worldMatrix_.m[3][2] };
+}
+
+void Player::ExplosionMove(){
+	//爆破タイマー
+	if (isExplosion_) {
+		explosionTimer_ += 1;
+	}
+	if (explosionTimer_ == baseExplosionTimer_) {
+		explosionTimer_ = 0;
+		isExplosion_ = false;
+	}
+
+	//爆破関係
+	if (isExplosion_){
+		explosionCollider_.radius_ += explosionSpeed_;
+	}
+	else {
+		explosionCollider_.radius_ = 0.0f;
+	}
+	
 }
 
 void Player::Fall()
@@ -530,4 +566,11 @@ void Player::allUpdateMatrix(){
 	worldTransformL_arm_.UpdateMatrix();
 	worldTransformR_arm_.UpdateMatrix();
 	worldTransformWeapon_.UpdateMatrix();
+}
+
+void Player::DrawImgui(){
+	ImGui::Begin("爆破関係");
+	ImGui::DragFloat3("爆破の中心", &explosionCollider_.center_.x, 0.1f);
+	ImGui::DragFloat("広がる速度", &explosionSpeed_, 0.01f, 0.0f, 2.0f);
+	ImGui::End();
 }

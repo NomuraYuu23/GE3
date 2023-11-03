@@ -185,6 +185,16 @@ public: // メンバ関数
 	/// ジャンプ
 	/// </summary>
 	void Jump();
+
+	/// <summary>
+	/// 爆破
+	/// </summary>
+	void Explosion();
+
+	/// <summary>
+	/// 爆破範囲の拡大
+	/// </summary>
+	void ExplosionMove();
 	
 	/// <summary>
 	/// 落下
@@ -236,6 +246,8 @@ public: // アクセッサ
 
 	Sphere& GetCollider() { return collider_; }
 
+	Sphere& GetExplosionCollider() { return explosionCollider_; }
+
 	Sphere& GetAttackCollider() { return workAttack_.attackCollider_; }
 
 	bool GetIsAttackJudgment() { return workAttack_.isAttackJudgment_; }
@@ -243,6 +255,9 @@ public: // アクセッサ
 private:
 	//全てのオブジェのUpdateMatrixをまとめたもの
 	void allUpdateMatrix();
+
+	//imguiの表示まとめ
+	void DrawImgui();
 
 private: // メンバ変数
 
@@ -257,6 +272,17 @@ private: // メンバ変数
 
 	// コライダー
 	Sphere collider_;
+	Sphere explosionCollider_;
+
+	//爆破の半径
+	float explosionSpeed_;
+
+	//爆破を広げるためのスイッチ
+	bool isExplosion_;
+	//爆破時間
+	const int baseExplosionTimer_ = 30;
+
+	int explosionTimer_;
 
 	//ワールド変換データ
 	WorldTransform worldTransformBody_;

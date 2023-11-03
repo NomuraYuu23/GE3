@@ -98,7 +98,7 @@ void GameScene::Initialize() {
 	collisionManager_->Initialize(player_.get(), floorManager_.get());
 
 	colliderDebugDraw_->AddCollider(&player_->GetCollider());
-
+	colliderDebugDraw_->AddCollider(&player_->GetExplosionCollider());
 	/// aaaaa
 	///bbbbb
 }
