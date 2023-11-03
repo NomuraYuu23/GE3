@@ -28,7 +28,7 @@ void OBB::worldTransformUpdate()
 	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
 
 	worldTransform_.transform_.translate = center_;
-	worldTransform_.transform_.scale = v3Calc->Multiply(2.0f, size_);
+	worldTransform_.transform_.scale = size_;
 	worldTransform_.UpdateMatrix();
 
 }

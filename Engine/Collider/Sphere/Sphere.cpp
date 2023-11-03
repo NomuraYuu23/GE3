@@ -14,7 +14,7 @@ void Sphere::worldTransformUpdate()
 {
 
 	worldTransform_.transform_.translate = center_;
-	worldTransform_.transform_.scale = { radius_ * 2.0f, radius_ * 2.0f, radius_ * 2.0f };
+	worldTransform_.transform_.scale = { radius_, radius_, radius_ };
 	worldTransform_.UpdateMatrix();
 
 }
