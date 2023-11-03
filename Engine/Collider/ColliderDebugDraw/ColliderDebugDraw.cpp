@@ -22,6 +22,8 @@ void ColliderDebugDraw::Initialize(const std::vector<Model*> models, Material* m
 
 	obbs_.clear();
 
+	isDraw_ = false;
+
 }
 
 void ColliderDebugDraw::Update()
