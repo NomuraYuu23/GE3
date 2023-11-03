@@ -99,7 +99,7 @@ void GameScene::Draw() {
 #ifdef _DEBUG
 
 	// デバッグ描画
-	colliderDebugDraw_->Update();
+	colliderDebugDraw_->Draw(viewProjection_);
 
 #endif // _DEBUG
 

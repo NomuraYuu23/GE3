@@ -12,6 +12,11 @@ public: // メンバ関数
 	/// <param name="radius">半径</param>
 	void Initialize(const Vector3& center, float radius);
 
+	/// <summary>
+	/// ワールドトランスフォーム更新
+	/// </summary>
+	void worldTransformUpdate() override;
+
 public: // メンバ変数
 
 	Vector3 center_; //中心点
