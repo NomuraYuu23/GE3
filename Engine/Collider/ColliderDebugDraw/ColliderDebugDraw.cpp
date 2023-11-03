@@ -1,4 +1,5 @@
 ﻿#include "ColliderDebugDraw.h"
+#include "../../2D/ImguiManager.h"
 
 void ColliderDebugDraw::Initialize(const std::vector<Model*> models, Material* material)
 {
@@ -47,10 +48,16 @@ void ColliderDebugDraw::Update()
 		return false;
 	});
 
+	ImGuiDraw();
+
 }
 
 void ColliderDebugDraw::Draw(const ViewProjection& viewProjection)
 {
+
+	if (!isDraw_) {
+		return;
+	}
 
 	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
 
@@ -96,5 +103,14 @@ void ColliderDebugDraw::AddCollider(OBB* obb)
 {
 
 	obbs_.push_back(obb);
+
+}
+
+void ColliderDebugDraw::ImGuiDraw()
+{
+
+	ImGui::Begin("ColliderDebugDraw");
+	ImGui::Checkbox("描画するか", &isDraw_);
+	ImGui::End();
 
 }
