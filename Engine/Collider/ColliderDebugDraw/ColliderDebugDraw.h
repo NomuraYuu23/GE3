@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "../Sphere/Sphere.h"
 #include "../Plane/Plane.h"
 #include "../Triangle/Triangle.h"
@@ -12,44 +12,44 @@
 #include "../../3D/ViewProjection.h"
 
 /// <summary>
-/// ƒRƒ‰ƒCƒ_[‚Ì•`‰æŠÖ”ƒfƒoƒbƒO—p
+/// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®æç”»é–¢æ•°ãƒ‡ãƒãƒƒã‚°ç”¨
 /// </summary>
 class ColliderDebugDraw
 {
 
-public: // ƒTƒuƒNƒ‰ƒX
+public: // ã‚µãƒ–ã‚¯ãƒ©ã‚¹
 
 	enum class ModelNo {
 		kSphere,
-		kPlane,
-		kTriangle,
+		//kPlane,
+		//kTriangle,
 		kAABB,
 		kOBB,
-		kEnd // g‚í‚È‚¢
+		kEnd // ä½¿ã‚ãªã„
 	};
 
 public:
 
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
 	/// <param name="models"></param>
 	/// <param name="material"></param>
 	void Initialize(const std::vector<Model*> models, Material* material);
 
 	/// <summary>
-	/// XV
+	/// æ›´æ–°
 	/// </summary>
 	void Update();
 
 	/// <summary>
-	/// •`‰æ
+	/// æç”»
 	/// </summary>
 	/// <param name="viewProjection"></param>
 	void Draw(const ViewProjection& viewProjection);
 
 	/// <summary>
-	/// ƒRƒ‰ƒCƒ_[’Ç‰Á
+	/// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼è¿½åŠ 
 	/// </summary>
 	void AddCollider(Sphere* sphere);
 	//void AddCollider(Plane* plane);
@@ -57,27 +57,27 @@ public:
 	void AddCollider(AABB* aabb);
 	void AddCollider(OBB* obb);
 
-private: // ƒƒ“ƒoŠÖ”
+private: // ãƒ¡ãƒ³ãƒé–¢æ•°
 
 
 
-private: // ƒƒ“ƒo•Ï”
+private: // ãƒ¡ãƒ³ãƒå¤‰æ•°
 
-	// ‹…
+	// çƒ
 	std::list<Sphere*> spheres_;
-	// •½–Ê
+	// å¹³é¢
 	//std::list<Plane*> planes_;
-	// OŠpŒ`
+	// ä¸‰è§’å½¢
 	//std::list<Triangle*> triangles_;
 	// AABB
 	std::list<AABB*> aabbs_;
 	// OBB
 	std::list<OBB*> obbs_;
 
-	// ƒ‚ƒfƒ‹
+	// ãƒ¢ãƒ‡ãƒ«
 	std::vector<Model*> models_;
 
-	// ƒ}ƒeƒŠƒAƒ‹
+	// ãƒãƒ†ãƒªã‚¢ãƒ«
 	Material* material_;
 
 };

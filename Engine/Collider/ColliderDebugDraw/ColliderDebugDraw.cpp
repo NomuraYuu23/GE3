@@ -1,4 +1,4 @@
-#include "ColliderDebugDraw.h"
+ï»¿#include "ColliderDebugDraw.h"
 
 void ColliderDebugDraw::Initialize(const std::vector<Model*> models, Material* material)
 {
@@ -50,7 +50,7 @@ void ColliderDebugDraw::Draw(const ViewProjection& viewProjection)
 	WorldTransform worldTransform;
 	worldTransform.Initialize();
 
-	// ‹…
+	// çƒ
 	for (Sphere* sphere : spheres_) {
 		worldTransform.transform_.translate = sphere->center_;
 		worldTransform.transform_.scale = { sphere->radius_ * 2.0f,sphere->radius_ * 2.0f, sphere->radius_ * 2.0f };

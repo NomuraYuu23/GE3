@@ -39,6 +39,14 @@ void GameScene::Initialize() {
 
 	isDebugCameraActive_ = false;
 
+	// デバッグ描画
+	colliderDebugDraw_ = std::make_unique<ColliderDebugDraw>();
+	colliderSphereModel_.reset(Model::Create("Resources/TD2_November/collider/sphere/","sphere.obj",dxCommon_));
+	colliderBoxModel_.reset(Model::Create("Resources/TD2_November/collider/box/", "box.obj", dxCommon_));
+	std::vector<Model*> colliderModels = { colliderSphereModel_.get(),colliderBoxModel_.get() };
+	colliderMaterial_.reset(Material::Create());
+	colliderDebugDraw_->Initialize(colliderModels, colliderMaterial_.get());
+
 	//光源
 	directionalLight.reset(DirectionalLight::Create());
 
@@ -58,6 +66,9 @@ void GameScene::Update(){
 
 	// デバッグカメラ
 	DebugCameraUpdate();
+	
+	// デバッグ描画
+	colliderDebugDraw_->Update();
 
 }
 
@@ -84,6 +95,13 @@ void GameScene::Draw() {
 
 	//光源
 	directionalLight->Draw(dxCommon_->GetCommadList());
+
+#ifdef _DEBUG
+
+	// デバッグ描画
+	colliderDebugDraw_->Update();
+
+#endif // _DEBUG
 
 	Model::PostDraw();
 
