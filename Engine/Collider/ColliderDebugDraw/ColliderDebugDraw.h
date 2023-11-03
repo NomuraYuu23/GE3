@@ -59,7 +59,7 @@ public:
 
 private: // メンバ関数
 
-
+	void ImGuiDraw();
 
 private: // メンバ変数
 
@@ -79,6 +79,9 @@ private: // メンバ変数
 
 	// マテリアル
 	Material* material_;
+
+	// 表示するか
+	bool isDraw_;
 
 };
 
