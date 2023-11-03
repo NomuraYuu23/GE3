@@ -7,6 +7,16 @@ void ColliderDebugDraw::Initialize(const std::vector<Model*> models, Material* m
 
 	material_ = material;
 
+	TransformStructure uvTransform = {
+	{1.0f,1.0f,1.0f},
+	{0.0f,0.0f,0.0f},
+	{0.0f,0.0f,0.0f},
+	};
+
+	Vector4 color = { 1.0f, 1.0f, 1.0f, 0.5f };
+
+	material_->Update(uvTransform, color, None);
+
 	spheres_.clear();
 
 	aabbs_.clear();

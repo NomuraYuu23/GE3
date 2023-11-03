@@ -43,7 +43,7 @@ void GameScene::Initialize() {
 	colliderDebugDraw_ = std::make_unique<ColliderDebugDraw>();
 	colliderSphereModel_.reset(Model::Create("Resources/TD2_November/collider/sphere/","sphere.obj",dxCommon_));
 	colliderBoxModel_.reset(Model::Create("Resources/TD2_November/collider/box/", "box.obj", dxCommon_));
-	std::vector<Model*> colliderModels = { colliderSphereModel_.get(),colliderBoxModel_.get() };
+	std::vector<Model*> colliderModels = { colliderSphereModel_.get(),colliderBoxModel_.get(),colliderBoxModel_.get() };
 	colliderMaterial_.reset(Material::Create());
 	colliderDebugDraw_->Initialize(colliderModels, colliderMaterial_.get());
 
