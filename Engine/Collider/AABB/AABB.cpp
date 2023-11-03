@@ -16,7 +16,7 @@ void AABB::worldTransformUpdate()
 	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
 
 	worldTransform_.transform_.translate = v3Calc->Multiply(0.5f, v3Calc->Add(max_, min_));
-	worldTransform_.transform_.scale = v3Calc->Subtract(max_, min_);
+	worldTransform_.transform_.scale = v3Calc->Multiply(0.5f, v3Calc->Subtract(max_, min_));
 	worldTransform_.UpdateMatrix();
 
 }
