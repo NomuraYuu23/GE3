@@ -49,17 +49,17 @@ void Player::Initialize(const std::vector<Model*>& models,
 
 	collider_.Initialize(worldTransform_.transform_.translate, workRoot_.kColliderSize);
 
-	//// 攻撃
+	// 攻撃
 	//
-	//workAttack_.attackCenterAdd_ = {0.0f,0.0,5.0f};
+	workAttack_.attackCenterAdd_ = {0.0f,0.0,5.0f};
 
-	//workAttack_.attackRadius_ = 5.0f;
+	workAttack_.attackRadius_ = 5.0f;
 
-	//// コライダー
-	//workAttack_.attackCollider_.Initialize(workAttack_.attackCenterAdd_, workAttack_.attackRadius_);
+	// コライダー
+	workAttack_.attackCollider_.Initialize(workAttack_.attackCenterAdd_, workAttack_.attackRadius_);
 
-	//// あたり判定を取るか
-	//workAttack_.isAttackJudgment_ = false;
+	// あたり判定を取るか
+	workAttack_.isAttackJudgment_ = false;
 
 	// グローバル
 
@@ -157,7 +157,7 @@ void Player::BehaviorRootUpdate()
 	DashStart();
 
 	// 浮遊ギミック
-	//UpdateFloatinggimmick();
+	UpdateFloatinggimmick();
 
 	// ぶらぶらギミック
 	UpdateSwinggimmick();
