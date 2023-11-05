@@ -63,29 +63,12 @@ private:
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
 
-	//コリジョンマネージャー
-	std::unique_ptr<CollisionManager> collisionManager_;
-
-	//床全体
-	std::unique_ptr<FloorManager> floorManager_;
-
-	std::unique_ptr<Model> floorModel_;
-	std::unique_ptr<Material> floorMaterial_;
-
-	bool isFloorMove_ = false;
-
-	bool isVertical_ = false;
-	//床の生成のトランスフォームとか
-	TransformStructure floorTransform_{};
-
 	//ビュープロジェクション
 	ViewProjection viewProjection_;
 
 	//デバッグカメラ
 	std::unique_ptr<DebugCamera> debugCamera_ = nullptr;
 	bool isDebugCameraActive_;
-	//フォローカメラ
-	std::unique_ptr<FollowCamera> followCamera_ = nullptr;
 
 	// デバッグ描画
 	std::unique_ptr<ColliderDebugDraw> colliderDebugDraw_ = nullptr;
@@ -95,11 +78,5 @@ private:
 
 	//光源
 	std::unique_ptr<DirectionalLight> directionalLight;
-
-	//自機
-	std::unique_ptr<Player> player_;
-	//自機のモデルとか
-	std::vector<Model*> playerModels_;
-	std::vector<Material*> playerMaterials_;
 
 };
