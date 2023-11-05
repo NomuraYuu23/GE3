@@ -65,6 +65,8 @@ public:
     Matrix4x4 MakeViewportMatrix(
         float left, float top, float width, float height, float minDepth, float maxDepth);
 
+    // atan2みたいなもの
+    Matrix4x4 DirectionToDirection(const Vector3& from, const Vector3& to);
 
 private:
     Matrix4x4Calc() = default;
