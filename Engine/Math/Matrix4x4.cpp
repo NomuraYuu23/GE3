@@ -499,3 +499,39 @@ Matrix4x4 Matrix4x4Calc::MakeViewportMatrix(
 	return result;
 
 }
+
+Matrix4x4 Matrix4x4Calc::DirectionToDirection(const Vector3& from, const Vector3& to)
+{
+
+	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
+
+	Vector3 n = v3Calc->Normalize(v3Calc->Cross(from, to));
+
+	float cosTheta = v3Calc->Dot(from, to);
+	float sinTheta = v3Calc->Length(v3Calc->Cross(from, to));
+
+	//確認用
+	Vector3 minusTo = v3Calc->Multiply(-1.0f,to);
+
+	Matrix4x4 result = Matrix4x4Calc::GetInstance()->MakeIdentity4x4();
+
+	if (!(from.x == minusTo.x &&
+		from.y == minusTo.y &&
+		from.z == minusTo.z)) {
+
+		result.m[0][0] = n.x * n.x * (1.0f - cosTheta) + cosTheta;
+		result.m[0][1] = n.x * n.y * (1.0f - cosTheta) + n.z * sinTheta;
+		result.m[0][2] = n.x * n.z * (1.0f - cosTheta) - n.y * sinTheta;
+
+		result.m[1][0] = n.x * n.y * (1.0f - cosTheta) - n.z * sinTheta;
+		result.m[1][1] = n.y * n.y * (1.0f - cosTheta) + cosTheta;
+		result.m[1][2] = n.y * n.z * (1.0f - cosTheta) + n.x * sinTheta;
+
+		result.m[2][0] = n.x * n.z * (1.0f - cosTheta) + n.y * sinTheta;
+		result.m[2][1] = n.y * n.z * (1.0f - cosTheta) - n.x * sinTheta;
+		result.m[2][2] = n.z * n.z * (1.0f - cosTheta) + cosTheta;
+
+	}
+
+	return result;
+}
