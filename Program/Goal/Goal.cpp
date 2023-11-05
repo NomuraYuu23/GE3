@@ -20,6 +20,7 @@ void Goal::Update()
 {
 
 	worldTransform_.UpdateMatrix();
+	collider_.worldTransformUpdate();
 
 }
 

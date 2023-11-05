@@ -76,7 +76,7 @@ void Enemy::Update() {
 		worldTransformR_arm_.UpdateMatrix();
 
 		collider_.center_ = { worldTransform_.worldMatrix_.m[3][0],worldTransform_.worldMatrix_.m[3][1], worldTransform_.worldMatrix_.m[3][2] };
-
+		collider_.worldTransformUpdate();
 	}
 }
 

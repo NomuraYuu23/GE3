@@ -12,7 +12,7 @@ public: //メンバ関数
 	/// 初期化
 	/// </summary>
 	/// <param name="model">モデル</param>
-	void Initialize(Model* model, Material* material, Vector3 position, Vector3 rotate, bool isMoving, bool isVertical);
+	void Initialize(Model* model, Material* material, Vector3 position, Vector3 rotate, bool isMoving);
 
 	/// <summary>
 	/// 更新
@@ -29,11 +29,6 @@ public: //メンバ関数
 	/// 移動
 	/// </summary>
 	void Move();
-
-	/// <summary>
-	/// 縦移動
-	/// </summary>
-	void verticalMove();
 
 public: // アクセッサ
 
@@ -56,9 +51,6 @@ private:
 
 	// 動くか
 	bool isMoving_;
-
-	//縦移動にするか
-	bool isVertical_;
 
 	// 移動用タイマー
 	float moveTimer_;

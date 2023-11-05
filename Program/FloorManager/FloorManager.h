@@ -37,7 +37,7 @@ public: // メンバ関数
 	/// <summary>
 	/// 床追加
 	/// </summary>
-	void AddFloor(Vector3 position, Vector3 rotate, bool isMoving, bool isVertical);
+	void AddFloor(Vector3 position, Vector3 rotate, bool isMoving);
 
 public: // アクセッサ
 

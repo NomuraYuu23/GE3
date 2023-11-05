@@ -106,6 +106,7 @@ void GameScene::Initialize() {
 	//オブジェクト
 	floorManager_ = std::make_unique<FloorManager>();
 	floorManager_->Initialize(floorModel_.get(), floorMaterial_.get());
+	floorManager_->SetColliderDebugDraw(colliderDebugDraw_.get());
 	// 床生成
 	floorManager_->AddFloor(Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 0.0f), false);
 	floorManager_->AddFloor(Vector3(0.0f, 0.0f, 30.0f), Vector3(0.0f, -1.57f, 0.0f), true);
@@ -151,6 +152,11 @@ void GameScene::Initialize() {
 	// 衝突マネージャー
 	collisionManager_ = std::make_unique<CollisionManager>();
 	collisionManager_->Initialize(player_.get(), floorManager_.get(), goal_.get(), enemy_.get());
+
+	colliderDebugDraw_->AddCollider(&player_->GetCollider());
+	colliderDebugDraw_->AddCollider(&enemy_->GetCollider());
+	colliderDebugDraw_->AddCollider(&goal_->GetCollider());
+
 }
 
 /// <summary>
