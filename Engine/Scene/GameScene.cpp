@@ -154,6 +154,7 @@ void GameScene::Initialize() {
 	collisionManager_->Initialize(player_.get(), floorManager_.get(), goal_.get(), enemy_.get());
 
 	colliderDebugDraw_->AddCollider(&player_->GetCollider());
+	colliderDebugDraw_->AddCollider(&player_->GetAttackCollider());
 	colliderDebugDraw_->AddCollider(&enemy_->GetCollider());
 	colliderDebugDraw_->AddCollider(&goal_->GetCollider());
 

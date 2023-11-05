@@ -37,11 +37,11 @@ void Player::Initialize(const std::vector<Model*>& models,
 	worldTransformWeapon_.transform_.translate.y += 3.0f;
 	worldTransformWeapon_.parent_ = &worldTransform_;
 
-	////浮遊ギミック
-	//InitializeFloatinggimmick();
+	//浮遊ギミック
+	InitializeFloatinggimmick();
 
-	////ぶらぶらギミック
-	//InitializeSwinggimmick();
+	//ぶらぶらギミック
+	InitializeSwinggimmick();
 
 	velocity_ = {0.0f,0.0f,0.0f};
 
@@ -51,7 +51,7 @@ void Player::Initialize(const std::vector<Model*>& models,
 
 	// 攻撃
 	//
-	workAttack_.attackCenterAdd_ = {0.0f,0.0,5.0f};
+	workAttack_.attackCenterAdd_ = {0.0f,0.0,10.0f};
 
 	workAttack_.attackRadius_ = 5.0f;
 
@@ -169,6 +169,8 @@ void Player::BehaviorAttackInitialize()
 
 	// 攻撃行動用の媒介変数
 	workAttack_.behaviorAttackParameter_ = 0.0f;
+	workAttack_.attackCollider_.center_ = { -100.0f,-100.0f,-100.0f };
+	workAttack_.attackCollider_.worldTransformUpdate();
 
 }
 
@@ -202,22 +204,15 @@ void Player::BehaviorAttackUpdate()
 		// 移動量に速さを反映
 		move = v3Calc->Multiply(speed, v3Calc->Normalize(move));
 
-		// カメラの角度から回転行列を計算する
-		Matrix4x4 rotateMatrixX = m4Calc->MakeRotateXMatrix(worldTransform_.transform_.rotate.x);
-		Matrix4x4 rotateMatrixY = m4Calc->MakeRotateYMatrix(worldTransform_.transform_.rotate.y);
-		Matrix4x4 rotateMatrixZ = m4Calc->MakeRotateZMatrix(worldTransform_.transform_.rotate.z);
-
-		Matrix4x4 rotateMatrix = m4Calc->Multiply(
-			rotateMatrixX, m4Calc->Multiply(rotateMatrixY, rotateMatrixZ));
-
 		// 移動ベクトルをカメラの角度だけ回転する
-		move = m4Calc->TransformNormal(move, rotateMatrix);
+		move = m4Calc->TransformNormal(move, worldTransform_.worldMatrix_);
 
 		// 移動
 		worldTransform_.transform_.translate = v3Calc->Add(worldTransform_.transform_.translate, move);
 
 		// 移動方向に見た目を合わせる(Y軸)
 		if (std::fabsf(move.x) > 0.1 || std::fabsf(move.z) > 0.1) {
+			// あたん
 			worldTransform_.transform_.rotate.y = std::atan2f(move.x, move.z);
 		}
 	}
@@ -250,6 +245,7 @@ void Player::BehaviorAttackUpdate()
 		workAttack_.attackCollider_.center_ = { worldTransform_.worldMatrix_.m[3][0] + attackCenterAdd.x,
 		worldTransform_.worldMatrix_.m[3][1] + attackCenterAdd.y,
 		worldTransform_.worldMatrix_.m[3][2] + attackCenterAdd.z };
+		workAttack_.attackCollider_.worldTransformUpdate();
 	}
 
 }
@@ -379,6 +375,7 @@ void Player::Walk()
 			velocity_.z = move.z;
 
 			// 移動方向に見た目を合わせる(Y軸)
+			// あたん
 			workRoot_.targetAngle_ = std::atan2f(move.x, move.z);
 
 		}
