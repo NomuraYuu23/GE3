@@ -130,9 +130,8 @@ void GameScene::Draw() {
 }
 
 void GameScene::ImguiDraw(){
-
+#ifdef _DEBUG
 #endif // _DEBUG
-
 }
 
 void GameScene::DebugCameraUpdate()
