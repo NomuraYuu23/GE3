@@ -189,6 +189,9 @@ void GameScene::Draw() {
 }
 
 void GameScene::ImguiDraw(){
+
+#ifdef _DEBUG
+
 	ImGui::Begin("カメラ");
 	ImGui::DragFloat3("カメラの座標", &viewProjection_.transform_.translate.x, 0.1f);
 	ImGui::DragFloat3("カメラの回転", &viewProjection_.transform_.rotate.x, 0.01f);
@@ -209,6 +212,8 @@ void GameScene::ImguiDraw(){
 		floorManager_->AddFloor(floorTransform_.translate, floorTransform_.rotate, isFloorMove_, isVertical_);
 	}
 	ImGui::End();
+
+#endif // _DEBUG
 
 }
 
