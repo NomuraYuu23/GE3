@@ -110,9 +110,9 @@ void ColliderDebugDraw::AddCollider(OBB* obb)
 
 void ColliderDebugDraw::ImGuiDraw()
 {
-
+#ifdef _DEBUG
 	ImGui::Begin("ColliderDebugDraw");
 	ImGui::Checkbox("描画するか", &isDraw_);
 	ImGui::End();
-
+#endif // _DEBUG
 }
