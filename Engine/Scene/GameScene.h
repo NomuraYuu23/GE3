@@ -79,9 +79,4 @@ private:
 	//光源
 	std::unique_ptr<DirectionalLight> directionalLight;
 
-	uint32_t testAudioHandle_;
-	uint32_t testPlayingAudioHandle_;
-	float testAudioValume_;
-
-
 };
