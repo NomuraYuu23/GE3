@@ -23,7 +23,7 @@ struct WorldTransform
 	bool usedRotateMatrix_;
 
 	// 方向ベクトル
-	Vector3 direction_ = {0.0f,0.0f,0.0f};
+	Vector3 direction_ = {0.0f,0.0f,1.0f};
 
 	// スケールを考えない
 	Matrix4x4 parentMatrix_;
