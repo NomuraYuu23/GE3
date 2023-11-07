@@ -1,6 +1,7 @@
 #include "../Player/Player.h"
 #include "../../Engine/Input/Input.h"
 #include "../../Engine/Math/Math.h"
+#include "../../Engine/Math/Ease.h"
 
 void Player::Initialize(const std::vector<Model*>& models,
 	const std::vector<Material*>& materials)
@@ -376,7 +377,8 @@ void Player::Walk()
 
 			// 移動方向に見た目を合わせる(Y軸)
 			// あたん
-			workRoot_.targetAngle_ = std::atan2f(move.x, move.z);
+			workRoot_.targetDirection_.x = v3Calc->Normalize(move).x;
+			workRoot_.targetDirection_.z = v3Calc->Normalize(move).z;
 
 		}
 		else {
@@ -386,7 +388,7 @@ void Player::Walk()
 		}
 
 		// 角度補間
-		worldTransform_.transform_.rotate.y = Math::LerpShortAngle(worldTransform_.transform_.rotate.y, workRoot_.targetAngle_, workRoot_.targetAngleT_);
+		worldTransform_.direction_ = Ease::Easing(Ease::EaseName::EaseInQuad,worldTransform_.direction_, workRoot_.targetDirection_, workRoot_.targetAngleT_);
 	}
 
 }

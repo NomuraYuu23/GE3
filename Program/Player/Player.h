@@ -45,7 +45,7 @@ public: // サブクラス
 		const float kColliderSize = 2.0f;
 
 		// 目標角度
-		float targetAngle_;
+		Vector3 targetDirection_;
 
 		// 補間レート
 		float targetAngleT_ = 0.1f;
