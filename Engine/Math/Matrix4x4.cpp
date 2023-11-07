@@ -505,19 +505,22 @@ Matrix4x4 Matrix4x4Calc::DirectionToDirection(const Vector3& from, const Vector3
 
 	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
 
-	Vector3 n = v3Calc->Normalize(v3Calc->Cross(from, to));
+	Vector3 nFrom = v3Calc->Normalize(from);
+	Vector3 nTo = v3Calc->Normalize(to);
 
-	float cosTheta = v3Calc->Dot(from, to);
-	float sinTheta = v3Calc->Length(v3Calc->Cross(from, to));
+	Vector3 n = v3Calc->Normalize(v3Calc->Cross(nFrom, nTo));
+
+	float cosTheta = v3Calc->Dot(nFrom, nTo);
+	float sinTheta = v3Calc->Length(v3Calc->Cross(nFrom, nTo));
 
 	//確認用
-	Vector3 minusTo = v3Calc->Multiply(-1.0f,to);
+	Vector3 minusTo = v3Calc->Multiply(-1.0f, nTo);
 
 	Matrix4x4 result = Matrix4x4Calc::GetInstance()->MakeIdentity4x4();
 
-	if (!(from.x == minusTo.x &&
-		from.y == minusTo.y &&
-		from.z == minusTo.z)) {
+	if (!(nFrom.x == minusTo.x &&
+		nFrom.y == minusTo.y &&
+		nFrom.z == minusTo.z)) {
 
 		result.m[0][0] = n.x * n.x * (1.0f - cosTheta) + cosTheta;
 		result.m[0][1] = n.x * n.y * (1.0f - cosTheta) + n.z * sinTheta;
