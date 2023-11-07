@@ -39,7 +39,7 @@ void WorldTransform::UpdateMatrix() {
 	// 回転行列作るか
 	if (!usedRotateMatrix_) {
 		// 回転行列
-		rotateMatrix_ = matrix4x4Calc->MakeRotateXYZMatrix(transform_.rotate);
+		rotateMatrix_ = matrix4x4Calc->DirectionToDirection(Vector3{0.0f,0.0f,1.0f}, direction_);
 	}
 
 	//平行移動行列
@@ -56,8 +56,8 @@ void WorldTransform::UpdateMatrix() {
 	// 親子関係
 	if (parent_) {
 		worldMatrix_ = matrix4x4Calc->Multiply(worldMatrix_, parent_->parentMatrix_);
+		parentMatrix_ = matrix4x4Calc->Multiply(parentMatrix_, parent_->parentMatrix_);
 	}
-
 
 	// このフレームで直接回転行列をいれてるかfalseに
 	usedRotateMatrix_ = false;

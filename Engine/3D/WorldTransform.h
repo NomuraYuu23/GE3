@@ -22,6 +22,9 @@ struct WorldTransform
 	// このフレームで直接回転行列をいれてるか
 	bool usedRotateMatrix_;
 
+	// 方向ベクトル
+	Vector3 direction_;
+
 	// スケールを考えない
 	Matrix4x4 parentMatrix_;
 
