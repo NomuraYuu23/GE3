@@ -8,11 +8,13 @@
 #include <cassert>
 #include <string>
 
-class Audio{
+class Audio {
 public:
 
 	// サウンドデータの最大数
 	static const int kMaxSoundData = 256;
+	// 再生中のサウンドデータの最大数
+	static const int kMaxPlayingSoundData = 256;
 
 	// チャンクヘッダ
 	struct ChunkHeader
@@ -47,6 +49,13 @@ public:
 		std::string name;
 	};
 
+	// 再生中データ
+	struct PlayingSoundData
+	{
+		uint32_t handle;
+		IXAudio2SourceVoice* pSourceVoice;
+	};
+
 	//インスタンス
 	static Audio* GetInstance();
 	/// <summary>
@@ -76,7 +85,9 @@ public:
 	/// 音声再生
 	/// </summary>
 	/// <param name="soundDataHandle">サウンドデータハンドル</param>
-	void PlayWave(uint32_t soundDataHandle);
+	/// <param name="isloop">ループをするか</param>
+	/// <returns>再生中のサウンドデータの番号</returns>
+	uint32_t PlayWave(uint32_t soundDataHandle, bool isLoop);
 
 private:
 	Audio() = default;
@@ -92,6 +103,14 @@ private:
 	std::string directoryPath_;
 	// 次に使うサウンドデータの番号
 	uint32_t indexSoundData_ = 0u;
+
+	// 再生中
+
+	// 再生中のサウンドデータコンテナ
+	std::array<PlayingSoundData, kMaxPlayingSoundData> playingSoundDatas_;
+
+	// 次に使う再生中のサウンドデータの番号
+	uint32_t indexPlayingSoundData_ = 0u;
 
 };
 
