@@ -81,5 +81,7 @@ private:
 
 	uint32_t testAudioHandle_;
 	uint32_t testPlayingAudioHandle_;
+	float testAudioValume_;
+
 
 };

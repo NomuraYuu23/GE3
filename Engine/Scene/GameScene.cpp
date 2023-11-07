@@ -57,7 +57,8 @@ void GameScene::Initialize() {
 	directionalLight.reset(DirectionalLight::Create());
 
 	testAudioHandle_ = audio_->LoadWave("default/Alarm01.wav");
-	testPlayingAudioHandle_ = audio_->PlayWave(testAudioHandle_,true);
+	testAudioValume_ = 1.0f;
+	testPlayingAudioHandle_ = audio_->PlayWave(testAudioHandle_,true, testAudioValume_);
 
 }
 
@@ -87,9 +88,19 @@ void GameScene::Update(){
 			audio_->StopWave(testPlayingAudioHandle_);
 		}
 		else {
-			testPlayingAudioHandle_ = audio_->PlayWave(testAudioHandle_, true);
+			testAudioValume_ = 1.0f;
+			testPlayingAudioHandle_ = audio_->PlayWave(testAudioHandle_, true, testAudioValume_);
 		}
 	}
+
+	if (testAudioValume_ > 0.0f) {
+		testAudioValume_ -= 0.01f;
+		if (testAudioValume_ <= 0.0f) {
+			testAudioValume_ = 0.0f;
+
+		}
+	}
+	audio_->SetVolume(testPlayingAudioHandle_, testAudioValume_);
 
 }
 

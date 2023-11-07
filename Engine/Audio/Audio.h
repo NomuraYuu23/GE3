@@ -86,7 +86,9 @@ public:
 	/// <param name="soundDataHandle">サウンドデータハンドル</param>
 	/// <param name="isloop">ループをするか</param>
 	/// <returns>再生中のサウンドデータの番号</returns>
-	uint32_t PlayWave(uint32_t soundDataHandle, bool isLoop);
+	uint32_t PlayWave(uint32_t soundDataHandle, bool isLoop, float volume = 1.0f);
+
+	/// 以下ループするもの推奨
 
 	/// <summary>
 	/// 再生中のオーディオ停止
@@ -94,7 +96,18 @@ public:
 	/// <param name="PlayingSoundDataHandle"></param>
 	void StopWave(uint32_t PlayingSoundDataHandle);
 
+	/// <summary>
+	/// 再生してあるか
+	/// </summary>
+	/// <param name="PlayingSoundDataHandle"></param>
+	/// <returns></returns>
 	bool IsPlayAudio(uint32_t PlayingSoundDataHandle);
+
+	/// <summary>
+	/// 再生中のオーディオ停止
+	/// </summary>
+	/// <param name="PlayingSoundDataHandle"></param>
+	void SetVolume(uint32_t PlayingSoundDataHandle, float volume);
 
 private:
 	Audio() = default;

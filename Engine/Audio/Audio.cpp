@@ -162,7 +162,7 @@ void Audio::Unload(SoundData* soundData) {
 /// <param name="soundDataHandle">サウンドデータハンドル</param>
 /// <param name="isloop">ループをするか</param>
 /// <returns>再生中のサウンドデータの番号</returns>
-uint32_t Audio::PlayWave(uint32_t soundDataHandle, bool isLoop) {
+uint32_t Audio::PlayWave(uint32_t soundDataHandle, bool isLoop, float volume) {
 
 	HRESULT result;
 
@@ -199,6 +199,7 @@ uint32_t Audio::PlayWave(uint32_t soundDataHandle, bool isLoop) {
 
 	// 波形データの再生
 	result = pSourceVoice->SubmitSourceBuffer(&buf);
+	pSourceVoice->SetVolume(volume);
 	result = pSourceVoice->Start();
 
 	indexPlayingSoundData_++;
@@ -232,5 +233,17 @@ bool Audio::IsPlayAudio(uint32_t PlayingSoundDataHandle)
 	}
 
 	return false;
+
+}
+
+void Audio::SetVolume(uint32_t PlayingSoundDataHandle, float volume)
+{
+
+	for (PlayingSoundData playingSoundData : playingSoundDatas_) {
+		if (playingSoundData.handle == PlayingSoundDataHandle) {
+			playingSoundData.pSourceVoice->SetVolume(volume);
+			return;
+		}
+	}
 
 }
