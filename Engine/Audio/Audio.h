@@ -7,8 +7,9 @@
 #include <wrl.h>
 #include <cassert>
 #include <string>
+#include <list>
 
-class Audio{
+class Audio {
 public:
 
 	// サウンドデータの最大数
@@ -47,6 +48,13 @@ public:
 		std::string name;
 	};
 
+	// 再生中データ
+	struct PlayingSoundData
+	{
+		uint32_t handle;
+		IXAudio2SourceVoice* pSourceVoice;
+	};
+
 	//インスタンス
 	static Audio* GetInstance();
 	/// <summary>
@@ -76,7 +84,30 @@ public:
 	/// 音声再生
 	/// </summary>
 	/// <param name="soundDataHandle">サウンドデータハンドル</param>
-	void PlayWave(uint32_t soundDataHandle);
+	/// <param name="isloop">ループをするか</param>
+	/// <returns>再生中のサウンドデータの番号</returns>
+	uint32_t PlayWave(uint32_t soundDataHandle, bool isLoop, float volume = 1.0f);
+
+	/// 以下ループするもの推奨
+
+	/// <summary>
+	/// 再生中のオーディオ停止
+	/// </summary>
+	/// <param name="PlayingSoundDataHandle"></param>
+	void StopWave(uint32_t PlayingSoundDataHandle);
+
+	/// <summary>
+	/// 再生してあるか
+	/// </summary>
+	/// <param name="PlayingSoundDataHandle"></param>
+	/// <returns></returns>
+	bool IsPlayAudio(uint32_t PlayingSoundDataHandle);
+
+	/// <summary>
+	/// 再生中のオーディオ停止
+	/// </summary>
+	/// <param name="PlayingSoundDataHandle"></param>
+	void SetVolume(uint32_t PlayingSoundDataHandle, float volume);
 
 private:
 	Audio() = default;
@@ -92,6 +123,14 @@ private:
 	std::string directoryPath_;
 	// 次に使うサウンドデータの番号
 	uint32_t indexSoundData_ = 0u;
+
+	// 再生中
+
+	// 再生中のサウンドデータコンテナ
+	std::list<PlayingSoundData> playingSoundDatas_;
+
+	// 次に使う再生中のサウンドデータの番号
+	uint32_t indexPlayingSoundData_ = 0u;
 
 };
 
