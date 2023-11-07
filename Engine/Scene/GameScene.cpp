@@ -56,6 +56,9 @@ void GameScene::Initialize() {
 	//光源
 	directionalLight.reset(DirectionalLight::Create());
 
+	testAudioHandle_ = audio_->LoadWave("default/Alarm01.wav");
+	testPlayingAudioHandle_ = audio_->PlayWave(testAudioHandle_,true);
+
 }
 
 /// <summary>
@@ -77,6 +80,16 @@ void GameScene::Update(){
 	
 	// デバッグ描画
 	colliderDebugDraw_->Update();
+
+	// オーディオ確認
+	if (input_->TriggerKey(DIK_A)) {
+		if (audio_->IsPlayAudio(testPlayingAudioHandle_)) {
+			audio_->StopWave(testPlayingAudioHandle_);
+		}
+		else {
+			testPlayingAudioHandle_ = audio_->PlayWave(testAudioHandle_, true);
+		}
+	}
 
 }
 

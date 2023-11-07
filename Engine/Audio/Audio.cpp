@@ -182,10 +182,10 @@ uint32_t Audio::PlayWave(uint32_t soundDataHandle, bool isLoop) {
 	// 再生中のデータを保存
 
 	// returnする為の音声データ
-	PlayingSoundData& playingSoundData = playingSoundDatas_.at(handle);
+	PlayingSoundData playingSoundData;
 	playingSoundData.handle = handle;
 	playingSoundData.pSourceVoice = pSourceVoice;
-
+	playingSoundDatas_.push_back(playingSoundData);
 
 	// 再生する波形データの設定
 	XAUDIO2_BUFFER buf{};
@@ -204,5 +204,33 @@ uint32_t Audio::PlayWave(uint32_t soundDataHandle, bool isLoop) {
 	indexPlayingSoundData_++;
 
 	return handle;
+
+}
+
+void Audio::StopWave(uint32_t PlayingSoundDataHandle)
+{
+
+	playingSoundDatas_.remove_if([PlayingSoundDataHandle](PlayingSoundData playingSoundData) {	
+		if (playingSoundData.handle == PlayingSoundDataHandle) {
+			playingSoundData.pSourceVoice->DestroyVoice();
+			return true;
+		}
+		return false;
+	});
+
+	indexPlayingSoundData_ = static_cast<uint32_t>(playingSoundDatas_.size());
+
+}
+
+bool Audio::IsPlayAudio(uint32_t PlayingSoundDataHandle)
+{
+
+	for (PlayingSoundData playingSoundData : playingSoundDatas_) {
+		if (playingSoundData.handle == PlayingSoundDataHandle) {
+			return true;
+		}
+	}
+
+	return false;
 
 }

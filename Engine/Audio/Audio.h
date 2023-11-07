@@ -7,14 +7,13 @@
 #include <wrl.h>
 #include <cassert>
 #include <string>
+#include <list>
 
 class Audio {
 public:
 
 	// サウンドデータの最大数
 	static const int kMaxSoundData = 256;
-	// 再生中のサウンドデータの最大数
-	static const int kMaxPlayingSoundData = 256;
 
 	// チャンクヘッダ
 	struct ChunkHeader
@@ -89,6 +88,14 @@ public:
 	/// <returns>再生中のサウンドデータの番号</returns>
 	uint32_t PlayWave(uint32_t soundDataHandle, bool isLoop);
 
+	/// <summary>
+	/// 再生中のオーディオ停止
+	/// </summary>
+	/// <param name="PlayingSoundDataHandle"></param>
+	void StopWave(uint32_t PlayingSoundDataHandle);
+
+	bool IsPlayAudio(uint32_t PlayingSoundDataHandle);
+
 private:
 	Audio() = default;
 	~Audio() = default;
@@ -107,7 +114,7 @@ private:
 	// 再生中
 
 	// 再生中のサウンドデータコンテナ
-	std::array<PlayingSoundData, kMaxPlayingSoundData> playingSoundDatas_;
+	std::list<PlayingSoundData> playingSoundDatas_;
 
 	// 次に使う再生中のサウンドデータの番号
 	uint32_t indexPlayingSoundData_ = 0u;
