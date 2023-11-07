@@ -56,7 +56,6 @@ void WorldTransform::UpdateMatrix() {
 	// 親子関係
 	if (parent_) {
 		worldMatrix_ = matrix4x4Calc->Multiply(worldMatrix_, parent_->parentMatrix_);
-		parentMatrix_ = matrix4x4Calc->Multiply(parentMatrix_, parent_->parentMatrix_);
 	}
 
 
