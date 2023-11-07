@@ -39,7 +39,7 @@ void WorldTransform::UpdateMatrix() {
 	// 回転行列作るか
 	if (!usedRotateMatrix_) {
 		// 回転行列
-		rotateMatrix_ = matrix4x4Calc->DirectionToDirection(Vector3{ 0.0f,0.0f,1.0f }, direction_);
+		rotateMatrix_ = matrix4x4Calc->MakeRotateXYZMatrix(transform_.rotate);
 	}
 
 	//平行移動行列
