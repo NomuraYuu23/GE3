@@ -8,6 +8,15 @@ void WorldTransform::Initialize() {
 
 	Matrix4x4Calc* matrix4x4Calc = Matrix4x4Calc::GetInstance();
 
+	// 回転行列
+	rotateMatrix_ = matrix4x4Calc->MakeRotateXYZMatrix(transform_.rotate);
+
+	// このフレームで直接回転行列をいれてるか
+	usedRotateMatrix_ = false;
+
+	// スケールを考えない
+	parentMatrix_ = matrix4x4Calc->MakeAffineMatrix(Vector3{1.0f,1.0f,1.0f}, transform_.rotate, transform_.translate);
+
 	//WVP用のリソースを作る。Matrix4x4 1つ分のサイズを用意する
 	transformationMatrixBuff_ = BufferResource::CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(TransformationMatrix));
 	//書き込むためのアドレスを取得
@@ -24,11 +33,34 @@ void WorldTransform::UpdateMatrix() {
 
 	Matrix4x4Calc* matrix4x4Calc = Matrix4x4Calc::GetInstance();
 
-	worldMatrix_ = matrix4x4Calc->MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
+	//拡大縮小行列
+	Matrix4x4 scaleMatrix = matrix4x4Calc->MakeScaleMatrix(transform_.scale);
 
-	if (parent_) {
-		worldMatrix_ = matrix4x4Calc->Multiply(worldMatrix_, parent_->worldMatrix_);
+	// 回転行列作るか
+	if (!usedRotateMatrix_) {
+		// 回転行列
+		rotateMatrix_ = matrix4x4Calc->MakeRotateXYZMatrix(transform_.rotate);
 	}
+
+	//平行移動行列
+	Matrix4x4 translateMatrix = matrix4x4Calc->MakeTranslateMatrix(transform_.translate);
+
+	// ワールド行列
+	worldMatrix_ = matrix4x4Calc->Multiply(scaleMatrix, matrix4x4Calc->Multiply(rotateMatrix_, translateMatrix));
+
+	//拡大縮小行列
+	scaleMatrix = matrix4x4Calc->MakeScaleMatrix(Vector3{ 1.0f,1.0f,1.0f });
+	// 親子関係用
+	parentMatrix_ = matrix4x4Calc->Multiply(scaleMatrix, matrix4x4Calc->Multiply(rotateMatrix_, translateMatrix));
+
+	// 親子関係
+	if (parent_) {
+		worldMatrix_ = matrix4x4Calc->Multiply(worldMatrix_, parent_->parentMatrix_);
+	}
+
+
+	// このフレームで直接回転行列をいれてるかfalseに
+	usedRotateMatrix_ = false;
 
 }
 
