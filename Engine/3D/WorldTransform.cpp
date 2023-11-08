@@ -12,7 +12,7 @@ void WorldTransform::Initialize() {
 	rotateMatrix_ = matrix4x4Calc->MakeRotateXYZMatrix(transform_.rotate);
 
 	// このフレームで直接回転行列をいれてるか
-	usedRotateMatrix_ = false;
+	usedDirection_ = false;
 
 	// スケールを考えない
 	parentMatrix_ = matrix4x4Calc->MakeAffineMatrix(Vector3{1.0f,1.0f,1.0f}, transform_.rotate, transform_.translate);
@@ -37,9 +37,12 @@ void WorldTransform::UpdateMatrix() {
 	Matrix4x4 scaleMatrix = matrix4x4Calc->MakeScaleMatrix(transform_.scale);
 
 	// 回転行列作るか
-	if (!usedRotateMatrix_) {
+	if (usedDirection_) {
 		// 回転行列
 		rotateMatrix_ = matrix4x4Calc->DirectionToDirection(Vector3{0.0f,0.0f,1.0f}, direction_);
+	}
+	else {
+		rotateMatrix_ = matrix4x4Calc->MakeRotateXYZMatrix(transform_.rotate);
 	}
 
 	//平行移動行列
@@ -58,9 +61,6 @@ void WorldTransform::UpdateMatrix() {
 		worldMatrix_ = matrix4x4Calc->Multiply(worldMatrix_, parent_->parentMatrix_);
 		parentMatrix_ = matrix4x4Calc->Multiply(parentMatrix_, parent_->parentMatrix_);
 	}
-
-	// このフレームで直接回転行列をいれてるかfalseに
-	usedRotateMatrix_ = false;
 
 }
 

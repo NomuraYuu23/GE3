@@ -34,7 +34,7 @@ public: // サブクラス
 		// 初期位置
 		const Vector3 kInitialPosition = { 0.0f, 0.0f, 0.0f };
 		// 初期角度
-		const Vector3 kInitialRotate = {};
+		const Vector3 kInitialDirection = { 0.0f, 0.0f, 1.0f };
 		// ジャンプ初期速さ
 		const float kJumpSpeed = 1.0f;
 		// 落下加速

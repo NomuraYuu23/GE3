@@ -68,6 +68,7 @@ void Player::Initialize(const std::vector<Model*>& models,
 
 void Player::Update()
 {
+	worldTransform_.usedDirection_ = true;
 
 	if (behaviorRequest_) {
 		//振るまいを変更する
@@ -137,7 +138,7 @@ void Player::BehaviorRootInitialize()
 	InitializeSwinggimmick();
 
 	//武器角度
-	worldTransformWeapon_.transform_.rotate.x = 0.0f;
+	worldTransformWeapon_.transform_.rotate = {0.0f,0.0f,0.0f};
 
 }
 
@@ -162,6 +163,7 @@ void Player::BehaviorRootUpdate()
 
 	// ぶらぶらギミック
 	UpdateSwinggimmick();
+
 
 }
 
@@ -203,18 +205,19 @@ void Player::BehaviorAttackUpdate()
 		// 移動量
 		Vector3 move = { 0.0f, 0.0f, 1.0f };
 		// 移動量に速さを反映
-		move = v3Calc->Multiply(speed, v3Calc->Normalize(move));
+		move = v3Calc->Multiply(workRoot_.kWalkSpeed, v3Calc->Normalize(move));
 
 		// 移動ベクトルをカメラの角度だけ回転する
-		move = m4Calc->TransformNormal(move, worldTransform_.worldMatrix_);
+		move = m4Calc->TransformNormal(move, worldTransform_.rotateMatrix_);
 
-		// 移動
-		worldTransform_.transform_.translate = v3Calc->Add(worldTransform_.transform_.translate, move);
+		worldTransform_.transform_.translate.x += move.x;
+		worldTransform_.transform_.translate.z += move.z;
 
 		// 移動方向に見た目を合わせる(Y軸)
 		if (std::fabsf(move.x) > 0.1 || std::fabsf(move.z) > 0.1) {
 			// あたん
-			worldTransform_.transform_.rotate.y = std::atan2f(move.x, move.z);
+			worldTransform_.direction_.x = v3Calc->Normalize(move).x;
+			worldTransform_.direction_.z = v3Calc->Normalize(move).z;
 		}
 	}
 	else if (workAttack_.behaviorAttackParameter_ < 0.8f * pi) {
@@ -233,15 +236,7 @@ void Player::BehaviorAttackUpdate()
 		// 攻撃のあたり判定をだす
 		workAttack_.isAttackJudgment_ = true;
 
-		// カメラの角度から回転行列を計算する
-		Matrix4x4 rotateMatrixX = m4Calc->MakeRotateXMatrix(worldTransform_.transform_.rotate.x);
-		Matrix4x4 rotateMatrixY = m4Calc->MakeRotateYMatrix(worldTransform_.transform_.rotate.y);
-		Matrix4x4 rotateMatrixZ = m4Calc->MakeRotateZMatrix(worldTransform_.transform_.rotate.z);
-
-		Matrix4x4 rotateMatrix = m4Calc->Multiply(
-			rotateMatrixX, m4Calc->Multiply(rotateMatrixY, rotateMatrixZ));
-
-		Vector3 attackCenterAdd = m4Calc->TransformNormal(workAttack_.attackCenterAdd_, rotateMatrix);
+		Vector3 attackCenterAdd = m4Calc->TransformNormal(workAttack_.attackCenterAdd_, worldTransform_.worldMatrix_);
 
 		workAttack_.attackCollider_.center_ = { worldTransform_.worldMatrix_.m[3][0] + attackCenterAdd.x,
 		worldTransform_.worldMatrix_.m[3][1] + attackCenterAdd.y,
@@ -255,7 +250,6 @@ void Player::BehaviorDashInitialize()
 {
 
 	workDash_.deshPrameter_ = 0;
-	//worldTransform_.transform_.rotate.y = d
 
 }
 
@@ -361,15 +355,18 @@ void Player::Walk()
 			Matrix4x4 rotateMatrixX = m4Calc->MakeRotateXMatrix(viewProjection_->transform_.rotate.x);
 			Matrix4x4 rotateMatrixY = m4Calc->MakeRotateYMatrix(viewProjection_->transform_.rotate.y);
 			Matrix4x4 rotateMatrixZ = m4Calc->MakeRotateZMatrix(viewProjection_->transform_.rotate.z);
-			if (worldTransform_.parent_) {
-				rotateMatrixY = m4Calc->MakeRotateYMatrix(viewProjection_->transform_.rotate.y - worldTransform_.parent_->transform_.rotate.y);
-			}
 
 			Matrix4x4 rotateMatrix = m4Calc->Multiply(
 				rotateMatrixX, m4Calc->Multiply(rotateMatrixY, rotateMatrixZ));
 
 			// 移動ベクトルをカメラの角度だけ回転する
 			move = m4Calc->TransformNormal(move, rotateMatrix);
+
+			//　親がいれば
+			if (worldTransform_.parent_) {
+				rotateMatrix = m4Calc->Inverse(worldTransform_.parent_->rotateMatrix_);
+				move = m4Calc->TransformNormal(move, rotateMatrix);
+			}
 
 			// 移動
 			velocity_.x = move.x;
@@ -388,7 +385,7 @@ void Player::Walk()
 		}
 
 		// 角度補間
-		worldTransform_.direction_ = Ease::Easing(Ease::EaseName::EaseInQuad,worldTransform_.direction_, workRoot_.targetDirection_, workRoot_.targetAngleT_);
+		worldTransform_.direction_ = Ease::Easing(Ease::EaseName::Lerp,worldTransform_.direction_, workRoot_.targetDirection_, workRoot_.targetAngleT_);
 	}
 
 }
@@ -458,7 +455,7 @@ void Player::Restart()
 {
 
 	worldTransform_.transform_.translate = workRoot_.kInitialPosition;
-	worldTransform_.transform_.rotate = workRoot_.kInitialRotate;
+	worldTransform_.direction_= workRoot_.kInitialDirection;
 	worldTransform_.parent_ = nullptr;
 	worldTransform_.UpdateMatrix();
 
@@ -493,20 +490,24 @@ void Player::GotParent(WorldTransform* parent)
 	Vector3 position = { worldTransform_.worldMatrix_.m[3][0] - parent->worldMatrix_.m[3][0],
 						worldTransform_.worldMatrix_.m[3][1] - parent->worldMatrix_.m[3][1],
 						worldTransform_.worldMatrix_.m[3][2] - parent->worldMatrix_.m[3][2] };
-	
-	// 親の角度から回転行列を計算する
-	Matrix4x4 rotateMatrixX = m4Calc->MakeRotateXMatrix(-parent->transform_.rotate.x);
-	Matrix4x4 rotateMatrixY = m4Calc->MakeRotateYMatrix(-parent->transform_.rotate.y);
-	Matrix4x4 rotateMatrixZ = m4Calc->MakeRotateZMatrix(-parent->transform_.rotate.z);
 
-	Matrix4x4 rotateMatrix = m4Calc->Multiply(
-		rotateMatrixX, m4Calc->Multiply(rotateMatrixY, rotateMatrixZ));
+	Matrix4x4 rotateMatrix = m4Calc->Inverse(parent->rotateMatrix_);
 
 	// 位置を親の角度だけ回転する
 	position = m4Calc->TransformNormal(position, rotateMatrix);
 
 	worldTransform_.transform_.translate = position;
 	worldTransform_.parent_ = parent;
+
+	Vector3 direction = m4Calc->TransformNormal(worldTransform_.direction_, rotateMatrix);
+
+	// 移動方向に見た目を合わせる(Y軸)
+	// あたん
+	workRoot_.targetDirection_.x = v3Calc->Normalize(direction).x;
+	workRoot_.targetDirection_.z = v3Calc->Normalize(direction).z;
+	worldTransform_.direction_.x = v3Calc->Normalize(direction).x;
+	worldTransform_.direction_.z = v3Calc->Normalize(direction).z;
+
 	worldTransform_.UpdateMatrix();
 
 }
@@ -514,10 +515,25 @@ void Player::GotParent(WorldTransform* parent)
 void Player::LostParent()
 {
 
-	Vector3 position = { worldTransform_.worldMatrix_.m[3][0] ,worldTransform_.worldMatrix_.m[3][1] ,worldTransform_.worldMatrix_.m[3][2] };
+	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
+	Matrix4x4Calc* m4Calc = Matrix4x4Calc::GetInstance();
 
+	Vector3 position = { worldTransform_.worldMatrix_.m[3][0] ,worldTransform_.worldMatrix_.m[3][1] ,worldTransform_.worldMatrix_.m[3][2] };
+	
 	worldTransform_.transform_.translate = position;
+
+	Matrix4x4 rotateMatrix = worldTransform_.parent_->rotateMatrix_;
+	Vector3 direction = m4Calc->TransformNormal(worldTransform_.direction_, rotateMatrix);
+
+	// 移動方向に見た目を合わせる(Y軸)
+	// あたん
+	workRoot_.targetDirection_.x = v3Calc->Normalize(direction).x;
+	workRoot_.targetDirection_.z = v3Calc->Normalize(direction).z;
+	worldTransform_.direction_.x = v3Calc->Normalize(direction).x;
+	worldTransform_.direction_.z = v3Calc->Normalize(direction).z;
+
 	worldTransform_.parent_ = nullptr;
+
 	worldTransform_.UpdateMatrix();
 
 }

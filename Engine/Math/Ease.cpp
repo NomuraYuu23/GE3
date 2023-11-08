@@ -399,6 +399,7 @@ float Ease::SetEaseT(Ease::EaseName name, float t)
 		return EaseInOutBounce(t);
 		break;
 	default:
+		return t;
 		break;
 	}
 
