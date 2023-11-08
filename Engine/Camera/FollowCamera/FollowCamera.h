@@ -55,9 +55,10 @@ private:
 	// 追従対象の残像座標
 	Vector3 interTarget_ = {};
 
-	float destinationAngleY_ = 0.0f;
+	Vector3 destinationAngle_ = {0.0f,0.0f,0.0f};
 
-	float rate_ = 0.1f;
+	float moveRate_ = 0.1f;
+	float rotateRate_ = 0.1f;
 
 };
 

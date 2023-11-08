@@ -3,6 +3,7 @@
 #include "../../Math/Matrix4x4.h"
 #include "../../Input/input.h"
 #include "../../Math/Ease.h"
+#include "../../Math/Math.h"
 
 void FollowCamera::Initialize() {
 
@@ -27,15 +28,15 @@ void FollowCamera::Update() {
 
 		const float RotateSpeed = 0.000001f;
 
-		viewProjection_.transform_.rotate.y += input->GetRightAnalogstick().x * RotateSpeed;
-		viewProjection_.transform_.rotate.x += input->GetRightAnalogstick().y * RotateSpeed;
+		destinationAngle_.y += input->GetRightAnalogstick().x * RotateSpeed;
+		destinationAngle_.x += input->GetRightAnalogstick().y * RotateSpeed;
 	}
 
 	//追従対象がいれば
 	if (target_) {
 		// 追従座標の補間
 		Vector3 targetPos = { target_->worldMatrix_.m[3][0], target_->worldMatrix_.m[3][1], target_->worldMatrix_.m[3][2] };
-		interTarget_ = Ease::Easing(Ease::EaseName::Lerp, interTarget_, targetPos, rate_);
+		interTarget_ = Ease::Easing(Ease::EaseName::Lerp, interTarget_, targetPos, moveRate_);
 
 		// オフセット
 		Vector3 offset = OffsetCalc();
@@ -46,6 +47,9 @@ void FollowCamera::Update() {
 
 	//y固定
 	//viewProjection_.transform_.translate.y = 10.0f;
+
+	viewProjection_.transform_.rotate.y = Math::LerpShortAngle(viewProjection_.transform_.rotate.y, destinationAngle_.y, rotateRate_);
+	viewProjection_.transform_.rotate.x = Math::LerpShortAngle(viewProjection_.transform_.rotate.x, destinationAngle_.x, rotateRate_);
 
 	//ビュー更新
 	viewProjection_.UpdateMatrix();
@@ -64,7 +68,7 @@ void FollowCamera::Reset()
 		interTarget_ = { target_->worldMatrix_.m[3][0], target_->worldMatrix_.m[3][1], target_->worldMatrix_.m[3][2] };
 		viewProjection_.transform_.rotate.y = target_->transform_.rotate.y;
 	}
-	destinationAngleY_ = viewProjection_.transform_.rotate.y;
+	destinationAngle_ = viewProjection_.transform_.rotate;
 
 	// 追従対象からのオフセット
 	Vector3 offset = OffsetCalc();
