@@ -250,11 +250,34 @@ void Player::BehaviorDashInitialize()
 {
 
 	workDash_.deshPrameter_ = 0;
+	worldTransform_.direction_ = workRoot_.targetDirection_;
 
 }
 
 void Player::BehaviorDashUpdate()
 {
+
+	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
+	Matrix4x4Calc* m4Calc = Matrix4x4Calc::GetInstance();
+
+	Vector3 move = { 0.0f,0.0f,1.0f };
+
+	// 移動量に速さを反映
+	move = v3Calc->Multiply(workDash_.spped_, v3Calc->Normalize(move));
+
+	// 移動ベクトルをカメラの角度だけ回転する
+	move = m4Calc->TransformNormal(move, worldTransform_.rotateMatrix_);
+
+	// 移動
+	velocity_.x = move.x;
+	velocity_.z = move.z;
+
+	worldTransform_.transform_.translate = v3Calc->Add(worldTransform_.transform_.translate, velocity_);
+
+	if (++workDash_.deshPrameter_ >= workDash_.frame_) {
+		behaviorRequest_ = Behavior::kRoot;
+	}
+
 }
 
 void Player::InitializeFloatinggimmick()

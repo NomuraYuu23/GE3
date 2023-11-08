@@ -114,6 +114,18 @@ void GameScene::Initialize() {
 	floorManager_->AddFloor(Vector3(30.0f, 0.0f, 60.0f), Vector3(0.0f, 0.0f, 0.0f), true);
 	floorManager_->AddFloor(Vector3(60.0f, 0.0f, 60.0f), Vector3(0.0f, 0.0f, 0.0f), false);
 
+	floorManager_->AddFloor(Vector3(0.0f, 0.0f, -30.0f), Vector3(0.0f, 0.0f, 0.0f), false);
+	floorManager_->AddFloor(Vector3(0.0f, 0.0f, -50.0f), Vector3(0.0f, 0.0f, 0.0f), false);
+	floorManager_->AddFloor(Vector3(0.0f, 0.0f, -70.0f), Vector3(0.0f, 0.0f, 0.0f), false);
+
+	floorManager_->AddFloor(Vector3(20.0f, 0.0f, -30.0f), Vector3(0.0f, 0.0f, 0.0f), false);
+	floorManager_->AddFloor(Vector3(20.0f, 0.0f, -50.0f), Vector3(0.0f, 0.0f, 0.0f), false);
+	floorManager_->AddFloor(Vector3(20.0f, 0.0f, -70.0f), Vector3(0.0f, 0.0f, 0.0f), false);
+
+	floorManager_->AddFloor(Vector3(-20.0f, 0.0f, -30.0f), Vector3(0.0f, 0.0f, 0.0f), false);
+	floorManager_->AddFloor(Vector3(-20.0f, 0.0f, -50.0f), Vector3(0.0f, 0.0f, 0.0f), false);
+	floorManager_->AddFloor(Vector3(-20.0f, 0.0f, -70.0f), Vector3(0.0f, 0.0f, 0.0f), false);
+
 	// ゴール
 	//マテリアル
 	goalMaterial_.reset(Material::Create());

@@ -74,6 +74,10 @@ public: // サブクラス
 	struct WorkDash{
 		// ダッシュ用の媒介変数
 		uint32_t deshPrameter_ = 0;
+		// ダッシュ速度
+		float spped_ = 2.0f;
+		// ダッシュフレーム
+		uint32_t frame_ = 10;
 	};
 
 	//浮遊ギミック用ワーク
