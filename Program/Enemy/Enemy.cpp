@@ -31,7 +31,7 @@ void Enemy::Initialize(const std::vector<Model*>& models,
 	worldTransformR_arm_.parent_ = &worldTransformBody_;
 
 	// ポジション
-	position_ = { -0.2f, 0.0f, 60.0f};
+	position_ = { 0.0f, 0.0f, -60.0f};
 	worldTransform_.transform_.translate = position_;
 
 	// 移動用

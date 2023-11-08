@@ -77,7 +77,7 @@ public: // サブクラス
 		// ダッシュ速度
 		float spped_ = 2.0f;
 		// ダッシュフレーム
-		uint32_t frame_ = 10;
+		uint32_t period_ = 10;
 	};
 
 	//浮遊ギミック用ワーク
@@ -229,6 +229,13 @@ public: // メンバ関数
 	/// 親を失った
 	/// </summary>
 	void LostParent();
+
+private:
+
+	/// <summary>
+	/// 調整項目の適用
+	/// </summary>
+	void ApplyGlobalVariables();
 
 public: // アクセッサ
 

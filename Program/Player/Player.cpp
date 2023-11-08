@@ -2,6 +2,7 @@
 #include "../../Engine/Input/Input.h"
 #include "../../Engine/Math/Math.h"
 #include "../../Engine/Math/Ease.h"
+#include "../../Engine/GlobalVariables/GlobalVariables.h"
 
 void Player::Initialize(const std::vector<Model*>& models,
 	const std::vector<Material*>& materials)
@@ -63,11 +64,21 @@ void Player::Initialize(const std::vector<Model*>& models,
 	workAttack_.isAttackJudgment_ = false;
 
 	// グローバル
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	const char* groupName = "Player";
+	//グループを追加
+	GlobalVariables::GetInstance()->CreateGroup(groupName);
+	globalVariables->AddItem(groupName, "dashPeriod", static_cast<int>(workDash_.period_));
 
 }
 
 void Player::Update()
 {
+
+#ifdef _DEBUG
+	ApplyGlobalVariables();
+#endif // _DEBUG
+
 	worldTransform_.usedDirection_ = true;
 
 	if (behaviorRequest_) {
@@ -274,7 +285,7 @@ void Player::BehaviorDashUpdate()
 
 	worldTransform_.transform_.translate = v3Calc->Add(worldTransform_.transform_.translate, velocity_);
 
-	if (++workDash_.deshPrameter_ >= workDash_.frame_) {
+	if (++workDash_.deshPrameter_ >= workDash_.period_) {
 		behaviorRequest_ = Behavior::kRoot;
 	}
 
@@ -558,6 +569,16 @@ void Player::LostParent()
 	worldTransform_.parent_ = nullptr;
 
 	worldTransform_.UpdateMatrix();
+
+}
+
+void Player::ApplyGlobalVariables()
+{
+
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	const char* groupName = "Player";
+
+	workDash_.period_ = globalVariables->GetIntValue(groupName, "dashPeriod");
 
 }
 

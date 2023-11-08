@@ -44,6 +44,11 @@ private: // メンバ関数
 	// 追従対象からのオフセットを計算する
 	Vector3 OffsetCalc() const;
 
+	/// <summary>
+	/// 調整項目の適用
+	/// </summary>
+	void ApplyGlobalVariables();
+
 private:
 
 	//ビュープロジェクション

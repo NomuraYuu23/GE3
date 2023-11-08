@@ -4,6 +4,7 @@
 #include "../../Input/input.h"
 #include "../../Math/Ease.h"
 #include "../../Math/Math.h"
+#include "../../GlobalVariables/GlobalVariables.h"
 
 void FollowCamera::Initialize() {
 
@@ -15,6 +16,14 @@ void FollowCamera::Initialize() {
 	//ビュー更新
 	viewProjection_.UpdateMatrix();
 
+
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	const char* groupName = "FollowCamera";
+	//グループを追加
+	GlobalVariables::GetInstance()->CreateGroup(groupName);
+	globalVariables->AddItem(groupName, "moveRate", moveRate_);
+	globalVariables->AddItem(groupName, "rotateRate", rotateRate_);
+
 }
 
 void FollowCamera::Update() {
@@ -23,6 +32,12 @@ void FollowCamera::Update() {
 	Input* input = Input::GetInstance();
 	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
 	Matrix4x4Calc* m4Calc = Matrix4x4Calc::GetInstance();
+
+#ifdef _DEBUG
+	ApplyGlobalVariables();
+#endif // _DEBUG
+
+
 
 	if (input->GetJoystickConnected()) {
 
@@ -102,5 +117,16 @@ Vector3 FollowCamera::OffsetCalc() const
 	offset = m4Calc->TransformNormal(offset, rotateMatrix);
 
 	return offset;
+
+}
+
+void FollowCamera::ApplyGlobalVariables()
+{
+
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	const char* groupName = "FollowCamera";
+
+	moveRate_ = globalVariables->GetFloatValue(groupName, "moveRate");
+	rotateRate_ = globalVariables->GetFloatValue(groupName, "rotateRate");
 
 }
