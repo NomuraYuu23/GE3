@@ -2,6 +2,7 @@
 #include "../../Engine/3D/Material.h"
 #include "../../Engine/3D/WorldTransform.h"
 #include "../../Engine/Collider/AABB/AABB.h"
+#include "../../Engine/3D/TransformStructure.h"
 
 class Box{
 public: //メンバ関数
@@ -32,6 +33,9 @@ public: //メンバ関数
 	/// 縦移動
 	/// </summary>
 	void verticalMove();
+
+
+	void DrawImgui();
 
 public: // アクセッサ
 

@@ -117,6 +117,8 @@ void GameScene::Initialize() {
 /// </summary>
 void GameScene::Update() {
 	ImguiDraw();
+
+
 	//光源
 	DirectionalLightData directionalLightData;
 	directionalLightData.color = { 1.0f,1.0f,1.0f,1.0f };
@@ -144,6 +146,8 @@ void GameScene::Update() {
 
 	// デバッグ描画
 	colliderDebugDraw_->Update();
+
+	
 
 }
 
@@ -210,37 +214,53 @@ void GameScene::ImguiDraw() {
 
 	ImGui::End();
 
-	ImGui::Begin("床の生成");
-	ImGui::DragFloat3("床の座標", &floorTransform_.translate.x, 0.1f);
-	ImGui::DragFloat3("床の回転", &floorTransform_.rotate.x, 0.01f);
-	ImGui::Checkbox("動く床にする", &isFloorMove_);
-	if (isFloorMove_) {
-		ImGui::Checkbox("縦移動にする", &isVertical_);
-	}
-	else {
-		isVertical_ = false;
-	}
-	if (ImGui::Button("床の追加")) {
-		floorManager_->AddFloor(floorTransform_.translate, floorTransform_.rotate, isFloorMove_, isVertical_);
+	ImGui::Begin("ステージ関連", nullptr, ImGuiWindowFlags_MenuBar);
+
+	if (ImGui::BeginMenuBar()){
+		if (ImGui::BeginMenu("床生成")){
+			ImGui::DragFloat3("床の座標", &floorTransform_.translate.x, 0.1f);
+			ImGui::DragFloat3("床の回転", &floorTransform_.rotate.x, 0.01f);
+			ImGui::Checkbox("動く床にする", &isFloorMove_);
+			if (isFloorMove_) {
+				ImGui::Checkbox("縦移動にする", &isVertical_);
+			}
+			else {
+				isVertical_ = false;
+			}
+			if (ImGui::Button("床の追加")) {
+				floorManager_->AddFloor(floorTransform_.translate, floorTransform_.rotate, isFloorMove_, isVertical_);
+			}
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("ボックス生成")){
+			ImGui::DragFloat3("箱の座標", &floorTransform_.translate.x, 0.1f);
+			ImGui::DragFloat3("箱の回転", &floorTransform_.rotate.x, 0.01f);
+			ImGui::DragFloat3("箱の大きさ", &floorTransform_.scale.x, 0.01f);
+			ImGui::Checkbox("動く箱にする", &isFloorMove_);
+			if (isFloorMove_) {
+				ImGui::Checkbox("縦移動にする", &isVertical_);
+			}
+			else {
+				isVertical_ = false;
+			}
+			if (ImGui::Button("箱の追加")) {
+				boxManager_->AddBox(floorTransform_, isFloorMove_, isVertical_);
+			}
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("ボックス一覧")){
+			boxManager_->DrawImgui();
+			ImGui::EndMenu();
+		}
+
+
+		ImGui::EndMenuBar();
 	}
 	ImGui::End();
 
-	ImGui::Begin("箱の生成");
-	ImGui::DragFloat3("箱の座標", &floorTransform_.translate.x, 0.1f);
-	ImGui::DragFloat3("箱の回転", &floorTransform_.rotate.x, 0.01f);
-	ImGui::DragFloat3("箱の大きさ", &floorTransform_.scale.x, 0.01f);
-	ImGui::Checkbox("動く箱にする", &isFloorMove_);
-	if (isFloorMove_) {
-		ImGui::Checkbox("縦移動にする", &isVertical_);
-	}
-	else {
-		isVertical_ = false;
-	}
-	if (ImGui::Button("箱の追加")) {
-		boxManager_->AddBox(floorTransform_, isFloorMove_, isVertical_);
-	}
-	ImGui::End();
+	
 
+	
 #endif // _DEBUG
 
 }

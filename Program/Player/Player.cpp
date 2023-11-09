@@ -110,7 +110,7 @@ void Player::Update()
 	//行列を定数バッファに転送
 	allUpdateMatrix();
 
-	if (worldTransform_.worldMatrix_.m[3][1] <= -10.0f) {
+	if (worldTransform_.worldMatrix_.m[3][1] <= -30.0f) {
 		Restart();
 	}
 

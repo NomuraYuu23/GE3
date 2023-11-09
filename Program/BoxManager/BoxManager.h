@@ -33,6 +33,12 @@ public:
 	void Draw(const ViewProjection& viewProjection);
 
 	/// <summary>
+	/// imgui描画
+	/// </summary>
+	/// <param name="viewProjection">ビュープロジェクション</param>
+	void DrawImgui();
+
+	/// <summary>
 	/// 床追加
 	/// </summary>
 	void AddBox(TransformStructure box,bool isMoving, bool isVertical);

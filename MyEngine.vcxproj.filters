@@ -37,6 +37,12 @@
     <Filter Include="AL\ヘッダーファイル">
       <UniqueIdentifier>{fc979200-3a7d-417b-9df3-acf5b50d287d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="AL\ヘッダーファイル\Stage">
+      <UniqueIdentifier>{ba6c57b3-1b6a-485b-9c56-9d141c7d04ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AL\ソースファイル\Stage">
+      <UniqueIdentifier>{9e6c974e-2c01-4eb7-81d0-beecb9fb62af}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -117,9 +123,6 @@
     <ClCompile Include="Program\BaseCharacter\BaseCharacter.cpp">
       <Filter>AL\ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\Floor\Floor.cpp">
-      <Filter>AL\ソースファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Camera\FollowCamera\FollowCamera.cpp">
       <Filter>AL\ソースファイル</Filter>
     </ClCompile>
@@ -127,9 +130,6 @@
       <Filter>AL\ソースファイル</Filter>
     </ClCompile>
     <ClCompile Include="Program\Skydome\Skydome.cpp">
-      <Filter>AL\ソースファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Program\FloorManager\FloorManager.cpp">
       <Filter>AL\ソースファイル</Filter>
     </ClCompile>
     <ClCompile Include="Program\CollisionManager\CollisionManager.cpp">
@@ -178,10 +178,16 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Program\Box\Box.cpp">
-      <Filter>AL\ソースファイル</Filter>
+      <Filter>AL\ソースファイル\Stage</Filter>
     </ClCompile>
     <ClCompile Include="Program\BoxManager\BoxManager.cpp">
-      <Filter>AL\ソースファイル</Filter>
+      <Filter>AL\ソースファイル\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\Floor\Floor.cpp">
+      <Filter>AL\ソースファイル\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\FloorManager\FloorManager.cpp">
+      <Filter>AL\ソースファイル\Stage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -287,9 +293,6 @@
     <ClInclude Include="Program\BaseCharacter\BaseCharacter.h">
       <Filter>AL\ヘッダーファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Program\Floor\Floor.h">
-      <Filter>AL\ヘッダーファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Camera\FollowCamera\FollowCamera.h">
       <Filter>AL\ヘッダーファイル</Filter>
     </ClInclude>
@@ -297,9 +300,6 @@
       <Filter>AL\ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="Program\Skydome\Skydome.h">
-      <Filter>AL\ヘッダーファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Program\FloorManager\FloorManager.h">
       <Filter>AL\ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="Program\CollisionManager\CollisionManager.h">
@@ -348,10 +348,16 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Program\Box\Box.h">
-      <Filter>AL\ヘッダーファイル</Filter>
+      <Filter>AL\ヘッダーファイル\Stage</Filter>
     </ClInclude>
     <ClInclude Include="Program\BoxManager\BoxManager.h">
-      <Filter>AL\ヘッダーファイル</Filter>
+      <Filter>AL\ヘッダーファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\Floor\Floor.h">
+      <Filter>AL\ヘッダーファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\FloorManager\FloorManager.h">
+      <Filter>AL\ヘッダーファイル\Stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

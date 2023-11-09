@@ -1,5 +1,6 @@
 #include "Box.h"
 #include <cmath>
+#include"../../externals/imgui/imgui.h"
 
 void Box::Initialize(Model* model, Material* material, TransformStructure transform_, bool isMoving, bool isVertical){
 	// nullポインタチェック
@@ -23,7 +24,7 @@ void Box::Initialize(Model* model, Material* material, TransformStructure transf
 
 	position_ = transform_.translate;
 
-	size_ = { transform_.scale.x + 0.1f,transform_.scale.y + 0.1f,transform_.scale.z + 0.1f, };
+	size_ = { drawWorldTransform_.transform_.scale.x + 0.1f,drawWorldTransform_.transform_.scale.y + 0.1f,drawWorldTransform_.transform_.scale.z + 0.1f, };
 
 	isMoving_ = isMoving;
 
@@ -45,10 +46,12 @@ void Box::Update(){
 		else {
 			Move();
 		}
-		Vector3 WorldPosition = { drawWorldTransform_.worldMatrix_.m[3][0] , drawWorldTransform_.worldMatrix_.m[3][1] , drawWorldTransform_.worldMatrix_.m[3][2] };
-		collider_.max_ = { WorldPosition.x + size_.x, WorldPosition.y + size_.y, WorldPosition.z + size_.z };
-		collider_.min_ = { WorldPosition.x - size_.x, WorldPosition.y - size_.y, WorldPosition.z - size_.z };
+		
 	}
+	Vector3 WorldPosition = { drawWorldTransform_.worldMatrix_.m[3][0] , drawWorldTransform_.worldMatrix_.m[3][1] , drawWorldTransform_.worldMatrix_.m[3][2] };
+	size_ = { drawWorldTransform_.transform_.scale.x + 0.1f,drawWorldTransform_.transform_.scale.y + 0.1f,drawWorldTransform_.transform_.scale.z + 0.1f, };
+	collider_.max_ = { WorldPosition.x + size_.x, WorldPosition.y + size_.y, WorldPosition.z + size_.z };
+	collider_.min_ = { WorldPosition.x - size_.x, WorldPosition.y - size_.y, WorldPosition.z - size_.z };
 
 	worldTransform_.UpdateMatrix();
 	drawWorldTransform_.UpdateMatrix();
@@ -106,5 +109,13 @@ void Box::verticalMove(){
 	position = m4Calc->TransformNormal(position, rotateMatrix);
 
 	worldTransform_.transform_.translate = v3Calc->Add(position_, v3Calc->Multiply(cosf(moveTimer_), position));
-	drawWorldTransform_.transform_.translate = v3Calc->Add(position_, v3Calc->Multiply(sinf(moveTimer_), position));
+	drawWorldTransform_.transform_.translate = v3Calc->Add(position_, v3Calc->Multiply(cosf(moveTimer_), position));
+}
+
+void Box::DrawImgui(){
+	
+	ImGui::DragFloat3("箱の座標", &drawWorldTransform_.transform_.translate.x, 0.1f);
+	ImGui::DragFloat3("箱の回転", &drawWorldTransform_.transform_.rotate.x, 0.1f);
+	ImGui::DragFloat3("箱の大きさ", &drawWorldTransform_.transform_.scale.x, 0.1f);
+	
 }
