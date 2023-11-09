@@ -99,6 +99,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3D\DirectionalLight.cpp" />
     <ClCompile Include="Engine\base\DirectXCommon.cpp" />
     <ClCompile Include="Engine\Collider\ColliderDebugDraw\ColliderDebugDraw.cpp" />
+    <ClCompile Include="Engine\Framework\MyGame.cpp" />
     <ClCompile Include="Engine\GlobalVariables\GlobalVariables.cpp" />
     <ClCompile Include="Engine\Math\Ease.cpp" />
     <ClCompile Include="Engine\Math\Math.cpp" />
@@ -117,6 +118,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Scene\GameScene\GameScene.cpp" />
     <ClCompile Include="Engine\Input\Input.cpp" />
     <ClCompile Include="Engine\Scene\IScene\IScene.cpp" />
+    <ClCompile Include="Engine\Framework\MyFramework.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\3D\Material.cpp" />
     <ClCompile Include="Engine\Math\Matrix4x4.cpp" />
@@ -155,6 +157,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\3D\DirectionalLightData.h" />
     <ClInclude Include="Engine\base\DirectXCommon.h" />
     <ClInclude Include="Engine\Collider\ColliderDebugDraw\ColliderDebugDraw.h" />
+    <ClInclude Include="Engine\Framework\MyGame.h" />
     <ClInclude Include="Engine\GlobalVariables\GlobalVariables.h" />
     <ClInclude Include="Engine\Math\Ease.h" />
     <ClInclude Include="Engine\Math\Math.h" />
@@ -179,6 +182,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\3D\Model.h" />
     <ClInclude Include="Engine\base\GraphicsPipelineState.h" />
     <ClInclude Include="Engine\Scene\IScene\IScene.h" />
+    <ClInclude Include="Engine\Framework\MyFramework.h" />
     <ClInclude Include="Program\BaseCharacter\BaseCharacter.h" />
     <ClInclude Include="Engine\Collider\AABB\AABB.h" />
     <ClInclude Include="Engine\Collider\Collider.h" />
