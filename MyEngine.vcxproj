@@ -102,8 +102,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\GlobalVariables\GlobalVariables.cpp" />
     <ClCompile Include="Engine\Math\Ease.cpp" />
     <ClCompile Include="Engine\Math\Math.cpp" />
+    <ClCompile Include="Engine\Scene\ClearScene\ClearScene.cpp" />
     <ClCompile Include="Engine\Scene\SceneFactory\SceneFactory.cpp" />
     <ClCompile Include="Engine\Scene\SceneManager\SceneManager.cpp" />
+    <ClCompile Include="Engine\Scene\SelectScene\SelectScene.cpp" />
     <ClCompile Include="Engine\Scene\TitleScene\TitleScene.cpp" />
     <ClCompile Include="externals\imgui\imgui.cpp" />
     <ClCompile Include="externals\imgui\imgui_demo.cpp" />
@@ -156,9 +158,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\GlobalVariables\GlobalVariables.h" />
     <ClInclude Include="Engine\Math\Ease.h" />
     <ClInclude Include="Engine\Math\Math.h" />
+    <ClInclude Include="Engine\Scene\ClearScene\ClearScene.h" />
     <ClInclude Include="Engine\Scene\SceneFactory\AbstractSceneFactory.h" />
     <ClInclude Include="Engine\Scene\SceneFactory\SceneFactory.h" />
     <ClInclude Include="Engine\Scene\SceneManager\SceneManager.h" />
+    <ClInclude Include="Engine\Scene\SelectScene\SelectScene.h" />
     <ClInclude Include="Engine\Scene\TitleScene\TitleScene.h" />
     <ClInclude Include="externals\imgui\imgui.h" />
     <ClInclude Include="externals\imgui\imgui_impl_dx12.h" />
