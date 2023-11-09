@@ -16,13 +16,13 @@ void ClearScene::Update()
 void ClearScene::Draw()
 {
 
-#pragma region ”wŒiƒXƒvƒ‰ƒCƒg•`‰æ
-	// ”wŒiƒXƒvƒ‰ƒCƒg•`‰æ‘Oˆ—
+#pragma region èƒŒæ™¯ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆæç”»
+	// èƒŒæ™¯ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆæç”»å‰å‡¦ç†
 	Sprite::PreDraw(dxCommon_->GetCommadList());
 
-	// ƒXƒvƒ‰ƒCƒg•`‰æŒãˆ—
+	// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆæç”»å¾Œå‡¦ç†
 	Sprite::PostDraw();
-	// [“xƒoƒbƒtƒ@ƒNƒŠƒA
+	// æ·±åº¦ãƒãƒƒãƒ•ã‚¡ã‚¯ãƒªã‚¢
 	dxCommon_->ClearDepthBuffer();
 
 
@@ -30,19 +30,19 @@ void ClearScene::Draw()
 
 	Model::PreDraw(dxCommon_->GetCommadList());
 
-	//3DƒIƒuƒWƒFƒNƒg‚Í‚±‚±
+	//3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¯ã“ã“
 
 	Model::PostDraw();
 
-#pragma region ‘OŒiƒXƒvƒ‰ƒCƒg•`‰æ
-	// ‘OŒiƒXƒvƒ‰ƒCƒg•`‰æ‘Oˆ—
+#pragma region å‰æ™¯ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆæç”»
+	// å‰æ™¯ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆæç”»å‰å‡¦ç†
 	Sprite::PreDraw(dxCommon_->GetCommadList());
 
 
-	//”wŒi
-	//‘OŒiƒXƒvƒ‰ƒCƒg•`‰æ
+	//èƒŒæ™¯
+	//å‰æ™¯ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆæç”»
 
-	// ‘OŒiƒXƒvƒ‰ƒCƒg•`‰æŒãˆ—
+	// å‰æ™¯ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆæç”»å¾Œå‡¦ç†
 	Sprite::PostDraw();
 
 #pragma endregion
