@@ -159,6 +159,27 @@ public: // アクセッサ(ワールドトランスフォーム)
 
 	void SetTextureLeftTop(const Vector2& textureLeftTop);
 
+	// 位置
+	Vector2 GetPosition() { return position_; }
+	// 回転
+	float GetRotate() { return rotate_; }
+	// サイズ
+	Vector2 GetSize() { return size_; }
+
+	// アンカーポイント
+	Vector2 GetAnchorPoint() { return anchorPoint_; }
+
+	// フリップ
+	bool GetIsFlipX() { return isFlipX_; }
+	bool GetIsFlipY() { return isFlipY_; }
+
+	// テクスチャのサイズ
+	Vector2 GetTextureSize() { return textureSize_; }
+	// 描画する
+	Vector2 GetTextureLeftTop() { return textureLeftTop_; }
+	// テクスチャ初期サイズ
+	Vector2 GetTextureInitSize() { return textureInitSize_; }
+
 private: // メンバ変数(ワールドトランスフォーム)
 
 	// 位置
