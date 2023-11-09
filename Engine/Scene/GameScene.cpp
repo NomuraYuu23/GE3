@@ -13,15 +13,15 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg
 /// <summary>
 /// コンストラクタ
 /// </summary>
-GameScene::GameScene(){
-	
+GameScene::GameScene() {
+
 }
 
 /// <summary>
 /// デストラクタ
 /// </summary>
-GameScene::~GameScene(){
-	for (size_t i = 0; i < playerModels_.size(); i++){
+GameScene::~GameScene() {
+	for (size_t i = 0; i < playerModels_.size(); i++) {
 		delete playerModels_[i];
 		delete playerMaterials_[i];
 	}
@@ -92,10 +92,10 @@ void GameScene::Initialize() {
 	playerModels_.push_back(Model::Create("Resources/AL4/float_R_arm/", "float_R_arm.obj", dxCommon_));
 	playerModels_.push_back(Model::Create("Resources/AL4/player_Weapon/", "player_Weapon.obj", dxCommon_));
 
-	for (size_t i = 0; i < playerModels_.size(); i++){
+	for (size_t i = 0; i < playerModels_.size(); i++) {
 		playerMaterials_.push_back(Material::Create());
 	}
-	
+
 
 	player_ = std::make_unique<Player>();
 	player_->Initialize(playerModels_, playerMaterials_);
@@ -115,7 +115,7 @@ void GameScene::Initialize() {
 /// <summary>
 /// 更新処理
 /// </summary>
-void GameScene::Update(){
+void GameScene::Update() {
 	ImguiDraw();
 	//光源
 	DirectionalLightData directionalLightData;
@@ -124,14 +124,14 @@ void GameScene::Update(){
 	directionalLightData.intencity = 1.0f;
 	directionalLight->Update(directionalLightData);
 
-	
+
 
 	floorManager_->Update();
 	boxManager_->Update();
 
 	player_->Update();
 
-	collisionManager_->AllCollision();	
+	collisionManager_->AllCollision();
 
 	followCamera_->Update();
 
@@ -141,7 +141,7 @@ void GameScene::Update(){
 
 	// デバッグカメラ
 	DebugCameraUpdate();
-	
+
 	// デバッグ描画
 	colliderDebugDraw_->Update();
 
@@ -188,7 +188,7 @@ void GameScene::Draw() {
 #pragma region 前景スプライト描画
 	// 前景スプライト描画前処理
 	Sprite::PreDraw(dxCommon_->GetCommadList());
-	
+
 
 	//背景
 	//前景スプライト描画
@@ -200,24 +200,27 @@ void GameScene::Draw() {
 
 }
 
-void GameScene::ImguiDraw(){
+void GameScene::ImguiDraw() {
+
+#ifdef _DEBUG
+
 	ImGui::Begin("カメラ");
 	ImGui::DragFloat3("カメラの座標", &viewProjection_.transform_.translate.x, 0.1f);
 	ImGui::DragFloat3("カメラの回転", &viewProjection_.transform_.rotate.x, 0.01f);
-	
+
 	ImGui::End();
 
 	ImGui::Begin("床の生成");
 	ImGui::DragFloat3("床の座標", &floorTransform_.translate.x, 0.1f);
 	ImGui::DragFloat3("床の回転", &floorTransform_.rotate.x, 0.01f);
 	ImGui::Checkbox("動く床にする", &isFloorMove_);
-	if (isFloorMove_){
+	if (isFloorMove_) {
 		ImGui::Checkbox("縦移動にする", &isVertical_);
 	}
 	else {
 		isVertical_ = false;
 	}
-	if (ImGui::Button("床の追加")){
+	if (ImGui::Button("床の追加")) {
 		floorManager_->AddFloor(floorTransform_.translate, floorTransform_.rotate, isFloorMove_, isVertical_);
 	}
 	ImGui::End();
@@ -237,6 +240,8 @@ void GameScene::ImguiDraw(){
 		boxManager_->AddBox(floorTransform_, isFloorMove_, isVertical_);
 	}
 	ImGui::End();
+
+#endif // _DEBUG
 
 }
 

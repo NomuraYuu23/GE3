@@ -16,6 +16,18 @@ struct WorldTransform
 	//ワールド行列
 	Matrix4x4 worldMatrix_;
 
+	// 回転行列
+	Matrix4x4 rotateMatrix_;
+
+	// このフレームで直接回転行列をいれてるか
+	bool usedRotateMatrix_;
+
+	// 方向ベクトル
+	Vector3 direction_ = {0.0f,0.0f,1.0f};
+
+	// スケールを考えない
+	Matrix4x4 parentMatrix_;
+
 	//親
 	WorldTransform* parent_ = nullptr;
 

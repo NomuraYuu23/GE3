@@ -56,7 +56,7 @@ uint32_t Audio::LoadWave(const std::string& fileName) {
 	// 読み込み済みサウンドデータを検索
 	auto it = std::find_if(soundDatas_.begin(), soundDatas_.end(), [&](const auto& soundData) {
 		return soundData.name == fileName;
-	});
+		});
 	if (it != soundDatas_.end()) {
 		// 読み込み済みサウンドデータの要素番号を取得
 		handle = static_cast<uint32_t>(std::distance(soundDatas_.begin(), it));
@@ -136,6 +136,8 @@ uint32_t Audio::LoadWave(const std::string& fileName) {
 	soundData.bufferSize = data.size;
 	soundData.name = fileName;
 
+	indexSoundData_++;
+
 	return handle;
 
 }
@@ -158,9 +160,9 @@ void Audio::Unload(SoundData* soundData) {
 /// 音声再生
 /// </summary>
 /// <param name="soundDataHandle">サウンドデータハンドル</param>
-/// <param name="loopFlag">ループ再生フラグ</param>
-/// <returns>再生ハンドル</returns>
-void Audio::PlayWave(uint32_t soundDataHandle) {
+/// <param name="isloop">ループをするか</param>
+/// <returns>再生中のサウンドデータの番号</returns>
+uint32_t Audio::PlayWave(uint32_t soundDataHandle, bool isLoop, float volume) {
 
 	HRESULT result;
 
@@ -169,19 +171,79 @@ void Audio::PlayWave(uint32_t soundDataHandle) {
 	// サウンドデータの参照を取得
 	SoundData& soundData = soundDatas_.at(soundDataHandle);
 
+	//再生中のサウンドデータの番号
+	uint32_t handle = indexPlayingSoundData_;
+
 	// 波形フォーマットを元にSourceVoiceの生成
 	IXAudio2SourceVoice* pSourceVoice = nullptr;
 	result = xAudio2_->CreateSourceVoice(&pSourceVoice, &soundData.wfex);
 	assert(SUCCEEDED(result));
+
+	// 再生中のデータを保存
+
+	// returnする為の音声データ
+	PlayingSoundData playingSoundData;
+	playingSoundData.handle = handle;
+	playingSoundData.pSourceVoice = pSourceVoice;
+	playingSoundDatas_.push_back(playingSoundData);
 
 	// 再生する波形データの設定
 	XAUDIO2_BUFFER buf{};
 	buf.pAudioData = soundData.pBuffer;
 	buf.AudioBytes = soundData.bufferSize;
 	buf.Flags = XAUDIO2_END_OF_STREAM;
+	if (isLoop) {
+		// ループする
+		buf.LoopCount = XAUDIO2_LOOP_INFINITE;
+	}
 
 	// 波形データの再生
 	result = pSourceVoice->SubmitSourceBuffer(&buf);
+	pSourceVoice->SetVolume(volume);
 	result = pSourceVoice->Start();
+
+	indexPlayingSoundData_++;
+
+	return handle;
+
+}
+
+void Audio::StopWave(uint32_t PlayingSoundDataHandle)
+{
+
+	playingSoundDatas_.remove_if([PlayingSoundDataHandle](PlayingSoundData playingSoundData) {	
+		if (playingSoundData.handle == PlayingSoundDataHandle) {
+			playingSoundData.pSourceVoice->DestroyVoice();
+			return true;
+		}
+		return false;
+	});
+
+	indexPlayingSoundData_ = static_cast<uint32_t>(playingSoundDatas_.size());
+
+}
+
+bool Audio::IsPlayAudio(uint32_t PlayingSoundDataHandle)
+{
+
+	for (PlayingSoundData playingSoundData : playingSoundDatas_) {
+		if (playingSoundData.handle == PlayingSoundDataHandle) {
+			return true;
+		}
+	}
+
+	return false;
+
+}
+
+void Audio::SetVolume(uint32_t PlayingSoundDataHandle, float volume)
+{
+
+	for (PlayingSoundData playingSoundData : playingSoundDatas_) {
+		if (playingSoundData.handle == PlayingSoundDataHandle) {
+			playingSoundData.pSourceVoice->SetVolume(volume);
+			return;
+		}
+	}
 
 }

@@ -51,7 +51,7 @@ public:
 	/// imgui描画処理
 	/// </summary>
 	void ImguiDraw();
-	
+
 
 public: //メンバ関数
 
