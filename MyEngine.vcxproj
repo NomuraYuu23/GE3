@@ -121,6 +121,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Collider\Collider.cpp" />
     <ClCompile Include="Engine\Collider\OBB\OBB.cpp" />
     <ClCompile Include="Engine\Collider\Triangle\Triangle.cpp" />
+    <ClCompile Include="Program\BoxManager\BoxManager.cpp" />
+    <ClCompile Include="Program\Box\Box.cpp" />
     <ClCompile Include="Program\CollisionManager\Collision.cpp" />
     <ClCompile Include="Program\CollisionManager\CollisionManager.cpp" />
     <ClCompile Include="Program\Enemy\Enemy.cpp" />
@@ -171,6 +173,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Collider\Collider.h" />
     <ClInclude Include="Engine\Collider\OBB\OBB.h" />
     <ClInclude Include="Engine\Collider\Triangle\Triangle.h" />
+    <ClInclude Include="Program\BoxManager\BoxManager.h" />
+    <ClInclude Include="Program\Box\Box.h" />
     <ClInclude Include="Program\CollisionManager\Collision.h" />
     <ClInclude Include="Program\CollisionManager\CollisionManager.h" />
     <ClInclude Include="Program\Enemy\Enemy.h" />

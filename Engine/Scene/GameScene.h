@@ -12,6 +12,7 @@
 #include "../3D/Material.h"
 #include "../3D/DirectionalLight.h"
 #include"../../Program/FloorManager/FloorManager.h"
+#include"../../Program/BoxManager/BoxManager.h"
 #include"../../Program/Player/Player.h"
 #include"../../Program/CollisionManager/CollisionManager.h"
 #include"../../Engine/Camera/FollowCamera/FollowCamera.h"
@@ -68,13 +69,19 @@ private:
 
 	//床全体
 	std::unique_ptr<FloorManager> floorManager_;
-
 	std::unique_ptr<Model> floorModel_;
 	std::unique_ptr<Material> floorMaterial_;
-
 	bool isFloorMove_ = false;
-
 	bool isVertical_ = false;
+
+	//壁とかのブロック
+	std::unique_ptr<BoxManager> boxManager_;
+	std::unique_ptr<Model> boxModel_;
+	std::unique_ptr<Material> boxMaterial_;
+	bool isBoxMove_ = false;
+	bool isBoxVertical_ = false;
+
+	
 	//床の生成のトランスフォームとか
 	TransformStructure floorTransform_{};
 

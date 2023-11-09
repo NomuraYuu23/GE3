@@ -516,6 +516,19 @@ void Player::OnCollision(WorldTransform* worldTransform)
 
 }
 
+void Player::OnCollisionBox(WorldTransform* worldTransform, float boxSize){
+	if (velocity_.y <= 0.0f) {
+		if (!worldTransform_.parent_ ||
+			(worldTransform_.parent_ != worldTransform)) {
+			GotParent(worldTransform);
+		}
+		worldTransform_.transform_.translate.y = boxSize;
+		allUpdateMatrix();
+
+		isLanding = true;
+	}
+}
+
 void Player::GotParent(WorldTransform* parent)
 {
 
@@ -569,6 +582,12 @@ void Player::allUpdateMatrix(){
 }
 
 void Player::DrawImgui(){
+	ImGui::Begin("プレイヤー");
+	ImGui::DragFloat3("座標", &worldTransform_.transform_.translate.x, 0.1f);
+	ImGui::DragFloat3("回転", &worldTransform_.transform_.rotate.x, 0.1f);
+	ImGui::DragFloat3("大きさ", &worldTransform_.transform_.scale.x, 0.1f);
+	ImGui::End();
+
 	ImGui::Begin("爆破関係");
 	ImGui::DragFloat3("爆破の中心", &explosionCollider_.center_.x, 0.1f);
 	ImGui::DragFloat("広がる速度", &explosionSpeed_, 0.01f, 0.0f, 2.0f);

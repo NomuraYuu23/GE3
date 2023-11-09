@@ -30,9 +30,7 @@ GameScene::~GameScene(){
 /// <summary>
 /// 初期化
 /// </summary>
-void GameScene::Initialize() {
-	
-	
+void GameScene::Initialize() {	
 	//機能
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
@@ -46,7 +44,7 @@ void GameScene::Initialize() {
 	colliderMaterial_.reset(Material::Create());
 	colliderDebugDraw_->Initialize(colliderModels, colliderMaterial_.get());
 
-
+	//フロアマネージャー
 	floorManager_ = std::make_unique<FloorManager>();
 
 	floorMaterial_.reset(Material::Create());
@@ -57,6 +55,17 @@ void GameScene::Initialize() {
 
 	floorManager_->SetColliderDebugDraw(colliderDebugDraw_.get());
 	floorManager_->AddFloor({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, false, false);
+
+	//ボックスマネージャー
+	boxManager_ = std::make_unique<BoxManager>();
+	boxMaterial_.reset(Material::Create());
+
+	boxModel_.reset(Model::Create("Resources/TD2_November/floorBox/", "box.obj", dxCommon_));
+
+	boxManager_->Initialize(boxModel_.get(), boxMaterial_.get());
+
+	boxManager_->SetColliderDebugDraw(colliderDebugDraw_.get());
+
 
 	//ビュープロジェクション
 	viewProjection_.Initialize();
@@ -95,7 +104,7 @@ void GameScene::Initialize() {
 	followCamera_->SetTarget(player_->GetWorldTransformAddress());
 
 	collisionManager_ = std::make_unique<CollisionManager>();
-	collisionManager_->Initialize(player_.get(), floorManager_.get());
+	collisionManager_->Initialize(player_.get(), floorManager_.get(), boxManager_.get());
 
 	colliderDebugDraw_->AddCollider(&player_->GetCollider());
 	colliderDebugDraw_->AddCollider(&player_->GetExplosionCollider());
@@ -118,6 +127,7 @@ void GameScene::Update(){
 	
 
 	floorManager_->Update();
+	boxManager_->Update();
 
 	player_->Update();
 
@@ -161,7 +171,9 @@ void GameScene::Draw() {
 	//光源
 	directionalLight->Draw(dxCommon_->GetCommadList());
 	/*3Dオブジェクトはここ*/
+	boxManager_->Draw(viewProjection_);
 	floorManager_->Draw(viewProjection_);
+	
 	player_->Draw(viewProjection_);
 
 #ifdef _DEBUG
@@ -207,6 +219,22 @@ void GameScene::ImguiDraw(){
 	}
 	if (ImGui::Button("床の追加")){
 		floorManager_->AddFloor(floorTransform_.translate, floorTransform_.rotate, isFloorMove_, isVertical_);
+	}
+	ImGui::End();
+
+	ImGui::Begin("箱の生成");
+	ImGui::DragFloat3("箱の座標", &floorTransform_.translate.x, 0.1f);
+	ImGui::DragFloat3("箱の回転", &floorTransform_.rotate.x, 0.01f);
+	ImGui::DragFloat3("箱の大きさ", &floorTransform_.scale.x, 0.01f);
+	ImGui::Checkbox("動く箱にする", &isFloorMove_);
+	if (isFloorMove_) {
+		ImGui::Checkbox("縦移動にする", &isVertical_);
+	}
+	else {
+		isVertical_ = false;
+	}
+	if (ImGui::Button("箱の追加")) {
+		boxManager_->AddBox(floorTransform_, isFloorMove_, isVertical_);
 	}
 	ImGui::End();
 

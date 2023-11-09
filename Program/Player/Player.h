@@ -227,9 +227,19 @@ public: // メンバ関数
 	void OnCollision(WorldTransform* worldTransform);
 
 	/// <summary>
+	/// 壁との衝突
+	/// </summary>
+	void OnCollisionBox(WorldTransform* worldTransform, float boxSize);
+
+	/// <summary>
 	/// 親を得た
 	/// </summary>
 	void GotParent(WorldTransform* parent);
+
+	/// <summary>
+	/// 親を得た
+	/// </summary>
+	void GotParent(WorldTransform* parent, float boxSize);
 
 	/// <summary>
 	/// 親を失った
