@@ -25,6 +25,26 @@ public: //メンバ関数
 	void Draw(const ViewProjection& viewProjection);
 
 	/// <summary>
+	/// 落下
+	/// </summary>
+	void Fall();
+
+	/// <summary>
+	/// 着地
+	/// </summary>
+	void Landing();
+
+	/// <summary>
+	/// 衝突
+	/// </summary>
+	void OnCollision(WorldTransform* worldTransform);
+
+	/// <summary>
+	/// 壁との衝突
+	/// </summary>
+	void OnCollisionBox(WorldTransform* worldTransform, float boxSize);
+
+	/// <summary>
 	/// 移動
 	/// </summary>
 	void Move();
