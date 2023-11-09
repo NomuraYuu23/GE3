@@ -1,38 +1,13 @@
 #include "GameScene.h"
-
-#include "../../externals/imgui/imgui_impl_dx12.h"
-#include "../../externals/imgui/imgui_impl_win32.h"
-extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
-#include "../base/WinApp.h"
-#include "../base/DirectXCommon.h"
-#include "../base/TextureManager.h"
-#include "../base/D3DResourceLeakChecker.h"
-#include <vector>
-
-/// <summary>
-/// コンストラクタ
-/// </summary>
-GameScene::GameScene(){
-	
-}
-
-/// <summary>
-/// デストラクタ
-/// </summary>
-GameScene::~GameScene(){
-}
+#include "../../base/WinApp.h"
+#include "../../base/TextureManager.h"
+#include "../../2D/ImguiManager.h"
+#include "../../base/D3DResourceLeakChecker.h"
 
 /// <summary>
 /// 初期化
 /// </summary>
 void GameScene::Initialize() {
-	
-	
-	//機能
-	dxCommon_ = DirectXCommon::GetInstance();
-	input_ = Input::GetInstance();
-	audio_ = Audio::GetInstance();
 
 	// デバッグ描画
 	colliderDebugDraw_ = std::make_unique<ColliderDebugDraw>();
@@ -42,19 +17,9 @@ void GameScene::Initialize() {
 	colliderMaterial_.reset(Material::Create());
 	colliderDebugDraw_->Initialize(colliderModels, colliderMaterial_.get());
 
-	//ビュープロジェクション
-	viewProjection_.Initialize();
-
+	// ビュープロジェクション
 	viewProjection_.transform_.translate = { 0.0f,23.0f,-35.0f };
 	viewProjection_.transform_.rotate = { 0.58f,0.0f,0.0f };
-
-	//デバッグカメラ
-	debugCamera_ = std::make_unique<DebugCamera>();
-	debugCamera_->Initialize();
-	isDebugCameraActive_ = false;
-
-	//光源
-	directionalLight.reset(DirectionalLight::Create());
 
 }
 
@@ -68,7 +33,7 @@ void GameScene::Update(){
 	directionalLightData.color = { 1.0f,1.0f,1.0f,1.0f };
 	directionalLightData.direction = { 0.0f, -1.0f, 0.0f };
 	directionalLightData.intencity = 1.0f;
-	directionalLight->Update(directionalLightData);
+	directionalLight_->Update(directionalLightData);
 
 	viewProjection_.UpdateMatrix();
 
@@ -102,7 +67,7 @@ void GameScene::Draw() {
 	Model::PreDraw(dxCommon_->GetCommadList());
 
 	//光源
-	directionalLight->Draw(dxCommon_->GetCommadList());
+	directionalLight_->Draw(dxCommon_->GetCommadList());
 	//3Dオブジェクトはここ
 
 #ifdef _DEBUG
