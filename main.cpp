@@ -29,7 +29,9 @@
 
 //デバッグカメラ
 #include "Engine/Camera/DebugCamera.h"
-#include "Engine/Scene/GameScene.h"
+
+// シーンマネージャー
+#include "Engine/Scene/SceneManager/SceneManager.h"
 
 // ImGui
 #include "Engine/2D/ImGuiManager.h"
@@ -92,8 +94,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	D3DResourceLeakChecker leakChecker;
 
 	//ゲームシーン
-	std::unique_ptr<GameScene> gameScene = std::make_unique<GameScene>();
-	gameScene->Initialize();
+	std::unique_ptr<SceneManager> sceneManager = std::make_unique<SceneManager>();
+	sceneManager->Initialize();
 
 	//ウィンドウののボタンが押されるまでループ
 	while (true) {
@@ -118,13 +120,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		GlobalVariables::GetInstance()->Update();
 
 		// ゲームシーン更新
-		gameScene->Update();
+		sceneManager->Update();
 
 		//描画前処理
 		dxCommon->PreDraw();
 
 		//ゲームシーン描画処理
-		gameScene->Draw();
+		sceneManager->Draw();
 
 		imGuiManager->End();
 

@@ -1,4 +1,8 @@
 #include "GameScene.h"
+#include "../../base/WinApp.h"
+#include "../../base/TextureManager.h"
+#include "../../2D/ImguiManager.h"
+#include "../../base/D3DResourceLeakChecker.h"
 
 #include "../../externals/imgui/imgui_impl_dx12.h"
 #include "../../externals/imgui/imgui_impl_win32.h"
@@ -13,8 +17,8 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg
 /// <summary>
 /// コンストラクタ
 /// </summary>
-GameScene::GameScene() {
-
+GameScene::GameScene(){
+	
 }
 
 /// <summary>
@@ -31,12 +35,6 @@ GameScene::~GameScene() {
 /// 初期化
 /// </summary>
 void GameScene::Initialize() {
-
-
-	//機能
-	dxCommon_ = DirectXCommon::GetInstance();
-	input_ = Input::GetInstance();
-	audio_ = Audio::GetInstance();
 
 	// デバッグ描画
 	colliderDebugDraw_ = std::make_unique<ColliderDebugDraw>();
@@ -58,23 +56,14 @@ void GameScene::Initialize() {
 	floorManager_->SetColliderDebugDraw(colliderDebugDraw_.get());
 	floorManager_->AddFloor({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, false, false);
 
-	//ビュープロジェクション
-	viewProjection_.Initialize();
 
 	viewProjection_.transform_.translate = { 0.0f,23.0f,-35.0f };
 	viewProjection_.transform_.rotate = { 0.58f,0.0f,0.0f };
 
-	//デバッグカメラ
-	debugCamera_ = std::make_unique<DebugCamera>();
-	debugCamera_->Initialize();
-	isDebugCameraActive_ = false;
-
+	
 	//フォローカメラ
 	followCamera_ = std::make_unique<FollowCamera>();
 	followCamera_->Initialize();
-
-	//光源
-	directionalLight.reset(DirectionalLight::Create());
 
 	//プレイヤー関連
 	playerModels_.push_back(Model::Create("Resources/AL4/float_Body/", "float_Body.obj", dxCommon_));
@@ -113,7 +102,7 @@ void GameScene::Update() {
 	directionalLightData.color = { 1.0f,1.0f,1.0f,1.0f };
 	directionalLightData.direction = { 0.0f, -1.0f, 0.0f };
 	directionalLightData.intencity = 1.0f;
-	directionalLight->Update(directionalLightData);
+	directionalLight_->Update(directionalLightData);
 
 
 
@@ -159,7 +148,7 @@ void GameScene::Draw() {
 	Model::PreDraw(dxCommon_->GetCommadList());
 
 	//光源
-	directionalLight->Draw(dxCommon_->GetCommadList());
+	directionalLight_->Draw(dxCommon_->GetCommadList());
 	/*3Dオブジェクトはここ*/
 	floorManager_->Draw(viewProjection_);
 	player_->Draw(viewProjection_);
