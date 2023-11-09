@@ -118,6 +118,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Scene\GameScene\GameScene.cpp" />
     <ClCompile Include="Engine\Input\Input.cpp" />
     <ClCompile Include="Engine\Scene\IScene\IScene.cpp" />
+    <ClCompile Include="Engine\Framework\MyFramework.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\3D\Material.cpp" />
     <ClCompile Include="Engine\Math\Matrix4x4.cpp" />
@@ -181,6 +182,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\3D\Model.h" />
     <ClInclude Include="Engine\base\GraphicsPipelineState.h" />
     <ClInclude Include="Engine\Scene\IScene\IScene.h" />
+    <ClInclude Include="Engine\Framework\MyFramework.h" />
     <ClInclude Include="Program\BaseCharacter\BaseCharacter.h" />
     <ClInclude Include="Engine\Collider\AABB\AABB.h" />
     <ClInclude Include="Engine\Collider\Collider.h" />
