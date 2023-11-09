@@ -43,6 +43,12 @@
     <Filter Include="AL\ソースファイル\Stage">
       <UniqueIdentifier>{9e6c974e-2c01-4eb7-81d0-beecb9fb62af}</UniqueIdentifier>
     </Filter>
+    <Filter Include="AL\ソースファイル\StageItem">
+      <UniqueIdentifier>{afb90174-61c5-4e0d-b134-8f2f493b26e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AL\ヘッダーファイル\StageItem">
+      <UniqueIdentifier>{7e063ad5-f6cd-446c-b2ee-2297c675f013}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -188,6 +194,21 @@
     </ClCompile>
     <ClCompile Include="Program\FloorManager\FloorManager.cpp">
       <Filter>AL\ソースファイル\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\BreakBox\BreakBox.cpp">
+      <Filter>AL\ソースファイル\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\BreakBoxManager\BreakBoxManager.cpp">
+      <Filter>AL\ソースファイル\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\RecoveryItemManager\RecoveryItemManager.cpp">
+      <Filter>AL\ソースファイル\StageItem</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\RecoveryItem\RecoveryItem.cpp">
+      <Filter>AL\ソースファイル\StageItem</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyManager.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -358,6 +379,21 @@
     </ClInclude>
     <ClInclude Include="Program\FloorManager\FloorManager.h">
       <Filter>AL\ヘッダーファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\BreakBox\BreakBox.h">
+      <Filter>AL\ヘッダーファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\BreakBoxManager\BreakBoxManager.h">
+      <Filter>AL\ヘッダーファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\RecoveryItem\RecoveryItem.h">
+      <Filter>AL\ヘッダーファイル\StageItem</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\RecoveryItemManager\RecoveryItemManager.h">
+      <Filter>AL\ヘッダーファイル\StageItem</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyManager.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

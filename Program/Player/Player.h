@@ -19,7 +19,8 @@ public: // サブクラス
 		kModelIndexHead = 1,
 		kModelIndexL_arm = 2,
 		kModelIndexR_arm = 3,
-		kModelIndexWeapon = 4
+		kModelIndexWeapon = 4,
+		kModelIndexExprode = 5
 	};
 
 	// 振るまい
@@ -236,10 +237,6 @@ public: // メンバ関数
 	/// </summary>
 	void GotParent(WorldTransform* parent);
 
-	/// <summary>
-	/// 親を得た
-	/// </summary>
-	void GotParent(WorldTransform* parent, float boxSize);
 
 	/// <summary>
 	/// 親を失った
@@ -300,6 +297,7 @@ private: // メンバ変数
 	WorldTransform worldTransformL_arm_;
 	WorldTransform worldTransformR_arm_;
 	WorldTransform worldTransformWeapon_;
+	WorldTransform worldTransformExprode_;
 
 	//振るまい
 	Behavior behavior_ = Behavior::kRoot;

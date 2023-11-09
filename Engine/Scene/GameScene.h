@@ -13,6 +13,7 @@
 #include "../3D/DirectionalLight.h"
 #include"../../Program/FloorManager/FloorManager.h"
 #include"../../Program/BoxManager/BoxManager.h"
+#include"../../Program/BreakBoxManager/BreakBoxManager.h"
 #include"../../Program/Player/Player.h"
 #include"../../Program/CollisionManager/CollisionManager.h"
 #include"../../Engine/Camera/FollowCamera/FollowCamera.h"
@@ -81,9 +82,18 @@ private:
 	bool isBoxMove_ = false;
 	bool isBoxVertical_ = false;
 
+	//壊れるブロック
+	std::unique_ptr<BreakBoxManager> breakBoxManager_;
+	std::unique_ptr<Model> breakBoxModel_;
+	std::unique_ptr<Material> breakBoxMaterial_;
+	bool isBreakBoxMove_ = false;
+	bool isBreakBoxVertical_ = false;
 	
 	//床の生成のトランスフォームとか
 	TransformStructure floorTransform_{};
+
+	//壊れるボックスの生成のトランスフォームとか
+	TransformStructure breakBoxTransform_{};
 
 	//ビュープロジェクション
 	ViewProjection viewProjection_;

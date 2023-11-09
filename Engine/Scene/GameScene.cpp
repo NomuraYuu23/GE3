@@ -66,6 +66,15 @@ void GameScene::Initialize() {
 
 	boxManager_->SetColliderDebugDraw(colliderDebugDraw_.get());
 
+	//壊れるボックス生成
+	breakBoxManager_ = std::make_unique<BreakBoxManager>();
+	breakBoxMaterial_.reset(Material::Create());
+
+	breakBoxModel_.reset(Model::Create("Resources/TD2_November/breakBox/", "box.obj", dxCommon_));
+
+	breakBoxManager_->Initialize(breakBoxModel_.get(), breakBoxMaterial_.get());
+
+	breakBoxManager_->SetColliderDebugDraw(colliderDebugDraw_.get());
 
 	//ビュープロジェクション
 	viewProjection_.Initialize();
@@ -91,6 +100,7 @@ void GameScene::Initialize() {
 	playerModels_.push_back(Model::Create("Resources/AL4/float_L_arm/", "float_L_arm.obj", dxCommon_));
 	playerModels_.push_back(Model::Create("Resources/AL4/float_R_arm/", "float_R_arm.obj", dxCommon_));
 	playerModels_.push_back(Model::Create("Resources/AL4/player_Weapon/", "player_Weapon.obj", dxCommon_));
+	playerModels_.push_back(Model::Create("Resources/TD2_November/exprode/", "sphere.obj", dxCommon_));
 
 	for (size_t i = 0; i < playerModels_.size(); i++) {
 		playerMaterials_.push_back(Material::Create());
@@ -104,7 +114,7 @@ void GameScene::Initialize() {
 	followCamera_->SetTarget(player_->GetWorldTransformAddress());
 
 	collisionManager_ = std::make_unique<CollisionManager>();
-	collisionManager_->Initialize(player_.get(), floorManager_.get(), boxManager_.get());
+	collisionManager_->Initialize(player_.get(), floorManager_.get(), boxManager_.get(), breakBoxManager_.get());
 
 	colliderDebugDraw_->AddCollider(&player_->GetCollider());
 	colliderDebugDraw_->AddCollider(&player_->GetExplosionCollider());
@@ -130,10 +140,15 @@ void GameScene::Update() {
 
 	floorManager_->Update();
 	boxManager_->Update();
-
-	player_->Update();
+	breakBoxManager_->Update();
+	
 
 	collisionManager_->AllCollision();
+
+	// デバッグ描画
+	colliderDebugDraw_->Update();
+
+	player_->Update();
 
 	followCamera_->Update();
 
@@ -144,8 +159,7 @@ void GameScene::Update() {
 	// デバッグカメラ
 	DebugCameraUpdate();
 
-	// デバッグ描画
-	colliderDebugDraw_->Update();
+	
 
 	
 
@@ -176,6 +190,7 @@ void GameScene::Draw() {
 	directionalLight->Draw(dxCommon_->GetCommadList());
 	/*3Dオブジェクトはここ*/
 	boxManager_->Draw(viewProjection_);
+	breakBoxManager_->Draw(viewProjection_);
 	floorManager_->Draw(viewProjection_);
 	
 	player_->Draw(viewProjection_);
@@ -250,6 +265,27 @@ void GameScene::ImguiDraw() {
 		}
 		if (ImGui::BeginMenu("ボックス一覧")){
 			boxManager_->DrawImgui();
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("壊れるボックス生成")) {
+			ImGui::DragFloat3("箱の座標", &breakBoxTransform_.translate.x, 0.1f);
+			ImGui::DragFloat3("箱の回転", &breakBoxTransform_.rotate.x, 0.01f);
+			ImGui::DragFloat3("箱の大きさ", &breakBoxTransform_.scale.x, 0.01f);
+			ImGui::Checkbox("動く箱にする", &isBreakBoxMove_);
+			if (isBreakBoxMove_) {
+				ImGui::Checkbox("縦移動にする", &isBreakBoxVertical_);
+			}
+			else {
+				isVertical_ = false;
+			}
+			if (ImGui::Button("壊れる箱の追加")) {
+				breakBoxManager_->AddBox(breakBoxTransform_, isBreakBoxMove_, isBreakBoxVertical_);
+			}
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("壊れる箱一覧")) {
+			breakBoxManager_->DrawImgui();
 			ImGui::EndMenu();
 		}
 

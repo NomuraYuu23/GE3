@@ -57,6 +57,11 @@ public:
 	void AddCollider(AABB* aabb);
 	void AddCollider(OBB* obb);
 
+	/// <summary>
+	/// コライダー削除
+	/// </summary>
+	void DeleteCollider(AABB* aabb);
+
 private: // メンバ関数
 
 	void ImGuiDraw();

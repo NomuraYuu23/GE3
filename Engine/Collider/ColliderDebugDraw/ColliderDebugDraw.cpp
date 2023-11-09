@@ -108,6 +108,16 @@ void ColliderDebugDraw::AddCollider(OBB* obb)
 
 }
 
+void ColliderDebugDraw::DeleteCollider(AABB* aabb){
+	auto it = std::find(aabbs_.begin(), aabbs_.end(), aabb);
+
+	if (it != aabbs_.end()) {
+		aabbs_.erase(it);
+
+	}
+
+}
+
 void ColliderDebugDraw::ImGuiDraw()
 {
 #ifdef _DEBUG

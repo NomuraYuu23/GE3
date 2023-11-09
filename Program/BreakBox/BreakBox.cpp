@@ -1,8 +1,8 @@
-#include "Box.h"
+#include "BreakBox.h"
 #include <cmath>
 #include"../../externals/imgui/imgui.h"
 
-void Box::Initialize(Model* model, Material* material, TransformStructure transform_, bool isMoving, bool isVertical){
+void BreakBox::Initialize(Model* model, Material* material, TransformStructure transform_, bool isMoving, bool isVertical){
 	// nullポインタチェック
 	assert(model);
 
@@ -32,13 +32,15 @@ void Box::Initialize(Model* model, Material* material, TransformStructure transf
 
 	moveTimer_ = 0.0f;
 
+	isBreak_ = false;
+
 	Vector3 colliderMax_ = { position_.x + size_.x, position_.y + size_.y, position_.z + size_.z };
 	Vector3 colliderMin_ = { position_.x - size_.x, position_.y - size_.y, position_.z - size_.z };
 
 	collider_.Initialize(colliderMin_, colliderMax_);
 }
 
-void Box::Update(){
+void BreakBox::Update(){
 	if (isMoving_) {
 		if (isVertical_) {
 			verticalMove();
@@ -46,7 +48,7 @@ void Box::Update(){
 		else {
 			Move();
 		}
-		
+
 	}
 	Vector3 WorldPosition = { drawWorldTransform_.worldMatrix_.m[3][0] , drawWorldTransform_.worldMatrix_.m[3][1] , drawWorldTransform_.worldMatrix_.m[3][2] };
 	size_ = { drawWorldTransform_.transform_.scale.x + 0.1f,drawWorldTransform_.transform_.scale.y + 0.1f,drawWorldTransform_.transform_.scale.z + 0.1f, };
@@ -58,12 +60,11 @@ void Box::Update(){
 	collider_.worldTransformUpdate();
 }
 
-void Box::Draw(const ViewProjection& viewProjection){
-	
+void BreakBox::Draw(const ViewProjection& viewProjection){
 	model_->Draw(drawWorldTransform_, viewProjection);
 }
 
-void Box::Move(){
+void BreakBox::Move(){
 	Matrix4x4Calc* m4Calc = Matrix4x4Calc::GetInstance();
 	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
 
@@ -88,7 +89,7 @@ void Box::Move(){
 	drawWorldTransform_.transform_.translate = v3Calc->Add(position_, v3Calc->Multiply(sinf(moveTimer_), position));
 }
 
-void Box::verticalMove(){
+void BreakBox::verticalMove(){
 	Matrix4x4Calc* m4Calc = Matrix4x4Calc::GetInstance();
 	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
 
@@ -113,10 +114,8 @@ void Box::verticalMove(){
 	drawWorldTransform_.transform_.translate = v3Calc->Add(position_, v3Calc->Multiply(cosf(moveTimer_), position));
 }
 
-void Box::DrawImgui(){
-	
+void BreakBox::DrawImgui(){
 	ImGui::DragFloat3("箱の座標", &drawWorldTransform_.transform_.translate.x, 0.1f);
 	ImGui::DragFloat3("箱の回転", &drawWorldTransform_.transform_.rotate.x, 0.1f);
 	ImGui::DragFloat3("箱の大きさ", &drawWorldTransform_.transform_.scale.x, 0.1f);
-	
 }

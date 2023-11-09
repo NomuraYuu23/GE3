@@ -38,6 +38,9 @@ void Player::Initialize(const std::vector<Model*>& models,
 	worldTransformWeapon_.transform_.translate.y += 3.0f;
 	worldTransformWeapon_.parent_ = &worldTransform_;
 
+	
+
+
 	////浮遊ギミック
 	//InitializeFloatinggimmick();
 
@@ -51,7 +54,11 @@ void Player::Initialize(const std::vector<Model*>& models,
 	collider_.Initialize(worldTransform_.transform_.translate, workRoot_.kColliderSize);
 	explosionCollider_.Initialize(Vector3(0.0f, 0.0f, 0.0f), 0.0f);
 
-	explosionSpeed_ = 1.0f;
+	worldTransformExprode_.Initialize();
+	worldTransformExprode_.transform_.translate = explosionCollider_.center_;
+	worldTransformExprode_.transform_.scale = { explosionCollider_.radius_,explosionCollider_.radius_ ,explosionCollider_.radius_ };
+
+	explosionSpeed_ = 0.5f;
 
 	isExplosion_ = false;
 	//// 攻撃
@@ -117,6 +124,8 @@ void Player::Update()
 	collider_.center_ = { worldTransform_.worldMatrix_.m[3][0], worldTransform_.worldMatrix_.m[3][1]+collider_.radius_, worldTransform_.worldMatrix_.m[3][2] };
 	collider_.worldTransformUpdate();
 	explosionCollider_.worldTransformUpdate();
+	worldTransformExprode_.transform_.translate = explosionCollider_.center_;
+	worldTransformExprode_.UpdateMatrix();
 
 }
 
@@ -129,7 +138,7 @@ void Player::Draw(const ViewProjection& viewProjection)
 	models_[int(ModelIndex::kModelIndexL_arm)]->Draw(worldTransformL_arm_, viewProjection);
 	models_[int(ModelIndex::kModelIndexR_arm)]->Draw(worldTransformR_arm_, viewProjection);
 	models_[int(ModelIndex::kModelIndexWeapon)]->Draw(worldTransformWeapon_, viewProjection);
-
+	models_[int(ModelIndex::kModelIndexExprode)]->Draw(worldTransformExprode_, viewProjection);
 
 }
 
@@ -426,6 +435,7 @@ void Player::Jump()
 void Player::Explosion(){
 	isExplosion_ = true;
 	explosionCollider_.center_ = { worldTransform_.worldMatrix_.m[3][0], worldTransform_.worldMatrix_.m[3][1], worldTransform_.worldMatrix_.m[3][2] };
+	worldTransformExprode_.transform_.translate = explosionCollider_.center_;
 }
 
 void Player::ExplosionMove(){
@@ -441,11 +451,12 @@ void Player::ExplosionMove(){
 	//爆破関係
 	if (isExplosion_){
 		explosionCollider_.radius_ += explosionSpeed_;
+		//worldTransformExprode_.transform_.rotate.y += 0.15f;
 	}
 	else {
 		explosionCollider_.radius_ = 0.0f;
 	}
-	
+	worldTransformExprode_.transform_.scale = { explosionCollider_.radius_,explosionCollider_.radius_ ,explosionCollider_.radius_ };
 }
 
 void Player::Fall()
@@ -579,6 +590,7 @@ void Player::allUpdateMatrix(){
 	worldTransformL_arm_.UpdateMatrix();
 	worldTransformR_arm_.UpdateMatrix();
 	worldTransformWeapon_.UpdateMatrix();
+	worldTransformExprode_.UpdateMatrix();
 }
 
 void Player::DrawImgui(){

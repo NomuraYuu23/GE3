@@ -51,7 +51,7 @@
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/source-charset:utf-8 %(AdditionalOptions)</AdditionalOptions>
       <TreatWarningAsError>true</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -75,7 +75,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/source-charset:utf-8 %(AdditionalOptions)</AdditionalOptions>
       <TreatWarningAsError>true</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -92,6 +92,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="Engine\2D\ImGuiManager.cpp" />
     <ClCompile Include="Engine\Audio\Audio.cpp" />
     <ClCompile Include="Engine\base\BufferResource.cpp" />
@@ -123,6 +124,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Collider\Triangle\Triangle.cpp" />
     <ClCompile Include="Program\BoxManager\BoxManager.cpp" />
     <ClCompile Include="Program\Box\Box.cpp" />
+    <ClCompile Include="Program\BreakBoxManager\BreakBoxManager.cpp" />
+    <ClCompile Include="Program\BreakBox\BreakBox.cpp" />
     <ClCompile Include="Program\CollisionManager\Collision.cpp" />
     <ClCompile Include="Program\CollisionManager\CollisionManager.cpp" />
     <ClCompile Include="Program\Enemy\Enemy.cpp" />
@@ -132,6 +135,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Program\Goal\Goal.cpp" />
     <ClCompile Include="Engine\Collider\Plane\Plane.cpp" />
     <ClCompile Include="Program\Player\Player.cpp" />
+    <ClCompile Include="Program\RecoveryItemManager\RecoveryItemManager.cpp" />
+    <ClCompile Include="Program\RecoveryItem\RecoveryItem.cpp" />
     <ClCompile Include="Program\Skydome\Skydome.cpp" />
     <ClCompile Include="Engine\Collider\Sphere\Sphere.cpp" />
     <ClCompile Include="Engine\2D\Sprite.cpp" />
@@ -142,6 +147,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3D\WorldTransform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="Engine\2D\ImGuiManager.h" />
     <ClInclude Include="Engine\Audio\Audio.h" />
     <ClInclude Include="Engine\base\BufferResource.h" />
@@ -175,6 +181,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Collider\Triangle\Triangle.h" />
     <ClInclude Include="Program\BoxManager\BoxManager.h" />
     <ClInclude Include="Program\Box\Box.h" />
+    <ClInclude Include="Program\BreakBoxManager\BreakBoxManager.h" />
+    <ClInclude Include="Program\BreakBox\BreakBox.h" />
     <ClInclude Include="Program\CollisionManager\Collision.h" />
     <ClInclude Include="Program\CollisionManager\CollisionManager.h" />
     <ClInclude Include="Program\Enemy\Enemy.h" />
@@ -184,6 +192,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Program\Goal\Goal.h" />
     <ClInclude Include="Engine\Collider\Plane\Plane.h" />
     <ClInclude Include="Program\Player\Player.h" />
+    <ClInclude Include="Program\RecoveryItemManager\RecoveryItemManager.h" />
+    <ClInclude Include="Program\RecoveryItem\RecoveryItem.h" />
     <ClInclude Include="Program\Skydome\Skydome.h" />
     <ClInclude Include="Engine\Collider\Sphere\Sphere.h" />
     <ClInclude Include="Engine\base\SafeDelete.h" />
