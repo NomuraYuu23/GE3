@@ -124,8 +124,6 @@ void GameScene::Update() {
 	// デバッグ描画
 	colliderDebugDraw_->Update();
 
-	pause_->Update();
-
 }
 
 /// <summary>
@@ -171,7 +169,6 @@ void GameScene::Draw() {
 
 	//背景
 	//前景スプライト描画
-	pause_->Draw();
 
 
 	// 前景スプライト描画後処理
