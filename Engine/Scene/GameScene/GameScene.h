@@ -11,6 +11,16 @@ class GameScene : public IScene
 {
 
 public:
+	
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	GameScene();
+
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	~GameScene();
 
 	/// <summary>
 	/// 初期化
@@ -44,5 +54,30 @@ private:
 	std::unique_ptr<Model> colliderSphereModel_ = nullptr;
 	std::unique_ptr<Model> colliderBoxModel_ = nullptr;
 	std::unique_ptr<Material> colliderMaterial_ = nullptr;
+
+
+	//コリジョンマネージャー
+	std::unique_ptr<CollisionManager> collisionManager_;
+
+	//床全体
+	std::unique_ptr<FloorManager> floorManager_;
+
+	std::unique_ptr<Model> floorModel_;
+	std::unique_ptr<Material> floorMaterial_;
+
+	bool isFloorMove_ = false;
+
+	bool isVertical_ = false;
+	//床の生成のトランスフォームとか
+	TransformStructure floorTransform_{};
+
+	//フォローカメラ
+	std::unique_ptr<FollowCamera> followCamera_ = nullptr;
+
+	//自機
+	std::unique_ptr<Player> player_;
+	//自機のモデルとか
+	std::vector<Model*> playerModels_;
+	std::vector<Material*> playerMaterials_;
 
 };
