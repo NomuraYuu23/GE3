@@ -6,6 +6,7 @@
 #include"../../../Program/Player/Player.h"
 #include"../../../Program/CollisionManager/CollisionManager.h"
 #include"../../../Engine/Camera/FollowCamera/FollowCamera.h"
+#include "../../Pause/Pause.h"
 
 class GameScene : public IScene
 {
@@ -44,5 +45,10 @@ private:
 	std::unique_ptr<Model> colliderSphereModel_ = nullptr;
 	std::unique_ptr<Model> colliderBoxModel_ = nullptr;
 	std::unique_ptr<Material> colliderMaterial_ = nullptr;
+
+	// ポーズ
+	// テクスチャハンドル
+	std::array<uint32_t, Pause::kCountOfPauseTextureNo> pauseTextureHandles_;
+	std::unique_ptr<Pause> pause_ = nullptr;
 
 };
