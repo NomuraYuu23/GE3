@@ -147,8 +147,6 @@ public: // アクセッサ(ワールドトランスフォーム)
 
 	void SetAnchorPoint(const Vector2& anchorPoint);
 
-	Vector2 GetAnchorPoint() { return anchorPoint_; }
-
 	void SetIsFlipX(bool isFlipX);
 
 	void SetIsFlipY(bool isFlipY);
