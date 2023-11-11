@@ -18,7 +18,11 @@ void GameScene::Initialize() {
 	colliderDebugDraw_->Initialize(colliderModels, colliderMaterial_.get());
 
 	// ポーズ
-	pauseTextureHandles_ = { TextureManager::Load("Resources/TD2_November/pause/pausing.png", dxCommon_) };
+	pauseTextureHandles_ = { 
+		TextureManager::Load("Resources/TD2_November/pause/pausing.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/pause/goToTitle.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/pause/returnToGame.png", dxCommon_),
+	};
 	pause_ = std::make_unique<Pause>();
 	pause_->Initialize(pauseTextureHandles_);
 
@@ -48,7 +52,11 @@ void GameScene::Update(){
 	// デバッグ描画
 	colliderDebugDraw_->Update();
 
+	// ポーズ機能
 	pause_->Update();
+
+	// タイトルへ行く
+	GoToTheTitle();
 
 }
 
@@ -131,5 +139,14 @@ void GameScene::DebugCameraUpdate()
 		viewProjection_.UpdateMatrix();
 	}
 #endif
+
+}
+
+void GameScene::GoToTheTitle()
+{
+
+	if (pause_->GoToTheTitle()) {
+		sceneNo = kTitle;
+	}
 
 }

@@ -36,7 +36,15 @@ public:
 
 public: //メンバ関数
 
+	/// <summary>
+	/// デバッグカメラ更新
+	/// </summary>
 	void DebugCameraUpdate();
+
+	/// <summary>
+	/// タイトルへ行く
+	/// </summary>
+	void GoToTheTitle();
 
 private:
 
@@ -48,7 +56,7 @@ private:
 
 	// ポーズ
 	// テクスチャハンドル
-	std::array<uint32_t, Pause::kCountOfPauseTextureNo> pauseTextureHandles_;
+	std::array<uint32_t, Pause::PauseTextureNo::kCountOfPauseTextureNo> pauseTextureHandles_;
 	std::unique_ptr<Pause> pause_ = nullptr;
 
 };
