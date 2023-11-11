@@ -56,6 +56,14 @@ void GameScene::Initialize() {
 	floorManager_->SetColliderDebugDraw(colliderDebugDraw_.get());
 	floorManager_->AddFloor({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, false, false);
 
+	// ポーズ
+	pauseTextureHandles_ = { 
+		TextureManager::Load("Resources/TD2_November/pause/pausing.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/pause/goToTitle.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/pause/returnToGame.png", dxCommon_),
+	};
+	pause_ = std::make_unique<Pause>();
+	pause_->Initialize(pauseTextureHandles_);
 
 	viewProjection_.transform_.translate = { 0.0f,23.0f,-35.0f };
 	viewProjection_.transform_.rotate = { 0.58f,0.0f,0.0f };
@@ -124,6 +132,12 @@ void GameScene::Update() {
 	// デバッグ描画
 	colliderDebugDraw_->Update();
 
+	// ポーズ機能
+	pause_->Update();
+
+	// タイトルへ行く
+	GoToTheTitle();
+
 }
 
 /// <summary>
@@ -169,7 +183,7 @@ void GameScene::Draw() {
 
 	//背景
 	//前景スプライト描画
-
+	pause_->Draw();
 
 	// 前景スプライト描画後処理
 	Sprite::PostDraw();
@@ -230,5 +244,14 @@ void GameScene::DebugCameraUpdate()
 		viewProjection_.UpdateMatrix();
 	}
 #endif
+
+}
+
+void GameScene::GoToTheTitle()
+{
+
+	if (pause_->GoToTheTitle()) {
+		sceneNo = kTitle;
+	}
 
 }
