@@ -29,7 +29,7 @@ void SceneManager::Update()
 
 	// シーン変更チェック
 	if (prevSceneNo_ != currentSceneNo_) {
-		TextureManager::GetInstance()->ResetAll();
+		TextureManager::GetInstance()->ResetTexture();
 		scene_.reset(sceneFacyory_->CreateScene(currentSceneNo_));
 		scene_->Initialize();
 	}
