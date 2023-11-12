@@ -2,7 +2,7 @@
 #include "Collision.h"
 
 void CollisionManager::Initialize(Player* player, FloorManager* floorManager, 
-	BoxManager* boxManager, BreakBoxManager* breakBoxManager/*, Goal* goal, Enemy* enemy*/)
+	BoxManager* boxManager, BreakBoxManager* breakBoxManager, RecoveryItemManager* recoveryItemManager/*, Goal* goal, Enemy* enemy*/)
 {
 
 	v3Calc = Vector3Calc::GetInstance();
@@ -15,6 +15,8 @@ void CollisionManager::Initialize(Player* player, FloorManager* floorManager,
 	boxManager_ = boxManager;
 
 	breakBoxManager_ = breakBoxManager;
+
+	recoveryItemManager_ = recoveryItemManager;
 
 	/*goal_ = goal;
 
@@ -32,7 +34,12 @@ void CollisionManager::AllCollision()
 		if (Collision::IsCollision(floor->GetCollider(), player_->GetCollider())) {
 			player_->OnCollision(floor->GetWorldTransformAdress());
 		}
-		
+
+		for (RecoveryItem* item: recoveryItemManager_->GetItems_()){
+			if (Collision::IsCollision(floor->GetCollider(), item->GetCollider())) {
+				item->OnCollision(floor->GetWorldTransformAdress());
+			}
+		}		
 	}
 
 	for (Box* box_ : boxManager_->GetBoxes_()) {
@@ -41,7 +48,11 @@ void CollisionManager::AllCollision()
 		if (Collision::IsCollision(box_->GetCollider(), player_->GetCollider())) {
 			player_->OnCollisionBox(box_->GetWorldTransformAdress(), box_->GetSize().y);
 		}
-
+		for (RecoveryItem* item : recoveryItemManager_->GetItems_()) {
+			if (Collision::IsCollision(box_->GetCollider(), item->GetCollider())) {
+				item->OnCollisionBox(box_->GetWorldTransformAdress(),box_->GetSize().y);
+			}
+		}
 	}
 
 	for (BreakBox* breakBox_ : breakBoxManager_->GetBoxes_()) {
@@ -53,8 +64,19 @@ void CollisionManager::AllCollision()
 		if (Collision::IsCollision(breakBox_->GetCollider(), player_->GetExplosionCollider())) {
 			breakBox_->SetIsBreak(true);
 		}
+
+		for (RecoveryItem* item : recoveryItemManager_->GetItems_()) {
+			if (Collision::IsCollision(breakBox_->GetCollider(), item->GetCollider())) {
+				item->OnCollisionBox(breakBox_->GetWorldTransformAdress(), breakBox_->GetSize().y);
+			}
+		}
 	}
 	
+	for (RecoveryItem* item : recoveryItemManager_->GetItems_()) {
+		if (Collision::IsCollision(item->GetCollider(), player_->GetCollider())) {
+			item->OnCollisionPlayer();
+		}
+	}
 
 	/*if (Collision::IsCollision(goal_->GetCollider(), player_->GetCollider()) || 
 		(Collision::IsCollision(enemy_->GetCollider(), player_->GetCollider()) &&

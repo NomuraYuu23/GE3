@@ -7,6 +7,7 @@
 #include"../BreakBoxManager/BreakBoxManager.h"
 #include "../Goal/Goal.h"
 #include "../Enemy/Enemy.h"
+#include"../RecoveryItemManager/RecoveryItemManager.h"
 
 class CollisionManager
 {
@@ -17,7 +18,7 @@ public: // メンバ関数
 	/// 初期化
 	/// </summary>
 	void Initialize(Player* player, FloorManager* floorManager,
-		BoxManager* boxManager, BreakBoxManager* breakBoxManager/*, Goal* goal, Enemy* enemy*/);
+		BoxManager* boxManager, BreakBoxManager* breakBoxManager, RecoveryItemManager* recoveryItemManager/*, Goal* goal, Enemy* enemy*/);
 
 	/// <summary>
 	/// 衝突
@@ -37,6 +38,7 @@ private: // メンバ変数
 	FloorManager* floorManager_ = nullptr;
 	BoxManager* boxManager_ = nullptr;
 	BreakBoxManager* breakBoxManager_ = nullptr;
+	RecoveryItemManager* recoveryItemManager_ = nullptr;
 	/*Goal* goal_ = nullptr;
 	Enemy* enemy_ = nullptr;*/
 

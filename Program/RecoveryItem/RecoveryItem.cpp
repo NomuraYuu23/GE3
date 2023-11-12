@@ -32,17 +32,30 @@ void RecoveryItem::Initialize(Model* model, Material* material, TransformStructu
 	Vector3 colliderMin_ = { position_.x - size_.x, position_.y - size_.y, position_.z - size_.z };
 
 	collider_.Initialize(colliderMin_, colliderMax_);
+
+	isDelete_ = false;
 }
 
 void RecoveryItem::Update(){
+
+	if (worldTransform_.worldMatrix_.m[3][1] <= -50.0f) {
+		isDelete_ = true;
+	}
+
+	Fall();
+	Landing();
+	worldTransform_.transform_.translate.y += velocity_.y;
+	drawWorldTransform_.transform_.translate.y += velocity_.y;
+
 	Vector3 WorldPosition = { drawWorldTransform_.worldMatrix_.m[3][0] , drawWorldTransform_.worldMatrix_.m[3][1] , drawWorldTransform_.worldMatrix_.m[3][2] };
 	size_ = { drawWorldTransform_.transform_.scale.x + 0.1f,drawWorldTransform_.transform_.scale.y + 0.1f,drawWorldTransform_.transform_.scale.z + 0.1f, };
 	collider_.max_ = { WorldPosition.x + size_.x, WorldPosition.y + size_.y, WorldPosition.z + size_.z };
 	collider_.min_ = { WorldPosition.x - size_.x, WorldPosition.y - size_.y, WorldPosition.z - size_.z };
 
+	collider_.worldTransformUpdate();
 	worldTransform_.UpdateMatrix();
 	drawWorldTransform_.UpdateMatrix();
-	collider_.worldTransformUpdate();
+	
 }
 
 void RecoveryItem::Draw(const ViewProjection& viewProjection){
@@ -50,9 +63,9 @@ void RecoveryItem::Draw(const ViewProjection& viewProjection){
 }
 
 void RecoveryItem::DrawImgui(){
-	ImGui::DragFloat3("箱の座標", &drawWorldTransform_.transform_.translate.x, 0.1f);
-	ImGui::DragFloat3("箱の回転", &drawWorldTransform_.transform_.rotate.x, 0.1f);
-	ImGui::DragFloat3("箱の大きさ", &drawWorldTransform_.transform_.scale.x, 0.1f);
+	ImGui::DragFloat3("アイテムの座標", &drawWorldTransform_.transform_.translate.x, 0.1f);
+	ImGui::DragFloat3("アイテムの回転", &drawWorldTransform_.transform_.rotate.x, 0.1f);
+	ImGui::DragFloat3("アイテムの大きさ", &drawWorldTransform_.transform_.scale.x, 0.1f);
 }
 
 void RecoveryItem::Fall(){
@@ -117,7 +130,8 @@ void RecoveryItem::OnCollision(WorldTransform* worldTransform){
 			(worldTransform_.parent_ != worldTransform)) {
 			GotParent(worldTransform);
 		}
-		worldTransform_.transform_.translate.y = 0;
+		worldTransform_.transform_.translate.y = size_.y;
+		drawWorldTransform_.transform_.translate.y = size_.y;
 		worldTransform_.UpdateMatrix();
 		drawWorldTransform_.UpdateMatrix();
 
@@ -131,10 +145,15 @@ void RecoveryItem::OnCollisionBox(WorldTransform* worldTransform, float boxSize)
 			(worldTransform_.parent_ != worldTransform)) {
 			GotParent(worldTransform);
 		}
-		worldTransform_.transform_.translate.y = boxSize;
+		worldTransform_.transform_.translate.y = boxSize+ size_.y;
+		drawWorldTransform_.transform_.translate.y = boxSize + size_.y;
 		worldTransform_.UpdateMatrix();
 		drawWorldTransform_.UpdateMatrix();
 
 		isLanding = true;
 	}
+}
+
+void RecoveryItem::OnCollisionPlayer(){
+	isDelete_ = true;
 }

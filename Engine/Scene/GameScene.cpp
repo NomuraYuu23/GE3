@@ -76,6 +76,15 @@ void GameScene::Initialize() {
 
 	breakBoxManager_->SetColliderDebugDraw(colliderDebugDraw_.get());
 
+	//回復アイテム生成
+	recoveryItemManager_ = std::make_unique<RecoveryItemManager>();
+	recoveryItemMaterial_.reset(Material::Create());
+	recoveryItemModel_.reset(Model::Create("Resources/TD2_November/recoveryItem/", "Bullet.obj", dxCommon_));
+
+	recoveryItemManager_->Initialize(recoveryItemModel_.get(), recoveryItemMaterial_.get());
+
+	recoveryItemManager_->SetColliderDebugDraw(colliderDebugDraw_.get());
+
 	//ビュープロジェクション
 	viewProjection_.Initialize();
 
@@ -114,7 +123,7 @@ void GameScene::Initialize() {
 	followCamera_->SetTarget(player_->GetWorldTransformAddress());
 
 	collisionManager_ = std::make_unique<CollisionManager>();
-	collisionManager_->Initialize(player_.get(), floorManager_.get(), boxManager_.get(), breakBoxManager_.get());
+	collisionManager_->Initialize(player_.get(), floorManager_.get(), boxManager_.get(), breakBoxManager_.get(),recoveryItemManager_.get());
 
 	colliderDebugDraw_->AddCollider(&player_->GetCollider());
 	colliderDebugDraw_->AddCollider(&player_->GetExplosionCollider());
@@ -149,6 +158,8 @@ void GameScene::Update() {
 	colliderDebugDraw_->Update();
 
 	player_->Update();
+
+	recoveryItemManager_->Update();
 
 	followCamera_->Update();
 
@@ -193,6 +204,7 @@ void GameScene::Draw() {
 	breakBoxManager_->Draw(viewProjection_);
 	floorManager_->Draw(viewProjection_);
 	
+	recoveryItemManager_->Draw(viewProjection_);
 	player_->Draw(viewProjection_);
 
 #ifdef _DEBUG
@@ -286,6 +298,21 @@ void GameScene::ImguiDraw() {
 		}
 		if (ImGui::BeginMenu("壊れる箱一覧")) {
 			breakBoxManager_->DrawImgui();
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("アイテム生成")) {
+			ImGui::DragFloat3("箱の座標", &recoveryItemTransform_.translate.x, 0.1f);
+			ImGui::DragFloat3("箱の回転", &recoveryItemTransform_.rotate.x, 0.01f);
+			ImGui::DragFloat3("箱の大きさ", &recoveryItemTransform_.scale.x, 0.01f);
+			
+			if (ImGui::Button("アイテムの追加")) {
+				recoveryItemManager_->AddItem(recoveryItemTransform_, isBreakBoxMove_, isBreakBoxVertical_);
+			}
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("アイテム一覧")) {
+			recoveryItemManager_->DrawImgui();
 			ImGui::EndMenu();
 		}
 

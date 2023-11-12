@@ -56,6 +56,11 @@ public: //メンバ関数
 	/// </summary>
 	void OnCollisionBox(WorldTransform* worldTransform, float boxSize);
 
+	/// <summary>
+	/// プレイヤーとの衝突
+	/// </summary>
+	void OnCollisionPlayer();
+
 public: // アクセッサ
 
 	WorldTransform GetWorldTransform() { return worldTransform_; }
@@ -68,7 +73,7 @@ public: // アクセッサ
 
 	AABB& GetCollider() { return collider_; }
 
-
+	bool GetIsDelete() { return isDelete_; }
 
 private:
 
@@ -94,11 +99,8 @@ private:
 	// 動くか
 	bool isMoving_;
 
-	//縦移動にするか
-	bool isVertical_;
-
-	//壊れるか
-	bool isBreak_;
+	//アイテムを削除するか
+	bool isDelete_;
 
 	// 移動用タイマー
 	float moveTimer_;

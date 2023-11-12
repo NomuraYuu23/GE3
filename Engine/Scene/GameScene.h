@@ -16,6 +16,7 @@
 #include"../../Program/BreakBoxManager/BreakBoxManager.h"
 #include"../../Program/Player/Player.h"
 #include"../../Program/CollisionManager/CollisionManager.h"
+#include"../../Program/RecoveryItemManager/RecoveryItemManager.h"
 #include"../../Engine/Camera/FollowCamera/FollowCamera.h"
 
 class GameScene
@@ -88,12 +89,19 @@ private:
 	std::unique_ptr<Material> breakBoxMaterial_;
 	bool isBreakBoxMove_ = false;
 	bool isBreakBoxVertical_ = false;
+
+	std::unique_ptr<RecoveryItemManager> recoveryItemManager_;
+	std::unique_ptr<Model> recoveryItemModel_;
+	std::unique_ptr<Material> recoveryItemMaterial_;
 	
-	//床の生成のトランスフォームとか
+	//床の生成のトランスフォーム
 	TransformStructure floorTransform_{};
 
-	//壊れるボックスの生成のトランスフォームとか
+	//壊れるボックスの生成のトランスフォーム
 	TransformStructure breakBoxTransform_{};
+
+	//回復アイテムの生成トランスフォーム
+	TransformStructure recoveryItemTransform_{};
 
 	//ビュープロジェクション
 	ViewProjection viewProjection_;

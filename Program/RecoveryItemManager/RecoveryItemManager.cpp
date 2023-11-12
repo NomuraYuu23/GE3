@@ -1,4 +1,5 @@
 #include"RecoveryItemManager.h"
+#include"../../Engine/2D/ImguiManager.h"
 
 RecoveryItemManager::~RecoveryItemManager(){
 	//解放
@@ -17,36 +18,51 @@ void RecoveryItemManager::Initialize(Model* model, Material* material){
 }
 
 void RecoveryItemManager::Update(){
-	////ブレイクフラグの立ったブロックのコライダー描画を削除
-	//for (RecoveryItem* breakBox : breakBoxes_) {
-	//	if (breakBox->GetIsBreak()) {
-	//		colliderDebugDraw_->DeleteCollider(&breakBox->GetCollider());
-	//	}
-	//}
-	////ブレイクフラグの立ったブロックを削除
-	//breakBoxes_.remove_if([](RecoveryItem* breakBox) {
-	//	if (breakBox->GetIsBreak()) {
-	//		delete breakBox;
+	//ブレイクフラグの立ったブロックのコライダー描画を削除
+	for (RecoveryItem* item : recoveryItems_) {
+		if (item->GetIsDelete()) {
+			colliderDebugDraw_->DeleteCollider(&item->GetCollider());
+		}
+	}
+	//ブレイクフラグの立ったブロックを削除
+	recoveryItems_.remove_if([](RecoveryItem* item) {
+		if (item->GetIsDelete()) {
+			delete item;
 
-	//		return true;
-	//	}
-	//	return false;
+			return true;
+		}
+		return false;
 
-	//	});
+		});
 
-	//for (BreakBox* box_ : breakBoxes_) {
-	//	box_->Update();
-	//}
+	for (RecoveryItem* item : recoveryItems_) {
+		item->Update();
+	}
 }
 
 void RecoveryItemManager::Draw(const ViewProjection& viewProjection){
-
+	for (RecoveryItem* item : recoveryItems_) {
+		item->Draw(viewProjection);
+	}
 }
 
 void RecoveryItemManager::DrawImgui(){
+	int i = 0;
 
+	for (RecoveryItem* item : recoveryItems_) {
+		if (ImGui::TreeNode((std::to_string(i + 1) + "個目の回復アイテム").c_str())) {
+			item->DrawImgui();
+			i++;
+			ImGui::TreePop();
+		}
+	}
 }
 
 void RecoveryItemManager::AddItem(TransformStructure Item, bool isMoving, bool isVertical){
+	RecoveryItem* item_ = new RecoveryItem();
+	item_->Initialize(model_, material_, Item);
 
+	recoveryItems_.push_back(item_);
+
+	colliderDebugDraw_->AddCollider(&item_->GetCollider());
 }
