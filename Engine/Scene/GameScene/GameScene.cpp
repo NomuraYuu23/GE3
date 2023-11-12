@@ -36,55 +36,33 @@ GameScene::~GameScene() {
 /// </summary>
 void GameScene::Initialize() {
 
+
+	ModelCreate();
+	MaterialCreate();
+	TextureLoad();
+
 	// デバッグ描画
 	colliderDebugDraw_ = std::make_unique<ColliderDebugDraw>();
-	colliderSphereModel_.reset(Model::Create("Resources/TD2_November/collider/sphere/", "sphere.obj", dxCommon_));
-	colliderBoxModel_.reset(Model::Create("Resources/TD2_November/collider/box/", "box.obj", dxCommon_));
 	std::vector<Model*> colliderModels = { colliderSphereModel_.get(),colliderBoxModel_.get(),colliderBoxModel_.get() };
-	colliderMaterial_.reset(Material::Create());
 	colliderDebugDraw_->Initialize(colliderModels, colliderMaterial_.get());
 
-
 	floorManager_ = std::make_unique<FloorManager>();
-
-	floorMaterial_.reset(Material::Create());
-
-	floorModel_.reset(Model::Create("Resources/AL4/floor/", "floor.obj", dxCommon_));
-
 	floorManager_->Initialize(floorModel_.get(), floorMaterial_.get());
 
 	floorManager_->SetColliderDebugDraw(colliderDebugDraw_.get());
 	floorManager_->AddFloor({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, false, false);
 
-	// ポーズ
-	pauseTextureHandles_ = { 
-		TextureManager::Load("Resources/TD2_November/pause/pausing.png", dxCommon_),
-		TextureManager::Load("Resources/TD2_November/pause/goToTitle.png", dxCommon_),
-		TextureManager::Load("Resources/TD2_November/pause/returnToGame.png", dxCommon_),
-	};
 	pause_ = std::make_unique<Pause>();
 	pause_->Initialize(pauseTextureHandles_);
 
 	viewProjection_.transform_.translate = { 0.0f,23.0f,-35.0f };
 	viewProjection_.transform_.rotate = { 0.58f,0.0f,0.0f };
-
 	
 	//フォローカメラ
 	followCamera_ = std::make_unique<FollowCamera>();
 	followCamera_->Initialize();
 
 	//プレイヤー関連
-	playerModels_.push_back(Model::Create("Resources/AL4/float_Body/", "float_Body.obj", dxCommon_));
-	playerModels_.push_back(Model::Create("Resources/AL4/float_Head/", "float_Head.obj", dxCommon_));
-	playerModels_.push_back(Model::Create("Resources/AL4/float_L_arm/", "float_L_arm.obj", dxCommon_));
-	playerModels_.push_back(Model::Create("Resources/AL4/float_R_arm/", "float_R_arm.obj", dxCommon_));
-	playerModels_.push_back(Model::Create("Resources/AL4/player_Weapon/", "player_Weapon.obj", dxCommon_));
-
-	for (size_t i = 0; i < playerModels_.size(); i++) {
-		playerMaterials_.push_back(Material::Create());
-	}
-
-
 	player_ = std::make_unique<Player>();
 	player_->Initialize(playerModels_, playerMaterials_);
 	player_->SetViewProjection(followCamera_->GetViewProjectionAddress());
@@ -111,8 +89,6 @@ void GameScene::Update() {
 	directionalLightData.direction = { 0.0f, -1.0f, 0.0f };
 	directionalLightData.intencity = 1.0f;
 	directionalLight_->Update(directionalLightData);
-
-
 
 	floorManager_->Update();
 
@@ -253,5 +229,46 @@ void GameScene::GoToTheTitle()
 	if (pause_->GoToTheTitle()) {
 		sceneNo = kTitle;
 	}
+
+}
+
+void GameScene::ModelCreate()
+{
+
+	colliderSphereModel_.reset(Model::Create("Resources/TD2_November/collider/sphere/", "sphere.obj", dxCommon_));
+	colliderBoxModel_.reset(Model::Create("Resources/TD2_November/collider/box/", "box.obj", dxCommon_));
+
+	floorModel_.reset(Model::Create("Resources/AL4/floor/", "floor.obj", dxCommon_));
+
+	playerModels_.push_back(Model::Create("Resources/AL4/float_Body/", "float_Body.obj", dxCommon_));
+	playerModels_.push_back(Model::Create("Resources/AL4/float_Head/", "float_Head.obj", dxCommon_));
+	playerModels_.push_back(Model::Create("Resources/AL4/float_L_arm/", "float_L_arm.obj", dxCommon_));
+	playerModels_.push_back(Model::Create("Resources/AL4/float_R_arm/", "float_R_arm.obj", dxCommon_));
+	playerModels_.push_back(Model::Create("Resources/AL4/player_Weapon/", "player_Weapon.obj", dxCommon_));
+
+}
+
+void GameScene::MaterialCreate()
+{
+
+	colliderMaterial_.reset(Material::Create());
+
+	floorMaterial_.reset(Material::Create());
+
+	for (size_t i = 0; i < playerModels_.size(); i++) {
+		playerMaterials_.push_back(Material::Create());
+	}
+
+}
+
+void GameScene::TextureLoad()
+{
+
+	// ポーズ
+	pauseTextureHandles_ = {
+		TextureManager::Load("Resources/TD2_November/pause/pausing.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/pause/goToTitle.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/pause/returnToGame.png", dxCommon_),
+	};
 
 }

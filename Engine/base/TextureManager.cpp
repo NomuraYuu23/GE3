@@ -59,10 +59,17 @@ void TextureManager::ResetAll() {
 	result = device_->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(&descriptorHeap_));
 	assert(SUCCEEDED(result));
 
+	ResetTexture();
+
+}
+
+void TextureManager::ResetTexture()
+{
+
 	indexNextDescriptorHeap = 0;
 
 	//全テクスチャを初期化
-	for (size_t i = 0; i < kNumDescriptors; i++){
+	for (size_t i = 0; i < kNumDescriptors; i++) {
 		textures_[i].resource.Reset();
 		textures_[i].cpuDescHandleSRV.ptr = 0;
 		textures_[i].gpuDescHandleSRV.ptr = 0;

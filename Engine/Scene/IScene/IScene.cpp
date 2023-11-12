@@ -42,3 +42,9 @@ void IScene::StaticInitialize()
 IScene::~IScene(){}
 
 int IScene::GetSceneNo(){ return sceneNo; }
+
+void IScene::ModelCreate(){}
+
+void IScene::MaterialCreate(){}
+
+void IScene::TextureLoad(){}

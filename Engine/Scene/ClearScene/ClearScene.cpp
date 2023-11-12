@@ -2,6 +2,11 @@
 
 void ClearScene::Initialize()
 {
+
+	ModelCreate();
+	MaterialCreate();
+	TextureLoad();
+
 }
 
 void ClearScene::Update()
@@ -47,4 +52,16 @@ void ClearScene::Draw()
 
 #pragma endregion
 
+}
+
+void ClearScene::ModelCreate()
+{
+}
+
+void ClearScene::MaterialCreate()
+{
+}
+
+void ClearScene::TextureLoad()
+{
 }

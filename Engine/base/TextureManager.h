@@ -56,6 +56,11 @@ public:
 	void ResetAll();
 
 	/// <summary>
+	/// テクスチャのリセット
+	/// </summary>
+	void ResetTexture();
+
+	/// <summary>
 	/// リソース情報取得
 	/// </summary>
 	/// <param name="textureHandle">テクスチャハンドル</param>
