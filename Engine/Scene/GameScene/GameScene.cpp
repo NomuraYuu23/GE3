@@ -9,20 +9,16 @@
 /// </summary>
 void GameScene::Initialize() {
 
+
+	ModelCreate();
+	MaterialCreate();
+	TextureLoad();
+
 	// デバッグ描画
 	colliderDebugDraw_ = std::make_unique<ColliderDebugDraw>();
-	colliderSphereModel_.reset(Model::Create("Resources/TD2_November/collider/sphere/", "sphere.obj", dxCommon_));
-	colliderBoxModel_.reset(Model::Create("Resources/TD2_November/collider/box/", "box.obj", dxCommon_));
 	std::vector<Model*> colliderModels = { colliderSphereModel_.get(),colliderBoxModel_.get(),colliderBoxModel_.get() };
-	colliderMaterial_.reset(Material::Create());
 	colliderDebugDraw_->Initialize(colliderModels, colliderMaterial_.get());
 
-	// ポーズ
-	pauseTextureHandles_ = { 
-		TextureManager::Load("Resources/TD2_November/pause/pausing.png", dxCommon_),
-		TextureManager::Load("Resources/TD2_November/pause/goToTitle.png", dxCommon_),
-		TextureManager::Load("Resources/TD2_November/pause/returnToGame.png", dxCommon_),
-	};
 	pause_ = std::make_unique<Pause>();
 	pause_->Initialize(pauseTextureHandles_);
 
@@ -148,5 +144,32 @@ void GameScene::GoToTheTitle()
 	if (pause_->GoToTheTitle()) {
 		sceneNo = kTitle;
 	}
+
+}
+
+void GameScene::ModelCreate()
+{
+
+	colliderSphereModel_.reset(Model::Create("Resources/TD2_November/collider/sphere/", "sphere.obj", dxCommon_));
+	colliderBoxModel_.reset(Model::Create("Resources/TD2_November/collider/box/", "box.obj", dxCommon_));
+
+}
+
+void GameScene::MaterialCreate()
+{
+
+	colliderMaterial_.reset(Material::Create());
+
+}
+
+void GameScene::TextureLoad()
+{
+
+	// ポーズ
+	pauseTextureHandles_ = {
+		TextureManager::Load("Resources/TD2_November/pause/pausing.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/pause/goToTitle.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/pause/returnToGame.png", dxCommon_),
+	};
 
 }

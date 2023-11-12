@@ -2,6 +2,11 @@
 
 void TitleScene::Initialize()
 {
+
+	ModelCreate();
+	MaterialCreate();
+	TextureLoad();
+
 }
 
 void TitleScene::Update()
@@ -47,4 +52,16 @@ void TitleScene::Draw()
 
 #pragma endregion
 
+}
+
+void TitleScene::ModelCreate()
+{
+}
+
+void TitleScene::MaterialCreate()
+{
+}
+
+void TitleScene::TextureLoad()
+{
 }

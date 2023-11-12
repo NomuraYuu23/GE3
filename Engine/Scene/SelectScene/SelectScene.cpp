@@ -2,6 +2,11 @@
 
 void SelectScene::Initialize()
 {
+
+	ModelCreate();
+	MaterialCreate();
+	TextureLoad();
+
 }
 
 void SelectScene::Update()
@@ -47,4 +52,16 @@ void SelectScene::Draw()
 
 #pragma endregion
 
+}
+
+void SelectScene::ModelCreate()
+{
+}
+
+void SelectScene::MaterialCreate()
+{
+}
+
+void SelectScene::TextureLoad()
+{
 }

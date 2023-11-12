@@ -74,5 +74,22 @@ public: // メンバ関数
 	// シーン番号のゲッター
 	int GetSceneNo();
 
+protected:  // メンバ関数
+
+	/// <summary>
+	/// モデルクリエイト
+	/// </summary>
+	virtual void ModelCreate();
+
+	/// <summary>
+	/// マテリアルクリエイト
+	/// </summary>
+	virtual void MaterialCreate();
+
+	/// <summary>
+	/// テクスチャロード
+	/// </summary>
+	virtual void TextureLoad();
+
 };
 

@@ -32,7 +32,6 @@ public:
 	/// imgui描画処理
 	/// </summary>
 	void ImguiDraw();
-	
 
 public: //メンバ関数
 
@@ -45,6 +44,23 @@ public: //メンバ関数
 	/// タイトルへ行く
 	/// </summary>
 	void GoToTheTitle();
+
+private: // メンバ関数
+
+	/// <summary>
+	/// モデルクリエイト
+	/// </summary>
+	void ModelCreate() override;
+
+	/// <summary>
+	/// マテリアルクリエイト
+	/// </summary>
+	void MaterialCreate() override;
+
+	/// <summary>
+	/// テクスチャロード
+	/// </summary>
+	void TextureLoad() override;
 
 private:
 

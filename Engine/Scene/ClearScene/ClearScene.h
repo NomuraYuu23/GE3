@@ -20,5 +20,21 @@ public: // メンバ関数
 	/// </summary>
 	virtual void Draw() override;
 
-};
+private: // メンバ関数
 
+	/// <summary>
+	/// モデルクリエイト
+	/// </summary>
+	void ModelCreate() override;
+
+	/// <summary>
+	/// マテリアルクリエイト
+	/// </summary>
+	void MaterialCreate() override;
+
+	/// <summary>
+	/// テクスチャロード
+	/// </summary>
+	void TextureLoad() override;
+
+};

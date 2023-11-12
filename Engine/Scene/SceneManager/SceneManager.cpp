@@ -1,4 +1,5 @@
 #include "SceneManager.h"
+#include "../../base/TextureManager.h"
 
 void SceneManager::Initialize()
 {
@@ -28,6 +29,7 @@ void SceneManager::Update()
 
 	// シーン変更チェック
 	if (prevSceneNo_ != currentSceneNo_) {
+		TextureManager::GetInstance()->ResetAll();
 		scene_.reset(sceneFacyory_->CreateScene(currentSceneNo_));
 		scene_->Initialize();
 	}
