@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "../Sphere/Sphere.h"
 #include "../Plane/Plane.h"
 #include "../Triangle/Triangle.h"
@@ -61,6 +61,7 @@ public:
 	/// コライダー削除
 	/// </summary>
 	void DeleteCollider(AABB* aabb);
+	void DeleteCollider(Sphere* sphere);
 
 private: // メンバ関数
 

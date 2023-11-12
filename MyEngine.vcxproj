@@ -92,7 +92,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="Engine\2D\ImGuiManager.cpp" />
     <ClCompile Include="Engine\Audio\Audio.cpp" />
     <ClCompile Include="Engine\base\BufferResource.cpp" />
@@ -128,6 +127,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Program\BreakBox\BreakBox.cpp" />
     <ClCompile Include="Program\CollisionManager\Collision.cpp" />
     <ClCompile Include="Program\CollisionManager\CollisionManager.cpp" />
+    <ClCompile Include="Program\EnemyManager\EnemyManager.cpp" />
     <ClCompile Include="Program\Enemy\Enemy.cpp" />
     <ClCompile Include="Program\FloorManager\FloorManager.cpp" />
     <ClCompile Include="Program\Floor\Floor.cpp" />
@@ -147,7 +147,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3D\WorldTransform.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="Engine\2D\ImGuiManager.h" />
     <ClInclude Include="Engine\Audio\Audio.h" />
     <ClInclude Include="Engine\base\BufferResource.h" />
@@ -185,6 +184,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Program\BreakBox\BreakBox.h" />
     <ClInclude Include="Program\CollisionManager\Collision.h" />
     <ClInclude Include="Program\CollisionManager\CollisionManager.h" />
+    <ClInclude Include="Program\EnemyManager\EnemyManager.h" />
     <ClInclude Include="Program\Enemy\Enemy.h" />
     <ClInclude Include="Program\FloorManager\FloorManager.h" />
     <ClInclude Include="Program\Floor\Floor.h" />

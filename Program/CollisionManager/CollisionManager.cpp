@@ -2,7 +2,8 @@
 #include "Collision.h"
 
 void CollisionManager::Initialize(Player* player, FloorManager* floorManager, 
-	BoxManager* boxManager, BreakBoxManager* breakBoxManager, RecoveryItemManager* recoveryItemManager/*, Goal* goal, Enemy* enemy*/)
+	BoxManager* boxManager, BreakBoxManager* breakBoxManager, 
+	RecoveryItemManager* recoveryItemManager, EnemyManager* enemyManager/*, Goal* goal, Enemy* enemy*/)
 {
 
 	v3Calc = Vector3Calc::GetInstance();
@@ -17,6 +18,8 @@ void CollisionManager::Initialize(Player* player, FloorManager* floorManager,
 	breakBoxManager_ = breakBoxManager;
 
 	recoveryItemManager_ = recoveryItemManager;
+
+	enemyManager_ = enemyManager;
 
 	/*goal_ = goal;
 
@@ -75,6 +78,12 @@ void CollisionManager::AllCollision()
 	for (RecoveryItem* item : recoveryItemManager_->GetItems_()) {
 		if (Collision::IsCollision(item->GetCollider(), player_->GetCollider())) {
 			item->OnCollisionPlayer();
+		}
+	}
+
+	for (Enemy* enemy:enemyManager_->GetEnemys_()){
+		if (Collision::IsCollision(enemy->GetCollider(),player_->GetCollider())){
+			player_->Restart();
 		}
 	}
 

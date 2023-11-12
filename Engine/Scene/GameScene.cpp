@@ -103,6 +103,23 @@ void GameScene::Initialize() {
 	//光源
 	directionalLight.reset(DirectionalLight::Create());
 
+	//エネミー関連
+	enemyModels_.push_back(Model::Create("Resources/AL4/enemy_Body/", "enemy_Body.obj", dxCommon_));
+	enemyModels_.push_back(Model::Create("Resources/AL4/enemy_Arm/", "enemy_Arm.obj", dxCommon_));
+	enemyModels_.push_back(Model::Create("Resources/AL4/enemy_Arm/", "enemy_Arm.obj", dxCommon_));
+	for (size_t i = 0; i < enemyModels_.size(); i++) {
+		enemyMaterials_.push_back(Material::Create());
+	}
+	enemyManager_ = std::make_unique<EnemyManager>();
+	enemyManager_->Initialize(enemyModels_, enemyMaterials_);
+	enemyManager_->SetColliderDebugDraw(colliderDebugDraw_.get());
+	firstEnemyTransform_ = {
+		.scale = {1.0f,1.0f,1.0f},
+		.rotate = {0.0f,0.0f,0.0f},
+		.translate = {0.0f,0.0f,50.0f},
+	};
+	enemyManager_->AddEnemy(firstEnemyTransform_);
+
 	//プレイヤー関連
 	playerModels_.push_back(Model::Create("Resources/AL4/float_Body/", "float_Body.obj", dxCommon_));
 	playerModels_.push_back(Model::Create("Resources/AL4/float_Head/", "float_Head.obj", dxCommon_));
@@ -123,7 +140,7 @@ void GameScene::Initialize() {
 	followCamera_->SetTarget(player_->GetWorldTransformAddress());
 
 	collisionManager_ = std::make_unique<CollisionManager>();
-	collisionManager_->Initialize(player_.get(), floorManager_.get(), boxManager_.get(), breakBoxManager_.get(),recoveryItemManager_.get());
+	collisionManager_->Initialize(player_.get(), floorManager_.get(), boxManager_.get(), breakBoxManager_.get(), recoveryItemManager_.get(), enemyManager_.get());
 
 	colliderDebugDraw_->AddCollider(&player_->GetCollider());
 	colliderDebugDraw_->AddCollider(&player_->GetExplosionCollider());
@@ -159,6 +176,8 @@ void GameScene::Update() {
 
 	player_->Update();
 
+	enemyManager_->Update();
+
 	recoveryItemManager_->Update();
 
 	followCamera_->Update();
@@ -169,10 +188,6 @@ void GameScene::Update() {
 
 	// デバッグカメラ
 	DebugCameraUpdate();
-
-	
-
-	
 
 }
 
@@ -206,6 +221,7 @@ void GameScene::Draw() {
 	
 	recoveryItemManager_->Draw(viewProjection_);
 	player_->Draw(viewProjection_);
+	enemyManager_->Draw(viewProjection_);
 
 #ifdef _DEBUG
 

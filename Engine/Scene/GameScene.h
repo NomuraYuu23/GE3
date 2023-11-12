@@ -15,6 +15,7 @@
 #include"../../Program/BoxManager/BoxManager.h"
 #include"../../Program/BreakBoxManager/BreakBoxManager.h"
 #include"../../Program/Player/Player.h"
+#include"../../Program/EnemyManager/EnemyManager.h"
 #include"../../Program/CollisionManager/CollisionManager.h"
 #include"../../Program/RecoveryItemManager/RecoveryItemManager.h"
 #include"../../Engine/Camera/FollowCamera/FollowCamera.h"
@@ -103,6 +104,10 @@ private:
 	//回復アイテムの生成トランスフォーム
 	TransformStructure recoveryItemTransform_{};
 
+	//敵生成トランスフォーム
+	TransformStructure firstEnemyTransform_{};
+	TransformStructure enemyTransform_{};
+
 	//ビュープロジェクション
 	ViewProjection viewProjection_;
 
@@ -127,4 +132,10 @@ private:
 	std::vector<Model*> playerModels_;
 	std::vector<Material*> playerMaterials_;
 
+	//エネミー関連
+	//自機
+	std::unique_ptr<EnemyManager> enemyManager_;
+	//自機のモデルとか
+	std::vector<Model*> enemyModels_;
+	std::vector<Material*> enemyMaterials_;
 };

@@ -14,7 +14,7 @@ public:
 	/// </summary>
 	/// <param name="model">モデル</param>
 	/// <param name="textureHandle">テクスチャハンドル</param>
-	void Initialize(const std::vector<Model*>& models,
+	void Initialize(TransformStructure transform, const std::vector<Model*>& models,
 		const std::vector<Material*>& materials);
 	/// <summary>
 	/// 更新
@@ -47,6 +47,7 @@ public:
 	void UpdateArmRotationgimmick();
 
 public:
+	WorldTransform* GetWorldTransformAddress() { return &worldTransform_; }
 
 	float GetColliderRadius() { return kColliderSize; }
 
