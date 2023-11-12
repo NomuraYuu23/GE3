@@ -39,9 +39,10 @@ void BoxManager::DrawImgui(){
 	for (Box* box : boxes_) {
 		if (ImGui::TreeNode((std::to_string(i+1) + "個目の箱").c_str())) {
 			box->DrawImgui();
-			i++;
+			
 			ImGui::TreePop();
 		}
+		i++;
 	}
 	
 	

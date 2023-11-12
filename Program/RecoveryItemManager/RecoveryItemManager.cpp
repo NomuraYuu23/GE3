@@ -52,9 +52,10 @@ void RecoveryItemManager::DrawImgui(){
 	for (RecoveryItem* item : recoveryItems_) {
 		if (ImGui::TreeNode((std::to_string(i + 1) + "個目の回復アイテム").c_str())) {
 			item->DrawImgui();
-			i++;
+			
 			ImGui::TreePop();
 		}
+		i++;
 	}
 }
 

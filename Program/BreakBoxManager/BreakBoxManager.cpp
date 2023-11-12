@@ -54,9 +54,10 @@ void BreakBoxManager::DrawImgui(){
 	for (BreakBox* box : breakBoxes_) {
 		if (ImGui::TreeNode((std::to_string(i + 1) + "個目の壊れる箱").c_str())) {
 			box->DrawImgui();
-			i++;
+			
 			ImGui::TreePop();
 		}
+		i++;
 	}
 }
 
