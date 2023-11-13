@@ -28,8 +28,8 @@ Matrix4x4Calc* Model::matrix4x4Calc = nullptr;
 /// </summary>
 /// <param name="device">デバイス</param>
 void Model::StaticInitialize(ID3D12Device* device,
-	const std::array<Microsoft::WRL::ComPtr<ID3D12RootSignature>, GraphicsPipelineState::PipelineStateName::kCountOfPipelineStateName>& rootSignature,
-	const std::array<Microsoft::WRL::ComPtr<ID3D12PipelineState>, GraphicsPipelineState::PipelineStateName::kCountOfPipelineStateName>& pipelineState) {
+	const std::array<ID3D12RootSignature*, GraphicsPipelineState::PipelineStateName::kCountOfPipelineStateName>& rootSignature,
+	const std::array<ID3D12PipelineState*, GraphicsPipelineState::PipelineStateName::kCountOfPipelineStateName>& pipelineState) {
 
 	assert(device);
 
@@ -39,8 +39,8 @@ void Model::StaticInitialize(ID3D12Device* device,
 
 	// グラフィックパイプライン生成
 	for (uint32_t i = 0u; i < GraphicsPipelineState::PipelineStateName::kCountOfPipelineStateName; i++) {
-		sRootSignature[i] = rootSignature[i].Get();
-		sPipelineState[i] = pipelineState[i].Get();
+		sRootSignature[i] = rootSignature[i];
+		sPipelineState[i] = pipelineState[i];
 	}
 
 }

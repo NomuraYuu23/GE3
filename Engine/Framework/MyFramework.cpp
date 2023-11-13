@@ -24,7 +24,15 @@ void MyFramework::Initialize()
 	Sprite::StaticInitialize(dxCommon->GetDevice(), GraphicsPipelineState::sRootSignature[GraphicsPipelineState::kSprite], GraphicsPipelineState::sPipelineState[GraphicsPipelineState::kSprite]);
 
 	// モデル静的初期化
-	Model::StaticInitialize(dxCommon->GetDevice(), GraphicsPipelineState::sRootSignature, GraphicsPipelineState::sPipelineState);
+	std::array<ID3D12RootSignature*, GraphicsPipelineState::PipelineStateName::kCountOfPipelineStateName> rootSignature = { 
+		GraphicsPipelineState::sRootSignature[GraphicsPipelineState::kSprite].Get(),
+		GraphicsPipelineState::sRootSignature[GraphicsPipelineState::kModel].Get(), 
+		GraphicsPipelineState::sRootSignature[GraphicsPipelineState::kParticle].Get()};
+	std::array<ID3D12PipelineState*, GraphicsPipelineState::PipelineStateName::kCountOfPipelineStateName> pipelineState = {
+	GraphicsPipelineState::sPipelineState[GraphicsPipelineState::kSprite].Get(),
+	GraphicsPipelineState::sPipelineState[GraphicsPipelineState::kModel].Get(),
+	GraphicsPipelineState::sPipelineState[GraphicsPipelineState::kParticle].Get() };
+	Model::StaticInitialize(dxCommon->GetDevice(), rootSignature, pipelineState);
 
 	// マテリアル静的初期化
 	Material::StaticInitialize(dxCommon->GetDevice());

@@ -48,8 +48,8 @@ public:
 	/// </summary>
 	/// <param name="device">デバイス</param>
 	static void StaticInitialize(ID3D12Device* device,
-		const std::array<Microsoft::WRL::ComPtr<ID3D12RootSignature>, GraphicsPipelineState::PipelineStateName::kCountOfPipelineStateName>& rootSignature,
-		const std::array<Microsoft::WRL::ComPtr<ID3D12PipelineState>, GraphicsPipelineState::PipelineStateName::kCountOfPipelineStateName>& pipelineState);
+		const std::array<ID3D12RootSignature*, GraphicsPipelineState::PipelineStateName::kCountOfPipelineStateName>& rootSignature,
+		const std::array<ID3D12PipelineState*, GraphicsPipelineState::PipelineStateName::kCountOfPipelineStateName>& pipelineState);
 
 	/// <summary>
 	/// 静的前処理

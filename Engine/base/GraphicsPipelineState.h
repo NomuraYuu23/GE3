@@ -24,7 +24,7 @@ public:
 	// ルートシグネチャ
 	static Microsoft::WRL::ComPtr<ID3D12RootSignature> sRootSignature[GraphicsPipelineState::PipelineStateName::kCountOfPipelineStateName];
 	// パイプラインステートオブジェクト
-	static Microsoft::WRL::ComPtr<ID3D12RootSignature> sPipelineState[GraphicsPipelineState::PipelineStateName::kCountOfPipelineStateName];
+	static Microsoft::WRL::ComPtr<ID3D12PipelineState> sPipelineState[GraphicsPipelineState::PipelineStateName::kCountOfPipelineStateName];
 
 private:
 
