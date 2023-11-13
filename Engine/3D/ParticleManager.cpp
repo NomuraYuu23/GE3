@@ -1,6 +1,5 @@
 #include "ParticleManager.h"
 #include <d3d12.h>
-#include "TransformationMatrix.h"
 #include "../base/TextureManager.h"
 
 uint32_t ParticleManager::kNumInstanceMax_ = 10;
@@ -47,3 +46,36 @@ void ParticleManager::SRVCreate()
 	DirectXCommon::GetInstance()->GetDevice()->CreateShaderResourceView(transformationMatrixBuff_.Get(), &instancingSrvDesc, instancingSrvHandleCPU_);
 
 }
+
+Particle3D* ParticleManager::ParticleCreate(uint32_t numInstance)
+{
+
+	// インスタンス数確認
+	assert(numInstance > 0 && numInstance + indexNextMap_ < kNumInstanceMax_);
+
+	Particle3D* particle = new Particle3D();
+	particle->Initialize(numInstance, indexNextMap_);
+
+	for (size_t i = 0; i < numInstance; i++) {
+		transformationMatrixMap_[indexNextMap_] = particle->transformationMatrixMap_[i];
+		indexNextMap_++;
+	}
+
+	return particle;
+
+}
+
+void ParticleManager::ParticleDelete(uint32_t numInstance, uint32_t indexMap)
+{
+
+	Matrix4x4Calc* matrix4x4Calc = Matrix4x4Calc::GetInstance();
+	uint32_t indexPuls = 0;
+	for (size_t i = indexMap + numInstance; i < indexNextMap_; i++) {
+		transformationMatrixMap_[indexMap + indexPuls] = transformationMatrixMap_[i];
+		transformationMatrixMap_[i].World = matrix4x4Calc->MakeIdentity4x4();
+		transformationMatrixMap_[i].WVP = matrix4x4Calc->MakeIdentity4x4();
+		indexPuls++;
+	}
+
+}
+

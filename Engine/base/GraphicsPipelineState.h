@@ -22,9 +22,9 @@ public:
 	static void InitializeGraphicsPipeline(ID3D12Device* sDevice);
 
 	// ルートシグネチャ
-	static Microsoft::WRL::ComPtr<ID3D12RootSignature> sRootSignature[kCountOfPipelineStateName];
+	static Microsoft::WRL::ComPtr<ID3D12RootSignature> sRootSignature[GraphicsPipelineState::PipelineStateName::kCountOfPipelineStateName];
 	// パイプラインステートオブジェクト
-	static Microsoft::WRL::ComPtr<ID3D12PipelineState> sPipelineState[kCountOfPipelineStateName];
+	static Microsoft::WRL::ComPtr<ID3D12RootSignature> sPipelineState[GraphicsPipelineState::PipelineStateName::kCountOfPipelineStateName];
 
 private:
 

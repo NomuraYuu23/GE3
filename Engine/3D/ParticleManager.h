@@ -1,19 +1,45 @@
 #pragma once
 #include <cstdint>
+#include "TransformationMatrix.h"
 #include "../base/BufferResource.h"
+#include "Particle3D.h"
+
 class ParticleManager
 {
-
-public: // メンバ関数
+public: // 静的メンバ変数
 
 	// パーティクル最大数
 	static uint32_t kNumInstanceMax_;
 
+public: // メンバ関数
+
+	/// <summary>
+	/// インスタンス取得
+	/// </summary>
+	/// <returns></returns>
 	static ParticleManager* GetInstance();
 
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Initialize();
 
+	/// <summary>
+	/// SRVを作る
+	/// </summary>
 	void SRVCreate();
+
+	/// <summary>
+	/// パーティクル作成
+	/// </summary>
+	/// <param name="numInstance">インスタンス数</param>
+	/// <returns></returns>
+	Particle3D* ParticleCreate(uint32_t numInstance);
+
+	/// <summary>
+	/// パーティクル終了時呼び出し関数
+	/// </summary>
+	void ParticleDelete(uint32_t numInstance, uint32_t indexMap);
 
 private: // メンバ変数
 
@@ -25,6 +51,9 @@ private: // メンバ変数
 	D3D12_CPU_DESCRIPTOR_HANDLE instancingSrvHandleCPU_;
 
 	D3D12_GPU_DESCRIPTOR_HANDLE instancingSrvHandleGPU_;
+
+	//次に使うディスクリプタヒープの番号
+	uint32_t indexNextMap_ = 0u;
 
 };
 

@@ -3,9 +3,9 @@
 using namespace Microsoft::WRL;
 
 // ルートシグネチャ
-ComPtr<ID3D12RootSignature> GraphicsPipelineState::sRootSignature[kCountOfPipelineStateName];
+Microsoft::WRL::ComPtr<ID3D12RootSignature> GraphicsPipelineState::sRootSignature[GraphicsPipelineState::PipelineStateName::kCountOfPipelineStateName];
 // パイプラインステートオブジェクト
-ComPtr<ID3D12PipelineState> GraphicsPipelineState::sPipelineState[kCountOfPipelineStateName];
+Microsoft::WRL::ComPtr<ID3D12RootSignature> GraphicsPipelineState::sPipelineState[GraphicsPipelineState::PipelineStateName::kCountOfPipelineStateName];
 
 void GraphicsPipelineState::InitializeGraphicsPipeline(ID3D12Device* sDevice)
 {

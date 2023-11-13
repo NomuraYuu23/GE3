@@ -3,13 +3,23 @@
 #include "../base/BufferResource.h"
 #include "../base/WinApp.h"
 #include "../base/DirectXCommon.h"
+#include "ParticleManager.h"
 #include <cassert>
 
-void Particle3D::Initialize(uint32_t numInstance) {
+Particle3D::~Particle3D()
+{
 
-	assert(numInstance > 0 && numInstance < kNumInstanceMax_);
+	ParticleManager::GetInstance()->ParticleDelete(numInstance_, indexMap_);
+
+}
+
+void Particle3D::Initialize(uint32_t numInstance, uint32_t indexMap) {
+
+	assert(numInstance > 0);
 
 	numInstance_ = numInstance;
+
+	indexMap_ = indexMap;
 
 	Matrix4x4Calc* matrix4x4Calc = Matrix4x4Calc::GetInstance();
 
@@ -81,9 +91,9 @@ void Particle3D::UpdateMatrix() {
 void Particle3D::Map(const ViewProjection& viewProjection)
 {
 
-	for (size_t i = 0; i < numInstance_; i++) {
+	Matrix4x4Calc* matrix4x4Calc = Matrix4x4Calc::GetInstance();
 
-		Matrix4x4Calc* matrix4x4Calc = Matrix4x4Calc::GetInstance();
+	for (size_t i = 0; i < numInstance_; i++) {
 
 		transformationMatrixMap_[i].World = data_[i].worldMatrix_;
 		transformationMatrixMap_[i].WVP = matrix4x4Calc->Multiply(data_[i].worldMatrix_, viewProjection.viewProjectionMatrix_);

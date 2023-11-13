@@ -7,8 +7,10 @@
 #include <d3d12.h>
 #include "ViewProjection.h"
 
-struct Particle3D
+class Particle3D
 {
+
+public:
 
 	struct Data
 	{
@@ -39,12 +41,17 @@ struct Particle3D
 	TransformationMatrix* transformationMatrixMap_{};
 
 	// インスタンス数
-	uint32_t numInstance_;
+	uint32_t numInstance_ = 0u;
+
+	// マップのインデックス
+	uint32_t indexMap_ = 0u;
 
 	// データ
 	Data* data_{};
 
-	void Initialize(uint32_t numInstance);
+	~Particle3D();
+
+	void Initialize(uint32_t numInstance, uint32_t indexMap);
 
 	void UpdateMatrix();
 

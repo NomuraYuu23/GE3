@@ -24,13 +24,16 @@ void MyFramework::Initialize()
 	Sprite::StaticInitialize(dxCommon->GetDevice(), GraphicsPipelineState::sRootSignature[GraphicsPipelineState::kSprite], GraphicsPipelineState::sPipelineState[GraphicsPipelineState::kSprite]);
 
 	// モデル静的初期化
-	Model::StaticInitialize(dxCommon->GetDevice(), GraphicsPipelineState::sRootSignature[GraphicsPipelineState::kModel], GraphicsPipelineState::sPipelineState[GraphicsPipelineState::kModel]);
+	Model::StaticInitialize(dxCommon->GetDevice(), GraphicsPipelineState::sRootSignature, GraphicsPipelineState::sPipelineState);
 
 	// マテリアル静的初期化
 	Material::StaticInitialize(dxCommon->GetDevice());
 
 	// 光源静的初期化
 	DirectionalLight::StaticInitialize(dxCommon->GetDevice());
+
+	// パーティクル
+	ParticleManager::GetInstance()->Initialize();
 
 	//サウンド
 	audio = Audio::GetInstance();

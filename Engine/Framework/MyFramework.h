@@ -39,6 +39,9 @@
 // グローバル変数
 #include "../GlobalVariables/GlobalVariables.h"
 
+// パーティクル
+#include "../3D/ParticleManager.h"
+
 class MyFramework
 {
 

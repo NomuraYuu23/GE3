@@ -25,6 +25,8 @@
 
 #include <list>
 
+#include "../base/GraphicsPipelineState.h"
+
 class Model
 {
 
@@ -46,8 +48,8 @@ public:
 	/// </summary>
 	/// <param name="device">デバイス</param>
 	static void StaticInitialize(ID3D12Device* device,
-		Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature,
-		Microsoft::WRL::ComPtr<ID3D12PipelineState> pipelineState);
+		const std::array<Microsoft::WRL::ComPtr<ID3D12RootSignature>, GraphicsPipelineState::PipelineStateName::kCountOfPipelineStateName>& rootSignature,
+		const std::array<Microsoft::WRL::ComPtr<ID3D12PipelineState>, GraphicsPipelineState::PipelineStateName::kCountOfPipelineStateName>& pipelineState);
 
 	/// <summary>
 	/// 静的前処理
@@ -75,9 +77,9 @@ private:
 	// コマンドリスト
 	static ID3D12GraphicsCommandList* sCommandList;
 	// ルートシグネチャ
-	static Microsoft::WRL::ComPtr<ID3D12RootSignature> sRootSignature;
+	static ID3D12RootSignature* sRootSignature[GraphicsPipelineState::PipelineStateName::kCountOfPipelineStateName];
 	// パイプラインステートオブジェクト
-	static Microsoft::WRL::ComPtr<ID3D12PipelineState> sPipelineState;
+	static ID3D12PipelineState* sPipelineState[GraphicsPipelineState::PipelineStateName::kCountOfPipelineStateName];
 	//計算
 	static Matrix4x4Calc* matrix4x4Calc;
 
