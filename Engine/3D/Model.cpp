@@ -213,6 +213,8 @@ void Model::Initialize(const std::string& directoryPath, const std::string& file
 	// マテリアル
 	defaultMaterial_.reset(Material::Create());
 
+	instanceCount_ = 1;
+
 }
 
 /// <summary>
@@ -245,7 +247,7 @@ void Model::Draw(WorldTransform& worldTransform, const ViewProjection& viewProje
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(sCommandList, 2, textureHandle_);
 
 	//描画
-	sCommandList->DrawInstanced(UINT(modelData.vertices.size()), 1, 0, 0);
+	sCommandList->DrawInstanced(UINT(modelData.vertices.size()), instanceCount_, 0, 0);
 
 }
 
@@ -272,7 +274,7 @@ void Model::Draw(WorldTransform& worldTransform, const ViewProjection& viewProje
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(sCommandList, 2, textureHandle_);
 
 	//描画
-	sCommandList->DrawInstanced(UINT(modelData.vertices.size()), 1, 0, 0);
+	sCommandList->DrawInstanced(UINT(modelData.vertices.size()), instanceCount_, 0, 0);
 
 }
 

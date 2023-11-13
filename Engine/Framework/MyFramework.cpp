@@ -21,10 +21,10 @@ void MyFramework::Initialize()
 	TextureManager::GetInstance()->Initialize(dxCommon->GetDevice());
 
 	// スプライト静的初期化
-	Sprite::StaticInitialize(dxCommon->GetDevice(), GraphicsPipelineState::sRootSignature, GraphicsPipelineState::sPipelineState[GraphicsPipelineState::Sprite]);
+	Sprite::StaticInitialize(dxCommon->GetDevice(), GraphicsPipelineState::sRootSignature[GraphicsPipelineState::kSprite], GraphicsPipelineState::sPipelineState[GraphicsPipelineState::kSprite]);
 
 	// モデル静的初期化
-	Model::StaticInitialize(dxCommon->GetDevice(), GraphicsPipelineState::sRootSignature, GraphicsPipelineState::sPipelineState[GraphicsPipelineState::Model]);
+	Model::StaticInitialize(dxCommon->GetDevice(), GraphicsPipelineState::sRootSignature[GraphicsPipelineState::kModel], GraphicsPipelineState::sPipelineState[GraphicsPipelineState::kModel]);
 
 	// マテリアル静的初期化
 	Material::StaticInitialize(dxCommon->GetDevice());

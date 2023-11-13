@@ -134,6 +134,8 @@ private:
 	// リソース設定
 	D3D12_RESOURCE_DESC resourceDesc_;
 
+	// インスタンスカウント
+	UINT instanceCount_;
 
 	// デフォルトマテリアル
 	std::unique_ptr<Material> defaultMaterial_;
