@@ -109,4 +109,7 @@ private:
 	std::array<uint32_t, Pause::PauseTextureNo::kCountOfPauseTextureNo> pauseTextureHandles_;
 	std::unique_ptr<Pause> pause_ = nullptr;
 
+	// パーティクルマネージャー
+	ParticleManager* particleManager_ = nullptr;
+
 };

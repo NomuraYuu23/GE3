@@ -21,16 +21,27 @@ void MyFramework::Initialize()
 	TextureManager::GetInstance()->Initialize(dxCommon->GetDevice());
 
 	// スプライト静的初期化
-	Sprite::StaticInitialize(dxCommon->GetDevice(), GraphicsPipelineState::sRootSignature, GraphicsPipelineState::sPipelineState[GraphicsPipelineState::Sprite]);
+	Sprite::StaticInitialize(dxCommon->GetDevice(), GraphicsPipelineState::sRootSignature[GraphicsPipelineState::kSprite], GraphicsPipelineState::sPipelineState[GraphicsPipelineState::kSprite]);
 
 	// モデル静的初期化
-	Model::StaticInitialize(dxCommon->GetDevice(), GraphicsPipelineState::sRootSignature, GraphicsPipelineState::sPipelineState[GraphicsPipelineState::Model]);
+	std::array<ID3D12RootSignature*, GraphicsPipelineState::PipelineStateName::kCountOfPipelineStateName> rootSignature = { 
+		GraphicsPipelineState::sRootSignature[GraphicsPipelineState::kSprite].Get(),
+		GraphicsPipelineState::sRootSignature[GraphicsPipelineState::kModel].Get(), 
+		GraphicsPipelineState::sRootSignature[GraphicsPipelineState::kParticle].Get()};
+	std::array<ID3D12PipelineState*, GraphicsPipelineState::PipelineStateName::kCountOfPipelineStateName> pipelineState = {
+	GraphicsPipelineState::sPipelineState[GraphicsPipelineState::kSprite].Get(),
+	GraphicsPipelineState::sPipelineState[GraphicsPipelineState::kModel].Get(),
+	GraphicsPipelineState::sPipelineState[GraphicsPipelineState::kParticle].Get() };
+	Model::StaticInitialize(dxCommon->GetDevice(), rootSignature, pipelineState);
 
 	// マテリアル静的初期化
 	Material::StaticInitialize(dxCommon->GetDevice());
 
 	// 光源静的初期化
 	DirectionalLight::StaticInitialize(dxCommon->GetDevice());
+
+	// パーティクル
+	ParticleManager::GetInstance()->Initialize();
 
 	//サウンド
 	audio = Audio::GetInstance();
@@ -52,6 +63,9 @@ void MyFramework::Finalize()
 
 	// サウンド後始末
 	audio->Finalize();
+
+	// パーティクル後始末
+	ParticleManager::GetInstance()->Finalize();
 
 	//色々な解放処理の前に書く
 	imGuiManager->Finalize();

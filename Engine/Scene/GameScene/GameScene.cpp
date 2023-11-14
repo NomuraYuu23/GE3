@@ -76,6 +76,12 @@ void GameScene::Initialize() {
 
 	/// aaaaa
 	///bbbbb
+
+	//パーティクル
+	particleManager_ = ParticleManager::GetInstance();
+	particleManager_->ModelCreate();
+	//particleManager_->ParticleCreate(10);
+
 }
 
 /// <summary>
@@ -107,6 +113,9 @@ void GameScene::Update() {
 
 	// デバッグ描画
 	colliderDebugDraw_->Update();
+	
+	//パーティクル
+	particleManager_->Update();
 
 	// ポーズ機能
 	pause_->Update();
@@ -142,6 +151,8 @@ void GameScene::Draw() {
 	/*3Dオブジェクトはここ*/
 	floorManager_->Draw(viewProjection_);
 	player_->Draw(viewProjection_);
+
+	particleManager_->Draw(viewProjection_);
 
 #ifdef _DEBUG
 

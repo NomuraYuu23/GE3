@@ -3,14 +3,16 @@
 using namespace Microsoft::WRL;
 
 // ルートシグネチャ
-ComPtr<ID3D12RootSignature> GraphicsPipelineState::sRootSignature;
+Microsoft::WRL::ComPtr<ID3D12RootSignature> GraphicsPipelineState::sRootSignature[GraphicsPipelineState::PipelineStateName::kCountOfPipelineStateName];
 // パイプラインステートオブジェクト
-ComPtr<ID3D12PipelineState> GraphicsPipelineState::sPipelineState[End];
+Microsoft::WRL::ComPtr<ID3D12PipelineState> GraphicsPipelineState::sPipelineState[GraphicsPipelineState::PipelineStateName::kCountOfPipelineStateName];
 
 void GraphicsPipelineState::InitializeGraphicsPipeline(ID3D12Device* sDevice)
 {
 
 	HRESULT hr;
+
+#pragma region モデル
 
 	//dxcCompilerを初期化
 	IDxcUtils* dxcUtils = nullptr;
@@ -87,7 +89,7 @@ void GraphicsPipelineState::InitializeGraphicsPipeline(ID3D12Device* sDevice)
 	}
 	//バイナリを元に生成
 	hr = sDevice->CreateRootSignature(0, signatureBlob->GetBufferPointer(),
-		signatureBlob->GetBufferSize(), IID_PPV_ARGS(&sRootSignature));
+		signatureBlob->GetBufferSize(), IID_PPV_ARGS(&sRootSignature[kModel]));
 	assert(SUCCEEDED(hr));
 
 	//InputLayout
@@ -140,7 +142,7 @@ void GraphicsPipelineState::InitializeGraphicsPipeline(ID3D12Device* sDevice)
 
 	//PSOを生成
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc{};
-	graphicsPipelineStateDesc.pRootSignature = sRootSignature.Get();//RootSignature
+	graphicsPipelineStateDesc.pRootSignature = sRootSignature[kModel].Get();//RootSignature
 	graphicsPipelineStateDesc.InputLayout = inputLayoutDesc;//InputLayout
 	graphicsPipelineStateDesc.VS = { vertexShaderBlob->GetBufferPointer(),
 	vertexShaderBlob->GetBufferSize() };//VertexShader
@@ -164,18 +166,90 @@ void GraphicsPipelineState::InitializeGraphicsPipeline(ID3D12Device* sDevice)
 
 	//実際に生成
 	hr = sDevice->CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
-		IID_PPV_ARGS(&sPipelineState[Model]));
+		IID_PPV_ARGS(&sPipelineState[kModel]));
 	assert(SUCCEEDED(hr));
 
 
-	// スプライト
+#pragma endregion
+
+#pragma region スプライト
+
+	//バイナリを元に生成
+	hr = sDevice->CreateRootSignature(0, signatureBlob->GetBufferPointer(),
+		signatureBlob->GetBufferSize(), IID_PPV_ARGS(&sRootSignature[kSprite]));
+	assert(SUCCEEDED(hr));
+
+	// 背面表示(フリップ用)
 	rasterizerDesc.CullMode = D3D12_CULL_MODE_NONE;
+
+	//PSOを変更
+	graphicsPipelineStateDesc.pRootSignature = sRootSignature[kSprite].Get();//RootSignature
 	graphicsPipelineStateDesc.RasterizerState = rasterizerDesc;//RasterizerState
 
 	//実際に生成
 	hr = sDevice->CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
-		IID_PPV_ARGS(&sPipelineState[Sprite]));
+		IID_PPV_ARGS(&sPipelineState[kSprite]));
 	assert(SUCCEEDED(hr));
+
+#pragma endregion
+
+#pragma region パーティクル
+
+	D3D12_DESCRIPTOR_RANGE descriptorRangeForInstancing[1] = {};
+	descriptorRangeForInstancing[0].BaseShaderRegister = 0;//0から始まる
+	descriptorRangeForInstancing[0].NumDescriptors = 1;//数は一つ
+	descriptorRangeForInstancing[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;//SRVを使う
+	descriptorRangeForInstancing[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;//Offsetを自動計算
+
+	//RootParameter作成。複数設定できるので配列。
+	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;//DescriptorTableを使う
+	rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;//PixelShaderで使う
+	rootParameters[1].DescriptorTable.pDescriptorRanges = descriptorRangeForInstancing;//Tableの中身の配列を指定
+	rootParameters[1].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeForInstancing);//Tableで利用する数
+	descriptionRootsignature.pParameters = rootParameters;             //ルートパラメータ配列へのポインタ
+	descriptionRootsignature.NumParameters = _countof(rootParameters); //配列の長さ
+
+	//シリアライズしてバイナリにする
+	signatureBlob = nullptr;
+	errorBlob = nullptr;
+	hr = D3D12SerializeRootSignature(&descriptionRootsignature,
+		D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob, &errorBlob);
+	if (FAILED(hr)) {
+		Log(reinterpret_cast<char*>(errorBlob->GetBufferPointer()));
+		assert(false);
+	}
+	//バイナリを元に生成
+	hr = sDevice->CreateRootSignature(0, signatureBlob->GetBufferPointer(),
+		signatureBlob->GetBufferSize(), IID_PPV_ARGS(&sRootSignature[kParticle]));
+	assert(SUCCEEDED(hr));
+
+	//Shaderをコンパイルする
+	IDxcBlob* vertexShaderBlobParticle = CompileShader(L"Resources/shaders/Particle.VS.hlsl",
+		L"vs_6_0", dxcUtils, dxcompiler, includeHandler);
+	assert(vertexShaderBlob != nullptr);
+
+	IDxcBlob* pixelShaderBlobParticle = CompileShader(L"Resources/shaders/Particle.PS.hlsl",
+		L"ps_6_0", dxcUtils, dxcompiler, includeHandler);
+	assert(pixelShaderBlob != nullptr);
+
+	//裏面(時計回り)を表示しない
+	rasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
+
+	//PSOを変更
+	graphicsPipelineStateDesc.pRootSignature = sRootSignature[kParticle].Get();//RootSignature
+	graphicsPipelineStateDesc.InputLayout = inputLayoutDesc;//InputLayout
+	graphicsPipelineStateDesc.VS = { vertexShaderBlobParticle->GetBufferPointer(),
+	vertexShaderBlobParticle->GetBufferSize() };//VertexShader
+	graphicsPipelineStateDesc.PS = { pixelShaderBlobParticle->GetBufferPointer(),
+	pixelShaderBlobParticle->GetBufferSize() };//PixelShader
+	graphicsPipelineStateDesc.RasterizerState = rasterizerDesc;//RasterizerState
+
+	//実際に生成
+	hr = sDevice->CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
+		IID_PPV_ARGS(&sPipelineState[kParticle]));
+	assert(SUCCEEDED(hr));
+
+#pragma endregion
 
 }
 

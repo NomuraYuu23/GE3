@@ -1,4 +1,4 @@
-﻿#include "ImGuiManager.h"
+#include "ImGuiManager.h"
 
 ImGuiManager* ImGuiManager::GetInstance()
 {
@@ -23,8 +23,8 @@ void ImGuiManager::Initialize(WinApp* winApp, DirectXCommon* dxCommon, TextureMa
 		2,								 // ダブルバッファ
 		DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, // SRGB
 		textureManager_->StaticGetDescriptorHeap(),
-		textureManager_->StaticGetCPUDescriptorHandle(),
-		textureManager_->StaticGetGPUDescriptorHandle());
+		textureManager_->StaticGetCPUDescriptorHandle(0),
+		textureManager_->StaticGetGPUDescriptorHandle(0));
 
 	static const ImWchar glyphRangesJapanese[] = {
 	0x0020, 0x007E, 0x00A2, 0x00A3, 0x00A7, 0x00A8, 0x00AC, 0x00AC, 0x00B0, 0x00B1, 0x00B4, 0x00B4, 0x00B6, 0x00B6, 0x00D7, 0x00D7,
