@@ -11,7 +11,7 @@ public: //メンバ関数
 	/// 初期化
 	/// </summary>
 	/// <param name="model">モデル</param>
-	void Initialize(Model* model, Material* material, TransformStructure transform_/*, bool isMoving, bool isVertical*/);
+	void Initialize(Model* model, Material* material, TransformStructure transform_, int recoveryValue/*, bool isMoving, bool isVertical*/);
 
 	/// <summary>
 	/// 更新
@@ -71,6 +71,8 @@ public: // アクセッサ
 
 	Vector3 GetSize() { return size_; }
 
+	int GetRecoveryValue() { return  recoveryValue_; }
+
 	AABB& GetCollider() { return collider_; }
 
 	bool GetIsDelete() { return isDelete_; }
@@ -104,6 +106,9 @@ private:
 
 	// 移動用タイマー
 	float moveTimer_;
+
+	//アイテムの回復値
+	int recoveryValue_;
 
 	// サイズ
 	Vector3 size_ = { 10.0f,0.1f, 10.0f };

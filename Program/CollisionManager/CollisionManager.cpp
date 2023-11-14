@@ -103,11 +103,13 @@ void CollisionManager::AllCollision()
 	
 	for (RecoveryItem* item : recoveryItemManager_->GetItems_()) {
 		if (Collision::IsCollision(item->GetCollider(), player_->GetCollider())) {
+			player_->OnCollisionRecoveryItem(item->GetRecoveryValue());
 			item->OnCollisionPlayer();
 		}
 	}
 	for (CollectibleItem* item : collectibleItemManager_->GetItems_()) {
 		if (Collision::IsCollision(item->GetCollider(), player_->GetCollider())) {
+			player_->OnCollisionCollectibleItem();
 			item->OnCollisionPlayer();
 		}
 	}

@@ -263,6 +263,10 @@ void GameScene::ImguiDraw() {
 
 #ifdef _DEBUG
 
+	ImGui::Begin("FPS");
+	ImGui::Text("Frame rate: %6.2f fps", ImGui::GetIO().Framerate);
+	ImGui::End();
+
 	ImGui::Begin("カメラ");
 	ImGui::DragFloat3("カメラの座標", &viewProjection_.transform_.translate.x, 0.1f);
 	ImGui::DragFloat3("カメラの回転", &viewProjection_.transform_.rotate.x, 0.01f);
@@ -327,9 +331,9 @@ void GameScene::ImguiDraw() {
 				ImGui::DragFloat3("アイテムの座標", &recoveryItemTransform_.translate.x, 0.1f);
 				ImGui::DragFloat3("アイテムの回転", &recoveryItemTransform_.rotate.x, 0.01f);
 				ImGui::DragFloat3("アイテムの大きさ", &recoveryItemTransform_.scale.x, 0.01f);
-
+				ImGui::DragInt("アイテムの回復値", &recoveryValue_, 1.0f, 1, 99);
 				if (ImGui::Button("アイテムの追加")) {
-					recoveryItemManager_->AddItem(recoveryItemTransform_, isBreakBoxMove_, isBreakBoxVertical_);
+					recoveryItemManager_->AddItem(recoveryItemTransform_, recoveryValue_);
 				}
 				ImGui::EndMenu();
 			}

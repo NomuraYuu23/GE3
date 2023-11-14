@@ -95,6 +95,7 @@ private:
 	std::unique_ptr<RecoveryItemManager> recoveryItemManager_;
 	std::unique_ptr<Model> recoveryItemModel_;
 	std::unique_ptr<Material> recoveryItemMaterial_;
+	int recoveryValue_ = 1;
 	//コイン系収集アイテム
 	std::unique_ptr<CollectibleItemManager> collectibleItemManager_;
 	std::unique_ptr<Model> collectibleItemModel_;

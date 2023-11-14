@@ -235,12 +235,12 @@ public: // メンバ関数
 	/// <summary>
 	/// 回復アイテムとの衝突
 	/// </summary>
-	//void OnCollisionRecoveryItem();
+	void OnCollisionRecoveryItem(int recoveryValue);
 
 	/// <summary>
 	/// 収集アイテムとの衝突
 	/// </summary>
-	//void OnCollisionCollectibleItem();
+	void OnCollisionCollectibleItem();
 
 	/// <summary>
 	/// 親を得た

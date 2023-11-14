@@ -59,9 +59,9 @@ void RecoveryItemManager::DrawImgui(){
 	}
 }
 
-void RecoveryItemManager::AddItem(TransformStructure Item, bool isMoving, bool isVertical){
+void RecoveryItemManager::AddItem(TransformStructure Item, int recoveryValue /*bool isMoving, bool isVertical*/){
 	RecoveryItem* item_ = new RecoveryItem();
-	item_->Initialize(model_, material_, Item);
+	item_->Initialize(model_, material_, Item, recoveryValue);
 
 	recoveryItems_.push_back(item_);
 

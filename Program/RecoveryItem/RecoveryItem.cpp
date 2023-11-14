@@ -2,7 +2,7 @@
 #include <cmath>
 #include"../../externals/imgui/imgui.h"
 
-void RecoveryItem::Initialize(Model* model, Material* material, TransformStructure transform_/*, bool isMoving, bool isVertical*/){
+void RecoveryItem::Initialize(Model* model, Material* material, TransformStructure transform_, int recoveryValue/*, bool isMoving, bool isVertical*/){
 	// nullポインタチェック
 	assert(model);
 
@@ -27,6 +27,8 @@ void RecoveryItem::Initialize(Model* model, Material* material, TransformStructu
 	size_ = { drawWorldTransform_.transform_.scale.x + 0.1f,drawWorldTransform_.transform_.scale.y + 0.1f,drawWorldTransform_.transform_.scale.z + 0.1f, };
 
 	moveTimer_ = 0.0f;
+
+	recoveryValue_ = recoveryValue;
 
 	Vector3 colliderMax_ = { position_.x + size_.x, position_.y + size_.y, position_.z + size_.z };
 	Vector3 colliderMin_ = { position_.x - size_.x, position_.y - size_.y, position_.z - size_.z };
@@ -66,6 +68,7 @@ void RecoveryItem::DrawImgui(){
 	ImGui::DragFloat3("アイテムの座標", &drawWorldTransform_.transform_.translate.x, 0.1f);
 	ImGui::DragFloat3("アイテムの回転", &drawWorldTransform_.transform_.rotate.x, 0.1f);
 	ImGui::DragFloat3("アイテムの大きさ", &drawWorldTransform_.transform_.scale.x, 0.1f, 0.0f, 300.0f);
+	ImGui::DragInt("アイテムの回復値", &recoveryValue_, 1.0f, 1, 99);
 }
 
 void RecoveryItem::Fall(){

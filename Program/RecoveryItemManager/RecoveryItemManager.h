@@ -37,7 +37,7 @@ public:
 	/// <summary>
 	/// 床追加
 	/// </summary>
-	void AddItem(TransformStructure Item, bool isMoving, bool isVertical);
+	void AddItem(TransformStructure Item, int recoveryValue/*bool isMoving, bool isVertical*/);
 
 public: // アクセッサ
 

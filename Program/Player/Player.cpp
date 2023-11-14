@@ -434,10 +434,9 @@ void Player::Jump()
 
 }
 
-void Player::Explosion(){
-	
-	
-
+void Player::Explosion(){	
+	if (exprosionNum_ == exprosionMin_)
+		return;
 	isExplosion_ = true;
 	explosionCollider_.center_ = { worldTransform_.worldMatrix_.m[3][0], worldTransform_.worldMatrix_.m[3][1], worldTransform_.worldMatrix_.m[3][2] };
 	worldTransformExprode_.transform_.translate = explosionCollider_.center_;
@@ -461,6 +460,7 @@ void Player::ExplosionMove(){
 			}
 		}
 	}
+	
 
 	//爆破関係
 	if (isExplosion_){
@@ -554,6 +554,17 @@ void Player::OnCollisionBox(WorldTransform* worldTransform, float boxSize){
 	}
 }
 
+void Player::OnCollisionRecoveryItem(int recoveryValue){
+	exprosionNum_ += recoveryValue;
+	if (exprosionNum_>exprosionMax_){
+		exprosionNum_ = exprosionMax_;
+	}
+}
+
+void Player::OnCollisionCollectibleItem(){
+	numCollectItem++;
+}
+
 void Player::GotParent(WorldTransform* parent)
 {
 
@@ -608,19 +619,27 @@ void Player::allUpdateMatrix(){
 }
 
 void Player::DrawImgui(){
-	ImGui::Begin("プレイヤー");
-	if (ImGui::TreeNode("WorldTransform")) {
-		ImGui::DragFloat3("座標", &worldTransform_.transform_.translate.x, 0.1f);
-		ImGui::DragFloat3("回転", &worldTransform_.transform_.rotate.x, 0.1f);
-		ImGui::DragFloat3("大きさ", &worldTransform_.transform_.scale.x, 0.1f);
-		ImGui::TreePop();
-	}
+	ImGui::Begin("プレイヤー", nullptr, ImGuiWindowFlags_MenuBar);
+	if (ImGui::BeginMenuBar()) {
+		if (ImGui::BeginMenu("WorldTransform")) {
+			ImGui::DragFloat3("座標", &worldTransform_.transform_.translate.x, 0.1f);
+			ImGui::DragFloat3("回転", &worldTransform_.transform_.rotate.x, 0.1f);
+			ImGui::DragFloat3("大きさ", &worldTransform_.transform_.scale.x, 0.1f);
+			ImGui::EndMenu();
+		}
 
-	if (ImGui::TreeNode("爆破関係")) {
-		ImGui::DragFloat3("爆破の中心", &explosionCollider_.center_.x, 0.1f);
-		ImGui::DragFloat("広がる速度", &explosionSpeed_, 0.01f, 0.0f, 2.0f);
-		ImGui::DragInt("残り爆発回数", &exprosionNum_, 1.0f, exprosionMin_, exprosionMax_);
-		ImGui::TreePop();
+		if (ImGui::BeginMenu("爆破関係")) {
+			ImGui::DragFloat3("爆破の中心", &explosionCollider_.center_.x, 0.1f);
+			ImGui::DragFloat("広がる速度", &explosionSpeed_, 0.01f, 0.0f, 2.0f);
+			ImGui::DragInt("残り爆発回数", &exprosionNum_, 1.0f, exprosionMin_, exprosionMax_);
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("収集アイテム数")) {
+			ImGui::Text("現在の枚数 = %d", numCollectItem);
+			ImGui::EndMenu();
+		}
+		ImGui::EndMenuBar();
 	}
 	ImGui::End();
 }
