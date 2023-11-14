@@ -1,21 +1,15 @@
 #pragma once
-#include "../../Engine/3D/Model.h"
-#include "../../Engine/3D/Material.h"
-#include "../../Engine/3D/WorldTransform.h"
-#include "../Floor/Floor.h"
-
-#include <vector>
+#include"../../Program/CollectibleItem/CollectibleItem.h"
+#include<list>
 #include "../../Engine/Collider/ColliderDebugDraw/ColliderDebugDraw.h"// コライダーデバッグ描画
 
-class FloorManager
-{
 
-public: // メンバ関数
-
+class CollectibleItemManager {
+public:
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~FloorManager();
+	~CollectibleItemManager();
 
 	/// <summary>
 	/// 初期化
@@ -35,14 +29,15 @@ public: // メンバ関数
 	void Draw(const ViewProjection& viewProjection);
 
 	/// <summary>
-	/// 床追加
+	/// imgui描画
 	/// </summary>
-	void AddFloor(Vector3 position, Vector3 rotate, bool isMoving, bool isVertical);
+	/// <param name="viewProjection">ビュープロジェクション</param>
+	void DrawImgui();
 
 	/// <summary>
-	/// imgui表示
+	/// 床追加
 	/// </summary>
-	void DrawImgui();
+	void AddItem(TransformStructure Item, bool isFalling);
 
 public: // アクセッサ
 
@@ -50,7 +45,7 @@ public: // アクセッサ
 	/// 床リストゲッター
 	/// </summary>
 	/// <returns></returns>
-	std::vector<Floor*> GetFloors() { return floors_; }
+	std::list<CollectibleItem*> GetItems_() { return collectibleItems_; }
 
 	/// <summary>
 	/// デバッグ描画セッター
@@ -66,9 +61,8 @@ private:
 	Material* material_ = nullptr;
 
 	// 床リスト
-	std::vector<Floor*> floors_;
+	std::list<CollectibleItem*> collectibleItems_;
 
 	// デバッグ描画
 	ColliderDebugDraw* colliderDebugDraw_ = nullptr;
-
 };

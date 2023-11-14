@@ -433,12 +433,17 @@ void Player::Jump()
 }
 
 void Player::Explosion(){
+	
+	
+
 	isExplosion_ = true;
 	explosionCollider_.center_ = { worldTransform_.worldMatrix_.m[3][0], worldTransform_.worldMatrix_.m[3][1], worldTransform_.worldMatrix_.m[3][2] };
 	worldTransformExprode_.transform_.translate = explosionCollider_.center_;
 }
 
 void Player::ExplosionMove(){
+	if (exprosionNum_ == exprosionMin_)
+		return;
 	//爆破タイマー
 	if (isExplosion_) {
 		explosionTimer_ += 1;
@@ -446,6 +451,13 @@ void Player::ExplosionMove(){
 	if (explosionTimer_ == baseExplosionTimer_) {
 		explosionTimer_ = 0;
 		isExplosion_ = false;
+		if (exprosionNum_ != exprosionMin_) {
+			isSubtraction_ = true;
+			if (isSubtraction_) {
+				exprosionNum_--;
+				isSubtraction_ = false;
+			}
+		}
 	}
 
 	//爆破関係
@@ -595,13 +607,18 @@ void Player::allUpdateMatrix(){
 
 void Player::DrawImgui(){
 	ImGui::Begin("プレイヤー");
-	ImGui::DragFloat3("座標", &worldTransform_.transform_.translate.x, 0.1f);
-	ImGui::DragFloat3("回転", &worldTransform_.transform_.rotate.x, 0.1f);
-	ImGui::DragFloat3("大きさ", &worldTransform_.transform_.scale.x, 0.1f);
-	ImGui::End();
+	if (ImGui::TreeNode("WorldTransform")) {
+		ImGui::DragFloat3("座標", &worldTransform_.transform_.translate.x, 0.1f);
+		ImGui::DragFloat3("回転", &worldTransform_.transform_.rotate.x, 0.1f);
+		ImGui::DragFloat3("大きさ", &worldTransform_.transform_.scale.x, 0.1f);
+		ImGui::TreePop();
+	}
 
-	ImGui::Begin("爆破関係");
-	ImGui::DragFloat3("爆破の中心", &explosionCollider_.center_.x, 0.1f);
-	ImGui::DragFloat("広がる速度", &explosionSpeed_, 0.01f, 0.0f, 2.0f);
+	if (ImGui::TreeNode("爆破関係")) {
+		ImGui::DragFloat3("爆破の中心", &explosionCollider_.center_.x, 0.1f);
+		ImGui::DragFloat("広がる速度", &explosionSpeed_, 0.01f, 0.0f, 2.0f);
+		ImGui::DragInt("残り爆発回数", &exprosionNum_, 1.0f, exprosionMin_, exprosionMax_);
+		ImGui::TreePop();
+	}
 	ImGui::End();
 }

@@ -1,5 +1,6 @@
 #include "Floor.h"
 #include <cmath>
+#include"../../Engine/2D/ImguiManager.h"
 
 void Floor::Initialize(Model* model, Material* material, Vector3 position, Vector3 rotate, bool isMoving, bool isVertical)
 {
@@ -108,4 +109,10 @@ void Floor::verticalMove(){
 	position = m4Calc->TransformNormal(position, rotateMatrix);
 
 	worldTransform_.transform_.translate = v3Calc->Add(position_, v3Calc->Multiply(cosf(moveTimer_), position));
+}
+
+void Floor::DrawImgui(){
+	ImGui::DragFloat3("床の座標", &worldTransform_.transform_.translate.x, 0.1f);
+	ImGui::DragFloat3("床の回転", &worldTransform_.transform_.rotate.x, 0.1f);
+	ImGui::DragFloat3("床の大きさ", &worldTransform_.transform_.scale.x, 0.1f);
 }

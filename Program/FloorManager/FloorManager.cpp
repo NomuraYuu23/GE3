@@ -1,4 +1,5 @@
 #include "FloorManager.h"
+#include"../../Engine/2D/ImguiManager.h"
 
 FloorManager::~FloorManager()
 {
@@ -50,4 +51,17 @@ void FloorManager::AddFloor(Vector3 position, Vector3 rotate, bool isMoving, boo
 
 	colliderDebugDraw_->AddCollider(&floor->GetCollider());
 
+}
+
+void FloorManager::DrawImgui(){
+	int i = 0;
+
+	for (Floor* floor : floors_) {
+		if (ImGui::TreeNode((std::to_string(i + 1) + "個目の床").c_str())) {
+			floor->DrawImgui();
+
+			ImGui::TreePop();
+		}
+		i++;
+	}
 }

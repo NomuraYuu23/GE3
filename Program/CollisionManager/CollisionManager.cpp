@@ -3,7 +3,8 @@
 
 void CollisionManager::Initialize(Player* player, FloorManager* floorManager, 
 	BoxManager* boxManager, BreakBoxManager* breakBoxManager, 
-	RecoveryItemManager* recoveryItemManager, EnemyManager* enemyManager/*, Goal* goal, Enemy* enemy*/)
+	RecoveryItemManager* recoveryItemManager, EnemyManager* enemyManager,
+	CollectibleItemManager* collectibleItemManager/*, Goal* goal, Enemy* enemy*/)
 {
 
 	v3Calc = Vector3Calc::GetInstance();
@@ -18,6 +19,8 @@ void CollisionManager::Initialize(Player* player, FloorManager* floorManager,
 	breakBoxManager_ = breakBoxManager;
 
 	recoveryItemManager_ = recoveryItemManager;
+
+	collectibleItemManager_ = collectibleItemManager;
 
 	enemyManager_ = enemyManager;
 
@@ -42,7 +45,15 @@ void CollisionManager::AllCollision()
 			if (Collision::IsCollision(floor->GetCollider(), item->GetCollider())) {
 				item->OnCollision(floor->GetWorldTransformAdress());
 			}
-		}		
+		}
+
+		for (CollectibleItem* item : collectibleItemManager_->GetItems_()) {
+			if (item->GetisFalling()) {
+				if (Collision::IsCollision(floor->GetCollider(), item->GetCollider())) {
+					item->OnCollision(floor->GetWorldTransformAdress());
+				}
+			}
+		}
 	}
 
 	for (Box* box_ : boxManager_->GetBoxes_()) {
@@ -54,6 +65,13 @@ void CollisionManager::AllCollision()
 		for (RecoveryItem* item : recoveryItemManager_->GetItems_()) {
 			if (Collision::IsCollision(box_->GetCollider(), item->GetCollider())) {
 				item->OnCollisionBox(box_->GetWorldTransformAdress(),box_->GetSize().y);
+			}
+		}
+		for (CollectibleItem* item : collectibleItemManager_->GetItems_()) {
+			if (item->GetisFalling()) {
+				if (Collision::IsCollision(box_->GetCollider(), item->GetCollider())) {
+					item->OnCollisionBox(box_->GetWorldTransformAdress(), box_->GetSize().y);
+				}
 			}
 		}
 	}
@@ -73,6 +91,14 @@ void CollisionManager::AllCollision()
 				item->OnCollisionBox(breakBox_->GetWorldTransformAdress(), breakBox_->GetSize().y);
 			}
 		}
+
+		for (CollectibleItem* item : collectibleItemManager_->GetItems_()) {
+			if (item->GetisFalling()) {
+				if (Collision::IsCollision(breakBox_->GetCollider(), item->GetCollider())) {
+					item->OnCollisionBox(breakBox_->GetWorldTransformAdress(), breakBox_->GetSize().y);
+				}
+			}
+		}
 	}
 	
 	for (RecoveryItem* item : recoveryItemManager_->GetItems_()) {
@@ -80,6 +106,12 @@ void CollisionManager::AllCollision()
 			item->OnCollisionPlayer();
 		}
 	}
+	for (CollectibleItem* item : collectibleItemManager_->GetItems_()) {
+		if (Collision::IsCollision(item->GetCollider(), player_->GetCollider())) {
+			item->OnCollisionPlayer();
+		}
+	}
+
 
 	for (Enemy* enemy:enemyManager_->GetEnemys_()){
 		if (Collision::IsCollision(enemy->GetCollider(),player_->GetCollider())){

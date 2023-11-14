@@ -216,6 +216,12 @@
     <ClCompile Include="Program\BaseCharacter\BaseCharacter.cpp">
       <Filter>AL\ソースファイル\Character</Filter>
     </ClCompile>
+    <ClCompile Include="Program\CollectibleItemManager\CollectibleItemManager.cpp">
+      <Filter>AL\ソースファイル\StageItem</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\CollectibleItem\CollectibleItem.cpp">
+      <Filter>AL\ソースファイル\StageItem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imgui.h">
@@ -400,6 +406,12 @@
     </ClInclude>
     <ClInclude Include="Program\BaseCharacter\BaseCharacter.h">
       <Filter>AL\ヘッダーファイル\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\CollectibleItem\CollectibleItem.h">
+      <Filter>AL\ヘッダーファイル\StageItem</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\CollectibleItemManager\CollectibleItemManager.h">
+      <Filter>AL\ヘッダーファイル\StageItem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

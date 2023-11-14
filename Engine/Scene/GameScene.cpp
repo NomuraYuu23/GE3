@@ -85,6 +85,15 @@ void GameScene::Initialize() {
 
 	recoveryItemManager_->SetColliderDebugDraw(colliderDebugDraw_.get());
 
+	//収集アイテム生成
+	collectibleItemManager_ = std::make_unique<CollectibleItemManager>();
+	collectibleItemMaterial_.reset(Material::Create());
+	collectibleItemModel_.reset(Model::Create("Resources/TD2_November/collectibleItem/", "box.obj", dxCommon_));
+
+	collectibleItemManager_->Initialize(collectibleItemModel_.get(), collectibleItemMaterial_.get());
+
+	collectibleItemManager_->SetColliderDebugDraw(colliderDebugDraw_.get());
+
 	//ビュープロジェクション
 	viewProjection_.Initialize();
 
@@ -140,7 +149,7 @@ void GameScene::Initialize() {
 	followCamera_->SetTarget(player_->GetWorldTransformAddress());
 
 	collisionManager_ = std::make_unique<CollisionManager>();
-	collisionManager_->Initialize(player_.get(), floorManager_.get(), boxManager_.get(), breakBoxManager_.get(), recoveryItemManager_.get(), enemyManager_.get());
+	collisionManager_->Initialize(player_.get(), floorManager_.get(), boxManager_.get(), breakBoxManager_.get(), recoveryItemManager_.get(), enemyManager_.get(), collectibleItemManager_.get());
 
 	colliderDebugDraw_->AddCollider(&player_->GetCollider());
 	colliderDebugDraw_->AddCollider(&player_->GetExplosionCollider());
@@ -179,6 +188,8 @@ void GameScene::Update() {
 	enemyManager_->Update();
 
 	recoveryItemManager_->Update();
+
+	collectibleItemManager_->Update();
 
 	followCamera_->Update();
 
@@ -220,6 +231,7 @@ void GameScene::Draw() {
 	floorManager_->Draw(viewProjection_);
 	
 	recoveryItemManager_->Draw(viewProjection_);
+	collectibleItemManager_->Draw(viewProjection_);
 	player_->Draw(viewProjection_);
 	enemyManager_->Draw(viewProjection_);
 
@@ -260,78 +272,106 @@ void GameScene::ImguiDraw() {
 	ImGui::Begin("ステージ関連", nullptr, ImGuiWindowFlags_MenuBar);
 
 	if (ImGui::BeginMenuBar()){
-		if (ImGui::BeginMenu("床生成")){
-			ImGui::DragFloat3("床の座標", &floorTransform_.translate.x, 0.1f);
-			ImGui::DragFloat3("床の回転", &floorTransform_.rotate.x, 0.01f);
-			ImGui::Checkbox("動く床にする", &isFloorMove_);
-			if (isFloorMove_) {
-				ImGui::Checkbox("縦移動にする", &isVertical_);
+		if (ImGui::BeginMenu("オブジェクトの生成")){
+			if (ImGui::BeginMenu("床生成")) {
+				ImGui::DragFloat3("床の座標", &floorTransform_.translate.x, 0.1f);
+				ImGui::DragFloat3("床の回転", &floorTransform_.rotate.x, 0.01f);
+				ImGui::Checkbox("動く床にする", &isFloorMove_);
+				if (isFloorMove_) {
+					ImGui::Checkbox("縦移動にする", &isVertical_);
+				}
+				else {
+					isVertical_ = false;
+				}
+				if (ImGui::Button("床の追加")) {
+					floorManager_->AddFloor(floorTransform_.translate, floorTransform_.rotate, isFloorMove_, isVertical_);
+				}
+				ImGui::EndMenu();
 			}
-			else {
-				isVertical_ = false;
-			}
-			if (ImGui::Button("床の追加")) {
-				floorManager_->AddFloor(floorTransform_.translate, floorTransform_.rotate, isFloorMove_, isVertical_);
-			}
-			ImGui::EndMenu();
-		}
-		if (ImGui::BeginMenu("ボックス生成")){
-			ImGui::DragFloat3("箱の座標", &floorTransform_.translate.x, 0.1f);
-			ImGui::DragFloat3("箱の回転", &floorTransform_.rotate.x, 0.01f);
-			ImGui::DragFloat3("箱の大きさ", &floorTransform_.scale.x, 0.01f);
-			ImGui::Checkbox("動く箱にする", &isFloorMove_);
-			if (isFloorMove_) {
-				ImGui::Checkbox("縦移動にする", &isVertical_);
-			}
-			else {
-				isVertical_ = false;
-			}
-			if (ImGui::Button("箱の追加")) {
-				boxManager_->AddBox(floorTransform_, isFloorMove_, isVertical_);
-			}
-			ImGui::EndMenu();
-		}
-		if (ImGui::BeginMenu("ボックス一覧")){
-			boxManager_->DrawImgui();
-			ImGui::EndMenu();
-		}
 
-		if (ImGui::BeginMenu("壊れるボックス生成")) {
-			ImGui::DragFloat3("箱の座標", &breakBoxTransform_.translate.x, 0.1f);
-			ImGui::DragFloat3("箱の回転", &breakBoxTransform_.rotate.x, 0.01f);
-			ImGui::DragFloat3("箱の大きさ", &breakBoxTransform_.scale.x, 0.01f);
-			ImGui::Checkbox("動く箱にする", &isBreakBoxMove_);
-			if (isBreakBoxMove_) {
-				ImGui::Checkbox("縦移動にする", &isBreakBoxVertical_);
+			if (ImGui::BeginMenu("ボックス生成")) {
+				ImGui::DragFloat3("箱の座標", &floorTransform_.translate.x, 0.1f);
+				ImGui::DragFloat3("箱の回転", &floorTransform_.rotate.x, 0.01f);
+				ImGui::DragFloat3("箱の大きさ", &floorTransform_.scale.x, 0.01f);
+				ImGui::Checkbox("動く箱にする", &isFloorMove_);
+				if (isFloorMove_) {
+					ImGui::Checkbox("縦移動にする", &isVertical_);
+				}
+				else {
+					isVertical_ = false;
+				}
+				if (ImGui::Button("箱の追加")) {
+					boxManager_->AddBox(floorTransform_, isFloorMove_, isVertical_);
+				}
+				ImGui::EndMenu();
 			}
-			else {
-				isVertical_ = false;
-			}
-			if (ImGui::Button("壊れる箱の追加")) {
-				breakBoxManager_->AddBox(breakBoxTransform_, isBreakBoxMove_, isBreakBoxVertical_);
-			}
-			ImGui::EndMenu();
-		}
-		if (ImGui::BeginMenu("壊れる箱一覧")) {
-			breakBoxManager_->DrawImgui();
-			ImGui::EndMenu();
-		}
 
-		if (ImGui::BeginMenu("アイテム生成")) {
-			ImGui::DragFloat3("箱の座標", &recoveryItemTransform_.translate.x, 0.1f);
-			ImGui::DragFloat3("箱の回転", &recoveryItemTransform_.rotate.x, 0.01f);
-			ImGui::DragFloat3("箱の大きさ", &recoveryItemTransform_.scale.x, 0.01f);
-			
-			if (ImGui::Button("アイテムの追加")) {
-				recoveryItemManager_->AddItem(recoveryItemTransform_, isBreakBoxMove_, isBreakBoxVertical_);
+			if (ImGui::BeginMenu("壊れるボックス生成")) {
+				ImGui::DragFloat3("箱の座標", &breakBoxTransform_.translate.x, 0.1f);
+				ImGui::DragFloat3("箱の回転", &breakBoxTransform_.rotate.x, 0.01f);
+				ImGui::DragFloat3("箱の大きさ", &breakBoxTransform_.scale.x, 0.01f);
+				ImGui::Checkbox("動く箱にする", &isBreakBoxMove_);
+				if (isBreakBoxMove_) {
+					ImGui::Checkbox("縦移動にする", &isBreakBoxVertical_);
+				}
+				else {
+					isVertical_ = false;
+				}
+				if (ImGui::Button("壊れる箱の追加")) {
+					breakBoxManager_->AddBox(breakBoxTransform_, isBreakBoxMove_, isBreakBoxVertical_);
+				}
+				ImGui::EndMenu();
 			}
-			ImGui::EndMenu();
-		}
-		if (ImGui::BeginMenu("アイテム一覧")) {
-			recoveryItemManager_->DrawImgui();
-			ImGui::EndMenu();
-		}
 
+			if (ImGui::BeginMenu("回復アイテム生成")) {
+				ImGui::DragFloat3("アイテムの座標", &recoveryItemTransform_.translate.x, 0.1f);
+				ImGui::DragFloat3("アイテムの回転", &recoveryItemTransform_.rotate.x, 0.01f);
+				ImGui::DragFloat3("アイテムの大きさ", &recoveryItemTransform_.scale.x, 0.01f);
+
+				if (ImGui::Button("アイテムの追加")) {
+					recoveryItemManager_->AddItem(recoveryItemTransform_, isBreakBoxMove_, isBreakBoxVertical_);
+				}
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("収集アイテム生成")) {
+				ImGui::DragFloat3("アイテムの座標", &collectibleItemTransform_.translate.x, 0.1f);
+				ImGui::DragFloat3("アイテムの回転", &collectibleItemTransform_.rotate.x, 0.01f);
+				ImGui::DragFloat3("アイテムの大きさ", &collectibleItemTransform_.scale.x, 0.01f);
+				ImGui::Checkbox("落下させるか", &isCollectibleItemFall_);
+				
+				if (ImGui::Button("収集アイテムの追加")) {
+					collectibleItemManager_->AddItem(collectibleItemTransform_, isCollectibleItemFall_);
+				}
+				ImGui::EndMenu();
+			}
+
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("オブジェクト一覧")) {
+			if (ImGui::BeginMenu("床一覧")) {
+				floorManager_->DrawImgui();
+				ImGui::EndMenu();
+			}
+			if (ImGui::BeginMenu("ボックス一覧")) {
+				boxManager_->DrawImgui();
+				ImGui::EndMenu();
+			}
+			if (ImGui::BeginMenu("壊れる箱一覧")) {
+				breakBoxManager_->DrawImgui();
+				ImGui::EndMenu();
+			}
+			if (ImGui::BeginMenu("回復アイテム一覧")) {
+				recoveryItemManager_->DrawImgui();
+				ImGui::EndMenu();
+			}
+			if (ImGui::BeginMenu("収集アイテム一覧")) {
+				collectibleItemManager_->DrawImgui();
+				ImGui::EndMenu();
+			}
+
+			ImGui::EndMenu();
+		}
 
 		ImGui::EndMenuBar();
 	}

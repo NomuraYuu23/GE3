@@ -35,6 +35,11 @@ public: //メンバ関数
 	/// </summary>
 	void verticalMove();
 
+	/// <summary>
+	/// imgui表示
+	/// </summary>
+	void DrawImgui();
+
 public: // アクセッサ
 
 	WorldTransform GetWorldTransform() { return worldTransform_; }

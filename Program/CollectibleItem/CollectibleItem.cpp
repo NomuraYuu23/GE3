@@ -1,14 +1,16 @@
-#include"RecoveryItem.h"
+#include"CollectibleItem.h"
 #include <cmath>
 #include"../../externals/imgui/imgui.h"
 
-void RecoveryItem::Initialize(Model* model, Material* material, TransformStructure transform_/*, bool isMoving, bool isVertical*/){
+void CollectibleItem::Initialize(Model* model, Material* material, TransformStructure transform_, bool isFalling/*, bool isMoving, bool isVertical*/){
 	// nullポインタチェック
 	assert(model);
 
 	model_ = model;
 
 	material_ = material;
+
+	isFalling_ = isFalling;
 
 	// ワールド変換データの初期化
 	worldTransform_.Initialize();
@@ -36,14 +38,16 @@ void RecoveryItem::Initialize(Model* model, Material* material, TransformStructu
 	isDelete_ = false;
 }
 
-void RecoveryItem::Update(){
+void CollectibleItem::Update(){
 
 	if (worldTransform_.worldMatrix_.m[3][1] <= -50.0f) {
 		isDelete_ = true;
 	}
-
-	Fall();
-	Landing();
+	if (isFalling_){
+		Fall();
+		Landing();
+	}
+	
 	worldTransform_.transform_.translate.y += velocity_.y;
 	drawWorldTransform_.transform_.translate.y += velocity_.y;
 
@@ -58,23 +62,23 @@ void RecoveryItem::Update(){
 	
 }
 
-void RecoveryItem::Draw(const ViewProjection& viewProjection){
+void CollectibleItem::Draw(const ViewProjection& viewProjection){
 	model_->Draw(drawWorldTransform_, viewProjection);
 }
 
-void RecoveryItem::DrawImgui(){
+void CollectibleItem::DrawImgui(){
 	ImGui::DragFloat3("アイテムの座標", &drawWorldTransform_.transform_.translate.x, 0.1f);
 	ImGui::DragFloat3("アイテムの回転", &drawWorldTransform_.transform_.rotate.x, 0.1f);
 	ImGui::DragFloat3("アイテムの大きさ", &drawWorldTransform_.transform_.scale.x, 0.1f, 0.0f, 300.0f);
 }
 
-void RecoveryItem::Fall(){
+void CollectibleItem::Fall(){
 	if (!isLanding) {
 		velocity_.y -= kFallAcceleration;
 	}
 }
 
-void RecoveryItem::Landing(){
+void CollectibleItem::Landing(){
 	if (!isLanding) {
 		if (worldTransform_.parent_) {
 			LostParent();
@@ -86,7 +90,7 @@ void RecoveryItem::Landing(){
 	isLanding = false;
 }
 
-void RecoveryItem::GotParent(WorldTransform* parent){
+void CollectibleItem::GotParent(WorldTransform* parent){
 
 		Vector3Calc* v3Calc = Vector3Calc::GetInstance();
 		Matrix4x4Calc* m4Calc = Matrix4x4Calc::GetInstance();
@@ -116,7 +120,7 @@ void RecoveryItem::GotParent(WorldTransform* parent){
 		worldTransform_.UpdateMatrix();
 }
 
-void RecoveryItem::LostParent(){
+void CollectibleItem::LostParent(){
 	Vector3 position = { worldTransform_.worldMatrix_.m[3][0] ,worldTransform_.worldMatrix_.m[3][1] ,worldTransform_.worldMatrix_.m[3][2] };
 
 	worldTransform_.transform_.translate = position;
@@ -124,7 +128,7 @@ void RecoveryItem::LostParent(){
 	worldTransform_.UpdateMatrix();
 }
 
-void RecoveryItem::OnCollision(WorldTransform* worldTransform){
+void CollectibleItem::OnCollision(WorldTransform* worldTransform){
 	if (velocity_.y <= 0.0f) {
 		if (!worldTransform_.parent_ ||
 			(worldTransform_.parent_ != worldTransform)) {
@@ -139,7 +143,7 @@ void RecoveryItem::OnCollision(WorldTransform* worldTransform){
 	}
 }
 
-void RecoveryItem::OnCollisionBox(WorldTransform* worldTransform, float boxSize){
+void CollectibleItem::OnCollisionBox(WorldTransform* worldTransform, float boxSize){
 	if (velocity_.y <= 0.0f) {
 		if (!worldTransform_.parent_ ||
 			(worldTransform_.parent_ != worldTransform)) {
@@ -154,6 +158,6 @@ void RecoveryItem::OnCollisionBox(WorldTransform* worldTransform, float boxSize)
 	}
 }
 
-void RecoveryItem::OnCollisionPlayer(){
+void CollectibleItem::OnCollisionPlayer(){
 	isDelete_ = true;
 }

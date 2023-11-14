@@ -233,6 +233,16 @@ public: // メンバ関数
 	void OnCollisionBox(WorldTransform* worldTransform, float boxSize);
 
 	/// <summary>
+	/// 回復アイテムとの衝突
+	/// </summary>
+	//void OnCollisionRecoveryItem();
+
+	/// <summary>
+	/// 収集アイテムとの衝突
+	/// </summary>
+	//void OnCollisionCollectibleItem();
+
+	/// <summary>
 	/// 親を得た
 	/// </summary>
 	void GotParent(WorldTransform* parent);
@@ -280,7 +290,7 @@ private: // メンバ変数
 	// コライダー
 	Sphere collider_;
 	Sphere explosionCollider_;
-
+	/*爆発関連*/
 	//爆破の半径
 	float explosionSpeed_;
 
@@ -290,6 +300,15 @@ private: // メンバ変数
 	const int baseExplosionTimer_ = 30;
 
 	int explosionTimer_;
+
+	//残り爆発回数
+	int exprosionNum_ = 5;
+	//爆発の最大値
+	const int exprosionMax_ = 99;
+	//爆発の最低値
+	const int exprosionMin_ = 0;
+	//爆破回数を減らすためのフラグ
+	bool isSubtraction_ = false;
 
 	//ワールド変換データ
 	WorldTransform worldTransformBody_;
@@ -319,5 +338,7 @@ private: // メンバ変数
 	// ぶらぶら
 	WorkSwing workSwing_;
 
+	//アイテム関連の変数
+	
 };
 

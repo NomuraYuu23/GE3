@@ -18,6 +18,7 @@
 #include"../../Program/EnemyManager/EnemyManager.h"
 #include"../../Program/CollisionManager/CollisionManager.h"
 #include"../../Program/RecoveryItemManager/RecoveryItemManager.h"
+#include"../../Program/CollectibleItemManager/CollectibleItemManager.h"
 #include"../../Engine/Camera/FollowCamera/FollowCamera.h"
 
 class GameScene
@@ -90,10 +91,15 @@ private:
 	std::unique_ptr<Material> breakBoxMaterial_;
 	bool isBreakBoxMove_ = false;
 	bool isBreakBoxVertical_ = false;
-
+	//爆発回数回復アイテム
 	std::unique_ptr<RecoveryItemManager> recoveryItemManager_;
 	std::unique_ptr<Model> recoveryItemModel_;
 	std::unique_ptr<Material> recoveryItemMaterial_;
+	//コイン系収集アイテム
+	std::unique_ptr<CollectibleItemManager> collectibleItemManager_;
+	std::unique_ptr<Model> collectibleItemModel_;
+	std::unique_ptr<Material> collectibleItemMaterial_;
+	bool isCollectibleItemFall_ = false;
 	
 	//床の生成のトランスフォーム
 	TransformStructure floorTransform_{};
@@ -103,6 +109,9 @@ private:
 
 	//回復アイテムの生成トランスフォーム
 	TransformStructure recoveryItemTransform_{};
+
+	//収集アイテムの生成トランスフォーム
+	TransformStructure collectibleItemTransform_{};
 
 	//敵生成トランスフォーム
 	TransformStructure firstEnemyTransform_{};
@@ -133,9 +142,9 @@ private:
 	std::vector<Material*> playerMaterials_;
 
 	//エネミー関連
-	//自機
+	//エネミー
 	std::unique_ptr<EnemyManager> enemyManager_;
-	//自機のモデルとか
+	//エネミーのモデルとか
 	std::vector<Model*> enemyModels_;
 	std::vector<Material*> enemyMaterials_;
 };
