@@ -204,10 +204,10 @@
     <ClCompile Include="Engine\Pause\Pause.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3D\Particle3D.cpp">
+    <ClCompile Include="Engine\3D\ParticleManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3D\ParticleManager.cpp">
+    <ClCompile Include="Engine\3D\Particle.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -404,10 +404,10 @@
     <ClInclude Include="Engine\Pause\Pause.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3D\Particle3D.h">
+    <ClInclude Include="Engine\3D\ParticleManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3D\ParticleManager.h">
+    <ClInclude Include="Engine\3D\Particle.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

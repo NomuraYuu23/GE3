@@ -64,6 +64,9 @@ void MyFramework::Finalize()
 	// サウンド後始末
 	audio->Finalize();
 
+	// パーティクル後始末
+	ParticleManager::GetInstance()->Finalize();
+
 	//色々な解放処理の前に書く
 	imGuiManager->Finalize();
 

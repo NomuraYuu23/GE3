@@ -1,6 +1,7 @@
 #include "ParticleManager.h"
 #include <d3d12.h>
 #include "../base/TextureManager.h"
+#include "Model.h"
 
 uint32_t ParticleManager::kNumInstanceMax_ = 100;
 
@@ -47,32 +48,66 @@ void ParticleManager::SRVCreate()
 
 }
 
-Particle3D ParticleManager::ParticleCreate(uint32_t numInstance)
+void ParticleManager::ParticleCreate(uint32_t numInstance)
 {
 
 	// インスタンス数確認
 	assert(numInstance > 0 && numInstance + indexNextMap_ < kNumInstanceMax_);
 
-	Particle3D particle;
-	particle.Initialize(numInstance, indexNextMap_);
+	Particle* particle = new Particle();
 
-	indexNextMap_ += numInstance;
+	particle->Initialize(numInstance);
 
-	return particle;
+	particles_.push_back(particle);
 
 }
 
-void ParticleManager::ParticleDelete(uint32_t numInstance, uint32_t indexMap)
+void ParticleManager::Update()
 {
 
-	Matrix4x4Calc* matrix4x4Calc = Matrix4x4Calc::GetInstance();
-	uint32_t indexPuls = 0;
-	for (size_t i = indexMap + numInstance; i < indexNextMap_; i++) {
-		transformationMatrixMap_[indexMap + indexPuls] = transformationMatrixMap_[i];
-		transformationMatrixMap_[i].World = matrix4x4Calc->MakeIdentity4x4();
-		transformationMatrixMap_[i].WVP = matrix4x4Calc->MakeIdentity4x4();
-		indexPuls++;
+	std::list<Particle*>::iterator itr = particles_.begin();
+	for (; itr != particles_.end(); ++itr) {
+		Particle* particle = *itr;
+		particle->Update();
 	}
+
+}
+
+void ParticleManager::Draw(const ViewProjection& viewProjection)
+{
+	
+	model_->ParticleDraw(viewProjection);
+
+}
+
+void ParticleManager::Map(const ViewProjection& viewProjection)
+{
+
+	instanceIndex_ = 0u;
+
+	std::list<Particle*>::iterator itr = particles_.begin();
+	for (; itr != particles_.end(); ++itr) {
+		Particle* particle = *itr;
+		particle->Map(viewProjection, instanceIndex_);
+		instanceIndex_ += particle->GetNumInstance();
+	}
+
+}
+
+void ParticleManager::Finalize()
+{
+
+	particles_.remove_if([](Particle* particle) {
+		delete particle;
+		return true;
+	});
+
+}
+
+void ParticleManager::ModelCreate()
+{
+
+	model_.reset(Model::Create("Resources/default/", "plane.obj", DirectXCommon::GetInstance()));
 
 }
 

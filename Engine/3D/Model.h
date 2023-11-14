@@ -101,7 +101,7 @@ public:
 	/// </summary>
 	void Draw(WorldTransform& worldTransform, const ViewProjection& viewProjection);
 	void Draw(WorldTransform& worldTransform, const ViewProjection& viewProjection, Material* material);
-	void Draw(Particle3D& particle3D, const ViewProjection& viewProjection);
+	void ParticleDraw(const ViewProjection& viewProjection);
 
 	/// <summary>
 	/// メッシュデータ生成

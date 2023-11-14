@@ -26,7 +26,10 @@ void GameScene::Initialize() {
 	viewProjection_.transform_.translate = { 0.0f,23.0f,-35.0f };
 	viewProjection_.transform_.rotate = { 0.58f,0.0f,0.0f };
 
-	particle3D_ = ParticleManager::GetInstance()->ParticleCreate(10);
+	//パーティクル
+	particleManager_ = ParticleManager::GetInstance();
+	particleManager_->ModelCreate();
+	particleManager_->ParticleCreate(10);
 
 }
 
@@ -49,14 +52,15 @@ void GameScene::Update(){
 	
 	// デバッグ描画
 	colliderDebugDraw_->Update();
+	
+	//パーティクル
+	particleManager_->Update();
 
 	// ポーズ機能
 	pause_->Update();
 
 	// タイトルへ行く
 	GoToTheTitle();
-
-	particle3D_.UpdateMatrix();
 
 }
 
@@ -85,7 +89,7 @@ void GameScene::Draw() {
 	directionalLight_->Draw(dxCommon_->GetCommadList());
 	//3Dオブジェクトはここ
 
-	Model_->Draw(particle3D_, viewProjection_);
+	particleManager_->Draw(viewProjection_);
 
 #ifdef _DEBUG
 
@@ -158,8 +162,6 @@ void GameScene::ModelCreate()
 
 	colliderSphereModel_.reset(Model::Create("Resources/TD2_November/collider/sphere/", "sphere.obj", dxCommon_));
 	colliderBoxModel_.reset(Model::Create("Resources/TD2_November/collider/box/", "box.obj", dxCommon_));
-
-	Model_.reset(Model::Create("Resources/default/", "plane.obj", dxCommon_));
 
 }
 

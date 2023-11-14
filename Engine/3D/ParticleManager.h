@@ -2,7 +2,11 @@
 #include <cstdint>
 #include "TransformationMatrix.h"
 #include "../base/BufferResource.h"
-#include "Particle3D.h"
+#include "Particle.h"
+#include <list>
+#include <memory>
+
+class Model;
 
 class ParticleManager
 {
@@ -34,12 +38,34 @@ public: // メンバ関数
 	/// </summary>
 	/// <param name="numInstance">インスタンス数</param>
 	/// <returns></returns>
-	Particle3D ParticleCreate(uint32_t numInstance);
+	void ParticleCreate(uint32_t numInstance);
 
 	/// <summary>
-	/// パーティクル終了時呼び出し関数
+	/// 更新
 	/// </summary>
-	void ParticleDelete(uint32_t numInstance, uint32_t indexMap);
+	void Update();
+
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="viewProjection"></param>
+	void Draw(const ViewProjection& viewProjection);
+
+	/// <summary>
+	/// マッピング
+	/// </summary>
+	/// <param name="viewProjection"></param>
+	void Map(const ViewProjection& viewProjection);
+
+	/// <summary>
+	/// 後処理
+	/// </summary>
+	void Finalize();
+
+	/// <summary>
+	/// モデル作成
+	/// </summary>
+	void ModelCreate();
 
 public: // アクセッサ
 
@@ -54,6 +80,8 @@ public: // アクセッサ
 
 	ID3D12Resource* GetTransformationMatrixBuff() { return transformationMatrixBuff_.Get(); }
 
+	uint32_t GetInstanceIndex() { return instanceIndex_; }
+
 private: // メンバ変数
 
 	//WVP用のリソースを作る。Matrix4x4 1つ分のサイズを用意する
@@ -67,6 +95,15 @@ private: // メンバ変数
 
 	//次に使うディスクリプタヒープの番号
 	uint32_t indexNextMap_ = 0u;
+
+	// パーティクル
+	std::list<Particle*> particles_;
+
+	// モデル
+	std::unique_ptr<Model> model_;
+
+	// 描画するインスタンス数
+	uint32_t instanceIndex_;
 
 };
 
