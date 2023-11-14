@@ -28,7 +28,7 @@ void Particle3D::Initialize(uint32_t numInstance, uint32_t indexMap) {
 
 		transform_[i].scale = {1.0f,1.0f,1.0f};
 		transform_[i].rotate = { 0.0f,0.0f,0.0f };
-		transform_[i].translate = { 0.0f,0.0f,0.0f };
+		transform_[i].translate = { 0.1f * i,0.1f * i,0.0f };
 
 		worldMatrix_[i] = matrix4x4Calc->MakeIdentity4x4();
 

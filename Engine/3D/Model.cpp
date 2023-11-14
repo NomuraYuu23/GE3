@@ -294,7 +294,6 @@ void Model::Draw(Particle3D& particle3D, const ViewProjection& viewProjection)
 	sCommandList->SetGraphicsRootSignature(sRootSignature[GraphicsPipelineState::PipelineStateName::kParticle]);
 
 	particle3D.Map(viewProjection);
-	//particle3D;
 
 	sCommandList->IASetVertexBuffers(0, 1, &vbView_); //VBVを設定
 
