@@ -70,6 +70,7 @@ void CollectibleItem::DrawImgui(){
 	ImGui::DragFloat3("アイテムの座標", &drawWorldTransform_.transform_.translate.x, 0.1f);
 	ImGui::DragFloat3("アイテムの回転", &drawWorldTransform_.transform_.rotate.x, 0.1f);
 	ImGui::DragFloat3("アイテムの大きさ", &drawWorldTransform_.transform_.scale.x, 0.1f, 0.0f, 300.0f);
+	worldTransform_.transform_.translate = drawWorldTransform_.transform_.translate;
 }
 
 void CollectibleItem::Fall(){
@@ -116,16 +117,22 @@ void CollectibleItem::GotParent(WorldTransform* parent){
 		position = m4Calc->TransformNormal(position, rotateMatrix);
 
 		worldTransform_.transform_.translate = position;
+		drawWorldTransform_.transform_.translate = position;
 		worldTransform_.parent_ = parent;
+		drawWorldTransform_.parent_ = parent;
 		worldTransform_.UpdateMatrix();
+		drawWorldTransform_.UpdateMatrix();
 }
 
 void CollectibleItem::LostParent(){
 	Vector3 position = { worldTransform_.worldMatrix_.m[3][0] ,worldTransform_.worldMatrix_.m[3][1] ,worldTransform_.worldMatrix_.m[3][2] };
 
 	worldTransform_.transform_.translate = position;
+	drawWorldTransform_.transform_.translate = position;
 	worldTransform_.parent_ = nullptr;
+	drawWorldTransform_.parent_ = nullptr;
 	worldTransform_.UpdateMatrix();
+	drawWorldTransform_.UpdateMatrix();
 }
 
 void CollectibleItem::OnCollision(WorldTransform* worldTransform){

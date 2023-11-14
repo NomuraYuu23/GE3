@@ -105,6 +105,13 @@ private:
 	//床の生成のトランスフォーム
 	TransformStructure floorTransform_{};
 
+	//ボックスのトランスフォーム
+	TransformStructure firstBoxTrnasform_{
+		.scale = {30.0f,3.0f,30.0f},
+		.rotate = {0.0f,0.0f,0.0f},
+		.translate = {0.0f,-5.0,35.0f}
+	};
+
 	//壊れるボックスの生成のトランスフォーム
 	TransformStructure breakBoxTransform_{};
 

@@ -65,6 +65,7 @@ void GameScene::Initialize() {
 	boxManager_->Initialize(boxModel_.get(), boxMaterial_.get());
 
 	boxManager_->SetColliderDebugDraw(colliderDebugDraw_.get());
+	boxManager_->AddBox(firstBoxTrnasform_, false, false);
 
 	//壊れるボックス生成
 	breakBoxManager_ = std::make_unique<BreakBoxManager>();

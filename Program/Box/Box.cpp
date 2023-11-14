@@ -118,5 +118,5 @@ void Box::DrawImgui(){
 	ImGui::DragFloat3("箱の座標", &drawWorldTransform_.transform_.translate.x, 0.1f);
 	ImGui::DragFloat3("箱の回転", &drawWorldTransform_.transform_.rotate.x, 0.1f);
 	ImGui::DragFloat3("箱の大きさ", &drawWorldTransform_.transform_.scale.x, 0.1f, 0.0f, 300.0f);
-	
+	worldTransform_.transform_.translate = drawWorldTransform_.transform_.translate;
 }
