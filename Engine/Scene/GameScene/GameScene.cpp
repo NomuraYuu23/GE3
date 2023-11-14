@@ -29,7 +29,7 @@ void GameScene::Initialize() {
 	//パーティクル
 	particleManager_ = ParticleManager::GetInstance();
 	particleManager_->ModelCreate();
-	particleManager_->ParticleCreate(10);
+	//particleManager_->ParticleCreate(10);
 
 }
 
