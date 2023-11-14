@@ -407,6 +407,15 @@ void GameScene::ImguiDraw() {
 
 			ImGui::EndMenu();
 		}
+		if (ImGui::BeginMenu("ファイル関連")){
+			if (ImGui::Button("全保存")) {
+				boxManager_->SaveFile();
+			}
+			if (ImGui::Button("全ロード(手動)")) {
+				boxManager_->LoadFiles();
+			}
+			ImGui::EndMenu();
+		}
 
 		ImGui::EndMenuBar();
 	}
@@ -423,7 +432,7 @@ void GameScene::DebugCameraUpdate()
 {
 
 #ifdef _DEBUG
-	if (input_->TriggerKey(DIK_0)) {
+	if (input_->TriggerKey(DIK_LSHIFT)) {
 		if (isDebugCameraActive_) {
 			isDebugCameraActive_ = false;
 		}

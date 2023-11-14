@@ -49,10 +49,10 @@ void BurningBoxManager::DrawImgui(){
 }
 
 void BurningBoxManager::AddBurningBox(TransformStructure BurningBox, bool isMoving, bool isVertical){
-	BurningBox* BurningBox_ = new BurningBox();
+	/*BurningBox* BurningBox_ = new BurningBox();
 	BurningBox_->Initialize(model_, material_, BurningBox, isMoving, isVertical);
 
 	BurningBoxes_.push_back(BurningBox_);
 
-	colliderDebugDraw_->AddCollider(&BurningBox_->GetCollider());
+	colliderDebugDraw_->AddCollider(&BurningBox_->GetCollider());*/
 }

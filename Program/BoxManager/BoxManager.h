@@ -6,10 +6,15 @@
 
 #include<list>
 #include "../../Engine/Collider/ColliderDebugDraw/ColliderDebugDraw.h"// コライダーデバッグ描画
+#include"../../externals/nlohmann/json.hpp"
+#include<fstream>
+#include<iostream>
 
 
 class BoxManager{
 public:
+	using json = nlohmann::json;
+
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
@@ -57,7 +62,35 @@ public: // アクセッサ
 	/// <param name="colliderDebugDraw"></param>
 	void SetColliderDebugDraw(ColliderDebugDraw* colliderDebugDraw) { colliderDebugDraw_ = colliderDebugDraw; }
 
+public:
+	void SaveFile();
+
+	void ChackFiles();
+
+	void LoadFiles();
+
+	void LoadFile(const std::string& groupName);
+
+	bool LoadChackItem(const std::string& directoryPath, const std::string& itemName);
+
 private:
+	int chackOnlyNumber = 0;
+
+	void from_json(const json& j, Vector3& v);
+	
+private:
+	//ファイル保存関連
+	const std::string kDirectoryPath = "Resources/Stages/";
+
+	const std::string kDirectoryName = "Resources/Stages";
+
+	const std::string kItemName_ = "Box";
+
+	std::string Name_ = "\0";
+
+	char ItemName_[256]{};
+
+	std::vector<std::string> fileName;
 
 	// モデル
 	Model* model_ = nullptr;
