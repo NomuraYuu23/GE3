@@ -1,10 +1,8 @@
-#include "Floor.h"
+#include "BurningBox.h"
 #include <cmath>
-#include"../../Engine/2D/ImguiManager.h"
+#include"../../externals/imgui/imgui.h"
 
-void Floor::Initialize(Model* model, Material* material, Vector3 position, Vector3 rotate, bool isMoving, bool isVertical)
-{
-
+void BurningBox::Initialize(Model* model, Material* material, TransformStructure transform_, bool isMoving, bool isVertical){
 	// nullポインタチェック
 	assert(model);
 
@@ -14,11 +12,19 @@ void Floor::Initialize(Model* model, Material* material, Vector3 position, Vecto
 
 	// ワールド変換データの初期化
 	worldTransform_.Initialize();
-	worldTransform_.transform_.translate = position;
-	worldTransform_.transform_.rotate = rotate;
+	worldTransform_.transform_.translate = transform_.translate;
+	worldTransform_.transform_.rotate = transform_.rotate;
 	worldTransform_.UpdateMatrix();
 
-	position_ = position;
+	drawWorldTransform_.Initialize();
+	drawWorldTransform_.transform_.translate = transform_.translate;
+	drawWorldTransform_.transform_.rotate = transform_.rotate;
+	drawWorldTransform_.transform_.scale = transform_.scale;
+	drawWorldTransform_.UpdateMatrix();
+
+	position_ = transform_.translate;
+
+	size_ = { drawWorldTransform_.transform_.scale.x + 0.1f,drawWorldTransform_.transform_.scale.y + 0.1f,drawWorldTransform_.transform_.scale.z + 0.1f, };
 
 	isMoving_ = isMoving;
 
@@ -30,39 +36,34 @@ void Floor::Initialize(Model* model, Material* material, Vector3 position, Vecto
 	Vector3 colliderMin_ = { position_.x - size_.x, position_.y - size_.y, position_.z - size_.z };
 
 	collider_.Initialize(colliderMin_, colliderMax_);
-
 }
 
-void Floor::Update()
-{
-
+void BurningBox::Update(){
 	if (isMoving_) {
-		if (isVertical_){
+		if (isVertical_) {
 			verticalMove();
 		}
 		else {
 			Move();
 		}
-		Vector3 WorldPosition = { worldTransform_.worldMatrix_.m[3][0] , worldTransform_.worldMatrix_.m[3][1] , worldTransform_.worldMatrix_.m[3][2] };
-		collider_.max_ = { WorldPosition.x + size_.x, WorldPosition.y + size_.y, WorldPosition.z + size_.z};
-		collider_.min_ = { WorldPosition.x - size_.x, WorldPosition.y - size_.y, WorldPosition.z - size_.z };
+		
 	}
+	Vector3 WorldPosition = { drawWorldTransform_.worldMatrix_.m[3][0] , drawWorldTransform_.worldMatrix_.m[3][1] , drawWorldTransform_.worldMatrix_.m[3][2] };
+	size_ = { drawWorldTransform_.transform_.scale.x + 0.1f,drawWorldTransform_.transform_.scale.y + 0.1f,drawWorldTransform_.transform_.scale.z + 0.1f, };
+	collider_.max_ = { WorldPosition.x + size_.x, WorldPosition.y + size_.y, WorldPosition.z + size_.z };
+	collider_.min_ = { WorldPosition.x - size_.x, WorldPosition.y - size_.y, WorldPosition.z - size_.z };
 
 	worldTransform_.UpdateMatrix();
+	drawWorldTransform_.UpdateMatrix();
 	collider_.worldTransformUpdate();
-
 }
 
-void Floor::Draw(const ViewProjection& viewProjection)
-{
-
-	model_->Draw(worldTransform_, viewProjection);
-
+void BurningBox::Draw(const ViewProjection& viewProjection){
+	
+	model_->Draw(drawWorldTransform_, viewProjection);
 }
 
-void Floor::Move()
-{
-
+void BurningBox::Move(){
 	Matrix4x4Calc* m4Calc = Matrix4x4Calc::GetInstance();
 	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
 
@@ -83,11 +84,11 @@ void Floor::Move()
 	// 移動ベクトルをカメラの角度だけ回転する
 	position = m4Calc->TransformNormal(position, rotateMatrix);
 
-	worldTransform_.transform_.translate = v3Calc->Add(position_, v3Calc->Multiply(sinf(moveTimer_),position));
-
+	worldTransform_.transform_.translate = v3Calc->Add(position_, v3Calc->Multiply(sinf(moveTimer_), position));
+	drawWorldTransform_.transform_.translate = v3Calc->Add(position_, v3Calc->Multiply(sinf(moveTimer_), position));
 }
 
-void Floor::verticalMove(){
+void BurningBox::verticalMove(){
 	Matrix4x4Calc* m4Calc = Matrix4x4Calc::GetInstance();
 	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
 
@@ -109,9 +110,13 @@ void Floor::verticalMove(){
 	position = m4Calc->TransformNormal(position, rotateMatrix);
 
 	worldTransform_.transform_.translate = v3Calc->Add(position_, v3Calc->Multiply(cosf(moveTimer_), position));
+	drawWorldTransform_.transform_.translate = v3Calc->Add(position_, v3Calc->Multiply(cosf(moveTimer_), position));
 }
 
-void Floor::DrawImgui(){
-	ImGui::DragFloat3("床の座標", &worldTransform_.transform_.translate.x, 0.1f);
-	ImGui::DragFloat3("床の回転", &worldTransform_.transform_.rotate.x, 0.1f);
+void BurningBox::DrawImgui(){
+	
+	ImGui::DragFloat3("箱の座標", &drawWorldTransform_.transform_.translate.x, 0.1f);
+	ImGui::DragFloat3("箱の回転", &drawWorldTransform_.transform_.rotate.x, 0.1f);
+	ImGui::DragFloat3("箱の大きさ", &drawWorldTransform_.transform_.scale.x, 0.1f, 0.0f, 300.0f);
+	worldTransform_.transform_.translate = drawWorldTransform_.transform_.translate;
 }

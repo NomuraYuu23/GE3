@@ -125,6 +125,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Program\Box\Box.cpp" />
     <ClCompile Include="Program\BreakBoxManager\BreakBoxManager.cpp" />
     <ClCompile Include="Program\BreakBox\BreakBox.cpp" />
+    <ClCompile Include="Program\BurningBoxManager\BurningBoxManager.cpp" />
+    <ClCompile Include="Program\BurningBox\BurningBox.cpp" />
+    <ClCompile Include="Program\CheckPointManager\CheckPointManager.cpp" />
+    <ClCompile Include="Program\CheckPoint\CheckPoint.cpp" />
     <ClCompile Include="Program\CollectibleItemManager\CollectibleItemManager.cpp" />
     <ClCompile Include="Program\CollectibleItem\CollectibleItem.cpp" />
     <ClCompile Include="Program\CollisionManager\Collision.cpp" />
@@ -184,6 +188,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Program\Box\Box.h" />
     <ClInclude Include="Program\BreakBoxManager\BreakBoxManager.h" />
     <ClInclude Include="Program\BreakBox\BreakBox.h" />
+    <ClInclude Include="Program\BurningBoxManager\BurningBoxManager.h" />
+    <ClInclude Include="Program\BurningBox\BurningBox.h" />
+    <ClInclude Include="Program\CheckPointManager\CheckPointManager.h" />
+    <ClInclude Include="Program\CheckPoint\CheckPoint.h" />
     <ClInclude Include="Program\CollectibleItemManager\CollectibleItemManager.h" />
     <ClInclude Include="Program\CollectibleItem\CollectibleItem.h" />
     <ClInclude Include="Program\CollisionManager\Collision.h" />

@@ -55,6 +55,7 @@ void GameScene::Initialize() {
 
 	floorManager_->SetColliderDebugDraw(colliderDebugDraw_.get());
 	floorManager_->AddFloor({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, false, false);
+	floorManager_->AddFloor({ 0.0f,0.0f,75.0f }, { 0.0f,0.0f,0.0f }, false, false);
 
 	//ボックスマネージャー
 	boxManager_ = std::make_unique<BoxManager>();
@@ -94,6 +95,16 @@ void GameScene::Initialize() {
 	collectibleItemManager_->Initialize(collectibleItemModel_.get(), collectibleItemMaterial_.get());
 
 	collectibleItemManager_->SetColliderDebugDraw(colliderDebugDraw_.get());
+
+	//チェックポイント生成
+	checkPointManager_ = std::make_unique<CheckPointManager>();
+	checkPointMaterial_.reset(Material::Create());
+	checkPointModel_.reset(Model::Create("Resources/TD2_November/checkPoint/", "box.obj", dxCommon_));
+
+	checkPointManager_->Initialize(checkPointModel_.get(), checkPointMaterial_.get());
+
+	checkPointManager_->SetColliderDebugDraw(colliderDebugDraw_.get());
+	checkPointManager_->AddCheck(firstCheckPointTransform_);
 
 	//ビュープロジェクション
 	viewProjection_.Initialize();
@@ -150,7 +161,9 @@ void GameScene::Initialize() {
 	followCamera_->SetTarget(player_->GetWorldTransformAddress());
 
 	collisionManager_ = std::make_unique<CollisionManager>();
-	collisionManager_->Initialize(player_.get(), floorManager_.get(), boxManager_.get(), breakBoxManager_.get(), recoveryItemManager_.get(), enemyManager_.get(), collectibleItemManager_.get());
+	collisionManager_->Initialize(player_.get(), floorManager_.get(), boxManager_.get(), 
+		breakBoxManager_.get(), recoveryItemManager_.get(), enemyManager_.get(), 
+		collectibleItemManager_.get(), checkPointManager_.get());
 
 	colliderDebugDraw_->AddCollider(&player_->GetCollider());
 	colliderDebugDraw_->AddCollider(&player_->GetExplosionCollider());
@@ -166,7 +179,7 @@ void GameScene::Update() {
 
 
 	//光源
-	DirectionalLightData directionalLightData;
+	DirectionalLightData directionalLightData{};
 	directionalLightData.color = { 1.0f,1.0f,1.0f,1.0f };
 	directionalLightData.direction = { 0.0f, -1.0f, 0.0f };
 	directionalLightData.intencity = 1.0f;
@@ -178,6 +191,7 @@ void GameScene::Update() {
 	boxManager_->Update();
 	breakBoxManager_->Update();
 	
+	checkPointManager_->Update();
 
 	collisionManager_->AllCollision();
 
@@ -230,6 +244,7 @@ void GameScene::Draw() {
 	boxManager_->Draw(viewProjection_);
 	breakBoxManager_->Draw(viewProjection_);
 	floorManager_->Draw(viewProjection_);
+	checkPointManager_->Draw(viewProjection_);
 	
 	recoveryItemManager_->Draw(viewProjection_);
 	collectibleItemManager_->Draw(viewProjection_);
@@ -351,6 +366,17 @@ void GameScene::ImguiDraw() {
 				ImGui::EndMenu();
 			}
 
+			if (ImGui::BeginMenu("チェックポイント生成")) {
+				ImGui::DragFloat3("チェックポイントの座標", &checkPointTransform_.translate.x, 0.1f);
+				ImGui::DragFloat3("チェックポイントの回転", &checkPointTransform_.rotate.x, 0.01f);
+				ImGui::DragFloat3("チェックポイントの大きさ", &checkPointTransform_.scale.x, 0.01f);
+
+				if (ImGui::Button("収集アイテムの追加")) {
+					checkPointManager_->AddCheck(checkPointTransform_);
+				}
+				ImGui::EndMenu();
+			}
+
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("オブジェクト一覧")) {
@@ -372,6 +398,10 @@ void GameScene::ImguiDraw() {
 			}
 			if (ImGui::BeginMenu("収集アイテム一覧")) {
 				collectibleItemManager_->DrawImgui();
+				ImGui::EndMenu();
+			}
+			if (ImGui::BeginMenu("チェックポイント一覧")) {
+				checkPointManager_->DrawImgui();
 				ImGui::EndMenu();
 			}
 

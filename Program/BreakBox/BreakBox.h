@@ -75,6 +75,7 @@ private:
 	//壊れるか
 	bool isBreak_;
 
+
 	// 移動用タイマー
 	float moveTimer_;
 

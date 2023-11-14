@@ -222,6 +222,18 @@
     <ClCompile Include="Program\CollectibleItem\CollectibleItem.cpp">
       <Filter>AL\ソースファイル\StageItem</Filter>
     </ClCompile>
+    <ClCompile Include="Program\CheckPoint\CheckPoint.cpp">
+      <Filter>AL\ソースファイル\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\CheckPointManager\CheckPointManager.cpp">
+      <Filter>AL\ソースファイル\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\BurningBox\BurningBox.cpp">
+      <Filter>AL\ソースファイル\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\BurningBoxManager\BurningBoxManager.cpp">
+      <Filter>AL\ソースファイル\Stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imgui.h">
@@ -412,6 +424,18 @@
     </ClInclude>
     <ClInclude Include="Program\CollectibleItemManager\CollectibleItemManager.h">
       <Filter>AL\ヘッダーファイル\StageItem</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\CheckPoint\CheckPoint.h">
+      <Filter>AL\ヘッダーファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\CheckPointManager\CheckPointManager.h">
+      <Filter>AL\ヘッダーファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\BurningBox\BurningBox.h">
+      <Filter>AL\ヘッダーファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\BurningBoxManager\BurningBoxManager.h">
+      <Filter>AL\ヘッダーファイル\Stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

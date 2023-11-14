@@ -6,7 +6,7 @@
 void Player::Initialize(const std::vector<Model*>& models,
 	const std::vector<Material*>& materials)
 {
-
+	workRoot_.kInitialPosition = { 0.0f,5.0f,0.0f };
 	//nullポインタチェック
 	assert(models.front());
 	//基底クラスの初期化
@@ -563,6 +563,11 @@ void Player::OnCollisionRecoveryItem(int recoveryValue){
 
 void Player::OnCollisionCollectibleItem(){
 	numCollectItem++;
+}
+
+void Player::SetRestartPosition(const Vector3& position){
+	Vector3 pos = { position.x,position.y + 5.0f,position.z };
+	workRoot_.kInitialPosition = pos;
 }
 
 void Player::GotParent(WorldTransform* parent)

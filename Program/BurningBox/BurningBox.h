@@ -4,7 +4,7 @@
 #include "../../Engine/Collider/AABB/AABB.h"
 #include "../../Engine/3D/TransformStructure.h"
 
-class Box{
+class BurningBox{
 public: //メンバ関数
 
 	/// <summary>

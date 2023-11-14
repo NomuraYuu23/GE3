@@ -20,6 +20,7 @@
 #include"../../Program/RecoveryItemManager/RecoveryItemManager.h"
 #include"../../Program/CollectibleItemManager/CollectibleItemManager.h"
 #include"../../Engine/Camera/FollowCamera/FollowCamera.h"
+#include"../../Program/CheckPointManager/CheckPointManager.h"
 
 class GameScene
 {
@@ -101,7 +102,12 @@ private:
 	std::unique_ptr<Model> collectibleItemModel_;
 	std::unique_ptr<Material> collectibleItemMaterial_;
 	bool isCollectibleItemFall_ = false;
-	
+
+	//チェックポイント
+	std::unique_ptr<CheckPointManager> checkPointManager_;
+	std::unique_ptr<Model> checkPointModel_;
+	std::unique_ptr<Material> checkPointMaterial_;
+
 	//床の生成のトランスフォーム
 	TransformStructure floorTransform_{};
 
@@ -120,6 +126,14 @@ private:
 
 	//収集アイテムの生成トランスフォーム
 	TransformStructure collectibleItemTransform_{};
+
+	//チェックポイントの生成トランスフォーム
+	TransformStructure checkPointTransform_{};
+	TransformStructure firstCheckPointTransform_{
+		.scale = {2.0f,2.0f,2.0f},
+		.rotate = {0.0f,0.0f,0.0f},
+		.translate = {0.0f,2.0f,75.0f}
+	};
 
 	//敵生成トランスフォーム
 	TransformStructure firstEnemyTransform_{};

@@ -1,17 +1,17 @@
+#pragma once
 #include "../../Engine/3D/Model.h"
 #include "../../Engine/3D/Material.h"
 #include "../../Engine/3D/WorldTransform.h"
 #include "../../Engine/Collider/AABB/AABB.h"
 #include "../../Engine/3D/TransformStructure.h"
-
-class Box{
+class CheckPoint{
 public: //メンバ関数
 
 	/// <summary>
 	/// 初期化
 	/// </summary>
 	/// <param name="model">モデル</param>
-	void Initialize(Model* model, Material* material, TransformStructure transform_, bool isMoving, bool isVertical);
+	void Initialize(Model* model, Material* material, TransformStructure transform_);
 
 	/// <summary>
 	/// 更新
@@ -24,20 +24,15 @@ public: //メンバ関数
 	/// <param name="viewProjection">ビュープロジェクション</param>
 	void Draw(const ViewProjection& viewProjection);
 
-
 	/// <summary>
-	/// 移動
+	/// imgui描画
 	/// </summary>
-	void Move();
-
-	/// <summary>
-	/// 縦移動
-	/// </summary>
-	void verticalMove();
-
-
 	void DrawImgui();
 
+	/// <summary>
+	/// 衝突
+	/// </summary>
+	void OnCollisiin();
 public: // アクセッサ
 
 	WorldTransform GetWorldTransform() { return worldTransform_; }
@@ -47,6 +42,8 @@ public: // アクセッサ
 	WorldTransform* GetDrawWorldTransformAdress() { return &drawWorldTransform_; }
 
 	Vector3 GetSize() { return size_; }
+
+	bool GetStarting() { return isStarting_; }
 
 	AABB& GetCollider() { return collider_; }
 
@@ -62,18 +59,6 @@ private:
 	//マテリアル
 	Material* material_ = nullptr;
 
-	// 動くか
-	bool isMoving_;
-
-	//縦移動にするか
-	bool isVertical_;
-
-	//壊れるか
-	bool isBreak_;
-
-	// 移動用タイマー
-	float moveTimer_;
-
 	// サイズ
 	Vector3 size_ = { 10.0f,0.1f, 10.0f };
 
@@ -82,4 +67,7 @@ private:
 
 	AABB collider_;
 
+	//起動させたかどうか
+	bool isStarting_;
 };
+

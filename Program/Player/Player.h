@@ -33,7 +33,7 @@ public: // サブクラス
 	// 通常用ワーク
 	struct WorkRoot {
 		// 初期位置
-		const Vector3 kInitialPosition = { 0.0f, 0.0f, 0.0f };
+		Vector3 kInitialPosition = { 0.0f, 0.0f, 0.0f };
 		// 初期角度
 		const Vector3 kInitialRotate = {};
 		// ジャンプ初期速さ
@@ -241,6 +241,11 @@ public: // メンバ関数
 	/// 収集アイテムとの衝突
 	/// </summary>
 	void OnCollisionCollectibleItem();
+
+	/// <summary>
+	/// 復活ポジション再設定
+	/// </summary>
+	void SetRestartPosition(const Vector3& position);
 
 	/// <summary>
 	/// 親を得た

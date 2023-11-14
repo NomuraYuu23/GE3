@@ -4,7 +4,8 @@
 void CollisionManager::Initialize(Player* player, FloorManager* floorManager, 
 	BoxManager* boxManager, BreakBoxManager* breakBoxManager, 
 	RecoveryItemManager* recoveryItemManager, EnemyManager* enemyManager,
-	CollectibleItemManager* collectibleItemManager/*, Goal* goal, Enemy* enemy*/)
+	CollectibleItemManager* collectibleItemManager, CheckPointManager* checkPointManager
+/*, Goal* goal, Enemy* enemy*/)
 {
 
 	v3Calc = Vector3Calc::GetInstance();
@@ -23,6 +24,8 @@ void CollisionManager::Initialize(Player* player, FloorManager* floorManager,
 	collectibleItemManager_ = collectibleItemManager;
 
 	enemyManager_ = enemyManager;
+
+	checkPointManager_ = checkPointManager;
 
 	/*goal_ = goal;
 
@@ -114,6 +117,14 @@ void CollisionManager::AllCollision()
 		}
 	}
 
+	for (CheckPoint* check:checkPointManager_->GetCheckPoints_()){
+		if (!check->GetStarting()) {
+			if (Collision::IsCollision(check->GetCollider(), player_->GetCollider())) {
+				player_->SetRestartPosition(check->GetWorldTransform().transform_.translate);
+				check->OnCollisiin();
+			}
+		}
+	}
 
 	for (Enemy* enemy:enemyManager_->GetEnemys_()){
 		if (Collision::IsCollision(enemy->GetCollider(),player_->GetCollider())){
