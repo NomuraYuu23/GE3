@@ -55,9 +55,6 @@ void Model::PreDraw(ID3D12GraphicsCommandList* cmdList) {
 
 	sCommandList = cmdList;
 
-	//RootSignatureを設定。
-	sCommandList->SetPipelineState(sPipelineState[GraphicsPipelineState::PipelineStateName::kModel]);//PS0を設定
-	sCommandList->SetGraphicsRootSignature(sRootSignature[GraphicsPipelineState::PipelineStateName::kModel]);
 	//形状を設定。PS0に設定しているものとは別。
 	sCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
@@ -214,8 +211,6 @@ void Model::Initialize(const std::string& directoryPath, const std::string& file
 	// マテリアル
 	defaultMaterial_.reset(Material::Create());
 
-	instanceCount_ = 1;
-
 }
 
 /// <summary>
@@ -234,6 +229,10 @@ void Model::Draw(WorldTransform& worldTransform, const ViewProjection& viewProje
 	assert(sDevice);
 	assert(sCommandList);
 
+	//RootSignatureを設定。
+	sCommandList->SetPipelineState(sPipelineState[GraphicsPipelineState::PipelineStateName::kModel]);//PS0を設定
+	sCommandList->SetGraphicsRootSignature(sRootSignature[GraphicsPipelineState::PipelineStateName::kModel]);
+
 	worldTransform.Map(viewProjection);
 
 	sCommandList->IASetVertexBuffers(0, 1, &vbView_); //VBVを設定
@@ -248,7 +247,7 @@ void Model::Draw(WorldTransform& worldTransform, const ViewProjection& viewProje
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(sCommandList, 2, textureHandle_);
 
 	//描画
-	sCommandList->DrawInstanced(UINT(modelData.vertices.size()), instanceCount_, 0, 0);
+	sCommandList->DrawInstanced(UINT(modelData.vertices.size()), 1, 0, 0);
 
 }
 
@@ -260,6 +259,10 @@ void Model::Draw(WorldTransform& worldTransform, const ViewProjection& viewProje
 	// nullptrチェック
 	assert(sDevice);
 	assert(sCommandList);
+
+	//RootSignatureを設定。
+	sCommandList->SetPipelineState(sPipelineState[GraphicsPipelineState::PipelineStateName::kModel]);//PS0を設定
+	sCommandList->SetGraphicsRootSignature(sRootSignature[GraphicsPipelineState::PipelineStateName::kModel]);
 
 	worldTransform.Map(viewProjection);
 
@@ -275,7 +278,39 @@ void Model::Draw(WorldTransform& worldTransform, const ViewProjection& viewProje
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(sCommandList, 2, textureHandle_);
 
 	//描画
-	sCommandList->DrawInstanced(UINT(modelData.vertices.size()), instanceCount_, 0, 0);
+	sCommandList->DrawInstanced(UINT(modelData.vertices.size()), 1, 0, 0);
+
+}
+
+void Model::Draw(Particle3D& particle3D, const ViewProjection& viewProjection)
+{
+
+	// nullptrチェック
+	assert(sDevice);
+	assert(sCommandList);
+
+	//RootSignatureを設定。
+	sCommandList->SetPipelineState(sPipelineState[GraphicsPipelineState::PipelineStateName::kParticle]);//PS0を設定
+	sCommandList->SetGraphicsRootSignature(sRootSignature[GraphicsPipelineState::PipelineStateName::kParticle]);
+
+	//particle3D.Map(viewProjection);
+	particle3D;
+
+	sCommandList->IASetVertexBuffers(0, 1, &vbView_); //VBVを設定
+
+	//wvp用のCBufferの場所を設定
+	//sCommandList->SetGraphicsRootConstantBufferView(1,ParticleManager::GetInstance()->GetTransformationMatrixBuff()->GetGPUVirtualAddress());
+
+	//マテリアルCBufferの場所を設定
+	//sCommandList->SetGraphicsRootConstantBufferView(0, defaultMaterial_->GetMaterialBuff()->GetGPUVirtualAddress());
+
+	//SRVのDescriptorTableの先頭を設定。2はrootParamenter[2]である
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(sCommandList, 2, textureHandle_);
+
+	sCommandList->SetGraphicsRootDescriptorTable(1, ParticleManager::GetInstance()->GetInstancingSrvHandleGPU());
+
+	//描画
+	sCommandList->DrawInstanced(UINT(modelData.vertices.size()), particle3D.numInstance_, 0, 0);
 
 }
 

@@ -26,6 +26,7 @@
 #include <list>
 
 #include "../base/GraphicsPipelineState.h"
+#include "ParticleManager.h"
 
 class Model
 {
@@ -100,6 +101,7 @@ public:
 	/// </summary>
 	void Draw(WorldTransform& worldTransform, const ViewProjection& viewProjection);
 	void Draw(WorldTransform& worldTransform, const ViewProjection& viewProjection, Material* material);
+	void Draw(Particle3D& particle3D, const ViewProjection& viewProjection);
 
 	/// <summary>
 	/// メッシュデータ生成
@@ -135,9 +137,6 @@ private:
 	UINT textureHandle_ = 0;
 	// リソース設定
 	D3D12_RESOURCE_DESC resourceDesc_;
-
-	// インスタンスカウント
-	UINT instanceCount_;
 
 	// デフォルトマテリアル
 	std::unique_ptr<Material> defaultMaterial_;

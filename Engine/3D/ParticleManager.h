@@ -34,12 +34,25 @@ public: // メンバ関数
 	/// </summary>
 	/// <param name="numInstance">インスタンス数</param>
 	/// <returns></returns>
-	Particle3D* ParticleCreate(uint32_t numInstance);
+	Particle3D ParticleCreate(uint32_t numInstance);
 
 	/// <summary>
 	/// パーティクル終了時呼び出し関数
 	/// </summary>
 	void ParticleDelete(uint32_t numInstance, uint32_t indexMap);
+
+public: // アクセッサ
+
+	D3D12_CPU_DESCRIPTOR_HANDLE GetInstancingSrvHandleCPU() { return instancingSrvHandleCPU_; }
+
+	D3D12_GPU_DESCRIPTOR_HANDLE GetInstancingSrvHandleGPU() { return instancingSrvHandleGPU_; }
+
+	TransformationMatrix* GetTransformationMatrixMap() { return transformationMatrixMap_; }
+
+	void SetTransformationMatrixMapWorld(Matrix4x4 matrix, uint32_t index);
+	void SetTransformationMatrixMapWVP(Matrix4x4 matrix, uint32_t index);
+
+	ID3D12Resource* GetTransformationMatrixBuff() { return transformationMatrixBuff_.Get(); }
 
 private: // メンバ変数
 

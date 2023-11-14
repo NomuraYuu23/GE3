@@ -75,4 +75,7 @@ private:
 	std::array<uint32_t, Pause::PauseTextureNo::kCountOfPauseTextureNo> pauseTextureHandles_;
 	std::unique_ptr<Pause> pause_ = nullptr;
 
+	Particle3D particle3D_;
+	std::unique_ptr<Model> Model_ = nullptr;
+
 };

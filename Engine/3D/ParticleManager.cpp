@@ -2,7 +2,7 @@
 #include <d3d12.h>
 #include "../base/TextureManager.h"
 
-uint32_t ParticleManager::kNumInstanceMax_ = 10;
+uint32_t ParticleManager::kNumInstanceMax_ = 100;
 
 ParticleManager* ParticleManager::GetInstance()
 {
@@ -47,19 +47,16 @@ void ParticleManager::SRVCreate()
 
 }
 
-Particle3D* ParticleManager::ParticleCreate(uint32_t numInstance)
+Particle3D ParticleManager::ParticleCreate(uint32_t numInstance)
 {
 
 	// インスタンス数確認
 	assert(numInstance > 0 && numInstance + indexNextMap_ < kNumInstanceMax_);
 
-	Particle3D* particle = new Particle3D();
-	particle->Initialize(numInstance, indexNextMap_);
+	Particle3D particle;
+	particle.Initialize(numInstance, indexNextMap_);
 
-	for (size_t i = 0; i < numInstance; i++) {
-		transformationMatrixMap_[indexNextMap_] = particle->transformationMatrixMap_[i];
-		indexNextMap_++;
-	}
+	indexNextMap_ += numInstance;
 
 	return particle;
 
@@ -76,6 +73,20 @@ void ParticleManager::ParticleDelete(uint32_t numInstance, uint32_t indexMap)
 		transformationMatrixMap_[i].WVP = matrix4x4Calc->MakeIdentity4x4();
 		indexPuls++;
 	}
+
+}
+
+void ParticleManager::SetTransformationMatrixMapWorld(Matrix4x4 matrix, uint32_t index)
+{
+
+	transformationMatrixMap_[index].World = matrix;
+
+}
+
+void ParticleManager::SetTransformationMatrixMapWVP(Matrix4x4 matrix, uint32_t index)
+{
+
+	transformationMatrixMap_[index].WVP = matrix;
 
 }
 
