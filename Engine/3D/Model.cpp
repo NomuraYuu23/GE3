@@ -293,8 +293,8 @@ void Model::Draw(Particle3D& particle3D, const ViewProjection& viewProjection)
 	sCommandList->SetPipelineState(sPipelineState[GraphicsPipelineState::PipelineStateName::kParticle]);//PS0を設定
 	sCommandList->SetGraphicsRootSignature(sRootSignature[GraphicsPipelineState::PipelineStateName::kParticle]);
 
-	//particle3D.Map(viewProjection);
-	particle3D;
+	particle3D.Map(viewProjection);
+	//particle3D;
 
 	sCommandList->IASetVertexBuffers(0, 1, &vbView_); //VBVを設定
 
@@ -302,7 +302,7 @@ void Model::Draw(Particle3D& particle3D, const ViewProjection& viewProjection)
 	//sCommandList->SetGraphicsRootConstantBufferView(1,ParticleManager::GetInstance()->GetTransformationMatrixBuff()->GetGPUVirtualAddress());
 
 	//マテリアルCBufferの場所を設定
-	//sCommandList->SetGraphicsRootConstantBufferView(0, defaultMaterial_->GetMaterialBuff()->GetGPUVirtualAddress());
+	sCommandList->SetGraphicsRootConstantBufferView(0, defaultMaterial_->GetMaterialBuff()->GetGPUVirtualAddress());
 
 	//SRVのDescriptorTableの先頭を設定。2はrootParamenter[2]である
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(sCommandList, 2, textureHandle_);
