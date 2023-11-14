@@ -301,8 +301,11 @@ private: // メンバ変数
 
 	int explosionTimer_;
 
+	//初期爆破回数
+	int startExprosionNum_ = 5;
+
 	//残り爆発回数
-	int exprosionNum_ = 5;
+	int exprosionNum_ = 0;
 	//爆発の最大値
 	const int exprosionMax_ = 99;
 	//爆発の最低値
@@ -339,6 +342,6 @@ private: // メンバ変数
 	WorkSwing workSwing_;
 
 	//アイテム関連の変数
-	
+	int numCollectItem;
 };
 

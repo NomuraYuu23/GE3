@@ -61,6 +61,8 @@ void Player::Initialize(const std::vector<Model*>& models,
 	explosionSpeed_ = 0.5f;
 
 	isExplosion_ = false;
+
+	exprosionNum_ = startExprosionNum_;
 	//// 攻撃
 	//
 	//workAttack_.attackCenterAdd_ = {0.0f,0.0,5.0f};
