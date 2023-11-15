@@ -6,17 +6,32 @@
 #include <wrl.h>
 #include <d3d12.h>
 #include "ViewProjection.h"
+#include "../Math/Vector4.h"
 
 class Particle
 {
 
+public: // サブクラス
+
+	struct Basic{
+		// トランスフォーム
+		TransformStructure transform_;
+		// 行列
+		Matrix4x4 worldMatrix_;
+		// 速度
+		Vector3 velocity_;
+		// 色
+		Vector4 color_;
+
+	};
+
 public:
 
-	~Particle();
+	virtual ~Particle();
 
-	void Initialize(uint32_t numInstance);
+	virtual void Initialize(uint32_t numInstance);
 
-	void Update();
+	virtual void Update();
 
 	void UpdateMatrix();
 
@@ -26,16 +41,13 @@ public: // アクセッサ
 
 	uint32_t GetNumInstance() { return numInstance_; }
 
-private:
+protected: // メンバ変数
 
 	// インスタンス数
 	uint32_t numInstance_ = 0u;
 
-	//トランスフォーム
-	TransformStructure* transform_;
-
-	//ワールド行列
-	Matrix4x4* worldMatrix_;
+	//基本的な変数
+	Basic* basic_;
 
 };
 

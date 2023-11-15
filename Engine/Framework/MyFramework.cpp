@@ -43,6 +43,9 @@ void MyFramework::Initialize()
 	// パーティクル
 	ParticleManager::GetInstance()->Initialize();
 
+	// 乱数
+	Random::GetInstance()->Initialize();
+
 	//サウンド
 	audio = Audio::GetInstance();
 	audio->Initialize();
