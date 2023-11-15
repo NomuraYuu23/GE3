@@ -65,6 +65,10 @@ public: // アクセッサ
 
 	WorldTransform GetWorldTransform() { return worldTransform_; }
 
+	WorldTransform GetDrawWorldTransform()const { return drawWorldTransform_; }
+
+	WorldTransform GetMakeWorldTransform()const { return makeWorldTransform_; }
+
 	WorldTransform* GetWorldTransformAdress() { return &worldTransform_; }
 
 	WorldTransform* GetDrawWorldTransformAdress() { return &drawWorldTransform_; }
@@ -92,6 +96,8 @@ private:
 	WorldTransform worldTransform_;
 	//描画用のワールドトランスフォーム
 	WorldTransform drawWorldTransform_;
+	//生成場所保存用のワールドトランスフォーム
+	WorldTransform makeWorldTransform_;
 
 	// モデル
 	Model* model_ = nullptr;

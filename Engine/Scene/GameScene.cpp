@@ -409,10 +409,10 @@ void GameScene::ImguiDraw() {
 		}
 		if (ImGui::BeginMenu("ファイル関連")){
 			if (ImGui::Button("全保存")) {
-				boxManager_->SaveFile();
+				FilesSave();
 			}
 			if (ImGui::Button("全ロード(手動)")) {
-				boxManager_->LoadFiles();
+				FilesLoad();
 			}
 			ImGui::EndMenu();
 		}
@@ -452,4 +452,26 @@ void GameScene::DebugCameraUpdate()
 	}
 #endif
 
+}
+
+void GameScene::FilesSave(){
+	floorManager_->SaveFile();
+	boxManager_->SaveFile();
+	breakBoxManager_->SaveFile();
+	checkPointManager_->SaveFile();
+	collectibleItemManager_->SaveFile();
+	recoveryItemManager_->SaveFile();
+	std::string message = std::format("{}.json saved.", "all");
+	MessageBoxA(nullptr, message.c_str(), "StagesObject", 0);
+}
+
+void GameScene::FilesLoad(){
+	boxManager_->LoadFiles();
+	floorManager_->LoadFiles();
+	breakBoxManager_->LoadFiles();
+	checkPointManager_->LoadFiles();
+	collectibleItemManager_->LoadFiles();
+	recoveryItemManager_->LoadFiles();
+	std::string message = std::format("{}.json loaded.", "all");
+	MessageBoxA(nullptr, message.c_str(), "StagesObject", 0);
 }

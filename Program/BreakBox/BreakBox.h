@@ -41,6 +41,8 @@ public: // アクセッサ
 
 	WorldTransform GetWorldTransform()const { return worldTransform_; }
 
+	WorldTransform GetDrawWorldTransform()const { return drawWorldTransform_; }
+
 	WorldTransform* GetWorldTransformAdress() { return &worldTransform_; }
 
 	WorldTransform* GetDrawWorldTransformAdress() { return &drawWorldTransform_; }

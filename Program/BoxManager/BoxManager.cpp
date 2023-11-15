@@ -63,7 +63,7 @@ void BoxManager::SaveFile(){
 	root = json::object();
 	int i = 0;
 
-	for (Box* box:boxes_){
+	for (Box* box : boxes_) {
 		root[kItemName_][i][0] = json::array(
 			{ box->GetDrawWorldTransform().transform_.scale.x,
 			  box->GetDrawWorldTransform().transform_.scale.y,
@@ -102,8 +102,6 @@ void BoxManager::SaveFile(){
 		ofs.close();
 		i++;
 	}
-	std::string message = std::format("{}.json saved.", "Points");
-	MessageBoxA(nullptr, message.c_str(), "Box", 0);
 }
 
 void BoxManager::ChackFiles(){
@@ -174,8 +172,13 @@ void BoxManager::LoadFiles(){
 			continue;
 		}
 
-		//ファイル読み込み
-		LoadFile(filePath.stem().string());
+		if (filePath.stem().string() == kItemName_) {
+			//ファイル読み込み
+			LoadFile(filePath.stem().string());
+			return;
+		}
+
+		
 	}
 }
 
@@ -232,8 +235,6 @@ void BoxManager::LoadFile(const std::string& groupName){
 
 		colliderDebugDraw_->AddCollider(&box_->GetCollider());
 	}
-	std::string message = std::format("{}.json loaded.", "Boxs");
-	MessageBoxA(nullptr, message.c_str(), "Box", 0);
 
 }
 

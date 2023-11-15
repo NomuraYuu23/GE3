@@ -22,6 +22,12 @@ void RecoveryItem::Initialize(Model* model, Material* material, TransformStructu
 	drawWorldTransform_.transform_.scale = transform_.scale;
 	drawWorldTransform_.UpdateMatrix();
 
+	makeWorldTransform_.Initialize();
+	makeWorldTransform_.transform_.translate = transform_.translate;
+	makeWorldTransform_.transform_.rotate = transform_.rotate;
+	makeWorldTransform_.transform_.scale = transform_.scale;
+	makeWorldTransform_.UpdateMatrix();
+
 	position_ = transform_.translate;
 
 	size_ = { drawWorldTransform_.transform_.scale.x + 0.1f,drawWorldTransform_.transform_.scale.y + 0.1f,drawWorldTransform_.transform_.scale.z + 0.1f, };

@@ -43,11 +43,11 @@ void Floor::Update()
 		else {
 			Move();
 		}
-		Vector3 WorldPosition = { worldTransform_.worldMatrix_.m[3][0] , worldTransform_.worldMatrix_.m[3][1] , worldTransform_.worldMatrix_.m[3][2] };
-		collider_.max_ = { WorldPosition.x + size_.x, WorldPosition.y + size_.y, WorldPosition.z + size_.z};
-		collider_.min_ = { WorldPosition.x - size_.x, WorldPosition.y - size_.y, WorldPosition.z - size_.z };
+		
 	}
-
+	Vector3 WorldPosition = { worldTransform_.worldMatrix_.m[3][0] , worldTransform_.worldMatrix_.m[3][1] , worldTransform_.worldMatrix_.m[3][2] };
+	collider_.max_ = { WorldPosition.x + size_.x, WorldPosition.y + size_.y, WorldPosition.z + size_.z };
+	collider_.min_ = { WorldPosition.x - size_.x, WorldPosition.y - size_.y, WorldPosition.z - size_.z };
 	worldTransform_.UpdateMatrix();
 	collider_.worldTransformUpdate();
 

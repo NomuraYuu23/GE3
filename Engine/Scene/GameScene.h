@@ -62,6 +62,10 @@ public: //メンバ関数
 
 	void DebugCameraUpdate();
 
+	void FilesSave();
+
+	void FilesLoad();
+
 	//テスト
 private:
 

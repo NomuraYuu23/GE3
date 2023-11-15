@@ -13,7 +13,7 @@
 
 class BoxManager{
 public:
-	using json = nlohmann::json;
+	
 
 	/// <summary>
 	/// デストラクタ
@@ -63,6 +63,8 @@ public: // アクセッサ
 	void SetColliderDebugDraw(ColliderDebugDraw* colliderDebugDraw) { colliderDebugDraw_ = colliderDebugDraw; }
 
 public:
+	using json = nlohmann::json;
+
 	void SaveFile();
 
 	void ChackFiles();
@@ -74,12 +76,14 @@ public:
 	bool LoadChackItem(const std::string& directoryPath, const std::string& itemName);
 
 private:
-	int chackOnlyNumber = 0;
+	
 
 	void from_json(const json& j, Vector3& v);
 	
 private:
 	//ファイル保存関連
+	int chackOnlyNumber = 0;
+
 	const std::string kDirectoryPath = "Resources/Stages/";
 
 	const std::string kDirectoryName = "Resources/Stages";
@@ -91,7 +95,7 @@ private:
 	char ItemName_[256]{};
 
 	std::vector<std::string> fileName;
-
+private:
 	// モデル
 	Model* model_ = nullptr;
 	// マテリアル

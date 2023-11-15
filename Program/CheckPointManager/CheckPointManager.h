@@ -2,6 +2,10 @@
 #include"../CheckPoint/CheckPoint.h"
 #include<list>
 #include "../../Engine/Collider/ColliderDebugDraw/ColliderDebugDraw.h"// コライダーデバッグ描画
+#include"../../externals/nlohmann/json.hpp"
+#include<fstream>
+#include<iostream>
+
 
 class CheckPointManager{
 public:
@@ -52,6 +56,38 @@ public: // アクセッサ
 	/// <param name="colliderDebugDraw"></param>
 	void SetColliderDebugDraw(ColliderDebugDraw* colliderDebugDraw) { colliderDebugDraw_ = colliderDebugDraw; }
 
+public:
+	using json = nlohmann::json;
+
+	void SaveFile();
+
+	void ChackFiles();
+
+	void LoadFiles();
+
+	void LoadFile(const std::string& groupName);
+
+	bool LoadChackItem(const std::string& directoryPath, const std::string& itemName);
+
+private:
+
+	void from_json(const json& j, Vector3& v);
+
+private:
+	//ファイル保存関連
+	int chackOnlyNumber = 0;
+
+	const std::string kDirectoryPath = "Resources/Stages/";
+
+	const std::string kDirectoryName = "Resources/Stages";
+
+	const std::string kItemName_ = "CheckPoint";
+
+	std::string Name_ = "\0";
+
+	char ItemName_[256]{};
+
+	std::vector<std::string> fileName;
 private:
 
 	// モデル
