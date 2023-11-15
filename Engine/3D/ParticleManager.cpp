@@ -18,13 +18,14 @@ void ParticleManager::Initialize()
 	Matrix4x4Calc* matrix4x4Calc = Matrix4x4Calc::GetInstance();
 
 	//WVP用のリソースを作る。Matrix4x4 1つ分のサイズを用意する
-	transformationMatrixBuff_ = BufferResource::CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(TransformationMatrix) * kNumInstanceMax_);
+	particleForGPUBuff_ = BufferResource::CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(TransformationMatrix) * kNumInstanceMax_);
 	//書き込むためのアドレスを取得
-	transformationMatrixBuff_->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixMap_));
+	particleForGPUBuff_->Map(0, nullptr, reinterpret_cast<void**>(&particleForGPUMap_));
 
 	for (size_t i = 0; i < kNumInstanceMax_; i++) {
-		transformationMatrixMap_[i].World = matrix4x4Calc->MakeIdentity4x4();
-		transformationMatrixMap_[i].WVP = matrix4x4Calc->MakeIdentity4x4();
+		particleForGPUMap_[i].World = matrix4x4Calc->MakeIdentity4x4();
+		particleForGPUMap_[i].WVP = matrix4x4Calc->MakeIdentity4x4();
+		particleForGPUMap_[i].color = {1.0f,1.0f,1.0f,1.0f};
 	}
 
 	SRVCreate();
@@ -44,7 +45,7 @@ void ParticleManager::SRVCreate()
 	instancingSrvDesc.Buffer.StructureByteStride = sizeof(TransformationMatrix);
 	instancingSrvHandleCPU_ = TextureManager::GetInstance()->StaticGetCPUDescriptorHandle(1);
 	instancingSrvHandleGPU_ = TextureManager::GetInstance()->StaticGetGPUDescriptorHandle(1);
-	DirectXCommon::GetInstance()->GetDevice()->CreateShaderResourceView(transformationMatrixBuff_.Get(), &instancingSrvDesc, instancingSrvHandleCPU_);
+	DirectXCommon::GetInstance()->GetDevice()->CreateShaderResourceView(particleForGPUBuff_.Get(), &instancingSrvDesc, instancingSrvHandleCPU_);
 
 }
 
@@ -111,17 +112,24 @@ void ParticleManager::ModelCreate()
 
 }
 
-void ParticleManager::SetTransformationMatrixMapWorld(Matrix4x4 matrix, uint32_t index)
+void ParticleManager::SetParticleForGPUMapWorld(Matrix4x4 matrix, uint32_t index)
 {
 
-	transformationMatrixMap_[index].World = matrix;
+	particleForGPUMap_[index].World = matrix;
 
 }
 
-void ParticleManager::SetTransformationMatrixMapWVP(Matrix4x4 matrix, uint32_t index)
+void ParticleManager::SetParticleForGPUMapWVP(Matrix4x4 matrix, uint32_t index)
 {
 
-	transformationMatrixMap_[index].WVP = matrix;
+	particleForGPUMap_[index].WVP = matrix;
+
+}
+
+void ParticleManager::SetParticleForGPUMapColor(Vector4 color, uint32_t index)
+{
+
+	particleForGPUMap_[index].color = color;
 
 }
 

@@ -5,6 +5,7 @@
 #include "Particle.h"
 #include <list>
 #include <memory>
+#include "ParticleForGPU.h"
 
 class Model;
 
@@ -73,21 +74,22 @@ public: // アクセッサ
 
 	D3D12_GPU_DESCRIPTOR_HANDLE GetInstancingSrvHandleGPU() { return instancingSrvHandleGPU_; }
 
-	TransformationMatrix* GetTransformationMatrixMap() { return transformationMatrixMap_; }
+	ParticleForGPU* GetParticleForGPUMap() { return particleForGPUMap_; }
 
-	void SetTransformationMatrixMapWorld(Matrix4x4 matrix, uint32_t index);
-	void SetTransformationMatrixMapWVP(Matrix4x4 matrix, uint32_t index);
+	void SetParticleForGPUMapWorld(Matrix4x4 matrix, uint32_t index);
+	void SetParticleForGPUMapWVP(Matrix4x4 matrix, uint32_t index);
+	void SetParticleForGPUMapColor(Vector4 color, uint32_t index);
 
-	ID3D12Resource* GetTransformationMatrixBuff() { return transformationMatrixBuff_.Get(); }
+	ID3D12Resource* GetParticleForGPUBuff() { return particleForGPUBuff_.Get(); }
 
 	uint32_t GetInstanceIndex() { return instanceIndex_; }
 
 private: // メンバ変数
 
 	//WVP用のリソースを作る。Matrix4x4 1つ分のサイズを用意する
-	Microsoft::WRL::ComPtr<ID3D12Resource> transformationMatrixBuff_;
+	Microsoft::WRL::ComPtr<ID3D12Resource> particleForGPUBuff_;
 	//書き込むためのアドレスを取得
-	TransformationMatrix* transformationMatrixMap_{};
+	ParticleForGPU* particleForGPUMap_{};
 
 	D3D12_CPU_DESCRIPTOR_HANDLE instancingSrvHandleCPU_;
 

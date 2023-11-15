@@ -154,6 +154,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   <ItemGroup>
     <ClInclude Include="Engine\2D\ImGuiManager.h" />
     <ClInclude Include="Engine\3D\Particle.h" />
+    <ClInclude Include="Engine\3D\ParticleForGPU.h" />
     <ClInclude Include="Engine\3D\ParticleManager.h" />
     <ClInclude Include="Engine\Audio\Audio.h" />
     <ClInclude Include="Engine\base\BufferResource.h" />
