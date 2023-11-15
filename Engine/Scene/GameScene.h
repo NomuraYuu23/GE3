@@ -4,6 +4,8 @@
 #include "../Input/Input.h"//入力デバイス
 #include "../Camera/DebugCamera.h"//デバッグカメラ
 #include "../Collider/ColliderDebugDraw/ColliderDebugDraw.h"// コライダーデバッグ描画
+#include <iostream>
+#include <vector>
 
 #include "../3D/WorldTransform.h"
 #include "../3D/ViewProjection.h"
@@ -66,6 +68,9 @@ public: //メンバ関数
 
 	void FilesLoad();
 
+private:
+	std::vector<std::string> stages;
+
 	//テスト
 private:
 
@@ -123,16 +128,16 @@ private:
 	};
 
 	//壊れるボックスの生成のトランスフォーム
-	TransformStructure breakBoxTransform_{};
+	TransformStructure breakBoxTransform_{ {1.0f,1.0f,1.0f} };
 
 	//回復アイテムの生成トランスフォーム
-	TransformStructure recoveryItemTransform_{};
+	TransformStructure recoveryItemTransform_{ {1.0f,1.0f,1.0f} };
 
 	//収集アイテムの生成トランスフォーム
-	TransformStructure collectibleItemTransform_{};
+	TransformStructure collectibleItemTransform_{ {1.0f,1.0f,1.0f} };
 
 	//チェックポイントの生成トランスフォーム
-	TransformStructure checkPointTransform_{};
+	TransformStructure checkPointTransform_{ {1.0f,1.0f,1.0f} };
 	TransformStructure firstCheckPointTransform_{
 		.scale = {2.0f,2.0f,2.0f},
 		.rotate = {0.0f,0.0f,0.0f},

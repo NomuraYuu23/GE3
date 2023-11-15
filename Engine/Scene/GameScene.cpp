@@ -167,8 +167,13 @@ void GameScene::Initialize() {
 
 	colliderDebugDraw_->AddCollider(&player_->GetCollider());
 	colliderDebugDraw_->AddCollider(&player_->GetExplosionCollider());
-	/// aaaaa
-	///bbbbb
+	//ステージ識別番号
+	stages = {
+		"Stage1",
+		"Stage2",
+		"Stage3",
+		"Stage4"
+	};
 }
 
 /// <summary>
@@ -176,7 +181,6 @@ void GameScene::Initialize() {
 /// </summary>
 void GameScene::Update() {
 	ImguiDraw();
-
 
 	//光源
 	DirectionalLightData directionalLightData{};
@@ -293,7 +297,7 @@ void GameScene::ImguiDraw() {
 
 	if (ImGui::BeginMenuBar()){
 		if (ImGui::BeginMenu("オブジェクトの生成")){
-			if (ImGui::BeginMenu("床生成")) {
+			if (ImGui::TreeNode("床生成")) {
 				ImGui::DragFloat3("床の座標", &floorTransform_.translate.x, 0.1f);
 				ImGui::DragFloat3("床の回転", &floorTransform_.rotate.x, 0.01f);
 				ImGui::Checkbox("動く床にする", &isFloorMove_);
@@ -306,75 +310,75 @@ void GameScene::ImguiDraw() {
 				if (ImGui::Button("床の追加")) {
 					floorManager_->AddFloor(floorTransform_.translate, floorTransform_.rotate, isFloorMove_, isVertical_);
 				}
-				ImGui::EndMenu();
+				ImGui::TreePop();
 			}
 
-			if (ImGui::BeginMenu("ボックス生成")) {
-				ImGui::DragFloat3("箱の座標", &floorTransform_.translate.x, 0.1f);
-				ImGui::DragFloat3("箱の回転", &floorTransform_.rotate.x, 0.01f);
-				ImGui::DragFloat3("箱の大きさ", &floorTransform_.scale.x, 0.01f);
-				ImGui::Checkbox("動く箱にする", &isFloorMove_);
+			if (ImGui::TreeNode("ボックス生成")) {
+				ImGui::DragFloat3("ボックスの座標", &floorTransform_.translate.x, 0.1f);
+				ImGui::DragFloat3("ボックスの回転", &floorTransform_.rotate.x, 0.01f);
+				ImGui::DragFloat3("ボックスの大きさ", &floorTransform_.scale.x, 0.1f, 0.1f, 999.0f, "%.1f");
+				ImGui::Checkbox("動くボックスにする", &isFloorMove_);
 				if (isFloorMove_) {
 					ImGui::Checkbox("縦移動にする", &isVertical_);
 				}
 				else {
 					isVertical_ = false;
 				}
-				if (ImGui::Button("箱の追加")) {
+				if (ImGui::Button("ボックスの追加")) {
 					boxManager_->AddBox(floorTransform_, isFloorMove_, isVertical_);
 				}
-				ImGui::EndMenu();
+				ImGui::TreePop();
 			}
 
-			if (ImGui::BeginMenu("壊れるボックス生成")) {
-				ImGui::DragFloat3("箱の座標", &breakBoxTransform_.translate.x, 0.1f);
-				ImGui::DragFloat3("箱の回転", &breakBoxTransform_.rotate.x, 0.01f);
-				ImGui::DragFloat3("箱の大きさ", &breakBoxTransform_.scale.x, 0.01f);
-				ImGui::Checkbox("動く箱にする", &isBreakBoxMove_);
+			if (ImGui::TreeNode("壊れるボックス生成")) {
+				ImGui::DragFloat3("壊れるボックスの座標", &breakBoxTransform_.translate.x, 0.1f);
+				ImGui::DragFloat3("壊れるボックスの回転", &breakBoxTransform_.rotate.x, 0.01f);
+				ImGui::DragFloat3("壊れるボックスの大きさ", &breakBoxTransform_.scale.x, 0.1f, 0.1f, 999.0f, "%.1f");
+				ImGui::Checkbox("動いて壊れるボックスにする", &isBreakBoxMove_);
 				if (isBreakBoxMove_) {
 					ImGui::Checkbox("縦移動にする", &isBreakBoxVertical_);
 				}
 				else {
 					isVertical_ = false;
 				}
-				if (ImGui::Button("壊れる箱の追加")) {
+				if (ImGui::Button("壊れるボックスの追加")) {
 					breakBoxManager_->AddBox(breakBoxTransform_, isBreakBoxMove_, isBreakBoxVertical_);
 				}
-				ImGui::EndMenu();
+				ImGui::TreePop();
 			}
 
-			if (ImGui::BeginMenu("回復アイテム生成")) {
+			if (ImGui::TreeNode("回復アイテム生成")) {
 				ImGui::DragFloat3("アイテムの座標", &recoveryItemTransform_.translate.x, 0.1f);
 				ImGui::DragFloat3("アイテムの回転", &recoveryItemTransform_.rotate.x, 0.01f);
-				ImGui::DragFloat3("アイテムの大きさ", &recoveryItemTransform_.scale.x, 0.01f);
+				ImGui::DragFloat3("アイテムの大きさ", &recoveryItemTransform_.scale.x, 0.1f, 0.1f, 999.0f, "%.1f");
 				ImGui::DragInt("アイテムの回復値", &recoveryValue_, 1.0f, 1, 99);
 				if (ImGui::Button("アイテムの追加")) {
 					recoveryItemManager_->AddItem(recoveryItemTransform_, recoveryValue_);
 				}
-				ImGui::EndMenu();
+				ImGui::TreePop();
 			}
 
-			if (ImGui::BeginMenu("収集アイテム生成")) {
+			if (ImGui::TreeNode("収集アイテム生成")) {
 				ImGui::DragFloat3("アイテムの座標", &collectibleItemTransform_.translate.x, 0.1f);
 				ImGui::DragFloat3("アイテムの回転", &collectibleItemTransform_.rotate.x, 0.01f);
-				ImGui::DragFloat3("アイテムの大きさ", &collectibleItemTransform_.scale.x, 0.01f);
+				ImGui::DragFloat3("アイテムの大きさ", &collectibleItemTransform_.scale.x, 0.1f, 0.1f, 999.0f, "%.1f");
 				ImGui::Checkbox("落下させるか", &isCollectibleItemFall_);
 				
 				if (ImGui::Button("収集アイテムの追加")) {
 					collectibleItemManager_->AddItem(collectibleItemTransform_, isCollectibleItemFall_);
 				}
-				ImGui::EndMenu();
+				ImGui::TreePop();
 			}
 
-			if (ImGui::BeginMenu("チェックポイント生成")) {
+			if (ImGui::TreeNode("チェックポイント生成")) {
 				ImGui::DragFloat3("チェックポイントの座標", &checkPointTransform_.translate.x, 0.1f);
 				ImGui::DragFloat3("チェックポイントの回転", &checkPointTransform_.rotate.x, 0.01f);
-				ImGui::DragFloat3("チェックポイントの大きさ", &checkPointTransform_.scale.x, 0.01f);
+				ImGui::DragFloat3("チェックポイントの大きさ", &checkPointTransform_.scale.x, 0.1f, 0.1f, 999.0f, "%.1f");
 
-				if (ImGui::Button("収集アイテムの追加")) {
+				if (ImGui::Button("チェックポイントの追加")) {
 					checkPointManager_->AddCheck(checkPointTransform_);
 				}
-				ImGui::EndMenu();
+				ImGui::TreePop();
 			}
 
 			ImGui::EndMenu();
