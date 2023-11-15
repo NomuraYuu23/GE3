@@ -112,24 +112,10 @@ void ParticleManager::ModelCreate()
 
 }
 
-void ParticleManager::SetParticleForGPUMapWorld(Matrix4x4 matrix, uint32_t index)
+void ParticleManager::SetParticleForGPUMap(const ParticleForGPU& particleForGPU, uint32_t index)
 {
 
-	particleForGPUMap_[index].World = matrix;
-
-}
-
-void ParticleManager::SetParticleForGPUMapWVP(Matrix4x4 matrix, uint32_t index)
-{
-
-	particleForGPUMap_[index].WVP = matrix;
-
-}
-
-void ParticleManager::SetParticleForGPUMapColor(Vector4 color, uint32_t index)
-{
-
-	particleForGPUMap_[index].color = color;
+	particleForGPUMap_[index] = particleForGPU;
 
 }
 

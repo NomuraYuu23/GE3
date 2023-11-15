@@ -67,9 +67,13 @@ void Particle::Map(const ViewProjection& viewProjection, uint32_t indexMap)
 	ParticleManager* particleManager = ParticleManager::GetInstance();
 
 	for (uint32_t i = 0; i < numInstance_; i++) {
-		particleManager->SetParticleForGPUMapWorld(basic_[i].worldMatrix_, indexMap + i);
-		particleManager->SetParticleForGPUMapWVP(matrix4x4Calc->Multiply(basic_[i].worldMatrix_, viewProjection.viewProjectionMatrix_), indexMap + i);
-		particleManager->SetParticleForGPUMapColor(basic_[i].color_, indexMap + i);
+
+		ParticleForGPU particleForGPU;
+		particleForGPU.World = basic_[i].worldMatrix_;
+		particleForGPU.WVP = matrix4x4Calc->Multiply(basic_[i].worldMatrix_, viewProjection.viewProjectionMatrix_);
+		particleForGPU.color = basic_[i].color_;
+		particleManager->SetParticleForGPUMap(particleForGPU, indexMap + i);
+
 	}
 
 }

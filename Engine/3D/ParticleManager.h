@@ -76,9 +76,7 @@ public: // アクセッサ
 
 	ParticleForGPU* GetParticleForGPUMap() { return particleForGPUMap_; }
 
-	void SetParticleForGPUMapWorld(Matrix4x4 matrix, uint32_t index);
-	void SetParticleForGPUMapWVP(Matrix4x4 matrix, uint32_t index);
-	void SetParticleForGPUMapColor(Vector4 color, uint32_t index);
+	void SetParticleForGPUMap(const ParticleForGPU& particleForGPU, uint32_t index);
 
 	ID3D12Resource* GetParticleForGPUBuff() { return particleForGPUBuff_.Get(); }
 
