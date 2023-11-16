@@ -23,8 +23,8 @@ public: // メンバ関数
 	void Initialize(Player* player, FloorManager* floorManager,
 		BoxManager* boxManager, BreakBoxManager* breakBoxManager,
 		RecoveryItemManager* recoveryItemManager, EnemyManager* enemyManager,
-		CollectibleItemManager* collectibleItemManager, CheckPointManager* checkPointManager,
-		BurningBoxManager* burningBoxManager/*, Goal* goal, Enemy* enemy*/);
+		CollectibleItemManager* collectibleItemManager, CheckPointManager* checkPointManager//,
+		/*BurningBoxManager* burningBoxManager*//*, Goal* goal, Enemy* enemy*/);
 
 	/// <summary>
 	/// 衝突

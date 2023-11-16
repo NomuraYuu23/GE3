@@ -4,8 +4,8 @@
 void CollisionManager::Initialize(Player* player, FloorManager* floorManager, 
 	BoxManager* boxManager, BreakBoxManager* breakBoxManager, 
 	RecoveryItemManager* recoveryItemManager, EnemyManager* enemyManager,
-	CollectibleItemManager* collectibleItemManager, CheckPointManager* checkPointManager,
-	BurningBoxManager* burningBoxManager/*, Goal* goal, Enemy* enemy*/)
+	CollectibleItemManager* collectibleItemManager, CheckPointManager* checkPointManager//,
+	/*BurningBoxManager* burningBoxManager*//*, Goal* goal, Enemy* enemy*/)
 {
 
 	v3Calc = Vector3Calc::GetInstance();
@@ -19,7 +19,7 @@ void CollisionManager::Initialize(Player* player, FloorManager* floorManager,
 
 	breakBoxManager_ = breakBoxManager;
 
-	burningBoxManager_ = burningBoxManager;
+	//burningBoxManager_ = burningBoxManager;
 
 	recoveryItemManager_ = recoveryItemManager;
 
