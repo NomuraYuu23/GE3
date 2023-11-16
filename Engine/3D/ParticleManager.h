@@ -11,6 +11,9 @@ class Model;
 
 class ParticleManager
 {
+
+public: // サブクラス
+
 public: // 静的メンバ変数
 
 	// パーティクル最大数
@@ -68,6 +71,12 @@ public: // メンバ関数
 	/// </summary>
 	void ModelCreate();
 
+	/// <summary>
+	/// ビルボード更新
+	/// </summary>
+	/// <param name="cameraMatrix4x4"></param>
+	void BillBoardUpdate(const Matrix4x4& cameraMatrix4x4);
+
 public: // アクセッサ
 
 	D3D12_CPU_DESCRIPTOR_HANDLE GetInstancingSrvHandleCPU() { return instancingSrvHandleCPU_; }
@@ -76,11 +85,11 @@ public: // アクセッサ
 
 	ParticleForGPU* GetParticleForGPUMap() { return particleForGPUMap_; }
 
-	void SetParticleForGPUMap(const ParticleForGPU& particleForGPU, uint32_t index);
-
 	ID3D12Resource* GetParticleForGPUBuff() { return particleForGPUBuff_.Get(); }
 
 	uint32_t GetInstanceIndex() { return instanceIndex_; }
+
+	Matrix4x4 GetBillBoardMatrix() { return billBoardMatrix_; }
 
 private: // メンバ変数
 
@@ -104,6 +113,9 @@ private: // メンバ変数
 
 	// 描画するインスタンス数
 	uint32_t instanceIndex_;
+
+	// ビルボード
+	Matrix4x4 billBoardMatrix_;
 
 };
 

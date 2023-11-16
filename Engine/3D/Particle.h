@@ -7,6 +7,7 @@
 #include <d3d12.h>
 #include "ViewProjection.h"
 #include "../Math/Vector4.h"
+#include "ParticleForGPU.h"
 
 class Particle
 {
@@ -15,64 +16,80 @@ public: // サブクラス
 
 	// 基本的な変数
 	struct Basic{
-		// トランスフォーム
-		TransformStructure transform_;
-		// 行列
-		Matrix4x4 worldMatrix_;
-		// 速度
-		Vector3 velocity_;
-		// 色
-		Vector4 color_;
-		// 生存時間
-		float lifeTime_;
-		// 発生してからの経過時間
-		float currentTime_;
 	};
 
-	// ビルボード
-	struct BillBoard
-	{
-		// ビルボード使うか
-		bool useIt_;
-		// 行列
-		Matrix4x4 matrix_;
+	// エミッタ
+	struct Emitter{
+		TransformStructure transform_;
+		uint32_t instanceCount_;
+		float frequency_;
+		float frequencyTime_;
 	};
 
 public:
 
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	virtual ~Particle();
 
-	virtual void Initialize(uint32_t numInstance);
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <param name="numInstance"></param>
+	virtual void Initialize();
 
-	virtual void Update(const Matrix4x4& cameraMatrix4x4);
+	/// <summary>
+	/// 更新
+	/// </summary>
+	/// <param name="cameraMatrix4x4"></param>
+	virtual void Update();
 
-	void UpdateMatrix(uint32_t num);
+	/// <summary>
+	/// 行列更新
+	/// </summary>
+	/// <param name="num"></param>
+	void UpdateMatrix();
 
-	void Map(const ViewProjection& viewProjection, uint32_t indexMap);
+	/// <summary>
+	/// マッピング
+	/// </summary>
+	/// <param name="viewProjection"></param>
+	ParticleForGPU Map(const ViewProjection& viewProjection);
 
-	void TimeElapsed(uint32_t num);
+	/// <summary>
+	/// 時間経過
+	/// </summary>
+	/// <param name="num"></param>
+	void TimeElapsed();
 
-	void GraduallyDisappear(uint32_t num);
-
-	void BillBoardUpdate(const Matrix4x4& cameraMatrix4x4);
-
-public: // アクセッサ
-
-	uint32_t GetNumInstance() { return numInstance_; }
+	/// <summary>
+	/// 徐々に消える
+	/// </summary>
+	/// <param name="num"></param>
+	void GraduallyDisappear();
 
 protected: // メンバ変数
 
 	// デルタタイム
 	static const float kDeltaTime_;
 
-	// インスタンス数
-	uint32_t numInstance_ = 0u;
-
 	// 基本的な変数
-	Basic* basic_;
+	// トランスフォーム
+	TransformStructure transform_;
+	// 行列
+	Matrix4x4 worldMatrix_;
+	// 速度
+	Vector3 velocity_;
+	// 色
+	Vector4 color_;
+	// 生存時間
+	float lifeTime_;
+	// 発生してからの経過時間
+	float currentTime_;
 
-	// ビルボード
-	BillBoard billBoard_;
+	// ビルボードを使うか
+	bool useBillBoard_;
 
 };
 

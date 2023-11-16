@@ -11,12 +11,8 @@ const float Particle::kDeltaTime_ = 1.0f / 60.0f;
 
 Particle::~Particle(){}
 
-void Particle::Initialize(uint32_t numInstance)
+void Particle::Initialize()
 {
-
-	assert(numInstance > 0);
-
-	numInstance_ = numInstance;
 
 	Matrix4x4Calc* matrix4x4Calc = Matrix4x4Calc::GetInstance();
 	
@@ -26,109 +22,79 @@ void Particle::Initialize(uint32_t numInstance)
 	std::uniform_real_distribution<float> distColor(0.0f, 1.0f);
 	std::uniform_real_distribution<float> distTime(1.0f, 3.0f);
 
-	basic_ = new Basic[numInstance_];
+	transform_.scale = {1.0f,1.0f,1.0f};
+	transform_.rotate = { 0.0f,0.0f,0.0f };
+	transform_.translate = { distribution(randomEngine) , distribution(randomEngine), distribution(randomEngine) };
 
-	for (uint32_t i = 0; i < numInstance_; i++) {
+	worldMatrix_ = matrix4x4Calc->MakeIdentity4x4();
 
-		basic_[i].transform_.scale = {1.0f,1.0f,1.0f};
-		basic_[i].transform_.rotate = { 0.0f,0.0f,0.0f };
-		basic_[i].transform_.translate = { distribution(randomEngine) , distribution(randomEngine), distribution(randomEngine) };
+	color_ = { distColor(randomEngine),distColor(randomEngine),distColor(randomEngine), 1.0f };
 
-		basic_[i].worldMatrix_ = matrix4x4Calc->MakeIdentity4x4();
+	lifeTime_ = distTime(randomEngine);
 
-		basic_[i].color_ = { distColor(randomEngine),distColor(randomEngine),distColor(randomEngine), 1.0f };
+	currentTime_ = 0.0f;
 
-		basic_[i].lifeTime_ = distTime(randomEngine);
+	UpdateMatrix();
 
-		basic_[i].currentTime_ = 0.0f;
-
-		UpdateMatrix(i);
-
-	}
-
-	billBoard_.useIt_ = true;
-
-	billBoard_.matrix_ = matrix4x4Calc->MakeIdentity4x4();
+	useBillBoard_ = true;
 
 }
 
-void Particle::Update(const Matrix4x4& cameraMatrix4x4)
+void Particle::Update()
 {
-
-	BillBoardUpdate(cameraMatrix4x4);
-
-	for (uint32_t i = 0; i < numInstance_; i++) {
-		if (basic_[i].lifeTime_ <= basic_[i].currentTime_) {
-			continue;
-		}
-		//TimeElapsed(i);
-		//GraduallyDisappear(i);
-		UpdateMatrix(i);
+	if (lifeTime_ <= currentTime_) {
+		// 消す
 	}
+	//TimeElapsed();
+	//GraduallyDisappear();
+	UpdateMatrix();
 
 }
 
-void Particle::UpdateMatrix(uint32_t num)
-{
-
-	Matrix4x4Calc* matrix4x4Calc = Matrix4x4Calc::GetInstance();
-
-	if (billBoard_.useIt_) {
-		Matrix4x4 scaleMatrix = matrix4x4Calc->MakeScaleMatrix(basic_[num].transform_.scale);
-		Matrix4x4 translateMatrix = matrix4x4Calc->MakeTranslateMatrix(basic_[num].transform_.translate);
-		basic_[num].worldMatrix_ = matrix4x4Calc->Multiply(scaleMatrix, matrix4x4Calc->Multiply(billBoard_.matrix_, translateMatrix));
-	}
-	else {
-		basic_[num].worldMatrix_ = matrix4x4Calc->MakeAffineMatrix(basic_[num].transform_.scale, basic_[num].transform_.rotate, basic_[num].transform_.translate);
-	}
-}
-
-void Particle::Map(const ViewProjection& viewProjection, uint32_t indexMap)
+void Particle::UpdateMatrix()
 {
 
 	Matrix4x4Calc* matrix4x4Calc = Matrix4x4Calc::GetInstance();
 	ParticleManager* particleManager = ParticleManager::GetInstance();
 
-	for (uint32_t i = 0; i < numInstance_; i++) {
-		if (basic_[i].lifeTime_ <= basic_[i].currentTime_) {
-			continue;
-		}
-
-		ParticleForGPU particleForGPU;
-		particleForGPU.World = basic_[i].worldMatrix_;
-		particleForGPU.WVP = matrix4x4Calc->Multiply(basic_[i].worldMatrix_, viewProjection.viewProjectionMatrix_);
-		particleForGPU.color = basic_[i].color_;
-		particleManager->SetParticleForGPUMap(particleForGPU, indexMap + i);
-
+	if (useBillBoard_) {
+		Matrix4x4 scaleMatrix = matrix4x4Calc->MakeScaleMatrix(transform_.scale);
+		Matrix4x4 translateMatrix = matrix4x4Calc->MakeTranslateMatrix(transform_.translate);
+		worldMatrix_ = matrix4x4Calc->Multiply(scaleMatrix, matrix4x4Calc->Multiply(particleManager->GetBillBoardMatrix(), translateMatrix));
 	}
-
-}
-
-void Particle::TimeElapsed(uint32_t num)
-{
-
-	basic_[num].currentTime_ += kDeltaTime_;
-	if (basic_[num].currentTime_ >= basic_[num].lifeTime_) {
-		basic_[num].currentTime_ = basic_[num].lifeTime_;
+	else {
+		worldMatrix_ = matrix4x4Calc->MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
 	}
-
 }
 
-void Particle::GraduallyDisappear(uint32_t num)
+ParticleForGPU Particle::Map(const ViewProjection& viewProjection)
 {
 
-	basic_[num].color_.w = 1.0f - (basic_[num].currentTime_ / basic_[num].lifeTime_);
-
-}
-
-void Particle::BillBoardUpdate(const Matrix4x4& cameraMatrix4x4)
-{
 	Matrix4x4Calc* matrix4x4Calc = Matrix4x4Calc::GetInstance();
+	ParticleManager* particleManager = ParticleManager::GetInstance();
 
-	Matrix4x4 backToFrontMatrix = matrix4x4Calc->MakeRotateXYZMatrix({0.0f,0.0f,0.0f });
-	billBoard_.matrix_ = matrix4x4Calc->Multiply(backToFrontMatrix, cameraMatrix4x4);
-	billBoard_.matrix_.m[3][0] = 0.0f;
-	billBoard_.matrix_.m[3][1] = 0.0f;
-	billBoard_.matrix_.m[3][2] = 0.0f;
+	ParticleForGPU particleForGPU;
+	particleForGPU.World = worldMatrix_;
+	particleForGPU.WVP = matrix4x4Calc->Multiply(worldMatrix_, viewProjection.viewProjectionMatrix_);
+	particleForGPU.color = color_;
+
+	return particleForGPU;
+
+}
+
+void Particle::TimeElapsed()
+{
+
+	currentTime_ += kDeltaTime_;
+	if (currentTime_ >= lifeTime_) {
+		currentTime_ = lifeTime_;
+	}
+
+}
+
+void Particle::GraduallyDisappear()
+{
+
+	color_.w = 1.0f - (currentTime_ / lifeTime_);
 
 }

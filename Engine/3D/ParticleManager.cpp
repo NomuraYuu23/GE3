@@ -30,6 +30,8 @@ void ParticleManager::Initialize()
 
 	SRVCreate();
 
+	billBoardMatrix_ = matrix4x4Calc->MakeIdentity4x4();
+
 }
 
 void ParticleManager::SRVCreate()
@@ -57,7 +59,7 @@ void ParticleManager::ParticleCreate(uint32_t numInstance)
 
 	Particle* particle = new Particle();
 
-	particle->Initialize(numInstance);
+	particle->Initialize();
 
 	particles_.push_back(particle);
 
@@ -66,10 +68,12 @@ void ParticleManager::ParticleCreate(uint32_t numInstance)
 void ParticleManager::Update(const Matrix4x4& cameraMatrix4x4)
 {
 
+	BillBoardUpdate(cameraMatrix4x4);
+
 	std::list<Particle*>::iterator itr = particles_.begin();
 	for (; itr != particles_.end(); ++itr) {
 		Particle* particle = *itr;
-		particle->Update(cameraMatrix4x4);
+		particle->Update();
 	}
 
 }
@@ -89,8 +93,8 @@ void ParticleManager::Map(const ViewProjection& viewProjection)
 	std::list<Particle*>::iterator itr = particles_.begin();
 	for (; itr != particles_.end(); ++itr) {
 		Particle* particle = *itr;
-		particle->Map(viewProjection, instanceIndex_);
-		instanceIndex_ += particle->GetNumInstance();
+		particleForGPUMap_[instanceIndex_] = particle->Map(viewProjection);
+		instanceIndex_++;
 	}
 
 }
@@ -112,10 +116,15 @@ void ParticleManager::ModelCreate()
 
 }
 
-void ParticleManager::SetParticleForGPUMap(const ParticleForGPU& particleForGPU, uint32_t index)
+void ParticleManager::BillBoardUpdate(const Matrix4x4& cameraMatrix4x4)
 {
 
-	particleForGPUMap_[index] = particleForGPU;
+	Matrix4x4Calc* matrix4x4Calc = Matrix4x4Calc::GetInstance();
+
+	Matrix4x4 backToFrontMatrix = matrix4x4Calc->MakeRotateXYZMatrix({ 0.0f,0.0f,0.0f });
+	billBoardMatrix_ = matrix4x4Calc->Multiply(backToFrontMatrix, cameraMatrix4x4);
+	billBoardMatrix_.m[3][0] = 0.0f;
+	billBoardMatrix_.m[3][1] = 0.0f;
+	billBoardMatrix_.m[3][2] = 0.0f;
 
 }
-
