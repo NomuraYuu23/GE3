@@ -22,7 +22,10 @@ public: // サブクラス
 		Vector3 velocity_;
 		// 色
 		Vector4 color_;
-
+		// 生存時間
+		float lifeTime_;
+		// 発生してからの経過時間
+		float currentTime_;
 	};
 
 public:
@@ -33,15 +36,22 @@ public:
 
 	virtual void Update();
 
-	void UpdateMatrix();
+	void UpdateMatrix(uint32_t num);
 
 	void Map(const ViewProjection& viewProjection, uint32_t indexMap);
+
+	void TimeElapsed(uint32_t num);
+
+	void GraduallyDisappear(uint32_t num);
 
 public: // アクセッサ
 
 	uint32_t GetNumInstance() { return numInstance_; }
 
 protected: // メンバ変数
+
+	// デルタタイム
+	static const float kDeltaTime_;
 
 	// インスタンス数
 	uint32_t numInstance_ = 0u;

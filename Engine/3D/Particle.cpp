@@ -6,6 +6,8 @@
 #include "../Random/Random.h"
 #include <cassert>
 
+const float Particle::kDeltaTime_ = 1.0f / 60.0f;
+
 Particle::~Particle(){}
 
 void Particle::Initialize(uint32_t numInstance)
@@ -21,6 +23,7 @@ void Particle::Initialize(uint32_t numInstance)
 	std::mt19937 randomEngine = random->GetRandomEngine();
 	std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);
 	std::uniform_real_distribution<float> distColor(0.0f, 1.0f);
+	std::uniform_real_distribution<float> distTime(1.0f, 3.0f);
 
 	basic_ = new Basic[numInstance_];
 
@@ -34,29 +37,36 @@ void Particle::Initialize(uint32_t numInstance)
 
 		basic_[i].color_ = { distColor(randomEngine),distColor(randomEngine),distColor(randomEngine), 1.0f };
 
-	}
+		basic_[i].lifeTime_ = distTime(randomEngine);
 
-	UpdateMatrix();
+		basic_[i].currentTime_ = 0.0f;
+
+		UpdateMatrix(i);
+
+	}
 
 }
 
 void Particle::Update()
 {
 
-	UpdateMatrix();
+	for (uint32_t i = 0; i < numInstance_; i++) {
+		if (basic_[i].lifeTime_ <= basic_[i].currentTime_) {
+			continue;
+		}
+		TimeElapsed(i);
+		GraduallyDisappear(i);
+		UpdateMatrix(i);
+	}
 
 }
 
-void Particle::UpdateMatrix()
+void Particle::UpdateMatrix(uint32_t num)
 {
 
 	Matrix4x4Calc* matrix4x4Calc = Matrix4x4Calc::GetInstance();
 
-	for (uint32_t i = 0; i < numInstance_; i++) {
-
-		basic_[i].worldMatrix_ = matrix4x4Calc->MakeAffineMatrix(basic_[i].transform_.scale, basic_[i].transform_.rotate, basic_[i].transform_.translate);
-
-	}
+	basic_[num].worldMatrix_ = matrix4x4Calc->MakeAffineMatrix(basic_[num].transform_.scale, basic_[num].transform_.rotate, basic_[num].transform_.translate);
 
 }
 
@@ -67,6 +77,9 @@ void Particle::Map(const ViewProjection& viewProjection, uint32_t indexMap)
 	ParticleManager* particleManager = ParticleManager::GetInstance();
 
 	for (uint32_t i = 0; i < numInstance_; i++) {
+		if (basic_[i].lifeTime_ <= basic_[i].currentTime_) {
+			continue;
+		}
 
 		ParticleForGPU particleForGPU;
 		particleForGPU.World = basic_[i].worldMatrix_;
@@ -75,5 +88,22 @@ void Particle::Map(const ViewProjection& viewProjection, uint32_t indexMap)
 		particleManager->SetParticleForGPUMap(particleForGPU, indexMap + i);
 
 	}
+
+}
+
+void Particle::TimeElapsed(uint32_t num)
+{
+
+	basic_[num].currentTime_ += kDeltaTime_;
+	if (basic_[num].currentTime_ >= basic_[num].lifeTime_) {
+		basic_[num].currentTime_ = basic_[num].lifeTime_;
+	}
+
+}
+
+void Particle::GraduallyDisappear(uint32_t num)
+{
+
+	basic_[num].color_.w = 1.0f - (basic_[num].currentTime_ / basic_[num].lifeTime_);
 
 }
