@@ -5,13 +5,13 @@
 
 void FollowCamera::Initialize() {
 
-	viewProjection_.Initialize();
+	BaseCamera::Initialize();
+
 	//y固定
 	viewProjection_.transform_.translate.y = 10.0f;
 	viewProjection_.transform_.rotate.x = 0.1f;
 
-	//ビュー更新
-	viewProjection_.UpdateMatrix();
+	BaseCamera::Update();
 
 }
 
@@ -52,10 +52,6 @@ void FollowCamera::Update() {
 
 	}
 
-	//y固定
-	//viewProjection_.transform_.translate.y = 10.0f;
-
-	//ビュー更新
-	viewProjection_.UpdateMatrix();
+	BaseCamera::Update();
 
 }

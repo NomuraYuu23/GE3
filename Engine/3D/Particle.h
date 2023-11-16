@@ -13,6 +13,7 @@ class Particle
 
 public: // サブクラス
 
+	// 基本的な変数
 	struct Basic{
 		// トランスフォーム
 		TransformStructure transform_;
@@ -26,6 +27,15 @@ public: // サブクラス
 		float lifeTime_;
 		// 発生してからの経過時間
 		float currentTime_;
+	};
+
+	// ビルボード
+	struct BillBoard
+	{
+		// ビルボード使うか
+		bool useIt_;
+		// 行列
+		Matrix4x4 matrix_;
 	};
 
 public:
@@ -44,6 +54,8 @@ public:
 
 	void GraduallyDisappear(uint32_t num);
 
+	void BillBoardUpdate(const Matrix4x4& cameraMatrix4x4);
+
 public: // アクセッサ
 
 	uint32_t GetNumInstance() { return numInstance_; }
@@ -56,8 +68,11 @@ protected: // メンバ変数
 	// インスタンス数
 	uint32_t numInstance_ = 0u;
 
-	//基本的な変数
+	// 基本的な変数
 	Basic* basic_;
+
+	// ビルボード
+	BillBoard billBoard_;
 
 };
 

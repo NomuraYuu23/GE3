@@ -97,6 +97,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3D\ParticleManager.cpp" />
     <ClCompile Include="Engine\Audio\Audio.cpp" />
     <ClCompile Include="Engine\base\BufferResource.cpp" />
+    <ClCompile Include="Engine\Camera\BaseCamera.cpp" />
     <ClCompile Include="Engine\Camera\DebugCamera.cpp" />
     <ClCompile Include="Engine\3D\DirectionalLight.cpp" />
     <ClCompile Include="Engine\base\DirectXCommon.cpp" />
@@ -159,6 +160,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Audio\Audio.h" />
     <ClInclude Include="Engine\base\BufferResource.h" />
     <ClInclude Include="Engine\base\D3DResourceLeakChecker.h" />
+    <ClInclude Include="Engine\Camera\BaseCamera.h" />
     <ClInclude Include="Engine\Camera\DebugCamera.h" />
     <ClInclude Include="Engine\3D\DirectionalLight.h" />
     <ClInclude Include="Engine\3D\DirectionalLightData.h" />
