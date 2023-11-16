@@ -66,51 +66,110 @@ void FloorManager::DrawImgui(){
 	}
 }
 
-void FloorManager::SaveFile() {
+void FloorManager::SaveFile(const std::vector<std::string>& stages) {
 	//保存
 	json root;
 	root = json::object();
-	int i = 0;
+	root[kItemName_] = json::object();
+	
+	for (size_t j = 0; j < stages.size(); ++j) {
+		int i = 0;
+		for (Floor* box : floors_) {
+			root[kItemName_][stages[j].c_str()][i][0] = json::array(
+				{ box->GetWorldTransform().transform_.scale.x,
+				  box->GetWorldTransform().transform_.scale.y,
+				  box->GetWorldTransform().transform_.scale.z
+				});
+			root[kItemName_][stages[j].c_str()][i][1] = json::array(
+				{ box->GetWorldTransform().transform_.rotate.x,
+				  box->GetWorldTransform().transform_.rotate.y,
+				  box->GetWorldTransform().transform_.rotate.z
+				});
+			root[kItemName_][stages[j].c_str()][i][2] = json::array(
+				{ box->GetWorldTransform().transform_.translate.x,
+				  box->GetWorldTransform().transform_.translate.y,
+				  box->GetWorldTransform().transform_.translate.z
+				});
+			std::filesystem::path dir(kDirectoryPath);
+			if (!std::filesystem::exists(kDirectoryName)) {
+				std::filesystem::create_directory(kDirectoryName);
+			}
+			// 書き込むjsonファイルのフルパスを合成する
+			std::string filePath = kDirectoryPath + kItemName_ + ".json";
+			// 書き込み用ファイルストリーム
+			std::ofstream ofs;
+			// ファイルを書き込みように開く
+			ofs.open(filePath);
+			//ファイルオープン失敗
+			if (ofs.fail()) {
+				std::string message = "Failed open data file for write.";
+				MessageBoxA(nullptr, message.c_str(), "Element", 0);
+				assert(0);
+				break;
+			}
+			//ファイルにjson文字列を書き込む(インデント幅4)
+			ofs << std::setw(4) << root << std::endl;
+			//ファイルを閉じる
+			ofs.close();
+			i++;
+		}
+	}
+}
 
+void FloorManager::FileOverWrite(const std::string& stage){
+	//読み込むjsonファイルのフルパスを合成する
+	std::string filePath = kDirectoryPath + kItemName_ + ".json";
+	//読み込み用のファイルストリーム
+	std::ifstream ifs;
+	//ファイルを読み込み用に開く
+	ifs.open(filePath);
+
+	//上書き用に読み取り
+	json root;
+	ifs >> root;
+	ifs.close();
+	
+	json overWrite;
+
+	int i = 0;
 	for (Floor* box : floors_) {
-		root[kItemName_][i][0] = json::array(
+		overWrite[i][0] = json::array(
 			{ box->GetWorldTransform().transform_.scale.x,
-			  box->GetWorldTransform().transform_.scale.y,
-			  box->GetWorldTransform().transform_.scale.z
+				box->GetWorldTransform().transform_.scale.y,
+				box->GetWorldTransform().transform_.scale.z
 			});
-		root[kItemName_][i][1] = json::array(
+		overWrite[i][1] = json::array(
 			{ box->GetWorldTransform().transform_.rotate.x,
-			  box->GetWorldTransform().transform_.rotate.y,
-			  box->GetWorldTransform().transform_.rotate.z
+				box->GetWorldTransform().transform_.rotate.y,
+				box->GetWorldTransform().transform_.rotate.z
 			});
-		root[kItemName_][i][2] = json::array(
+		overWrite[i][2] = json::array(
 			{ box->GetWorldTransform().transform_.translate.x,
-			  box->GetWorldTransform().transform_.translate.y,
-			  box->GetWorldTransform().transform_.translate.z
+				box->GetWorldTransform().transform_.translate.y,
+				box->GetWorldTransform().transform_.translate.z
 			});
-		std::filesystem::path dir(kDirectoryPath);
-		if (!std::filesystem::exists(kDirectoryName)) {
-			std::filesystem::create_directory(kDirectoryName);
-		}
-		// 書き込むjsonファイルのフルパスを合成する
-		std::string filePath = kDirectoryPath + kItemName_ + ".json";
-		// 書き込み用ファイルストリーム
-		std::ofstream ofs;
-		// ファイルを書き込みように開く
-		ofs.open(filePath);
-		//ファイルオープン失敗
-		if (ofs.fail()) {
-			std::string message = "Failed open data file for write.";
-			MessageBoxA(nullptr, message.c_str(), "Element", 0);
-			assert(0);
-			break;
-		}
-		//ファイルにjson文字列を書き込む(インデント幅4)
-		ofs << std::setw(4) << root << std::endl;
-		//ファイルを閉じる
-		ofs.close();
+		overWrite[i][3] = box->GetMoveFlag();
+		overWrite[i][4] = box->GetVerticalFlag();
 		i++;
 	}
+
+	root[kItemName_][stage] = overWrite;
+
+	// 書き込み用ファイルストリーム
+	std::ofstream ofs;
+	// ファイルを書き込みように開く
+	ofs.open(filePath);
+	//ファイルオープン失敗
+	if (ofs.fail()) {
+		std::string message = "Failed open data file for write.";
+		MessageBoxA(nullptr, message.c_str(), "Element", 0);
+		assert(0);
+		return;
+	}
+	//ファイルにjson文字列を書き込む(インデント幅4)
+	ofs << std::setw(4) << root << std::endl;
+	//ファイルを閉じる
+	ofs.close();
 }
 
 void FloorManager::ChackFiles() {
@@ -157,7 +216,7 @@ void FloorManager::ChackFiles() {
 	}
 }
 
-void FloorManager::LoadFiles() {
+void FloorManager::LoadFiles(const std::string& stage) {
 
 	if (!LoadChackItem(kDirectoryPath, kItemName_))
 		return;
@@ -183,7 +242,7 @@ void FloorManager::LoadFiles() {
 
 		if (filePath.stem().string() == kItemName_) {
 			//ファイル読み込み
-			LoadFile(filePath.stem().string());
+			LoadFile(filePath.stem().string(),stage);
 			return;
 		}
 
@@ -191,7 +250,7 @@ void FloorManager::LoadFiles() {
 	}
 }
 
-void FloorManager::LoadFile(const std::string& groupName) {
+void FloorManager::LoadFile(const std::string& groupName,const std::string& stage) {
 	//読み込むjsonファイルのフルパスを合成する
 	std::string filePath = kDirectoryPath + groupName + ".json";
 	//読み込み用のファイルストリーム
@@ -204,8 +263,7 @@ void FloorManager::LoadFile(const std::string& groupName) {
 		MessageBoxA(nullptr, message.c_str(), "Adjustment_Item", 0);
 		assert(0);
 		return;
-	}
-	floors_.clear();
+	}	
 
 	nlohmann::json root;
 
@@ -213,17 +271,30 @@ void FloorManager::LoadFile(const std::string& groupName) {
 	ifs >> root;
 	//ファイルを閉じる
 	ifs.close();
+	for (Floor* box : floors_) {
+		colliderDebugDraw_->DeleteCollider(&box->GetCollider());
+	}
+	
+
+	floors_.clear();
+
 	//グループを検索
 	nlohmann::json::iterator itGroup = root.find(groupName);
 	//未登録チェック
 	assert(itGroup != root.end());
 	//各アイテムについて
-	for (const auto& i : root[groupName]) {
+	for (const auto& i : root[groupName][stage]) {
 		int count = 0;
 		TransformStructure newTrans{};
+		bool isNewMove = false;
+		bool isVerticalMove = false;
 		for (const auto& j : i) {
 			Vector3 v{};
-			from_json(j, v);
+			
+			if (count < 3) {
+				from_json(j, v);
+			}
+			
 			if (count == 0) {
 				newTrans.scale = v;
 			}
@@ -233,12 +304,19 @@ void FloorManager::LoadFile(const std::string& groupName) {
 			else if (count == 2) {
 				newTrans.translate = v;
 			}
+			else if (count == 3) {
+				isNewMove = j;
+			}
+			else if (count == 4) {
+				isVerticalMove = j;
+			}
+
 			count++;
 
 		}
 
 		Floor* box_ = new Floor();
-		box_->Initialize(model_, material_, newTrans.translate, newTrans.rotate, false, false);
+		box_->Initialize(model_, material_, newTrans.translate, newTrans.rotate, isNewMove, isVerticalMove);
 
 		floors_.push_back(box_);
 

@@ -168,12 +168,14 @@ void GameScene::Initialize() {
 	colliderDebugDraw_->AddCollider(&player_->GetCollider());
 	colliderDebugDraw_->AddCollider(&player_->GetExplosionCollider());
 	//ステージ識別番号
-	stages = {
+	stages_ = {
 		"Stage1",
 		"Stage2",
 		"Stage3",
 		"Stage4"
 	};
+
+	stageName_ = stages_[0].c_str();
 }
 
 /// <summary>
@@ -412,11 +414,21 @@ void GameScene::ImguiDraw() {
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("ファイル関連")){
-			if (ImGui::Button("全保存")) {
-				FilesSave();
+			for (size_t i = 0; i < stages_.size(); i++){
+				if (ImGui::RadioButton(stages_[i].c_str(), &stageSelect_, static_cast<int>(i))) {
+					stageName_ = stages_[stageSelect_].c_str();
+				}
+				
 			}
+			/*if (ImGui::Button("jsonファイルを作る")) {
+				FilesSave(stages_);
+			}*/
+			if (ImGui::Button("上書きセーブ")) {
+				FilesOverWrite(stageName_);
+			}
+
 			if (ImGui::Button("全ロード(手動)")) {
-				FilesLoad();
+				FilesLoad(stages_,stageName_);
 			}
 			ImGui::EndMenu();
 		}
@@ -458,24 +470,35 @@ void GameScene::DebugCameraUpdate()
 
 }
 
-void GameScene::FilesSave(){
-	floorManager_->SaveFile();
-	boxManager_->SaveFile();
-	breakBoxManager_->SaveFile();
-	checkPointManager_->SaveFile();
-	collectibleItemManager_->SaveFile();
-	recoveryItemManager_->SaveFile();
-	std::string message = std::format("{}.json saved.", "all");
+void GameScene::FilesSave(const std::vector<std::string>& stages){
+	floorManager_->SaveFile(stages);
+	boxManager_->SaveFile(stages);
+	breakBoxManager_->SaveFile(stages);
+	checkPointManager_->SaveFile(stages);
+	collectibleItemManager_->SaveFile(stages);
+	recoveryItemManager_->SaveFile(stages);
+	std::string message = std::format("{}.json created.", "all");
 	MessageBoxA(nullptr, message.c_str(), "StagesObject", 0);
 }
 
-void GameScene::FilesLoad(){
-	boxManager_->LoadFiles();
-	floorManager_->LoadFiles();
-	breakBoxManager_->LoadFiles();
-	checkPointManager_->LoadFiles();
-	collectibleItemManager_->LoadFiles();
-	recoveryItemManager_->LoadFiles();
+void GameScene::FilesOverWrite(const std::string& stage){
+	floorManager_->FileOverWrite(stage);
+	boxManager_->FileOverWrite(stage);
+	breakBoxManager_->FileOverWrite(stage);
+	checkPointManager_->FileOverWrite(stage);
+	collectibleItemManager_->FileOverWrite(stage);
+	recoveryItemManager_->FileOverWrite(stage);
+	std::string message = std::format("{}.json OverWrite.", "all");
+	MessageBoxA(nullptr, message.c_str(), "StagesObject", 0);
+}
+
+void GameScene::FilesLoad(const std::vector<std::string>& stages, const std::string& stage){
+	floorManager_->LoadFiles(stage);
+	boxManager_->LoadFiles(stage);
+	breakBoxManager_->LoadFiles(stage);
+	checkPointManager_->LoadFiles(stage);
+	collectibleItemManager_->LoadFiles(stage);
+	recoveryItemManager_->LoadFiles(stage);
 	std::string message = std::format("{}.json loaded.", "all");
 	MessageBoxA(nullptr, message.c_str(), "StagesObject", 0);
 }

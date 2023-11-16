@@ -64,12 +64,18 @@ public: //メンバ関数
 
 	void DebugCameraUpdate();
 
-	void FilesSave();
+	void FilesSave(const std::vector<std::string>& stages);
 
-	void FilesLoad();
+	void FilesOverWrite(const std::string& stage);
+
+	void FilesLoad(const std::vector<std::string>& stages, const std::string& stage);
 
 private:
-	std::vector<std::string> stages;
+	std::vector<std::string> stages_;
+
+	std::string stageName_;
+
+	int stageSelect_;
 
 	//テスト
 private:

@@ -46,6 +46,10 @@ public: // アクセッサ
 
 	WorldTransform* GetWorldTransformAdress() { return &worldTransform_; }
 
+	bool GetMoveFlag() { return isMoving_; }
+
+	bool GetVerticalFlag() { return isVertical_; }
+
 	Vector3 GetSize() { return size_; }
 
 	AABB& GetCollider() { return collider_; }

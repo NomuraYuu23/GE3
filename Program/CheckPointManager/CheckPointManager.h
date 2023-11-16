@@ -59,13 +59,15 @@ public: // アクセッサ
 public:
 	using json = nlohmann::json;
 
-	void SaveFile();
+	void SaveFile(const std::vector<std::string>& stages);
+
+	void FileOverWrite(const std::string& stage);
 
 	void ChackFiles();
 
-	void LoadFiles();
+	void LoadFiles(const std::string& stage);
 
-	void LoadFile(const std::string& groupName);
+	void LoadFile(const std::string& groupName, const std::string& stage);
 
 	bool LoadChackItem(const std::string& directoryPath, const std::string& itemName);
 

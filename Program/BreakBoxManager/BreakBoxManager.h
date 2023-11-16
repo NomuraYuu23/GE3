@@ -9,7 +9,7 @@
 
 class BreakBoxManager{
 public:
-	using json = nlohmann::json;
+	
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
@@ -58,13 +58,17 @@ public: // アクセッサ
 	void SetColliderDebugDraw(ColliderDebugDraw* colliderDebugDraw) { colliderDebugDraw_ = colliderDebugDraw; }
 
 public:
-	void SaveFile();
+	using json = nlohmann::json;
+
+	void SaveFile(const std::vector<std::string>& stages);
+
+	void FileOverWrite(const std::string& stage);
 
 	void ChackFiles();
 
-	void LoadFiles();
+	void LoadFiles(const std::string& stage);
 
-	void LoadFile(const std::string& groupName);
+	void LoadFile(const std::string& groupName, const std::string& stage);
 
 	bool LoadChackItem(const std::string& directoryPath, const std::string& itemName);
 

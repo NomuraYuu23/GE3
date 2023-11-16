@@ -76,6 +76,7 @@ void CollectibleItem::DrawImgui(){
 	ImGui::DragFloat3("アイテムの座標", &drawWorldTransform_.transform_.translate.x, 0.1f);
 	ImGui::DragFloat3("アイテムの回転", &drawWorldTransform_.transform_.rotate.x, 0.1f);
 	ImGui::DragFloat3("アイテムの大きさ", &drawWorldTransform_.transform_.scale.x, 0.1f, 0.0f, 300.0f);
+	ImGui::Checkbox("動くかどうか", &isFalling_);
 	worldTransform_.transform_.translate = drawWorldTransform_.transform_.translate;
 }
 

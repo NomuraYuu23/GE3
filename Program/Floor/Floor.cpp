@@ -114,4 +114,6 @@ void Floor::verticalMove(){
 void Floor::DrawImgui(){
 	ImGui::DragFloat3("床の座標", &worldTransform_.transform_.translate.x, 0.1f);
 	ImGui::DragFloat3("床の回転", &worldTransform_.transform_.rotate.x, 0.1f);
+	ImGui::Checkbox("動くかどうか", &isMoving_);
+	ImGui::Checkbox("縦移動させるか", &isVertical_);
 }
