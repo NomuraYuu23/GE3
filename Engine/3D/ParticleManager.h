@@ -44,7 +44,7 @@ public: // メンバ関数
 	/// <summary>
 	/// 更新
 	/// </summary>
-	void Update();
+	void Update(const Matrix4x4& cameraMatrix4x4);
 
 	/// <summary>
 	/// 描画

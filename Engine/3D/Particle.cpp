@@ -46,21 +46,23 @@ void Particle::Initialize(uint32_t numInstance)
 
 	}
 
-	billBoard_.useIt_ = false;
+	billBoard_.useIt_ = true;
 
 	billBoard_.matrix_ = matrix4x4Calc->MakeIdentity4x4();
 
 }
 
-void Particle::Update()
+void Particle::Update(const Matrix4x4& cameraMatrix4x4)
 {
+
+	BillBoardUpdate(cameraMatrix4x4);
 
 	for (uint32_t i = 0; i < numInstance_; i++) {
 		if (basic_[i].lifeTime_ <= basic_[i].currentTime_) {
 			continue;
 		}
-		TimeElapsed(i);
-		GraduallyDisappear(i);
+		//TimeElapsed(i);
+		//GraduallyDisappear(i);
 		UpdateMatrix(i);
 	}
 
@@ -123,10 +125,10 @@ void Particle::BillBoardUpdate(const Matrix4x4& cameraMatrix4x4)
 {
 	Matrix4x4Calc* matrix4x4Calc = Matrix4x4Calc::GetInstance();
 
-	Matrix4x4 backToFrontMatrix = matrix4x4Calc->MakeRotateYMatrix(std::numbers::pi_v<float>);
-	Matrix4x4 billBoardMatrix = matrix4x4Calc->Multiply(backToFrontMatrix, cameraMatrix4x4);
-	billBoardMatrix.m[3][0] = 0.0f;
-	billBoardMatrix.m[3][1] = 0.0f;
-	billBoardMatrix.m[3][2] = 0.0f;
+	Matrix4x4 backToFrontMatrix = matrix4x4Calc->MakeRotateXYZMatrix({0.0f,0.0f,0.0f });
+	billBoard_.matrix_ = matrix4x4Calc->Multiply(backToFrontMatrix, cameraMatrix4x4);
+	billBoard_.matrix_.m[3][0] = 0.0f;
+	billBoard_.matrix_.m[3][1] = 0.0f;
+	billBoard_.matrix_.m[3][2] = 0.0f;
 
 }

@@ -31,6 +31,8 @@ void GameScene::Initialize() {
 	particleManager_->ModelCreate();
 	particleManager_->ParticleCreate(10);
 
+	isDebugCameraActive_ = true;
+
 }
 
 /// <summary>
@@ -54,7 +56,7 @@ void GameScene::Update(){
 	colliderDebugDraw_->Update();
 	
 	//パーティクル
-	particleManager_->Update();
+	particleManager_->Update(debugCamera_->GetMatrix());
 
 	// ポーズ機能
 	pause_->Update();

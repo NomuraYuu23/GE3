@@ -44,7 +44,7 @@ public:
 
 	virtual void Initialize(uint32_t numInstance);
 
-	virtual void Update();
+	virtual void Update(const Matrix4x4& cameraMatrix4x4);
 
 	void UpdateMatrix(uint32_t num);
 

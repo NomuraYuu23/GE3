@@ -27,6 +27,8 @@ public:
 	/// <returns></returns>
 	ViewProjection* GetViewProjectionAddress() { return &viewProjection_; }
 
+	Matrix4x4 GetMatrix() { return matrix_; }
+
 protected:
 
 	//ビュープロジェクション

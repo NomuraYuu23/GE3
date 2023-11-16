@@ -63,13 +63,13 @@ void ParticleManager::ParticleCreate(uint32_t numInstance)
 
 }
 
-void ParticleManager::Update()
+void ParticleManager::Update(const Matrix4x4& cameraMatrix4x4)
 {
 
 	std::list<Particle*>::iterator itr = particles_.begin();
 	for (; itr != particles_.end(); ++itr) {
 		Particle* particle = *itr;
-		particle->Update();
+		particle->Update(cameraMatrix4x4);
 	}
 
 }
