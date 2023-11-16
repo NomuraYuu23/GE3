@@ -244,6 +244,10 @@ void GraphicsPipelineState::InitializeGraphicsPipeline(ID3D12Device* sDevice)
 	pixelShaderBlobParticle->GetBufferSize() };//PixelShader
 	graphicsPipelineStateDesc.RasterizerState = rasterizerDesc;//RasterizerState
 
+	//ZSort
+	depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
+	graphicsPipelineStateDesc.DepthStencilState = depthStencilDesc;
+
 	//実際に生成
 	hr = sDevice->CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
 		IID_PPV_ARGS(&sPipelineState[kParticle]));
