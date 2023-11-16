@@ -1,11 +1,12 @@
 #include "../Player/Player.h"
 #include "../../Engine/Input/Input.h"
 #include "../../Engine/Math/Math.h"
+#include"../../Engine/2D/ImguiManager.h"
 
 void Player::Initialize(const std::vector<Model*>& models,
 	const std::vector<Material*>& materials)
 {
-
+	workRoot_.kInitialPosition = { 0.0f,5.0f,0.0f };
 	//nullポインタチェック
 	assert(models.front());
 	//基底クラスの初期化
@@ -37,6 +38,9 @@ void Player::Initialize(const std::vector<Model*>& models,
 	worldTransformWeapon_.transform_.translate.y += 3.0f;
 	worldTransformWeapon_.parent_ = &worldTransform_;
 
+	
+
+
 	////浮遊ギミック
 	//InitializeFloatinggimmick();
 
@@ -48,7 +52,17 @@ void Player::Initialize(const std::vector<Model*>& models,
 	isLanding = true;
 
 	collider_.Initialize(worldTransform_.transform_.translate, workRoot_.kColliderSize);
+	explosionCollider_.Initialize(Vector3(0.0f, 0.0f, 0.0f), 0.0f);
 
+	worldTransformExprode_.Initialize();
+	worldTransformExprode_.transform_.translate = explosionCollider_.center_;
+	worldTransformExprode_.transform_.scale = { explosionCollider_.radius_,explosionCollider_.radius_ ,explosionCollider_.radius_ };
+
+	explosionSpeed_ = 0.5f;
+
+	isExplosion_ = false;
+
+	exprosionNum_ = startExprosionNum_;
 	//// 攻撃
 	//
 	//workAttack_.attackCenterAdd_ = {0.0f,0.0,5.0f};
@@ -105,24 +119,28 @@ void Player::Update()
 	//行列を定数バッファに転送
 	allUpdateMatrix();
 
-	if (worldTransform_.worldMatrix_.m[3][1] <= -10.0f) {
+	if (worldTransform_.worldMatrix_.m[3][1] <= -30.0f) {
 		Restart();
 	}
 
 	collider_.center_ = { worldTransform_.worldMatrix_.m[3][0], worldTransform_.worldMatrix_.m[3][1]+collider_.radius_, worldTransform_.worldMatrix_.m[3][2] };
 	collider_.worldTransformUpdate();
+	explosionCollider_.worldTransformUpdate();
+	worldTransformExprode_.transform_.translate = explosionCollider_.center_;
+	worldTransformExprode_.UpdateMatrix();
 
 }
 
 void Player::Draw(const ViewProjection& viewProjection)
 {
+	DrawImgui();
 
 	models_[int(ModelIndex::kModelIndexBody)]->Draw(worldTransformBody_, viewProjection);
 	models_[int(ModelIndex::kModelIndexHead)]->Draw(worldTransformHead_, viewProjection);
 	models_[int(ModelIndex::kModelIndexL_arm)]->Draw(worldTransformL_arm_, viewProjection);
 	models_[int(ModelIndex::kModelIndexR_arm)]->Draw(worldTransformR_arm_, viewProjection);
 	models_[int(ModelIndex::kModelIndexWeapon)]->Draw(worldTransformWeapon_, viewProjection);
-
+	models_[int(ModelIndex::kModelIndexExprode)]->Draw(worldTransformExprode_, viewProjection);
 
 }
 
@@ -262,8 +280,8 @@ void Player::BehaviorDashInitialize()
 
 }
 
-void Player::BehaviorDashUpdate()
-{
+void Player::BehaviorDashUpdate(){
+
 }
 
 void Player::InitializeFloatinggimmick()
@@ -404,12 +422,55 @@ void Player::Jump()
 	if (input->GetJoystickConnected()) {
 		
 		if (Input::GetInstance()->TriggerJoystick(0) && isLanding) {
+			Explosion();
 			velocity_.y += workRoot_.kJumpSpeed;
 			isLanding = false;
+			
 		}
 
 	}
 
+	ExplosionMove();
+
+}
+
+void Player::Explosion(){	
+	if (exprosionNum_ == exprosionMin_)
+		return;
+	isExplosion_ = true;
+	explosionCollider_.center_ = { worldTransform_.worldMatrix_.m[3][0], worldTransform_.worldMatrix_.m[3][1], worldTransform_.worldMatrix_.m[3][2] };
+	worldTransformExprode_.transform_.translate = explosionCollider_.center_;
+}
+
+void Player::ExplosionMove(){
+	if (exprosionNum_ == exprosionMin_)
+		return;
+	//爆破タイマー
+	if (isExplosion_) {
+		explosionTimer_ += 1;
+	}
+	if (explosionTimer_ == baseExplosionTimer_) {
+		explosionTimer_ = 0;
+		isExplosion_ = false;
+		if (exprosionNum_ != exprosionMin_) {
+			isSubtraction_ = true;
+			if (isSubtraction_) {
+				exprosionNum_--;
+				isSubtraction_ = false;
+			}
+		}
+	}
+	
+
+	//爆破関係
+	if (isExplosion_){
+		explosionCollider_.radius_ += explosionSpeed_;
+		//worldTransformExprode_.transform_.rotate.y += 0.15f;
+	}
+	else {
+		explosionCollider_.radius_ = 0.0f;
+	}
+	worldTransformExprode_.transform_.scale = { explosionCollider_.radius_,explosionCollider_.radius_ ,explosionCollider_.radius_ };
 }
 
 void Player::Fall()
@@ -480,6 +541,35 @@ void Player::OnCollision(WorldTransform* worldTransform)
 
 }
 
+void Player::OnCollisionBox(WorldTransform* worldTransform, float boxSize){
+	if (velocity_.y <= 0.0f) {
+		if (!worldTransform_.parent_ ||
+			(worldTransform_.parent_ != worldTransform)) {
+			GotParent(worldTransform);
+		}
+		worldTransform_.transform_.translate.y = boxSize;
+		allUpdateMatrix();
+
+		isLanding = true;
+	}
+}
+
+void Player::OnCollisionRecoveryItem(int recoveryValue){
+	exprosionNum_ += recoveryValue;
+	if (exprosionNum_>exprosionMax_){
+		exprosionNum_ = exprosionMax_;
+	}
+}
+
+void Player::OnCollisionCollectibleItem(){
+	numCollectItem++;
+}
+
+void Player::SetRestartPosition(const Vector3& position){
+	Vector3 pos = { position.x,position.y + 5.0f,position.z };
+	workRoot_.kInitialPosition = pos;
+}
+
 void Player::GotParent(WorldTransform* parent)
 {
 
@@ -530,4 +620,31 @@ void Player::allUpdateMatrix(){
 	worldTransformL_arm_.UpdateMatrix();
 	worldTransformR_arm_.UpdateMatrix();
 	worldTransformWeapon_.UpdateMatrix();
+	worldTransformExprode_.UpdateMatrix();
+}
+
+void Player::DrawImgui(){
+	ImGui::Begin("プレイヤー", nullptr, ImGuiWindowFlags_MenuBar);
+	if (ImGui::BeginMenuBar()) {
+		if (ImGui::BeginMenu("WorldTransform")) {
+			ImGui::DragFloat3("座標", &worldTransform_.transform_.translate.x, 0.1f);
+			ImGui::DragFloat3("回転", &worldTransform_.transform_.rotate.x, 0.1f);
+			ImGui::DragFloat3("大きさ", &worldTransform_.transform_.scale.x, 0.1f);
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("爆破関係")) {
+			ImGui::DragFloat3("爆破の中心", &explosionCollider_.center_.x, 0.1f);
+			ImGui::DragFloat("広がる速度", &explosionSpeed_, 0.01f, 0.0f, 2.0f);
+			ImGui::DragInt("残り爆発回数", &exprosionNum_, 1.0f, exprosionMin_, exprosionMax_);
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("収集アイテム数")) {
+			ImGui::Text("現在の枚数 = %d", numCollectItem);
+			ImGui::EndMenu();
+		}
+		ImGui::EndMenuBar();
+	}
+	ImGui::End();
 }

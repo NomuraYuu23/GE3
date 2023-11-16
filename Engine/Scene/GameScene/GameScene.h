@@ -3,10 +3,16 @@
 #include "../../Collider/ColliderDebugDraw/ColliderDebugDraw.h"// コライダーデバッグ描画
 
 #include"../../../Program/FloorManager/FloorManager.h"
+#include"../../../Program/BoxManager/BoxManager.h"
+#include"../../../Program/BreakBoxManager/BreakBoxManager.h"
 #include"../../../Program/Player/Player.h"
+#include"../../../Program/EnemyManager/EnemyManager.h"
 #include"../../../Program/CollisionManager/CollisionManager.h"
-#include"../../../Engine/Camera/FollowCamera/FollowCamera.h"
+#include"../../../Program/RecoveryItemManager/RecoveryItemManager.h"
+#include"../../../Program/CollectibleItemManager/CollectibleItemManager.h"
+#include"../../Camera/FollowCamera/FollowCamera.h"
 #include "../../Pause/Pause.h"
+#include"../../../Program/CheckPointManager/CheckPointManager.h"
 
 class GameScene : public IScene
 {
@@ -72,6 +78,20 @@ private: // メンバ関数
 	/// </summary>
 	void TextureLoad() override;
 
+	void FilesSave(const std::vector<std::string>& stages);
+
+	void FilesOverWrite(const std::string& stage);
+
+	void FilesLoad(const std::vector<std::string>& stages, const std::string& stage);
+
+private:
+	std::vector<std::string> stages_;
+
+	std::string stageName_;
+
+	int stageSelect_;
+
+	//テスト
 private:
 
 	// デバッグ描画
@@ -86,16 +106,77 @@ private:
 
 	//床全体
 	std::unique_ptr<FloorManager> floorManager_;
-
 	std::unique_ptr<Model> floorModel_;
 	std::unique_ptr<Material> floorMaterial_;
-
 	bool isFloorMove_ = false;
-
 	bool isVertical_ = false;
-	//床の生成のトランスフォームとか
+
+	//壁とかのブロック
+	std::unique_ptr<BoxManager> boxManager_;
+	std::unique_ptr<Model> boxModel_;
+	std::unique_ptr<Material> boxMaterial_;
+	bool isBoxMove_ = false;
+	bool isBoxVertical_ = false;
+
+	//壊れるブロック
+	std::unique_ptr<BreakBoxManager> breakBoxManager_;
+	std::unique_ptr<Model> breakBoxModel_;
+	std::unique_ptr<Material> breakBoxMaterial_;
+	bool isBreakBoxMove_ = false;
+	bool isBreakBoxVertical_ = false;
+	//爆発回数回復アイテム
+	std::unique_ptr<RecoveryItemManager> recoveryItemManager_;
+	std::unique_ptr<Model> recoveryItemModel_;
+	std::unique_ptr<Material> recoveryItemMaterial_;
+	int recoveryValue_ = 1;
+	//コイン系収集アイテム
+	std::unique_ptr<CollectibleItemManager> collectibleItemManager_;
+	std::unique_ptr<Model> collectibleItemModel_;
+	std::unique_ptr<Material> collectibleItemMaterial_;
+	bool isCollectibleItemFall_ = false;
+
+	//チェックポイント
+	std::unique_ptr<CheckPointManager> checkPointManager_;
+	std::unique_ptr<Model> checkPointModel_;
+	std::unique_ptr<Material> checkPointMaterial_;
+
+	//床の生成のトランスフォーム
 	TransformStructure floorTransform_{};
 
+	//ボックスのトランスフォーム
+	TransformStructure firstBoxTrnasform_{
+		.scale = {30.0f,3.0f,30.0f},
+		.rotate = {0.0f,0.0f,0.0f},
+		.translate = {0.0f,-5.0,35.0f}
+	};
+
+	//壊れるボックスの生成のトランスフォーム
+	TransformStructure breakBoxTransform_{ {1.0f,1.0f,1.0f} };
+
+	//回復アイテムの生成トランスフォーム
+	TransformStructure recoveryItemTransform_{ {1.0f,1.0f,1.0f} };
+
+	//収集アイテムの生成トランスフォーム
+	TransformStructure collectibleItemTransform_{ {1.0f,1.0f,1.0f} };
+
+	//チェックポイントの生成トランスフォーム
+	TransformStructure checkPointTransform_{ {1.0f,1.0f,1.0f} };
+	TransformStructure firstCheckPointTransform_{
+		.scale = {2.0f,2.0f,2.0f},
+		.rotate = {0.0f,0.0f,0.0f},
+		.translate = {0.0f,2.0f,75.0f}
+	};
+
+	//敵生成トランスフォーム
+	TransformStructure firstEnemyTransform_{};
+	TransformStructure enemyTransform_{};
+
+	//ビュープロジェクション
+	ViewProjection viewProjection_;
+
+	//デバッグカメラ
+	std::unique_ptr<DebugCamera> debugCamera_ = nullptr;
+	bool isDebugCameraActive_;
 	//フォローカメラ
 	std::unique_ptr<FollowCamera> followCamera_ = nullptr;
 
@@ -112,4 +193,10 @@ private:
 	// パーティクルマネージャー
 	ParticleManager* particleManager_ = nullptr;
 
+	//エネミー関連
+	//エネミー
+	std::unique_ptr<EnemyManager> enemyManager_;
+	//エネミーのモデルとか
+	std::vector<Model*> enemyModels_;
+	std::vector<Material*> enemyMaterials_;
 };

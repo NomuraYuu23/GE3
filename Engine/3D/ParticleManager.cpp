@@ -68,7 +68,7 @@ void ParticleManager::Update(const Matrix4x4& cameraMatrix4x4)
 void ParticleManager::Draw(const ViewProjection& viewProjection)
 {
 	
-	model_->ParticleDraw(viewProjection);
+	//model_->ParticleDraw(viewProjection);
 
 }
 

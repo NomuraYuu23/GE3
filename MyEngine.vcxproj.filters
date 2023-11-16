@@ -37,6 +37,24 @@
     <Filter Include="AL\ヘッダーファイル">
       <UniqueIdentifier>{fc979200-3a7d-417b-9df3-acf5b50d287d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="AL\ヘッダーファイル\Stage">
+      <UniqueIdentifier>{ba6c57b3-1b6a-485b-9c56-9d141c7d04ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AL\ソースファイル\Stage">
+      <UniqueIdentifier>{9e6c974e-2c01-4eb7-81d0-beecb9fb62af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AL\ソースファイル\StageItem">
+      <UniqueIdentifier>{afb90174-61c5-4e0d-b134-8f2f493b26e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AL\ヘッダーファイル\StageItem">
+      <UniqueIdentifier>{7e063ad5-f6cd-446c-b2ee-2297c675f013}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AL\ソースファイル\Character">
+      <UniqueIdentifier>{7cb242e1-9cb5-40b9-98ff-8e970c731c74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AL\ヘッダーファイル\Character">
+      <UniqueIdentifier>{404473bf-34d1-4bf0-8785-b71f3f04d54b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -114,31 +132,16 @@
     <ClCompile Include="Engine\Math\Vector3.cpp">
       <Filter>ソース ファイル\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Program\BaseCharacter\BaseCharacter.cpp">
-      <Filter>AL\ソースファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Program\Floor\Floor.cpp">
-      <Filter>AL\ソースファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Camera\FollowCamera\FollowCamera.cpp">
       <Filter>AL\ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\Player\Player.cpp">
-      <Filter>AL\ソースファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Program\Skydome\Skydome.cpp">
-      <Filter>AL\ソースファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Program\FloorManager\FloorManager.cpp">
       <Filter>AL\ソースファイル</Filter>
     </ClCompile>
     <ClCompile Include="Program\CollisionManager\CollisionManager.cpp">
       <Filter>AL\ソースファイル</Filter>
     </ClCompile>
     <ClCompile Include="Program\Goal\Goal.cpp">
-      <Filter>AL\ソースファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Program\Enemy\Enemy.cpp">
       <Filter>AL\ソースファイル</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Collider\Collider.cpp">
@@ -215,6 +218,60 @@
     </ClCompile>
     <ClCompile Include="Engine\3D\Emitter.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\Box\Box.cpp">
+      <Filter>AL\ソースファイル\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\BoxManager\BoxManager.cpp">
+      <Filter>AL\ソースファイル\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\Floor\Floor.cpp">
+      <Filter>AL\ソースファイル\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\FloorManager\FloorManager.cpp">
+      <Filter>AL\ソースファイル\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\BreakBox\BreakBox.cpp">
+      <Filter>AL\ソースファイル\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\BreakBoxManager\BreakBoxManager.cpp">
+      <Filter>AL\ソースファイル\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\RecoveryItemManager\RecoveryItemManager.cpp">
+      <Filter>AL\ソースファイル\StageItem</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\RecoveryItem\RecoveryItem.cpp">
+      <Filter>AL\ソースファイル\StageItem</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\Enemy\Enemy.cpp">
+      <Filter>AL\ソースファイル\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\Player\Player.cpp">
+      <Filter>AL\ソースファイル\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\EnemyManager\EnemyManager.cpp">
+      <Filter>AL\ソースファイル\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\BaseCharacter\BaseCharacter.cpp">
+      <Filter>AL\ソースファイル\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\CollectibleItemManager\CollectibleItemManager.cpp">
+      <Filter>AL\ソースファイル\StageItem</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\CollectibleItem\CollectibleItem.cpp">
+      <Filter>AL\ソースファイル\StageItem</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\CheckPoint\CheckPoint.cpp">
+      <Filter>AL\ソースファイル\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\CheckPointManager\CheckPointManager.cpp">
+      <Filter>AL\ソースファイル\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\BurningBox\BurningBox.cpp">
+      <Filter>AL\ソースファイル\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\BurningBoxManager\BurningBoxManager.cpp">
+      <Filter>AL\ソースファイル\Stage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -317,31 +374,16 @@
     <ClInclude Include="Engine\Math\Matrix4x4.h">
       <Filter>ヘッダー ファイル\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Program\BaseCharacter\BaseCharacter.h">
-      <Filter>AL\ヘッダーファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Program\Floor\Floor.h">
-      <Filter>AL\ヘッダーファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Camera\FollowCamera\FollowCamera.h">
       <Filter>AL\ヘッダーファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Program\Player\Player.h">
-      <Filter>AL\ヘッダーファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Program\Skydome\Skydome.h">
-      <Filter>AL\ヘッダーファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Program\FloorManager\FloorManager.h">
       <Filter>AL\ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="Program\CollisionManager\CollisionManager.h">
       <Filter>AL\ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="Program\Goal\Goal.h">
-      <Filter>AL\ヘッダーファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Program\Enemy\Enemy.h">
       <Filter>AL\ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Collider\Collider.h">
@@ -427,6 +469,60 @@
     </ClInclude>
     <ClInclude Include="Engine\Math\DeltaTime.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\Box\Box.h">
+      <Filter>AL\ヘッダーファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\BoxManager\BoxManager.h">
+      <Filter>AL\ヘッダーファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\Floor\Floor.h">
+      <Filter>AL\ヘッダーファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\FloorManager\FloorManager.h">
+      <Filter>AL\ヘッダーファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\BreakBox\BreakBox.h">
+      <Filter>AL\ヘッダーファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\BreakBoxManager\BreakBoxManager.h">
+      <Filter>AL\ヘッダーファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\RecoveryItem\RecoveryItem.h">
+      <Filter>AL\ヘッダーファイル\StageItem</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\RecoveryItemManager\RecoveryItemManager.h">
+      <Filter>AL\ヘッダーファイル\StageItem</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\Enemy\Enemy.h">
+      <Filter>AL\ヘッダーファイル\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\Player\Player.h">
+      <Filter>AL\ヘッダーファイル\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\EnemyManager\EnemyManager.h">
+      <Filter>AL\ヘッダーファイル\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\BaseCharacter\BaseCharacter.h">
+      <Filter>AL\ヘッダーファイル\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\CollectibleItem\CollectibleItem.h">
+      <Filter>AL\ヘッダーファイル\StageItem</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\CollectibleItemManager\CollectibleItemManager.h">
+      <Filter>AL\ヘッダーファイル\StageItem</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\CheckPoint\CheckPoint.h">
+      <Filter>AL\ヘッダーファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\CheckPointManager\CheckPointManager.h">
+      <Filter>AL\ヘッダーファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\BurningBox\BurningBox.h">
+      <Filter>AL\ヘッダーファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\BurningBoxManager\BurningBoxManager.h">
+      <Filter>AL\ヘッダーファイル\Stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

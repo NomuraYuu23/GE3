@@ -1,5 +1,6 @@
 #include "Floor.h"
 #include <cmath>
+#include"../../Engine/2D/ImguiManager.h"
 
 void Floor::Initialize(Model* model, Material* material, Vector3 position, Vector3 rotate, bool isMoving, bool isVertical)
 {
@@ -42,11 +43,11 @@ void Floor::Update()
 		else {
 			Move();
 		}
-		Vector3 WorldPosition = { worldTransform_.worldMatrix_.m[3][0] , worldTransform_.worldMatrix_.m[3][1] , worldTransform_.worldMatrix_.m[3][2] };
-		collider_.max_ = { WorldPosition.x + size_.x, WorldPosition.y + size_.y, WorldPosition.z + size_.z};
-		collider_.min_ = { WorldPosition.x - size_.x, WorldPosition.y - size_.y, WorldPosition.z - size_.z };
+		
 	}
-
+	Vector3 WorldPosition = { worldTransform_.worldMatrix_.m[3][0] , worldTransform_.worldMatrix_.m[3][1] , worldTransform_.worldMatrix_.m[3][2] };
+	collider_.max_ = { WorldPosition.x + size_.x, WorldPosition.y + size_.y, WorldPosition.z + size_.z };
+	collider_.min_ = { WorldPosition.x - size_.x, WorldPosition.y - size_.y, WorldPosition.z - size_.z };
 	worldTransform_.UpdateMatrix();
 	collider_.worldTransformUpdate();
 
@@ -108,4 +109,15 @@ void Floor::verticalMove(){
 	position = m4Calc->TransformNormal(position, rotateMatrix);
 
 	worldTransform_.transform_.translate = v3Calc->Add(position_, v3Calc->Multiply(cosf(moveTimer_), position));
+}
+
+void Floor::DrawImgui(){
+	ImGui::DragFloat3("床の座標", &worldTransform_.transform_.translate.x, 0.1f);
+	ImGui::DragFloat3("床の回転", &worldTransform_.transform_.rotate.x, 0.1f);
+	ImGui::Checkbox("動くかどうか", &isMoving_);
+	ImGui::Checkbox("縦移動させるか", &isVertical_);
+	if (ImGui::Button("このオブジェを削除")){
+		isDelete_ = true;
+	}
+	position_ = worldTransform_.transform_.translate;
 }

@@ -19,7 +19,8 @@ public: // サブクラス
 		kModelIndexHead = 1,
 		kModelIndexL_arm = 2,
 		kModelIndexR_arm = 3,
-		kModelIndexWeapon = 4
+		kModelIndexWeapon = 4,
+		kModelIndexExprode = 5
 	};
 
 	// 振るまい
@@ -32,7 +33,7 @@ public: // サブクラス
 	// 通常用ワーク
 	struct WorkRoot {
 		// 初期位置
-		const Vector3 kInitialPosition = { 0.0f, 0.0f, 0.0f };
+		Vector3 kInitialPosition = { 0.0f, 0.0f, 0.0f };
 		// 初期角度
 		const Vector3 kInitialRotate = {};
 		// ジャンプ初期速さ
@@ -185,6 +186,16 @@ public: // メンバ関数
 	/// ジャンプ
 	/// </summary>
 	void Jump();
+
+	/// <summary>
+	/// 爆破
+	/// </summary>
+	void Explosion();
+
+	/// <summary>
+	/// 爆破範囲の拡大
+	/// </summary>
+	void ExplosionMove();
 	
 	/// <summary>
 	/// 落下
@@ -217,9 +228,30 @@ public: // メンバ関数
 	void OnCollision(WorldTransform* worldTransform);
 
 	/// <summary>
+	/// 壁との衝突
+	/// </summary>
+	void OnCollisionBox(WorldTransform* worldTransform, float boxSize);
+
+	/// <summary>
+	/// 回復アイテムとの衝突
+	/// </summary>
+	void OnCollisionRecoveryItem(int recoveryValue);
+
+	/// <summary>
+	/// 収集アイテムとの衝突
+	/// </summary>
+	void OnCollisionCollectibleItem();
+
+	/// <summary>
+	/// 復活ポジション再設定
+	/// </summary>
+	void SetRestartPosition(const Vector3& position);
+
+	/// <summary>
 	/// 親を得た
 	/// </summary>
 	void GotParent(WorldTransform* parent);
+
 
 	/// <summary>
 	/// 親を失った
@@ -236,6 +268,8 @@ public: // アクセッサ
 
 	Sphere& GetCollider() { return collider_; }
 
+	Sphere& GetExplosionCollider() { return explosionCollider_; }
+
 	Sphere& GetAttackCollider() { return workAttack_.attackCollider_; }
 
 	bool GetIsAttackJudgment() { return workAttack_.isAttackJudgment_; }
@@ -243,6 +277,9 @@ public: // アクセッサ
 private:
 	//全てのオブジェのUpdateMatrixをまとめたもの
 	void allUpdateMatrix();
+
+	//imguiの表示まとめ
+	void DrawImgui();
 
 private: // メンバ変数
 
@@ -257,6 +294,29 @@ private: // メンバ変数
 
 	// コライダー
 	Sphere collider_;
+	Sphere explosionCollider_;
+	/*爆発関連*/
+	//爆破の半径
+	float explosionSpeed_;
+
+	//爆破を広げるためのスイッチ
+	bool isExplosion_;
+	//爆破時間
+	const int baseExplosionTimer_ = 30;
+
+	int explosionTimer_;
+
+	//初期爆破回数
+	int startExprosionNum_ = 5;
+
+	//残り爆発回数
+	int exprosionNum_ = 0;
+	//爆発の最大値
+	const int exprosionMax_ = 99;
+	//爆発の最低値
+	const int exprosionMin_ = 0;
+	//爆破回数を減らすためのフラグ
+	bool isSubtraction_ = false;
 
 	//ワールド変換データ
 	WorldTransform worldTransformBody_;
@@ -264,6 +324,7 @@ private: // メンバ変数
 	WorldTransform worldTransformL_arm_;
 	WorldTransform worldTransformR_arm_;
 	WorldTransform worldTransformWeapon_;
+	WorldTransform worldTransformExprode_;
 
 	//振るまい
 	Behavior behavior_ = Behavior::kRoot;
@@ -285,5 +346,7 @@ private: // メンバ変数
 	// ぶらぶら
 	WorkSwing workSwing_;
 
+	//アイテム関連の変数
+	int numCollectItem;
 };
 

@@ -8,7 +8,7 @@
 /// </summary>
 /// <param name="model">モデル</param>
 /// <param name="textureHandle">テクスチャハンドル</param>
-void Enemy::Initialize(const std::vector<Model*>& models,
+void Enemy::Initialize(TransformStructure transform,const std::vector<Model*>& models,
 	const std::vector<Material*>& materials) {
 
 	// nullポインタチェック
@@ -16,6 +16,8 @@ void Enemy::Initialize(const std::vector<Model*>& models,
 
 	// 基底クラスの初期化
 	BaseCharacter::Initialize(models, materials);
+	worldTransform_.transform_.translate = transform.translate;
+	worldTransform_.transform_.rotate = transform.rotate;
 
 	worldTransformBody_.Initialize();
 	worldTransformBody_.parent_ = &worldTransform_;
@@ -31,8 +33,8 @@ void Enemy::Initialize(const std::vector<Model*>& models,
 	worldTransformR_arm_.parent_ = &worldTransformBody_;
 
 	// ポジション
-	position_ = { -0.2f, 0.0f, 60.0f};
-	worldTransform_.transform_.translate = position_;
+	/*position_ = { -0.2f, 0.0f, 60.0f};
+	worldTransform_.transform_.translate = position_;*/
 
 	// 移動用
 	// 速度
@@ -56,28 +58,26 @@ void Enemy::Initialize(const std::vector<Model*>& models,
 /// <summary>
 /// 更新
 /// </summary>
-void Enemy::Update() {
+void Enemy::Update() {	
+	// 回転
+	Rotation();
 
-	if (!isDead_) {
-		// 回転
-		Rotation();
+	// 移動
+	//Move();
 
-		// 移動
-		//Move();
+	// 腕回転ギミック
+	UpdateArmRotationgimmick();
 
-		// 腕回転ギミック
-		UpdateArmRotationgimmick();
+	//ワールド変換データ更新
+	worldTransform_.UpdateMatrix();
 
-		//ワールド変換データ更新
-		worldTransform_.UpdateMatrix();
+	worldTransformBody_.UpdateMatrix();
+	worldTransformL_arm_.UpdateMatrix();
+	worldTransformR_arm_.UpdateMatrix();
 
-		worldTransformBody_.UpdateMatrix();
-		worldTransformL_arm_.UpdateMatrix();
-		worldTransformR_arm_.UpdateMatrix();
-
-		collider_.center_ = { worldTransform_.worldMatrix_.m[3][0],worldTransform_.worldMatrix_.m[3][1], worldTransform_.worldMatrix_.m[3][2] };
-
-	}
+	collider_.center_ = { worldTransform_.worldMatrix_.m[3][0],worldTransform_.worldMatrix_.m[3][1], worldTransform_.worldMatrix_.m[3][2] };
+	collider_.worldTransformUpdate();
+	
 }
 
 /// <summary>
@@ -98,7 +98,7 @@ void Enemy::Draw(const ViewProjection& viewProjection) {
 /// 移動
 /// </summary>
 void Enemy::Move() {
-
+	Rotation();
 
 	Matrix4x4Calc* m4Calc = Matrix4x4Calc::GetInstance();
 	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
@@ -117,12 +117,10 @@ void Enemy::Move() {
 /// <summary>
 /// 回転
 /// </summary>
-void Enemy::Rotation() {
-
-	
+void Enemy::Rotation() {	
 	worldTransform_.transform_.rotate.y += kRotateSpeed;
 	if (worldTransform_.transform_.rotate.y >= 2.0f * float(std::numbers::pi)) {
-		worldTransform_.transform_.rotate.y -= 2.0f * float(std::numbers::pi);
+		//worldTransform_.transform_.rotate.y -= 2.0f * float(std::numbers::pi);
 	}
 	
 

@@ -1,4 +1,4 @@
-﻿#include "ColliderDebugDraw.h"
+#include "ColliderDebugDraw.h"
 #include "../../2D/ImguiManager.h"
 
 void ColliderDebugDraw::Initialize(const std::vector<Model*> models, Material* material)
@@ -105,6 +105,25 @@ void ColliderDebugDraw::AddCollider(OBB* obb)
 {
 
 	obbs_.push_back(obb);
+
+}
+
+void ColliderDebugDraw::DeleteCollider(AABB* aabb){
+	auto it = std::find(aabbs_.begin(), aabbs_.end(), aabb);
+
+	if (it != aabbs_.end()) {
+		aabbs_.erase(it);
+
+	}
+
+}
+
+void ColliderDebugDraw::DeleteCollider(Sphere* sphere) {
+	auto it = std::find(spheres_.begin(), spheres_.end(), sphere);
+
+	if (it != spheres_.end()) {
+		spheres_.erase(it);
+	}
 
 }
 
