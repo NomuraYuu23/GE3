@@ -10,19 +10,29 @@
 
 Particle::~Particle(){}
 
-void Particle::Initialize()
+void Particle::Initialize(const Vector3& position, const Vector3& size)
 {
 
+	Vector3Calc* vector3Calc = Vector3Calc::GetInstance();
 	Matrix4x4Calc* matrix4x4Calc = Matrix4x4Calc::GetInstance();
 	std::random_device seedGenerator;
 	std::mt19937 randomEngine(seedGenerator());
-	std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);
+
+	Vector3 distributionMax = { position.x + size.x / 2.0f,
+								position.y + size.y / 2.0f,
+								position.z + size.z / 2.0f };
+	Vector3 distributionMin = { position.x - size.x / 2.0f,
+								position.y - size.y / 2.0f,
+								position.z - size.z / 2.0f };
+	std::uniform_real_distribution<float> distributionX(distributionMin.x, distributionMax.x);
+	std::uniform_real_distribution<float> distributionY(distributionMin.y, distributionMax.y);
+	std::uniform_real_distribution<float> distributionZ(distributionMin.z, distributionMax.z);
 	std::uniform_real_distribution<float> distColor(0.0f, 1.0f);
 	std::uniform_real_distribution<float> distTime(1.0f, 3.0f);
 
 	transform_.scale = {1.0f,1.0f,1.0f};
 	transform_.rotate = { 0.0f,0.0f,0.0f };
-	transform_.translate = { distribution(randomEngine) , distribution(randomEngine), distribution(randomEngine) };
+	transform_.translate = { distributionX(randomEngine), distributionY(randomEngine), distributionZ(randomEngine) };
 
 	worldMatrix_ = matrix4x4Calc->MakeIdentity4x4();
 

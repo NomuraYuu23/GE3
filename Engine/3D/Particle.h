@@ -25,7 +25,7 @@ public:
 	/// 初期化
 	/// </summary>
 	/// <param name="numInstance"></param>
-	virtual void Initialize();
+	virtual void Initialize(const Vector3& position, const Vector3& size);
 
 	/// <summary>
 	/// 更新

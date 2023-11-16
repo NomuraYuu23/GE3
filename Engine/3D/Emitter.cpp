@@ -52,6 +52,6 @@ std::list<Particle*> Emitter::Emit()
 Particle* Emitter::MakeParticle()
 {
 	Particle* particle = new Particle();
-	particle->Initialize();
+	particle->Initialize(transform_.translate, transform_.scale);
 	return particle;
 }
