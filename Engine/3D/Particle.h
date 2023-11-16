@@ -31,13 +31,13 @@ public:
 	/// 更新
 	/// </summary>
 	/// <param name="cameraMatrix4x4"></param>
-	virtual void Update();
+	virtual void Update(const Matrix4x4& billBoardMatrix);
 
 	/// <summary>
 	/// 行列更新
 	/// </summary>
 	/// <param name="num"></param>
-	void UpdateMatrix();
+	void UpdateMatrix(const Matrix4x4& billBoardMatrix);
 
 	/// <summary>
 	/// マッピング

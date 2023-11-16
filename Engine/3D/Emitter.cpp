@@ -7,7 +7,7 @@ void Emitter::Initialize(const TransformStructure& transform, float lifeTime)
 	// トランスフォーム
 	transform_ = transform;
 	// 発生させるインスタンス数
-	instanceCount_ = 1;
+	instanceCount_ = 4;
 	// 発生頻度
 	frequency_ = 0.5;
 	// 発生時間

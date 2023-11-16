@@ -155,7 +155,7 @@ void ParticleManager::ParticlesUpdate()
 {
 
 	for (Particle* particle : particles_) {
-		particle->Update();
+		particle->Update(billBoardMatrix_);
 	}
 
 }

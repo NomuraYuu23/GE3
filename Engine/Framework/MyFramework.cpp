@@ -43,9 +43,6 @@ void MyFramework::Initialize()
 	// パーティクル
 	ParticleManager::GetInstance()->Initialize();
 
-	// 乱数
-	Random::GetInstance()->Initialize();
-
 	//サウンド
 	audio = Audio::GetInstance();
 	audio->Initialize();
@@ -91,9 +88,6 @@ void MyFramework::Update()
 	if (input->PushKey(DIK_SPACE)) {
 		input->JoystickConnected(win->GetHwnd());
 	}
-
-	// 乱数
-	Random::GetInstance()->Update();
 
 	//ゲームの処理 
 	//ImGui

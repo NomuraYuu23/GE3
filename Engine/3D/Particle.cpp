@@ -3,9 +3,9 @@
 #include "../base/WinApp.h"
 #include "../base/DirectXCommon.h"
 #include "ParticleManager.h"
-#include "../Random/Random.h"
 #include <cassert>
 #include <numbers>
+#include <random>
 #include "../Math/DeltaTime.h"
 
 Particle::~Particle(){}
@@ -14,8 +14,8 @@ void Particle::Initialize()
 {
 
 	Matrix4x4Calc* matrix4x4Calc = Matrix4x4Calc::GetInstance();
-	Random* random = Random::GetInstance();
-	std::mt19937 randomEngine = random->GetRandomEngine();
+	std::random_device seedGenerator;
+	std::mt19937 randomEngine(seedGenerator());
 	std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);
 	std::uniform_real_distribution<float> distColor(0.0f, 1.0f);
 	std::uniform_real_distribution<float> distTime(1.0f, 3.0f);
@@ -32,35 +32,34 @@ void Particle::Initialize()
 
 	currentTime_ = 0.0f;
 
-	UpdateMatrix();
-
 	useBillBoard_ = true;
+
+	UpdateMatrix(matrix4x4Calc->MakeIdentity4x4());
 
 	isDead_ = false;
 
 }
 
-void Particle::Update()
+void Particle::Update(const Matrix4x4& billBoardMatrix)
 {
 	if (lifeTime_ <= currentTime_) {
 		isDead_ = true;
 	}
 	TimeElapsed();
 	GraduallyDisappear();
-	UpdateMatrix();
+	UpdateMatrix(billBoardMatrix);
 
 }
 
-void Particle::UpdateMatrix()
+void Particle::UpdateMatrix(const Matrix4x4& billBoardMatrix)
 {
 
 	Matrix4x4Calc* matrix4x4Calc = Matrix4x4Calc::GetInstance();
-	ParticleManager* particleManager = ParticleManager::GetInstance();
 
 	if (useBillBoard_) {
 		Matrix4x4 scaleMatrix = matrix4x4Calc->MakeScaleMatrix(transform_.scale);
 		Matrix4x4 translateMatrix = matrix4x4Calc->MakeTranslateMatrix(transform_.translate);
-		worldMatrix_ = matrix4x4Calc->Multiply(scaleMatrix, matrix4x4Calc->Multiply(particleManager->GetBillBoardMatrix(), translateMatrix));
+		worldMatrix_ = matrix4x4Calc->Multiply(scaleMatrix, matrix4x4Calc->Multiply(billBoardMatrix, translateMatrix));
 	}
 	else {
 		worldMatrix_ = matrix4x4Calc->MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);

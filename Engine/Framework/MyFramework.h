@@ -42,9 +42,6 @@
 // パーティクル
 #include "../3D/ParticleManager.h"
 
-// 乱数
-#include "../Random/Random.h"
-
 class MyFramework
 {
 
