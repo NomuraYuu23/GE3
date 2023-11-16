@@ -89,14 +89,15 @@ void GameScene::Draw() {
 	directionalLight_->Draw(dxCommon_->GetCommadList());
 	//3Dオブジェクトはここ
 
-	particleManager_->Draw(viewProjection_);
-
 #ifdef _DEBUG
 
 	// デバッグ描画
 	colliderDebugDraw_->Draw(viewProjection_);
 
 #endif // _DEBUG
+
+	// パーティクルはここ
+	particleManager_->Draw(viewProjection_);
 
 	Model::PostDraw();
 
