@@ -108,7 +108,7 @@ void ParticleManager::Finalize()
 void ParticleManager::ModelCreate()
 {
 
-	model_.reset(Model::Create("Resources/default/", "plane.obj", DirectXCommon::GetInstance()));
+	model_.reset(Model::Create("Resources/Particle/", "plane.obj", DirectXCommon::GetInstance()));
 
 }
 
