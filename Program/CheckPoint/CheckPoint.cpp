@@ -51,8 +51,10 @@ void CheckPoint::DrawImgui(){
 	ImGui::DragFloat3("チェックポイントの座標", &drawWorldTransform_.transform_.translate.x, 0.1f);
 	ImGui::DragFloat3("チェックポイントの回転", &drawWorldTransform_.transform_.rotate.x, 0.1f);
 	ImGui::DragFloat3("チェックポイントの大きさ", &drawWorldTransform_.transform_.scale.x, 0.1f, 0.0f, 300.0f);
+	if (ImGui::Button("このオブジェを削除")) {
+		isDelete_ = true;
+	}
 	worldTransform_.transform_.translate = drawWorldTransform_.transform_.translate;
-
 }
 
 void CheckPoint::OnCollisiin(){

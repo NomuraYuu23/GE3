@@ -48,6 +48,10 @@ public: // アクセッサ
 	WorldTransform* GetDrawWorldTransformAdress() { return &drawWorldTransform_; }
 
 	Vector3 GetSize() { return size_; }
+
+	bool GetMoveFlag() { return isMoving_; }
+
+	bool GetVerticalFlag() { return isVertical_; }
 	//壊れたかどうか
 	bool GetIsBreak() { return isBreak_; }
 

@@ -48,6 +48,12 @@ public: // アクセッサ
 
 	WorldTransform* GetDrawWorldTransformAdress() { return &drawWorldTransform_; }
 
+	bool GetMoveFlag() { return isMoving_; }
+
+	bool GetVerticalFlag() { return isVertical_; }
+
+	bool GetDeleteFlag() { return isDelete_; }
+
 	Vector3 GetSize() { return size_; }
 
 	AABB& GetCollider() { return collider_; }
@@ -71,7 +77,7 @@ private:
 	bool isVertical_;
 
 	//壊れるか
-	bool isBreak_;
+	bool isDelete_;
 
 	// 移動用タイマー
 	float moveTimer_;

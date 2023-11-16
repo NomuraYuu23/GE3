@@ -20,7 +20,22 @@ void BoxManager::Initialize(Model* model, Material* material){
 }
 
 void BoxManager::Update(){
-	
+	for (Box* box : boxes_) {
+		if (box->GetDeleteFlag()) {
+			colliderDebugDraw_->DeleteCollider(&box->GetCollider());
+		}
+	}
+	//ブレイクフラグの立ったブロックを削除
+	boxes_.remove_if([](Box* breakBox) {
+		if (breakBox->GetDeleteFlag()) {
+			delete breakBox;
+
+			return true;
+		}
+		return false;
+
+		});
+
 	for (Box* box_ : boxes_) {
 		box_->Update();
 	}
@@ -140,6 +155,8 @@ void BoxManager::FileOverWrite(const std::string& stage){
 				box->GetDrawWorldTransform().transform_.translate.y,
 				box->GetDrawWorldTransform().transform_.translate.z
 			});
+		overWrite[i][3] = box->GetMoveFlag();
+		overWrite[i][4] = box->GetVerticalFlag();
 		i++;
 	}
 
@@ -275,9 +292,14 @@ void BoxManager::LoadFile(const std::string& groupName, const std::string& stage
 	for (const auto& i:root[groupName][stage]) {
 		int count = 0;
 		TransformStructure newTrans{};
+		bool isNewMove = false;
+		bool isVerticalMove = false;
 		for (const auto& j:i){
 			Vector3 v{};
-			from_json(j, v);
+			if (count < 3) {
+				from_json(j, v);
+			}
+
 			if (count == 0) {
 				newTrans.scale = v;
 			}
@@ -287,12 +309,18 @@ void BoxManager::LoadFile(const std::string& groupName, const std::string& stage
 			else if (count == 2) {
 				newTrans.translate = v;
 			}
+			else if (count == 3) {
+				isNewMove = j;
+			}
+			else if (count == 4) {
+				isVerticalMove = j;
+			}
 			count++;
 
 		}
 
 		Box* box_ = new Box();
-		box_->Initialize(model_, material_, newTrans, false, false);
+		box_->Initialize(model_, material_, newTrans, isNewMove, isVerticalMove);
 
 		boxes_.push_back(box_);
 

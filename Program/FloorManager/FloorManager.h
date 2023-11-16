@@ -54,7 +54,7 @@ public: // アクセッサ
 	/// 床リストゲッター
 	/// </summary>
 	/// <returns></returns>
-	std::vector<Floor*> GetFloors() { return floors_; }
+	std::list<Floor*> GetFloors() { return floors_; }
 
 	/// <summary>
 	/// デバッグ描画セッター
@@ -105,7 +105,7 @@ private:
 	Material* material_ = nullptr;
 
 	// 床リスト
-	std::vector<Floor*> floors_;
+	std::list<Floor*> floors_;
 
 	// デバッグ描画
 	ColliderDebugDraw* colliderDebugDraw_ = nullptr;

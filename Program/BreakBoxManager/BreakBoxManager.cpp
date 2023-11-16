@@ -153,6 +153,8 @@ void BreakBoxManager::FileOverWrite(const std::string& stage){
 				box->GetDrawWorldTransform().transform_.translate.y,
 				box->GetDrawWorldTransform().transform_.translate.z
 			});
+		overWrite[i][3] = box->GetMoveFlag();
+		overWrite[i][4] = box->GetVerticalFlag();
 		i++;
 	}
 
@@ -286,9 +288,13 @@ void BreakBoxManager::LoadFile(const std::string& groupName, const std::string& 
 	for (const auto& i : root[groupName][stage]) {
 		int count = 0;
 		TransformStructure newTrans{};
+		bool isNewMove = false;
+		bool isVerticalMove = false;
 		for (const auto& j : i) {
 			Vector3 v{};
-			from_json(j, v);
+			if (count < 3) {
+				from_json(j, v);
+			}
 			if (count == 0) {
 				newTrans.scale = v;
 			}
@@ -298,12 +304,18 @@ void BreakBoxManager::LoadFile(const std::string& groupName, const std::string& 
 			else if (count == 2) {
 				newTrans.translate = v;
 			}
+			else if (count == 3) {
+				isNewMove = j;
+			}
+			else if (count == 4) {
+				isVerticalMove = j;
+			}
 			count++;
 
 		}
 
 		BreakBox* box_ = new BreakBox();
-		box_->Initialize(model_, material_, newTrans, false, false);
+		box_->Initialize(model_, material_, newTrans, isNewMove, isVerticalMove);
 
 		breakBoxes_.push_back(box_);
 

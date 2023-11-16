@@ -137,20 +137,21 @@ void RecoveryItemManager::FileOverWrite(const std::string& stage){
 	int i = 0;
 	for (RecoveryItem* box : recoveryItems_) {
 		overWrite[i][0] = json::array(
-			{ box->GetDrawWorldTransform().transform_.scale.x,
-				box->GetDrawWorldTransform().transform_.scale.y,
-				box->GetDrawWorldTransform().transform_.scale.z
+			{ box->GetMakeWorldTransform().transform_.scale.x,
+				box->GetMakeWorldTransform().transform_.scale.y,
+				box->GetMakeWorldTransform().transform_.scale.z
 			});
 		overWrite[i][1] = json::array(
-			{ box->GetDrawWorldTransform().transform_.rotate.x,
-				box->GetDrawWorldTransform().transform_.rotate.y,
-				box->GetDrawWorldTransform().transform_.rotate.z
+			{ box->GetMakeWorldTransform().transform_.rotate.x,
+				box->GetMakeWorldTransform().transform_.rotate.y,
+				box->GetMakeWorldTransform().transform_.rotate.z
 			});
 		overWrite[i][2] = json::array(
-			{ box->GetDrawWorldTransform().transform_.translate.x,
-				box->GetDrawWorldTransform().transform_.translate.y,
-				box->GetDrawWorldTransform().transform_.translate.z
+			{ box->GetMakeWorldTransform().transform_.translate.x,
+				box->GetMakeWorldTransform().transform_.translate.y,
+				box->GetMakeWorldTransform().transform_.translate.z
 			});
+		overWrite[i][3] = box->GetRecoveryValue();
 		i++;
 	}
 
@@ -287,9 +288,12 @@ void RecoveryItemManager::LoadFile(const std::string& groupName, const std::stri
 	for (const auto& i : root[groupName][stage]) {
 		int count = 0;
 		TransformStructure newTrans{};
+		int newValue = 3;
 		for (const auto& j : i) {
 			Vector3 v{};
-			from_json(j, v);
+			if (count < 3) {
+				from_json(j, v);
+			}
 			if (count == 0) {
 				newTrans.scale = v;
 			}
@@ -299,12 +303,15 @@ void RecoveryItemManager::LoadFile(const std::string& groupName, const std::stri
 			else if (count == 2) {
 				newTrans.translate = v;
 			}
+			else if (count == 3) {
+				newValue = j.get<int>();
+			}
 			count++;
 
 		}
 
 		RecoveryItem* box_ = new RecoveryItem();
-		box_->Initialize(model_, material_, newTrans,3);
+		box_->Initialize(model_, material_, newTrans, newValue);
 
 		recoveryItems_.push_back(box_);
 

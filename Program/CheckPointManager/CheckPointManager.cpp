@@ -18,6 +18,22 @@ void CheckPointManager::Initialize(Model* model, Material* material){
 }
 
 void CheckPointManager::Update(){
+	for (CheckPoint* box : checkPoints_) {
+		if (box->GetDeleteFlag()) {
+			colliderDebugDraw_->DeleteCollider(&box->GetCollider());
+		}
+	}
+	//ブレイクフラグの立ったブロックを削除
+	checkPoints_.remove_if([](CheckPoint* breakBox) {
+		if (breakBox->GetDeleteFlag()) {
+			delete breakBox;
+
+			return true;
+		}
+		return false;
+
+		});
+
 	for (CheckPoint* checkpoint : checkPoints_) {
 		checkpoint->Update();
 	}

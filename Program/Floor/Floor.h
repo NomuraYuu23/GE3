@@ -46,9 +46,11 @@ public: // アクセッサ
 
 	WorldTransform* GetWorldTransformAdress() { return &worldTransform_; }
 
-	bool GetMoveFlag() { return isMoving_; }
+	bool GetMoveFlag() { return isMoving_; }	
 
 	bool GetVerticalFlag() { return isVertical_; }
+
+	bool GetDeleteFlag() { return isDelete_; }
 
 	Vector3 GetSize() { return size_; }
 
@@ -68,6 +70,9 @@ private:
 
 	//縦移動にするか
 	bool isVertical_;
+
+	//削除するか
+	bool isDelete_;
 
 	// 移動用タイマー
 	float moveTimer_;

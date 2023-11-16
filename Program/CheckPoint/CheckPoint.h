@@ -45,6 +45,8 @@ public: // アクセッサ
 
 	Vector3 GetSize() { return size_; }
 
+	bool GetDeleteFlag() { return isDelete_; }
+
 	bool GetStarting() { return isStarting_; }
 
 	AABB& GetCollider() { return collider_; }
@@ -68,6 +70,9 @@ private:
 	Vector3 position_;
 
 	AABB collider_;
+
+	//壊れるか
+	bool isDelete_;
 
 	//起動させたかどうか
 	bool isStarting_;

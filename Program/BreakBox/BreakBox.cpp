@@ -120,5 +120,9 @@ void BreakBox::DrawImgui(){
 	ImGui::DragFloat3("箱の大きさ", &drawWorldTransform_.transform_.scale.x, 0.1f, 0.0f, 300.0f);
 	ImGui::Checkbox("動くかどうか", &isMoving_);
 	ImGui::Checkbox("縦移動させるか", &isVertical_);
+	if (ImGui::Button("このオブジェを削除")) {
+		isBreak_ = true;
+	}
 	worldTransform_.transform_.translate = drawWorldTransform_.transform_.translate;
+	position_ = drawWorldTransform_.transform_.translate;
 }

@@ -75,6 +75,9 @@ void RecoveryItem::DrawImgui(){
 	ImGui::DragFloat3("アイテムの回転", &drawWorldTransform_.transform_.rotate.x, 0.1f);
 	ImGui::DragFloat3("アイテムの大きさ", &drawWorldTransform_.transform_.scale.x, 0.1f, 0.0f, 300.0f);
 	ImGui::DragInt("アイテムの回復値", &recoveryValue_, 1.0f, 1, 99);
+	if (ImGui::Button("このオブジェを削除")) {
+		isDelete_ = true;
+	}
 	worldTransform_.transform_.translate = drawWorldTransform_.transform_.translate;
 }
 

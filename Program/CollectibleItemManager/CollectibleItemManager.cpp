@@ -137,20 +137,21 @@ void CollectibleItemManager::FileOverWrite(const std::string& stage){
 	int i = 0;
 	for (CollectibleItem* box : collectibleItems_) {
 		overWrite[i][0] = json::array(
-			{ box->GetDrawWorldTransform().transform_.scale.x,
-				box->GetDrawWorldTransform().transform_.scale.y,
-				box->GetDrawWorldTransform().transform_.scale.z
+			{ box->GetMakeWorldTransform().transform_.scale.x,
+				box->GetMakeWorldTransform().transform_.scale.y,
+				box->GetMakeWorldTransform().transform_.scale.z
 			});
 		overWrite[i][1] = json::array(
-			{ box->GetDrawWorldTransform().transform_.rotate.x,
-				box->GetDrawWorldTransform().transform_.rotate.y,
-				box->GetDrawWorldTransform().transform_.rotate.z
+			{ box->GetMakeWorldTransform().transform_.rotate.x,
+				box->GetMakeWorldTransform().transform_.rotate.y,
+				box->GetMakeWorldTransform().transform_.rotate.z
 			});
 		overWrite[i][2] = json::array(
-			{ box->GetDrawWorldTransform().transform_.translate.x,
-				box->GetDrawWorldTransform().transform_.translate.y,
-				box->GetDrawWorldTransform().transform_.translate.z
+			{ box->GetMakeWorldTransform().transform_.translate.x,
+				box->GetMakeWorldTransform().transform_.translate.y,
+				box->GetMakeWorldTransform().transform_.translate.z
 			});
+		overWrite[i][3] = box->GetisFalling();
 		i++;
 	}
 
@@ -289,9 +290,12 @@ void CollectibleItemManager::LoadFile(const std::string& groupName, const std::s
 	for (const auto& i : root[groupName][stage]) {
 		int count = 0;
 		TransformStructure newTrans{};
+		bool isFall = false;
 		for (const auto& j : i) {
 			Vector3 v{};
-			from_json(j, v);
+			if (count < 3) {
+				from_json(j, v);
+			}
 			if (count == 0) {
 				newTrans.scale = v;
 			}
@@ -301,12 +305,15 @@ void CollectibleItemManager::LoadFile(const std::string& groupName, const std::s
 			else if (count == 2) {
 				newTrans.translate = v;
 			}
+			else if (count == 3) {
+				isFall = j;
+			}
 			count++;
 
 		}
 
 		CollectibleItem* box_ = new CollectibleItem();
-		box_->Initialize(model_, material_, newTrans, false);
+		box_->Initialize(model_, material_, newTrans, isFall);
 
 		collectibleItems_.push_back(box_);
 

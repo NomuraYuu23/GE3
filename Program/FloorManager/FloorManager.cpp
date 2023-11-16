@@ -25,6 +25,21 @@ void FloorManager::Initialize(Model* model, Material* material)
 
 void FloorManager::Update()
 {
+	for (Floor* floor : floors_) {
+		if (floor->GetDeleteFlag()) {
+			colliderDebugDraw_->DeleteCollider(&floor->GetCollider());
+		}
+	}
+	//ブレイクフラグの立ったブロックを削除
+	floors_.remove_if([](Floor* breakBox) {
+		if (breakBox->GetDeleteFlag()) {
+			delete breakBox;
+
+			return true;
+		}
+		return false;
+
+		});
 
 	for (Floor* floor : floors_) {
 		floor->Update();
