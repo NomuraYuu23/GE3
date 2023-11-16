@@ -1,7 +1,8 @@
 #pragma once
 #include "../../Engine/3D/ViewProjection.h"
+#include "BaseCamera.h"
 
-class DebugCamera
+class DebugCamera : public BaseCamera
 {
 
 public:
@@ -9,29 +10,14 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize();
+	void Initialize() override;
 
 	/// <summary>
 	/// 更新
 	/// </summary>
-	void Update();
-
-	/// <summary>
-	/// ビュープロジェクションゲッター
-	/// </summary>
-	/// <returns></returns>
-	ViewProjection GetViewProjection() { return viewProjection_; }
-
-	/// <summary>
-	/// ビュープロジェクションアドレスゲッター
-	/// </summary>
-	/// <returns></returns>
-	ViewProjection* GetViewProjectionAddress() { return &viewProjection_; }
+	void Update() override;
 
 private:
-
-	//ビュープロジェクション
-	ViewProjection viewProjection_;
 
 	// 移動速度
 	float moveSpeed_;
