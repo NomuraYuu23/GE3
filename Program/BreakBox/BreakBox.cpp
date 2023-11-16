@@ -125,4 +125,5 @@ void BreakBox::DrawImgui(){
 	}
 	worldTransform_.transform_.translate = drawWorldTransform_.transform_.translate;
 	position_ = drawWorldTransform_.transform_.translate;
+
 }

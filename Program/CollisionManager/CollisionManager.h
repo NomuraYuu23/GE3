@@ -10,6 +10,7 @@
 #include"../RecoveryItemManager/RecoveryItemManager.h"
 #include"../CollectibleItemManager/CollectibleItemManager.h"
 #include"../CheckPointManager/CheckPointManager.h"
+#include"../BurningBoxManager/BurningBoxManager.h"
 
 class CollisionManager
 {
@@ -20,10 +21,10 @@ public: // メンバ関数
 	/// 初期化
 	/// </summary>
 	void Initialize(Player* player, FloorManager* floorManager,
-		BoxManager* boxManager, BreakBoxManager* breakBoxManager, 
+		BoxManager* boxManager, BreakBoxManager* breakBoxManager,
 		RecoveryItemManager* recoveryItemManager, EnemyManager* enemyManager,
-		CollectibleItemManager* collectibleItemManager,CheckPointManager* checkPointManager
-	/*, Goal* goal, Enemy* enemy*/);
+		CollectibleItemManager* collectibleItemManager, CheckPointManager* checkPointManager,
+		BurningBoxManager* burningBoxManager/*, Goal* goal, Enemy* enemy*/);
 
 	/// <summary>
 	/// 衝突
@@ -43,6 +44,7 @@ private: // メンバ変数
 	FloorManager* floorManager_ = nullptr;
 	BoxManager* boxManager_ = nullptr;
 	BreakBoxManager* breakBoxManager_ = nullptr;
+	BurningBoxManager* burningBoxManager_ = nullptr;
 	RecoveryItemManager* recoveryItemManager_ = nullptr;
 	EnemyManager* enemyManager_ = nullptr;
 	CollectibleItemManager* collectibleItemManager_ = nullptr;

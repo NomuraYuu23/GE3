@@ -49,7 +49,7 @@ public: // アクセッサ
 
 	Vector3 GetSize() { return size_; }
 
-	bool GetMoveFlag() { return isMoving_; }
+	bool GetMoveFlag() { return isMoving_; }	
 
 	bool GetVerticalFlag() { return isVertical_; }
 	//壊れたかどうか

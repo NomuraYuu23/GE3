@@ -113,10 +113,19 @@ void BurningBox::verticalMove(){
 	drawWorldTransform_.transform_.translate = v3Calc->Add(position_, v3Calc->Multiply(cosf(moveTimer_), position));
 }
 
-void BurningBox::DrawImgui(){
-	
+void BurningBox::OnCollision(){
+	isBurning_ = true;
+}
+
+void BurningBox::DrawImgui(){	
 	ImGui::DragFloat3("箱の座標", &drawWorldTransform_.transform_.translate.x, 0.1f);
 	ImGui::DragFloat3("箱の回転", &drawWorldTransform_.transform_.rotate.x, 0.1f);
 	ImGui::DragFloat3("箱の大きさ", &drawWorldTransform_.transform_.scale.x, 0.1f, 0.0f, 300.0f);
+	ImGui::Checkbox("動くかどうか", &isMoving_);
+	ImGui::Checkbox("縦移動させるか", &isVertical_);
+	if (ImGui::Button("このオブジェを削除")) {
+		isBreak_ = true;
+	}
 	worldTransform_.transform_.translate = drawWorldTransform_.transform_.translate;
+	position_ = drawWorldTransform_.transform_.translate;
 }

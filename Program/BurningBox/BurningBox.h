@@ -35,18 +35,27 @@ public: //メンバ関数
 	/// </summary>
 	void verticalMove();
 
+	void OnCollision();
 
 	void DrawImgui();
 
 public: // アクセッサ
 
-	WorldTransform GetWorldTransform() { return worldTransform_; }
+	WorldTransform GetWorldTransform()const { return worldTransform_; }
+
+	WorldTransform GetDrawWorldTransform()const { return drawWorldTransform_; }
 
 	WorldTransform* GetWorldTransformAdress() { return &worldTransform_; }
 
 	WorldTransform* GetDrawWorldTransformAdress() { return &drawWorldTransform_; }
 
 	Vector3 GetSize() { return size_; }
+
+	bool GetMoveFlag() { return isMoving_; }
+
+	bool GetVerticalFlag() { return isVertical_; }
+	//壊れたかどうか
+	bool GetIsBreak() { return isBreak_; }
 
 	AABB& GetCollider() { return collider_; }
 
@@ -70,6 +79,12 @@ private:
 
 	//壊れるか
 	bool isBreak_;
+
+	//燃えるか
+	bool isBurning_;
+
+	//燃える尽きるまでの時間
+	int burningTimer_;
 
 	// 移動用タイマー
 	float moveTimer_;
