@@ -14,18 +14,6 @@ class Particle
 
 public: // サブクラス
 
-	// 基本的な変数
-	struct Basic{
-	};
-
-	// エミッタ
-	struct Emitter{
-		TransformStructure transform_;
-		uint32_t instanceCount_;
-		float frequency_;
-		float frequencyTime_;
-	};
-
 public:
 
 	/// <summary>
@@ -69,10 +57,15 @@ public:
 	/// <param name="num"></param>
 	void GraduallyDisappear();
 
-protected: // メンバ変数
+public: // アクセッサ
 
-	// デルタタイム
-	static const float kDeltaTime_;
+	/// <summary>
+	/// 死んでいるか
+	/// </summary>
+	/// <returns></returns>
+	bool IsDead() { return isDead_; }
+
+protected: // メンバ変数
 
 	// 基本的な変数
 	// トランスフォーム
@@ -90,6 +83,9 @@ protected: // メンバ変数
 
 	// ビルボードを使うか
 	bool useBillBoard_;
+
+	// 死んでいるか
+	bool isDead_;
 
 };
 

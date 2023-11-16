@@ -6,8 +6,7 @@
 #include "../Random/Random.h"
 #include <cassert>
 #include <numbers>
-
-const float Particle::kDeltaTime_ = 1.0f / 60.0f;
+#include "../Math/DeltaTime.h"
 
 Particle::~Particle(){}
 
@@ -15,7 +14,6 @@ void Particle::Initialize()
 {
 
 	Matrix4x4Calc* matrix4x4Calc = Matrix4x4Calc::GetInstance();
-	
 	Random* random = Random::GetInstance();
 	std::mt19937 randomEngine = random->GetRandomEngine();
 	std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);
@@ -38,15 +36,17 @@ void Particle::Initialize()
 
 	useBillBoard_ = true;
 
+	isDead_ = false;
+
 }
 
 void Particle::Update()
 {
 	if (lifeTime_ <= currentTime_) {
-		// 消す
+		isDead_ = true;
 	}
-	//TimeElapsed();
-	//GraduallyDisappear();
+	TimeElapsed();
+	GraduallyDisappear();
 	UpdateMatrix();
 
 }

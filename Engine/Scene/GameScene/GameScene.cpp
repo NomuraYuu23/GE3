@@ -29,7 +29,8 @@ void GameScene::Initialize() {
 	//パーティクル
 	particleManager_ = ParticleManager::GetInstance();
 	particleManager_->ModelCreate();
-	particleManager_->ParticleCreate(10);
+
+	particleManager_->EmitterCreate(TransformStructure{ {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} }, 300.0f);
 
 	isDebugCameraActive_ = true;
 

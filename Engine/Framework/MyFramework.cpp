@@ -92,6 +92,9 @@ void MyFramework::Update()
 		input->JoystickConnected(win->GetHwnd());
 	}
 
+	// 乱数
+	Random::GetInstance()->Update();
+
 	//ゲームの処理 
 	//ImGui
 	imGuiManager->Begin();

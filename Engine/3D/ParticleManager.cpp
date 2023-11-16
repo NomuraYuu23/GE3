@@ -2,6 +2,7 @@
 #include <d3d12.h>
 #include "../base/TextureManager.h"
 #include "Model.h"
+#include "../Math/DeltaTime.h"
 
 uint32_t ParticleManager::kNumInstanceMax_ = 100;
 
@@ -51,30 +52,16 @@ void ParticleManager::SRVCreate()
 
 }
 
-void ParticleManager::ParticleCreate(uint32_t numInstance)
-{
-
-	// インスタンス数確認
-	assert(numInstance > 0 && numInstance + indexNextMap_ < kNumInstanceMax_);
-
-	Particle* particle = new Particle();
-
-	particle->Initialize();
-
-	particles_.push_back(particle);
-
-}
-
 void ParticleManager::Update(const Matrix4x4& cameraMatrix4x4)
 {
 
+	DeadDelete();
+
 	BillBoardUpdate(cameraMatrix4x4);
 
-	std::list<Particle*>::iterator itr = particles_.begin();
-	for (; itr != particles_.end(); ++itr) {
-		Particle* particle = *itr;
-		particle->Update();
-	}
+	EmitterUpdate();
+
+	ParticlesUpdate();
 
 }
 
@@ -107,6 +94,11 @@ void ParticleManager::Finalize()
 		return true;
 	});
 
+	emitters_.remove_if([](Emitter* emitter) {
+		delete emitter;
+		return true;
+	});
+
 }
 
 void ParticleManager::ModelCreate()
@@ -126,5 +118,65 @@ void ParticleManager::BillBoardUpdate(const Matrix4x4& cameraMatrix4x4)
 	billBoardMatrix_.m[3][0] = 0.0f;
 	billBoardMatrix_.m[3][1] = 0.0f;
 	billBoardMatrix_.m[3][2] = 0.0f;
+
+}
+
+void ParticleManager::EmitterCreate(const TransformStructure& transform, float lifeTime)
+{
+
+	Emitter* emitter = new Emitter();
+	emitter->Initialize(transform, lifeTime);
+
+	emitters_.push_back(emitter);
+
+}
+
+void ParticleManager::EmitterUpdate()
+{
+
+	for (Emitter* emitter : emitters_) {
+		emitter->Update();
+		if (emitter->GetToEmit()) {
+			AddParticles(emitter->Emit());
+			emitter->SetToEmit(false);
+		}
+	}
+
+}
+
+void ParticleManager::AddParticles(std::list<Particle*> particles)
+{
+
+	particles_.splice(particles_.end(), particles);
+
+}
+
+void ParticleManager::ParticlesUpdate()
+{
+
+	for (Particle* particle : particles_) {
+		particle->Update();
+	}
+
+}
+
+void ParticleManager::DeadDelete()
+{
+
+	particles_.remove_if([](Particle* particle) {
+		if (particle->IsDead()) {
+			delete particle;
+			return true;
+		}
+		return false;
+	});
+
+	emitters_.remove_if([](Emitter* emitter) {
+		if (emitter->IsDead()) {
+			delete emitter;
+			return true;
+		}
+		return false;
+	});
 
 }

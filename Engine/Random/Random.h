@@ -17,6 +17,11 @@ public: // メンバ関数
 	void Initialize();
 
 	/// <summary>
+	/// 更新
+	/// </summary>
+	void Update();
+
+	/// <summary>
 	/// ランダムエンジンゲッター
 	/// </summary>
 	/// <returns></returns>
@@ -30,7 +35,6 @@ private:
 
 private: // メンバ変数
 
-	std::random_device seedGenerator_;
 	std::mt19937 randomEngine_;
 
 };

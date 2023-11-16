@@ -9,7 +9,15 @@ Random* Random::GetInstance()
 void Random::Initialize()
 {
 
-	std::mt19937 randomEngine(seedGenerator_());
+	Update();
+
+}
+
+void Random::Update()
+{
+
+	std::random_device seedGenerator;
+	std::mt19937 randomEngine(seedGenerator());
 	randomEngine_ = randomEngine;
 
 }
