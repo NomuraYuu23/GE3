@@ -406,12 +406,12 @@ void GraphicsPipelineState::CreateForSprite(ID3D12Device* sDevice)
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 
 	//Shaderをコンパイルする
-	IDxcBlob* vertexShaderBlob = CompileShader(L"Resources/shaders/Object3d.VS.hlsl",
+	IDxcBlob* vertexShaderBlob = CompileShader(L"Resources/shaders/Sprite.VS.hlsl",
 		L"vs_6_0", dxcUtils, dxcompiler, includeHandler);
 	assert(vertexShaderBlob != nullptr);
 
 
-	IDxcBlob* pixelShaderBlob = CompileShader(L"Resources/shaders/Object3d.PS.hlsl",
+	IDxcBlob* pixelShaderBlob = CompileShader(L"Resources/shaders/Sprite.PS.hlsl",
 		L"ps_6_0", dxcUtils, dxcompiler, includeHandler);
 	assert(pixelShaderBlob != nullptr);
 
