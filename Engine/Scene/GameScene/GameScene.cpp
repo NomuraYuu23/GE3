@@ -524,11 +524,11 @@ void GameScene::ModelCreate()
 	//壊れるボックス生成
 	breakBoxModel_.reset(Model::Create("Resources/TD2_November/breakBox/", "box.obj", dxCommon_));
 	//回復アイテム生成
-	recoveryItemModel_.reset(Model::Create("Resources/TD2_November/recoveryItem/", "Bullet.obj", dxCommon_));
+	recoveryItemModel_.reset(Model::Create("Resources/TD2_November/bombCherry/", "bombCherry.obj", dxCommon_));
 	//収集アイテム生成
-	collectibleItemModel_.reset(Model::Create("Resources/TD2_November/collectibleItem/", "box.obj", dxCommon_));
+	collectibleItemModel_.reset(Model::Create("Resources/TD2_November/emerald/", "emerald.obj", dxCommon_));
 	//チェックポイント生成
-	checkPointModel_.reset(Model::Create("Resources/TD2_November/checkPoint/", "box.obj", dxCommon_));
+	checkPointModel_.reset(Model::Create("Resources/TD2_November/torch/", "torch.obj", dxCommon_));
 	//エネミー関連
 	enemyModels_.push_back(Model::Create("Resources/AL4/enemy_Body/", "enemy_Body.obj", dxCommon_));
 	enemyModels_.push_back(Model::Create("Resources/AL4/enemy_Arm/", "enemy_Arm.obj", dxCommon_));
