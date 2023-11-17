@@ -56,9 +56,6 @@ void GameScene::Initialize() {
 
 	//ボックスマネージャー
 	boxManager_ = std::make_unique<BoxManager>();
-	boxMaterial_.reset(Material::Create());
-
-	boxModel_.reset(Model::Create("Resources/TD2_November/floorBox/", "box.obj", dxCommon_));
 
 	boxManager_->Initialize(boxModel_.get(), boxMaterial_.get());
 
@@ -67,9 +64,6 @@ void GameScene::Initialize() {
 
 	//壊れるボックス生成
 	breakBoxManager_ = std::make_unique<BreakBoxManager>();
-	breakBoxMaterial_.reset(Material::Create());
-
-	breakBoxModel_.reset(Model::Create("Resources/TD2_November/breakBox/", "box.obj", dxCommon_));
 
 	breakBoxManager_->Initialize(breakBoxModel_.get(), breakBoxMaterial_.get());
 
@@ -77,8 +71,6 @@ void GameScene::Initialize() {
 
 	//回復アイテム生成
 	recoveryItemManager_ = std::make_unique<RecoveryItemManager>();
-	recoveryItemMaterial_.reset(Material::Create());
-	recoveryItemModel_.reset(Model::Create("Resources/TD2_November/recoveryItem/", "Bullet.obj", dxCommon_));
 
 	recoveryItemManager_->Initialize(recoveryItemModel_.get(), recoveryItemMaterial_.get());
 
@@ -86,8 +78,6 @@ void GameScene::Initialize() {
 
 	//収集アイテム生成
 	collectibleItemManager_ = std::make_unique<CollectibleItemManager>();
-	collectibleItemMaterial_.reset(Material::Create());
-	collectibleItemModel_.reset(Model::Create("Resources/TD2_November/collectibleItem/", "box.obj", dxCommon_));
 
 	collectibleItemManager_->Initialize(collectibleItemModel_.get(), collectibleItemMaterial_.get());
 
@@ -95,8 +85,6 @@ void GameScene::Initialize() {
 
 	//チェックポイント生成
 	checkPointManager_ = std::make_unique<CheckPointManager>();
-	checkPointMaterial_.reset(Material::Create());
-	checkPointModel_.reset(Model::Create("Resources/TD2_November/checkPoint/", "box.obj", dxCommon_));
 
 	checkPointManager_->Initialize(checkPointModel_.get(), checkPointMaterial_.get());
 
@@ -121,12 +109,6 @@ void GameScene::Initialize() {
 
 
 	//エネミー関連
-	enemyModels_.push_back(Model::Create("Resources/AL4/enemy_Body/", "enemy_Body.obj", dxCommon_));
-	enemyModels_.push_back(Model::Create("Resources/AL4/enemy_Arm/", "enemy_Arm.obj", dxCommon_));
-	enemyModels_.push_back(Model::Create("Resources/AL4/enemy_Arm/", "enemy_Arm.obj", dxCommon_));
-	for (size_t i = 0; i < enemyModels_.size(); i++) {
-		enemyMaterials_.push_back(Material::Create());
-	}
 	enemyManager_ = std::make_unique<EnemyManager>();
 	enemyManager_->Initialize(enemyModels_, enemyMaterials_);
 	enemyManager_->SetColliderDebugDraw(colliderDebugDraw_.get());
@@ -525,30 +507,58 @@ void GameScene::GoToTheTitle()
 
 void GameScene::ModelCreate()
 {
-
+	// デバッグ描画
 	colliderSphereModel_.reset(Model::Create("Resources/TD2_November/collider/sphere/", "sphere.obj", dxCommon_));
 	colliderBoxModel_.reset(Model::Create("Resources/TD2_November/collider/box/", "box.obj", dxCommon_));
-
+	//フロアマネージャー
 	floorModel_.reset(Model::Create("Resources/AL4/floor/", "floor.obj", dxCommon_));
-
+	//プレイヤー関連
 	playerModels_.push_back(Model::Create("Resources/AL4/float_Body/", "float_Body.obj", dxCommon_));
 	playerModels_.push_back(Model::Create("Resources/AL4/float_Head/", "float_Head.obj", dxCommon_));
 	playerModels_.push_back(Model::Create("Resources/AL4/float_L_arm/", "float_L_arm.obj", dxCommon_));
 	playerModels_.push_back(Model::Create("Resources/AL4/float_R_arm/", "float_R_arm.obj", dxCommon_));
 	playerModels_.push_back(Model::Create("Resources/AL4/player_Weapon/", "player_Weapon.obj", dxCommon_));
 	playerModels_.push_back(Model::Create("Resources/TD2_November/exprode/", "sphere.obj", dxCommon_));
+	//ボックスマネージャー
+	boxModel_.reset(Model::Create("Resources/TD2_November/floorBox/", "box.obj", dxCommon_));
+	//壊れるボックス生成
+	breakBoxModel_.reset(Model::Create("Resources/TD2_November/breakBox/", "box.obj", dxCommon_));
+	//回復アイテム生成
+	recoveryItemModel_.reset(Model::Create("Resources/TD2_November/recoveryItem/", "Bullet.obj", dxCommon_));
+	//収集アイテム生成
+	collectibleItemModel_.reset(Model::Create("Resources/TD2_November/collectibleItem/", "box.obj", dxCommon_));
+	//チェックポイント生成
+	checkPointModel_.reset(Model::Create("Resources/TD2_November/checkPoint/", "box.obj", dxCommon_));
+	//エネミー関連
+	enemyModels_.push_back(Model::Create("Resources/AL4/enemy_Body/", "enemy_Body.obj", dxCommon_));
+	enemyModels_.push_back(Model::Create("Resources/AL4/enemy_Arm/", "enemy_Arm.obj", dxCommon_));
+	enemyModels_.push_back(Model::Create("Resources/AL4/enemy_Arm/", "enemy_Arm.obj", dxCommon_));
 
 }
 
 void GameScene::MaterialCreate()
 {
-
+	// デバッグ描画
 	colliderMaterial_.reset(Material::Create());
-
+	//フロアマネージャー
 	floorMaterial_.reset(Material::Create());
-
+	//プレイヤー関連
 	for (size_t i = 0; i < playerModels_.size(); i++) {
 		playerMaterials_.push_back(Material::Create());
+	}
+	//ボックスマネージャー
+	boxMaterial_.reset(Material::Create());
+	//壊れるボックス生成
+	breakBoxMaterial_.reset(Material::Create());
+	//回復アイテム生成
+	recoveryItemMaterial_.reset(Material::Create());
+	//収集アイテム生成
+	collectibleItemMaterial_.reset(Material::Create());
+	//チェックポイント生成
+	checkPointMaterial_.reset(Material::Create());
+	//エネミー関連
+	for (size_t i = 0; i < enemyModels_.size(); i++) {
+		enemyMaterials_.push_back(Material::Create());
 	}
 
 }
