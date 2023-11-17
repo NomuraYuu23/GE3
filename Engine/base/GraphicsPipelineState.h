@@ -19,7 +19,7 @@ public:
 
 public:
 
-	static void InitializeGraphicsPipeline(ID3D12Device* sDevice);
+	static void Initialize(ID3D12Device* sDevice);
 
 	// ルートシグネチャ
 	static Microsoft::WRL::ComPtr<ID3D12RootSignature> sRootSignature[GraphicsPipelineState::PipelineStateName::kCountOfPipelineStateName];
@@ -43,5 +43,13 @@ private:
 	static std::wstring ConvertString(const std::string& str);
 
 	static std::string ConvertString(const std::wstring& str);
+
+	// グラフィックスパイプライン作成
+	// モデル用
+	static void CreateForModel(ID3D12Device* sDevice);
+	// スプライト用
+	static void CreateForSprite(ID3D12Device* sDevice);
+	// パーティクル用
+	static void CreateForParticle(ID3D12Device* sDevice);
 
 };
