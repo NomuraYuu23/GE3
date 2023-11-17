@@ -15,7 +15,7 @@ void MyFramework::Initialize()
 	input = Input::GetInstance();
 	input->Initialize(win->GetHInstance(), win->GetHwnd());
 
-	GraphicsPipelineState::InitializeGraphicsPipeline(dxCommon->GetDevice());
+	GraphicsPipelineState::Initialize(dxCommon->GetDevice());
 
 	//テクスチャマネージャー
 	TextureManager::GetInstance()->Initialize(dxCommon->GetDevice());
