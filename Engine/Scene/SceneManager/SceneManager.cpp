@@ -52,18 +52,18 @@ void SceneManager::Update()
 	}
 
 	//シーン遷移中
-	if (requestSeneNo_ != currentSceneNo_) {
+	if (sceneTransition_) {
 		// シーン遷移更新
 		sceneTransition_->Update();
 		if (sceneTransition_->GetSwitchScene()) {
 			// シーン切り替え
-			TextureManager::GetInstance()->ResetTexture();
+			//TextureManager::GetInstance()->ResetTexture();
 			currentSceneNo_ = requestSeneNo_;
 			scene_.reset(sceneFacyory_->CreateScene(currentSceneNo_));
 			scene_->Initialize();
 			sceneTransition_->SetSwitchScene(false);
 		}
-		else if (sceneTransition_->GetTransitioning()) {
+		else if (!sceneTransition_->GetTransitioning()) {
 			sceneTransition_.release();
 			sceneTransition_ = nullptr;
 		}
@@ -78,4 +78,8 @@ void SceneManager::Draw()
 {
 	// 描画処理
 	scene_->Draw();
+	if (sceneTransition_) {
+		sceneTransition_->Draw();
+	}
+
 }
