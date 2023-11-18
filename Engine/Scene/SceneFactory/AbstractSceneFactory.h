@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../IScene/IScene.h"
-#include <memory>
 
 class AbstractSceneFactory {
 

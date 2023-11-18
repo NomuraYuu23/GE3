@@ -108,6 +108,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Math\Ease.cpp" />
     <ClCompile Include="Engine\Math\Math.cpp" />
     <ClCompile Include="Engine\Pause\Pause.cpp" />
+    <ClCompile Include="Engine\SceneTransition\ISceneTransition\ISceneTransition.cpp" />
+    <ClCompile Include="Engine\SceneTransition\SceneTransitionFactory\SceneTransitionFactory.cpp" />
     <ClCompile Include="Engine\Scene\ClearScene\ClearScene.cpp" />
     <ClCompile Include="Engine\Scene\SceneFactory\SceneFactory.cpp" />
     <ClCompile Include="Engine\Scene\SceneManager\SceneManager.cpp" />
@@ -173,6 +175,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Math\Ease.h" />
     <ClInclude Include="Engine\Math\Math.h" />
     <ClInclude Include="Engine\Pause\Pause.h" />
+    <ClInclude Include="Engine\SceneTransition\SceneTransitionFactory\AbstractSceneTransitionFactory.h" />
+    <ClInclude Include="Engine\SceneTransition\ISceneTransition\ISceneTransition.h" />
+    <ClInclude Include="Engine\SceneTransition\SceneTransitionFactory\SceneTransitionFactory.h" />
     <ClInclude Include="Engine\Scene\ClearScene\ClearScene.h" />
     <ClInclude Include="Engine\Scene\SceneFactory\AbstractSceneFactory.h" />
     <ClInclude Include="Engine\Scene\SceneFactory\SceneFactory.h" />

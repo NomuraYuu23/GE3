@@ -4,6 +4,8 @@
 #include "../TitleScene/TitleScene.h"
 #include "../GameScene/GameScene.h"
 #include "../SceneFactory/SceneFactory.h"
+#include "../../SceneTransition/ISceneTransition/ISceneTransition.h"
+#include "../../SceneTransition/SceneTransitionFactory/SceneTransitionFactory.h"
 
 /// <summary>
 /// シーンマネージャー
@@ -38,7 +40,15 @@ private: // メンバ変数
 
 	// どのステージを呼び出すかを管理する変数
 	int currentSceneNo_; // 現在のシーン
-	int prevSceneNo_; // 前のシーン
+
+	int requestSeneNo_; // リクエストシーン
+	int prevRequestSeneNo_; // 前のリクエストシーン
+
+	// シーン遷移ファクトリー
+	SceneTransitionFactory* sceneTransitionFactory_ = nullptr;
+
+	// シーン遷移を保持するメンバ変数
+	std::unique_ptr<ISceneTransition> sceneTransition_;
 
 };
 
