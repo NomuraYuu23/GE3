@@ -22,21 +22,21 @@ void Player::Initialize(const std::vector<Model*>& models,
 
 	worldTransformBody_.Initialize();
 	worldTransformBody_.parent_ = &worldTransform_;
-	worldTransformHead_.Initialize();
-	worldTransformHead_.transform_.translate.y += 3.5f;
-	worldTransformHead_.parent_ = &worldTransformBody_;
-	worldTransformL_arm_.Initialize();
-	worldTransformL_arm_.transform_.translate.y += 2.5f;
-	worldTransformL_arm_.transform_.translate.x -= 1.0f;
-	worldTransformL_arm_.parent_ = &worldTransformBody_;
-	worldTransformR_arm_.Initialize();
-	worldTransformR_arm_.transform_.translate.y += 2.5f;
-	worldTransformR_arm_.transform_.translate.x += 1.0f;
-	worldTransformR_arm_.parent_ = &worldTransformBody_;
+	//worldTransformHead_.Initialize();
+	//worldTransformHead_.transform_.translate.y += 3.5f;
+	//worldTransformHead_.parent_ = &worldTransformBody_;
+	//worldTransformL_arm_.Initialize();
+	//worldTransformL_arm_.transform_.translate.y += 2.5f;
+	//worldTransformL_arm_.transform_.translate.x -= 1.0f;
+	//worldTransformL_arm_.parent_ = &worldTransformBody_;
+	//worldTransformR_arm_.Initialize();
+	//worldTransformR_arm_.transform_.translate.y += 2.5f;
+	//worldTransformR_arm_.transform_.translate.x += 1.0f;
+	//worldTransformR_arm_.parent_ = &worldTransformBody_;
 
-	worldTransformWeapon_.Initialize();
-	worldTransformWeapon_.transform_.translate.y += 3.0f;
-	worldTransformWeapon_.parent_ = &worldTransform_;
+	//worldTransformWeapon_.Initialize();
+	//worldTransformWeapon_.transform_.translate.y += 3.0f;
+	//worldTransformWeapon_.parent_ = &worldTransform_;
 
 	
 
@@ -136,10 +136,10 @@ void Player::Draw(const ViewProjection& viewProjection)
 	DrawImgui();
 
 	models_[int(ModelIndex::kModelIndexBody)]->Draw(worldTransformBody_, viewProjection);
-	models_[int(ModelIndex::kModelIndexHead)]->Draw(worldTransformHead_, viewProjection);
-	models_[int(ModelIndex::kModelIndexL_arm)]->Draw(worldTransformL_arm_, viewProjection);
-	models_[int(ModelIndex::kModelIndexR_arm)]->Draw(worldTransformR_arm_, viewProjection);
-	models_[int(ModelIndex::kModelIndexWeapon)]->Draw(worldTransformWeapon_, viewProjection);
+	//models_[int(ModelIndex::kModelIndexHead)]->Draw(worldTransformHead_, viewProjection);
+	//models_[int(ModelIndex::kModelIndexL_arm)]->Draw(worldTransformL_arm_, viewProjection);
+	//models_[int(ModelIndex::kModelIndexR_arm)]->Draw(worldTransformR_arm_, viewProjection);
+	//models_[int(ModelIndex::kModelIndexWeapon)]->Draw(worldTransformWeapon_, viewProjection);
 	models_[int(ModelIndex::kModelIndexExprode)]->Draw(worldTransformExprode_, viewProjection);
 
 }
@@ -154,7 +154,7 @@ void Player::BehaviorRootInitialize()
 	InitializeSwinggimmick();
 
 	//武器角度
-	worldTransformWeapon_.transform_.rotate.x = 0.0f;
+	//worldTransformWeapon_.transform_.rotate.x = 0.0f;
 
 }
 
@@ -208,9 +208,9 @@ void Player::BehaviorAttackUpdate()
 	if (workAttack_.behaviorAttackParameter_ >= 0.8f * pi &&
 		workAttack_.behaviorAttackParameter_ <= 1.5f * pi) {
 
-		worldTransformL_arm_.transform_.rotate.x = workAttack_.behaviorAttackParameter_;
-		worldTransformR_arm_.transform_.rotate.x = workAttack_.behaviorAttackParameter_;
-		worldTransformWeapon_.transform_.rotate.x = workAttack_.behaviorAttackParameter_ + pi;
+		//worldTransformL_arm_.transform_.rotate.x = workAttack_.behaviorAttackParameter_;
+		//worldTransformR_arm_.transform_.rotate.x = workAttack_.behaviorAttackParameter_;
+		//worldTransformWeapon_.transform_.rotate.x = workAttack_.behaviorAttackParameter_ + pi;
 
 		// 速さ
 		const float speed = 0.3f;
@@ -241,8 +241,8 @@ void Player::BehaviorAttackUpdate()
 	}
 	else if (workAttack_.behaviorAttackParameter_ < 0.8f * pi) {
 		//	振りかぶり
-		worldTransformL_arm_.transform_.rotate.x = -workAttack_.behaviorAttackParameter_;
-		worldTransformR_arm_.transform_.rotate.x = -workAttack_.behaviorAttackParameter_;
+		//worldTransformL_arm_.transform_.rotate.x = -workAttack_.behaviorAttackParameter_;
+		//worldTransformR_arm_.transform_.rotate.x = -workAttack_.behaviorAttackParameter_;
 
 	}
 	else if (workAttack_.behaviorAttackParameter_ >= 2.0f * pi) {
@@ -339,8 +339,8 @@ void Player::UpdateSwinggimmick()
 	// 2πを超えたら0に戻す
 	workSwing_.swingParameter_ = std::fmod(workSwing_.swingParameter_, 2.0f * pi);
 
-	worldTransformL_arm_.transform_.rotate.x = std::sinf(workSwing_.swingParameter_) / 2.0f;
-	worldTransformR_arm_.transform_.rotate.x = std::sinf(workSwing_.swingParameter_) / 2.0f;
+	//worldTransformL_arm_.transform_.rotate.x = std::sinf(workSwing_.swingParameter_) / 2.0f;
+	//worldTransformR_arm_.transform_.rotate.x = std::sinf(workSwing_.swingParameter_) / 2.0f;
 
 
 }
@@ -616,10 +616,10 @@ void Player::LostParent()
 void Player::allUpdateMatrix(){
 	worldTransform_.UpdateMatrix();
 	worldTransformBody_.UpdateMatrix();
-	worldTransformHead_.UpdateMatrix();
-	worldTransformL_arm_.UpdateMatrix();
-	worldTransformR_arm_.UpdateMatrix();
-	worldTransformWeapon_.UpdateMatrix();
+	//worldTransformHead_.UpdateMatrix();
+	//worldTransformL_arm_.UpdateMatrix();
+	//worldTransformR_arm_.UpdateMatrix();
+	//worldTransformWeapon_.UpdateMatrix();
 	worldTransformExprode_.UpdateMatrix();
 }
 

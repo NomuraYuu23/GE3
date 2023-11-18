@@ -16,11 +16,12 @@ public: // サブクラス
 	// モデル
 	enum class ModelIndex {
 		kModelIndexBody = 0,
-		kModelIndexHead = 1,
-		kModelIndexL_arm = 2,
-		kModelIndexR_arm = 3,
-		kModelIndexWeapon = 4,
-		kModelIndexExprode = 5
+		//kModelIndexHead = 1,
+		//kModelIndexL_arm = 2,
+		//kModelIndexR_arm = 3,
+		//kModelIndexWeapon = 4,
+		//kModelIndexExprode = 5
+		kModelIndexExprode = 1
 	};
 
 	// 振るまい
@@ -320,10 +321,10 @@ private: // メンバ変数
 
 	//ワールド変換データ
 	WorldTransform worldTransformBody_;
-	WorldTransform worldTransformHead_;
-	WorldTransform worldTransformL_arm_;
-	WorldTransform worldTransformR_arm_;
-	WorldTransform worldTransformWeapon_;
+	//WorldTransform worldTransformHead_;
+	//WorldTransform worldTransformL_arm_;
+	//WorldTransform worldTransformR_arm_;
+	//WorldTransform worldTransformWeapon_;
 	WorldTransform worldTransformExprode_;
 
 	//振るまい

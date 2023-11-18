@@ -120,10 +120,6 @@ void GameScene::Initialize() {
 	enemyManager_->AddEnemy(firstEnemyTransform_);
 
 	//プレイヤー関連
-	for (size_t i = 0; i < playerModels_.size(); i++) {
-		playerMaterials_.push_back(Material::Create());
-	}
-
 
 	player_ = std::make_unique<Player>();
 	player_->Initialize(playerModels_, playerMaterials_);
@@ -513,11 +509,11 @@ void GameScene::ModelCreate()
 	//フロアマネージャー
 	floorModel_.reset(Model::Create("Resources/AL4/floor/", "floor.obj", dxCommon_));
 	//プレイヤー関連
-	playerModels_.push_back(Model::Create("Resources/AL4/float_Body/", "float_Body.obj", dxCommon_));
-	playerModels_.push_back(Model::Create("Resources/AL4/float_Head/", "float_Head.obj", dxCommon_));
-	playerModels_.push_back(Model::Create("Resources/AL4/float_L_arm/", "float_L_arm.obj", dxCommon_));
-	playerModels_.push_back(Model::Create("Resources/AL4/float_R_arm/", "float_R_arm.obj", dxCommon_));
-	playerModels_.push_back(Model::Create("Resources/AL4/player_Weapon/", "player_Weapon.obj", dxCommon_));
+	playerModels_.push_back(Model::Create("Resources/TD2_November/Player/", "playerBomb.obj", dxCommon_));
+	//playerModels_.push_back(Model::Create("Resources/AL4/float_Head/", "float_Head.obj", dxCommon_));
+	//playerModels_.push_back(Model::Create("Resources/AL4/float_L_arm/", "float_L_arm.obj", dxCommon_));
+	//playerModels_.push_back(Model::Create("Resources/AL4/float_R_arm/", "float_R_arm.obj", dxCommon_));
+	//playerModels_.push_back(Model::Create("Resources/AL4/player_Weapon/", "player_Weapon.obj", dxCommon_));
 	playerModels_.push_back(Model::Create("Resources/TD2_November/exprode/", "sphere.obj", dxCommon_));
 	//ボックスマネージャー
 	boxModel_.reset(Model::Create("Resources/TD2_November/floorBox/", "box.obj", dxCommon_));
