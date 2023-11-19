@@ -57,7 +57,7 @@ void SceneManager::Update()
 		sceneTransition_->Update();
 		if (sceneTransition_->GetSwitchScene()) {
 			// シーン切り替え
-			//TextureManager::GetInstance()->ResetTexture();
+			TextureManager::GetInstance()->ResetTexture();
 			currentSceneNo_ = requestSeneNo_;
 			scene_.reset(sceneFacyory_->CreateScene(currentSceneNo_));
 			scene_->Initialize();
