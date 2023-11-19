@@ -2,6 +2,7 @@
 
 //タイトルシーンで初期化
 int IScene::sceneNo = kTitle;
+int IScene::requestSeneNo = kTitle;
 
 DirectXCommon* IScene::dxCommon_ = nullptr;
 Input* IScene::input_ = nullptr;
@@ -42,6 +43,8 @@ void IScene::StaticInitialize()
 IScene::~IScene(){}
 
 int IScene::GetSceneNo(){ return sceneNo; }
+
+int IScene::GetRequestSceneNo(){ return requestSeneNo; }
 
 void IScene::ModelCreate(){}
 

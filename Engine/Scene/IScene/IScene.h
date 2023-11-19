@@ -31,6 +31,7 @@ protected: // 静的メンバ変数
 
 	// シーン番号
 	static int sceneNo;
+	static int requestSeneNo;
 
 	// 入力マネージャー
 	static DirectXCommon* dxCommon_;
@@ -74,6 +75,9 @@ public: // メンバ関数
 
 	// シーン番号のゲッター
 	int GetSceneNo();
+
+	// リクエストシーン番号のゲッター
+	int GetRequestSceneNo();
 
 protected:  // メンバ関数
 

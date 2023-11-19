@@ -13,7 +13,7 @@ void TitleScene::Update()
 {
 
 	if (input_->TriggerKey(DIK_SPACE)) {
-		sceneNo = kGame;
+		requestSeneNo = kGame;
 	}
 
 }
