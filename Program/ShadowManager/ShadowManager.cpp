@@ -1,7 +1,7 @@
 #include "ShadowManager.h"
 
 // 影
-std::list<WorldTransform> ShadowManager::shadowWorldTransforms_;
+std::list<ShadowManager::Shadow> ShadowManager::shadows_;
 
 // 影をつくるobj
 std::list<WorldTransform*> ShadowManager::makerWorldTransforms_;
@@ -31,7 +31,7 @@ void ShadowManager::Update()
 	Vector3 makerRadius = {};
 	Vector3 floorPosition = {};
 	Vector3 floorRadius = {};
-	std::list<WorldTransform>::iterator itr = shadowWorldTransforms_.begin();
+	std::list<Shadow>::iterator itr = shadows_.begin();
 
 	for (WorldTransform* makerWorldTransform : makerWorldTransforms_) {
 		makerPosition = { 
@@ -70,11 +70,13 @@ void ShadowManager::Update()
 		
 		//ansWorldTransformがnullじゃない
 		if (ansWorldTransform) {
-			*itr = *ansWorldTransform;
-			itr->transform_.translate.y += floorRadius.y;
+			itr->worldTransform_ = *ansWorldTransform;
+			itr->worldTransform_.transform_.translate.y += floorRadius.y;
+			itr->isDraw_ = true;
 		}
 		else {
 			//描画しない
+			itr->isDraw_ = false;
 		}
 
 		// 後処理
@@ -84,8 +86,8 @@ void ShadowManager::Update()
 
 
 	// ワールドトランスフォーム更新
-	for (WorldTransform worldTransform : shadowWorldTransforms_) {
-		worldTransform.UpdateMatrix();
+	for (Shadow shadow : shadows_) {
+		shadow.worldTransform_.UpdateMatrix();
 	}
 
 }
@@ -93,8 +95,10 @@ void ShadowManager::Update()
 void ShadowManager::Draw(const ViewProjection& viewProjection)
 {
 
-	for (WorldTransform worldTransform : shadowWorldTransforms_) {
-		model_->Draw(worldTransform, viewProjection);
+	for (Shadow shadow : shadows_) {
+		if (shadow.isDraw_) {
+			model_->Draw(shadow.worldTransform_, viewProjection);
+		}
 	}
 
 }
@@ -103,10 +107,11 @@ void ShadowManager::AddMeker(WorldTransform* worldTransform)
 {
 
 	makerWorldTransforms_.push_back(worldTransform);
-	WorldTransform newWorldTransform;
-	newWorldTransform.Initialize();
-	newWorldTransform.parent_ = worldTransform;
-	shadowWorldTransforms_.push_back(newWorldTransform);
+	Shadow shadow;
+	shadow.worldTransform_.Initialize();
+	shadow.worldTransform_.parent_ = worldTransform;
+	shadow.isDraw_ = true;
+	shadows_.push_back(shadow);
 
 }
 
@@ -121,8 +126,8 @@ void ShadowManager::CheckIfItsGone()
 {
 
 	// 影
-	shadowWorldTransforms_.remove_if([](WorldTransform worldTransform) {
-		if (!worldTransform.parent_) {
+	shadows_.remove_if([](Shadow shadow) {
+		if (!shadow.worldTransform_.parent_) {
 			return true;
 		}
 		return false;

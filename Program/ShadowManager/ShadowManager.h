@@ -9,6 +9,13 @@
 class ShadowManager
 {
 
+public: // サブクラス
+
+	struct Shadow{
+		WorldTransform worldTransform_;
+		bool isDraw_;
+	};
+
 public: // メンバ関数
 
 	static void Initialize(Model* model);
@@ -28,7 +35,7 @@ private: // メンバ関数
 private: // メンバ変数
 
 	// 影
-	static std::list<WorldTransform> shadowWorldTransforms_;
+	static std::list<Shadow> shadows_;
 
 	// 影をつくるobj
 	static std::list<WorldTransform*> makerWorldTransforms_;
