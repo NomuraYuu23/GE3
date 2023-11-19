@@ -159,6 +159,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Program\Player\Player.cpp" />
     <ClCompile Include="Program\RecoveryItemManager\RecoveryItemManager.cpp" />
     <ClCompile Include="Program\RecoveryItem\RecoveryItem.cpp" />
+    <ClCompile Include="Program\ShadowManager\ShadowManager.cpp" />
     <ClCompile Include="Program\Skydome\Skydome.cpp" />
     <ClCompile Include="Engine\Collider\Sphere\Sphere.cpp" />
     <ClCompile Include="Engine\2D\Sprite.cpp" />
@@ -242,6 +243,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Program\Player\Player.h" />
     <ClInclude Include="Program\RecoveryItemManager\RecoveryItemManager.h" />
     <ClInclude Include="Program\RecoveryItem\RecoveryItem.h" />
+    <ClInclude Include="Program\ShadowManager\ShadowManager.h" />
     <ClInclude Include="Program\Skydome\Skydome.h" />
     <ClInclude Include="Engine\Collider\Sphere\Sphere.h" />
     <ClInclude Include="Engine\base\SafeDelete.h" />
