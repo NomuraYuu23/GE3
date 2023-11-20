@@ -112,12 +112,28 @@ public: // アクセッサ
 
 	Matrix4x4 GetBillBoardMatrix() { return billBoardMatrix_; }
 
+	uint32_t GetStartInstanceIdMap() { return *startInstanceIdMap_; }
+
+	void SetStartInstanceIdMap(uint32_t startInstanceIdMap) { *startInstanceIdMap_ = startInstanceIdMap; }
+
+	ID3D12Resource* GetStartInstanceIdBuff() { return startInstanceIdBuff_.Get(); }
+
 private: // メンバ変数
 
-	//WVP用のリソースを作る。Matrix4x4 1つ分のサイズを用意する
+	ParticleManager() = default;
+	~ParticleManager() = default;
+	ParticleManager(const ParticleManager&) = delete;
+	const ParticleManager& operator=(const ParticleManager&) = delete;
+
+	//WVP用のリソースを作る。
 	Microsoft::WRL::ComPtr<ID3D12Resource> particleForGPUBuff_;
 	//書き込むためのアドレスを取得
 	ParticleForGPU* particleForGPUMap_{};
+
+	//スタートインスタンス用のリソースを作る。
+	Microsoft::WRL::ComPtr<ID3D12Resource> startInstanceIdBuff_;
+	//書き込むためのアドレスを取得
+	uint32_t* startInstanceIdMap_{};
 
 	D3D12_CPU_DESCRIPTOR_HANDLE instancingSrvHandleCPU_;
 

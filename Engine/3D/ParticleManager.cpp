@@ -18,7 +18,7 @@ void ParticleManager::Initialize()
 
 	Matrix4x4Calc* matrix4x4Calc = Matrix4x4Calc::GetInstance();
 
-	//WVP用のリソースを作る。Matrix4x4 1つ分のサイズを用意する
+	//WVP用のリソースを作る。
 	particleForGPUBuff_ = BufferResource::CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(TransformationMatrix) * kNumInstanceMax_);
 	//書き込むためのアドレスを取得
 	particleForGPUBuff_->Map(0, nullptr, reinterpret_cast<void**>(&particleForGPUMap_));
@@ -28,6 +28,12 @@ void ParticleManager::Initialize()
 		particleForGPUMap_[i].WVP = matrix4x4Calc->MakeIdentity4x4();
 		particleForGPUMap_[i].color = {1.0f,1.0f,1.0f,1.0f};
 	}
+
+	//スタートインスタンス用のリソースを作る。
+	startInstanceIdBuff_ = BufferResource::CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(uint32_t));
+	//書き込むためのアドレスを取得
+	startInstanceIdBuff_->Map(0, nullptr, reinterpret_cast<void**>(&startInstanceIdMap_));
+	*startInstanceIdMap_ = 0;
 
 	SRVCreate();
 

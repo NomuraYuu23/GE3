@@ -305,6 +305,9 @@ void Model::ParticleDraw(const ViewProjection& viewProjection)
 	//マテリアルCBufferの場所を設定
 	sCommandList->SetGraphicsRootConstantBufferView(0, defaultMaterial_->GetMaterialBuff()->GetGPUVirtualAddress());
 
+	//マテリアルCBufferの場所を設定
+	sCommandList->SetGraphicsRootConstantBufferView(2, particleManager->GetStartInstanceIdBuff()->GetGPUVirtualAddress());
+
 	//SRVのDescriptorTableの先頭を設定。2はrootParamenter[2]である
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(sCommandList, 2, textureHandle_);
 
