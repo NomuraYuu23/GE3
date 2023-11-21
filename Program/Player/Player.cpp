@@ -516,7 +516,12 @@ void Player::OnCollision(WorldTransform* worldTransform)
 }
 
 void Player::OnCollisionBox(WorldTransform* worldTransform, float boxSize){
+	if (true){
+
+
+	}
 	if (velocity_.y <= 0.0f) {
+
 		if (!worldTransform_.parent_ ||
 			(worldTransform_.parent_ != worldTransform)) {
 			GotParent(worldTransform);
