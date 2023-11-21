@@ -136,19 +136,19 @@ void CheckPointManager::FileOverWrite(const std::string& stage){
 	int i = 0;
 	for (CheckPoint* box : checkPoints_) {
 		overWrite[i][0] = json::array(
-			{ box->GetWorldTransform().transform_.scale.x,
-				box->GetWorldTransform().transform_.scale.y,
-				box->GetWorldTransform().transform_.scale.z
+			{ box->GetDrawWorldTransform().transform_.scale.x,
+				box->GetDrawWorldTransform().transform_.scale.y,
+				box->GetDrawWorldTransform().transform_.scale.z
 			});
 		overWrite[i][1] = json::array(
-			{ box->GetWorldTransform().transform_.rotate.x,
-				box->GetWorldTransform().transform_.rotate.y,
-				box->GetWorldTransform().transform_.rotate.z
+			{ box->GetDrawWorldTransform().transform_.rotate.x,
+				box->GetDrawWorldTransform().transform_.rotate.y,
+				box->GetDrawWorldTransform().transform_.rotate.z
 			});
 		overWrite[i][2] = json::array(
-			{ box->GetWorldTransform().transform_.translate.x,
-				box->GetWorldTransform().transform_.translate.y,
-				box->GetWorldTransform().transform_.translate.z
+			{ box->GetDrawWorldTransform().transform_.translate.x,
+				box->GetDrawWorldTransform().transform_.translate.y,
+				box->GetDrawWorldTransform().transform_.translate.z
 			});
 		i++;
 	}
