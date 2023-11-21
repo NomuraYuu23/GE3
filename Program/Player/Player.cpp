@@ -22,6 +22,8 @@ void Player::Initialize(const std::vector<Model*>& models,
 
 	worldTransformBody_.Initialize();
 	worldTransformBody_.parent_ = &worldTransform_;
+	worldTransformBody_.transform_.translate.y = 2.5f;
+	worldTransformBody_.transform_.scale = { 5.0f,5.0f,5.0f };
 	//worldTransformHead_.Initialize();
 	//worldTransformHead_.transform_.translate.y += 3.5f;
 	//worldTransformHead_.parent_ = &worldTransformBody_;
@@ -630,6 +632,13 @@ void Player::DrawImgui(){
 			ImGui::DragFloat3("座標", &worldTransform_.transform_.translate.x, 0.1f);
 			ImGui::DragFloat3("回転", &worldTransform_.transform_.rotate.x, 0.1f);
 			ImGui::DragFloat3("大きさ", &worldTransform_.transform_.scale.x, 0.1f);
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("body")) {
+			ImGui::DragFloat3("座標", &worldTransformBody_.transform_.translate.x, 0.1f);
+			ImGui::DragFloat3("回転", &worldTransformBody_.transform_.rotate.x, 0.1f);
+			ImGui::DragFloat3("大きさ", &worldTransformBody_.transform_.scale.x, 0.1f);
 			ImGui::EndMenu();
 		}
 
