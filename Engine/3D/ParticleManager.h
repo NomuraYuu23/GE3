@@ -31,8 +31,10 @@ public: // サブクラス
 	{
 		// 描画するインスタンス数
 		uint32_t instanceIndex_;
-		// 描画するとき開始インスタンス数
-		StartInstanceId startInstanceIndex_;
+		//スタートインスタンス用のリソースを作る。
+		Microsoft::WRL::ComPtr<ID3D12Resource> startInstanceIdBuff_;
+		//書き込むためのアドレスを取得
+		StartInstanceId* startInstanceIdMap_{};
 		// パーティクルリスト
 		std::list<Particle*> particles_;
 		// モデル
@@ -132,15 +134,11 @@ public: // アクセッサ
 
 	ID3D12Resource* GetParticleForGPUBuff() { return particleForGPUBuff_.Get(); }
 
-	uint32_t GetInstanceIndex() { return instanceIndex_; }
+	uint32_t GetCurrentInstanceIndex() { return particleDatas_[currentModel_].instanceIndex_; }
 
 	Matrix4x4 GetBillBoardMatrix() { return billBoardMatrix_; }
 
-	uint32_t GetStartInstanceIdMap() { return startInstanceIdMap_->num; }
-
-	void SetStartInstanceIdMap(uint32_t startInstanceIdMap) { startInstanceIdMap_->num = startInstanceIdMap; }
-
-	ID3D12Resource* GetStartInstanceIdBuff() { return startInstanceIdBuff_.Get(); }
+	ID3D12Resource* GetCurrentStartInstanceIdBuff() { return particleDatas_[currentModel_].startInstanceIdBuff_.Get(); }
 
 private: // メンバ変数
 
@@ -154,11 +152,6 @@ private: // メンバ変数
 	//書き込むためのアドレスを取得
 	ParticleForGPU* particleForGPUMap_{};
 
-	//スタートインスタンス用のリソースを作る。
-	Microsoft::WRL::ComPtr<ID3D12Resource> startInstanceIdBuff_;
-	//書き込むためのアドレスを取得
-	StartInstanceId* startInstanceIdMap_{};
-
 	D3D12_CPU_DESCRIPTOR_HANDLE instancingSrvHandleCPU_;
 
 	D3D12_GPU_DESCRIPTOR_HANDLE instancingSrvHandleGPU_;
@@ -166,13 +159,14 @@ private: // メンバ変数
 	// パーティクル
 	std::array<ParticleData, kCountofParticleModel> particleDatas_;
 
-	uint32_t instanceIndex_ = 0u;
-
 	// ビルボード
 	Matrix4x4 billBoardMatrix_;
 
 	// エミッタ
 	std::list<Emitter*> emitters_;
+
+	// 現在のモデル
+	uint32_t currentModel_ = 0u;
 
 };
 

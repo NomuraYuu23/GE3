@@ -312,7 +312,7 @@ void Model::ParticleDraw()
 	sCommandList->SetGraphicsRootConstantBufferView(0, defaultMaterial_->GetMaterialBuff()->GetGPUVirtualAddress());
 
 	//マテリアルCBufferの場所を設定
-	sCommandList->SetGraphicsRootConstantBufferView(4, particleManager->GetStartInstanceIdBuff()->GetGPUVirtualAddress());
+	sCommandList->SetGraphicsRootConstantBufferView(4, particleManager->GetCurrentStartInstanceIdBuff()->GetGPUVirtualAddress());
 
 	//SRVのDescriptorTableの先頭を設定。2はrootParamenter[2]である
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(sCommandList, 2, textureHandle_);
@@ -320,7 +320,7 @@ void Model::ParticleDraw()
 	sCommandList->SetGraphicsRootDescriptorTable(1, particleManager->GetInstancingSrvHandleGPU());
 
 	//描画
-	sCommandList->DrawInstanced(UINT(modelData.vertices.size()), particleManager->GetInstanceIndex(), 0, 0);
+	sCommandList->DrawInstanced(UINT(modelData.vertices.size()), particleManager->GetCurrentInstanceIndex(), 0, 0);
 
 }
 

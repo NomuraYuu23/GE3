@@ -35,12 +35,11 @@ void ParticleManager::Initialize()
 
 	for (size_t i = 0; i < particleDatas_.size(); i++) {
 		particleDatas_[i].instanceIndex_ = 0;
-		particleDatas_[i].startInstanceIndex_ = { 0 };
 		//スタートインスタンス用のリソースを作る。
-		startInstanceIdBuff_ = BufferResource::CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(StartInstanceId));
+		particleDatas_[i].startInstanceIdBuff_ = BufferResource::CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(StartInstanceId));
 		//書き込むためのアドレスを取得
-		startInstanceIdBuff_->Map(0, nullptr, reinterpret_cast<void**>(&startInstanceIdMap_));
-
+		particleDatas_[i].startInstanceIdBuff_->Map(0, nullptr, reinterpret_cast<void**>(&particleDatas_[i].startInstanceIdMap_));
+		particleDatas_[i].startInstanceIdMap_->num = 0;
 	}
 
 }
@@ -79,8 +78,7 @@ void ParticleManager::Draw()
 {
 
 	for (uint32_t i = 0; i < kCountofParticleModel; i++) {
-		startInstanceIdMap_->num = particleDatas_[i].startInstanceIndex_.num;
-		instanceIndex_ = particleDatas_[i].instanceIndex_;
+		currentModel_ = i;
 		particleDatas_[i].model_->ParticleDraw();
 	}
 
@@ -92,7 +90,7 @@ void ParticleManager::Map(const ViewProjection& viewProjection)
 	uint32_t instanceIndex = 0u;
 
 	for (uint32_t i = 0; i < kCountofParticleModel; i++) {
-		particleDatas_[i].startInstanceIndex_.num = instanceIndex;
+		particleDatas_[i].startInstanceIdMap_->num = instanceIndex;
 		std::list<Particle*>::iterator itr = particleDatas_[i].particles_.begin();
 		for (; itr != particleDatas_[i].particles_.end(); ++itr) {
 			Particle* particle = *itr;
