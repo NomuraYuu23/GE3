@@ -50,10 +50,6 @@ void RecoveryItem::Update(){
 		isDelete_ = true;
 	}
 
-	Fall();
-	Landing();
-	worldTransform_.transform_.translate.y += velocity_.y;
-	drawWorldTransform_.transform_.translate.y += velocity_.y;
 
 	Vector3 WorldPosition = { drawWorldTransform_.worldMatrix_.m[3][0] , drawWorldTransform_.worldMatrix_.m[3][1] , drawWorldTransform_.worldMatrix_.m[3][2] };
 	size_ = { drawWorldTransform_.transform_.scale.x + 0.1f,drawWorldTransform_.transform_.scale.y + 0.1f,drawWorldTransform_.transform_.scale.z + 0.1f, };
@@ -71,13 +67,14 @@ void RecoveryItem::Draw(const ViewProjection& viewProjection){
 }
 
 void RecoveryItem::DrawImgui(){
-	ImGui::DragFloat3("アイテムの座標", &drawWorldTransform_.transform_.translate.x, 0.1f);
-	ImGui::DragFloat3("アイテムの回転", &drawWorldTransform_.transform_.rotate.x, 0.1f);
-	ImGui::DragFloat3("アイテムの大きさ", &drawWorldTransform_.transform_.scale.x, 0.1f, 0.0f, 300.0f);
+	ImGui::DragFloat3("アイテムの座標", &makeWorldTransform_.transform_.translate.x, 0.1f);
+	ImGui::DragFloat3("アイテムの回転", &makeWorldTransform_.transform_.rotate.x, 0.1f);
+	ImGui::DragFloat3("アイテムの大きさ", &makeWorldTransform_.transform_.scale.x, 0.1f, 0.0f, 300.0f);
 	ImGui::DragInt("アイテムの回復値", &recoveryValue_, 1.0f, 1, 99);
 	if (ImGui::Button("このオブジェを削除")) {
 		isDelete_ = true;
 	}
+	drawWorldTransform_.transform_.translate = makeWorldTransform_.transform_.translate;
 	worldTransform_.transform_.translate = drawWorldTransform_.transform_.translate;
 }
 

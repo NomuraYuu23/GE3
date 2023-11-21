@@ -48,7 +48,7 @@ void CollisionManager::AllCollision()
 			player_->OnCollision(floor->GetWorldTransformAdress());
 		}
 
-		for (RecoveryItem* item: recoveryItemManager_->GetItems_()){
+		/*for (RecoveryItem* item: recoveryItemManager_->GetItems_()){
 			if (Collision::IsCollision(floor->GetCollider(), item->GetCollider())) {
 				item->OnCollision(floor->GetWorldTransformAdress());
 			}
@@ -60,7 +60,7 @@ void CollisionManager::AllCollision()
 					item->OnCollision(floor->GetWorldTransformAdress());
 				}
 			}
-		}
+		}*/
 	}
 
 	for (Box* box_ : boxManager_->GetBoxes_()) {
@@ -69,7 +69,7 @@ void CollisionManager::AllCollision()
 		if (Collision::IsCollision(box_->GetCollider(), player_->GetCollider())) {
 			player_->OnCollisionBox(box_->GetWorldTransformAdress(), box_->GetSize().y);
 		}
-		for (RecoveryItem* item : recoveryItemManager_->GetItems_()) {
+		/*for (RecoveryItem* item : recoveryItemManager_->GetItems_()) {
 			if (Collision::IsCollision(box_->GetCollider(), item->GetCollider())) {
 				item->OnCollisionBox(box_->GetWorldTransformAdress(),box_->GetSize().y);
 			}
@@ -80,7 +80,7 @@ void CollisionManager::AllCollision()
 					item->OnCollisionBox(box_->GetWorldTransformAdress(), box_->GetSize().y);
 				}
 			}
-		}
+		}*/
 	}
 
 	for (BreakBox* breakBox_ : breakBoxManager_->GetBoxes_()) {
@@ -93,7 +93,7 @@ void CollisionManager::AllCollision()
 			breakBox_->SetIsBreak(true);
 		}
 
-		for (RecoveryItem* item : recoveryItemManager_->GetItems_()) {
+		/*for (RecoveryItem* item : recoveryItemManager_->GetItems_()) {
 			if (Collision::IsCollision(breakBox_->GetCollider(), item->GetCollider())) {
 				item->OnCollisionBox(breakBox_->GetWorldTransformAdress(), breakBox_->GetSize().y);
 			}
@@ -105,7 +105,7 @@ void CollisionManager::AllCollision()
 					item->OnCollisionBox(breakBox_->GetWorldTransformAdress(), breakBox_->GetSize().y);
 				}
 			}
-		}
+		}*/
 	}
 	
 	for (RecoveryItem* item : recoveryItemManager_->GetItems_()) {
