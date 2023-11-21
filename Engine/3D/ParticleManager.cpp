@@ -73,33 +73,40 @@ void ParticleManager::Update(const Matrix4x4& cameraMatrix4x4)
 
 void ParticleManager::Draw(const ViewProjection& viewProjection)
 {
-	
-	model_->ParticleDraw(viewProjection);
+
+	for (uint32_t i = 0; i < kCountofParticleModel; i++) {
+		*startInstanceIdMap_ = particleDatas_[i].startInstanceIndex_;
+		instanceIndex_ = particleDatas_[i].instanceIndex_;
+		particleDatas_[i].model_->ParticleDraw(viewProjection);
+	}
 
 }
 
 void ParticleManager::Map(const ViewProjection& viewProjection)
 {
 
-	instanceIndex_ = 0u;
+	uint32_t instanceIndex = 0u;
 
-	std::list<Particle*>::iterator itr = particles_.begin();
-	for (; itr != particles_.end(); ++itr) {
-		Particle* particle = *itr;
-		particleForGPUMap_[instanceIndex_] = particle->Map(viewProjection);
-		instanceIndex_++;
+	for (uint32_t i = 0; i < kCountofParticleModel; i++) {
+		particleDatas_[i].startInstanceIndex_ = instanceIndex;
+		std::list<Particle*>::iterator itr = particleDatas_[i].particles_.begin();
+		for (; itr != particleDatas_[i].particles_.end(); ++itr) {
+			Particle* particle = *itr;
+			particleForGPUMap_[instanceIndex] = particle->Map(viewProjection);
+			instanceIndex++;
+		}
 	}
 
 }
 
 void ParticleManager::Finalize()
 {
-
-	particles_.remove_if([](Particle* particle) {
-		delete particle;
-		return true;
-	});
-
+	for (uint32_t i = 0; i < kCountofParticleModel; i++) {
+		particleDatas_[i].particles_.remove_if([](Particle* particle) {
+			delete particle;
+			return true;
+			});
+	}
 	emitters_.remove_if([](Emitter* emitter) {
 		delete emitter;
 		return true;
@@ -107,10 +114,12 @@ void ParticleManager::Finalize()
 
 }
 
-void ParticleManager::ModelCreate()
+void ParticleManager::ModelCreate(std::array<Model*, kCountofParticleModel> model)
 {
 
-	model_.reset(Model::Create("Resources/Particle/", "plane.obj", DirectXCommon::GetInstance()));
+	for (uint32_t i = 0; i < kCountofParticleModel; i++) {
+		particleDatas_[i].model_ = model[i];
+	}
 
 }
 
@@ -127,11 +136,11 @@ void ParticleManager::BillBoardUpdate(const Matrix4x4& cameraMatrix4x4)
 
 }
 
-void ParticleManager::EmitterCreate(const TransformStructure& transform, float lifeTime)
+void ParticleManager::EmitterCreate(const TransformStructure& transform, float lifeTime, uint32_t particleModelNum)
 {
 
 	Emitter* emitter = new Emitter();
-	emitter->Initialize(transform, lifeTime);
+	emitter->Initialize(transform, lifeTime, particleModelNum);
 
 	emitters_.push_back(emitter);
 
@@ -143,39 +152,42 @@ void ParticleManager::EmitterUpdate()
 	for (Emitter* emitter : emitters_) {
 		emitter->Update();
 		if (emitter->GetToEmit()) {
-			AddParticles(emitter->Emit());
+			AddParticles(emitter->Emit(),emitter->GetParticleModelNum());
 			emitter->SetToEmit(false);
 		}
 	}
 
 }
 
-void ParticleManager::AddParticles(std::list<Particle*> particles)
+void ParticleManager::AddParticles(std::list<Particle*> particles, uint32_t particleModelNum)
 {
 
-	particles_.splice(particles_.end(), particles);
+	particleDatas_[particleModelNum].particles_.splice(particleDatas_[particleModelNum].particles_.end(), particles);
 
 }
 
 void ParticleManager::ParticlesUpdate()
 {
 
-	for (Particle* particle : particles_) {
-		particle->Update(billBoardMatrix_);
+	for (uint32_t i = 0; i < kCountofParticleModel; i++) {
+		for (Particle* particle : particleDatas_[i].particles_) {
+			particle->Update(billBoardMatrix_);
+		}
 	}
-
 }
 
 void ParticleManager::DeadDelete()
 {
-
-	particles_.remove_if([](Particle* particle) {
-		if (particle->IsDead()) {
-			delete particle;
-			return true;
-		}
-		return false;
-	});
+	
+	for (uint32_t i = 0; i < kCountofParticleModel; i++) {
+		particleDatas_[i].particles_.remove_if([](Particle* particle) {
+			if (particle->IsDead()) {
+				delete particle;
+				return true;
+			}
+			return false;
+			});
+	}
 
 	emitters_.remove_if([](Emitter* emitter) {
 		if (emitter->IsDead()) {

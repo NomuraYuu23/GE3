@@ -299,9 +299,6 @@ void Model::ParticleDraw(const ViewProjection& viewProjection)
 
 	sCommandList->IASetVertexBuffers(0, 1, &vbView_); //VBVを設定
 
-	//wvp用のCBufferの場所を設定
-	//sCommandList->SetGraphicsRootConstantBufferView(1,ParticleManager::GetInstance()->GetTransformationMatrixBuff()->GetGPUVirtualAddress());
-
 	//マテリアルCBufferの場所を設定
 	sCommandList->SetGraphicsRootConstantBufferView(0, defaultMaterial_->GetMaterialBuff()->GetGPUVirtualAddress());
 

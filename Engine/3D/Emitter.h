@@ -11,7 +11,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(const TransformStructure& transform, float lifeTime);
+	void Initialize(const TransformStructure& transform, float lifeTime, uint32_t particleModelNum);
 
 	/// <summary>
 	/// 更新
@@ -34,6 +34,8 @@ public: // アクセッサ
 	/// <returns></returns>
 	bool IsDead() { return isDead_; }
 
+	uint32_t GetParticleModelNum() { return particleModelNum_; };
+
 protected:
 
 	// トランスフォーム
@@ -53,6 +55,9 @@ protected:
 
 	// 死んでいるか
 	bool isDead_;
+
+	// モデルネーム
+	uint32_t particleModelNum_;
 
 };
 

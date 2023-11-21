@@ -28,7 +28,7 @@ void GameScene::Initialize() {
 
 	//パーティクル
 	particleManager_ = ParticleManager::GetInstance();
-	particleManager_->ModelCreate();
+	//particleManager_->ModelCreate();
 
 	isDebugCameraActive_ = true;
 

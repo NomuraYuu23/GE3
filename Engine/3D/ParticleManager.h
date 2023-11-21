@@ -6,6 +6,7 @@
 #include "Emitter.h"
 #include <list>
 #include <memory>
+#include <array>
 #include "ParticleForGPU.h"
 
 class Model;
@@ -14,6 +15,23 @@ class ParticleManager
 {
 
 public: // サブクラス
+
+	enum ParticleModel {
+		kCountofParticleModel
+	};
+
+	//パーティクルリスト
+	struct ParticleData
+	{
+		// 描画するインスタンス数
+		uint32_t instanceIndex_;
+		// 描画するとき開始インスタンス数
+		uint32_t startInstanceIndex_;
+		// パーティクルリスト
+		std::list<Particle*> particles_;
+		// モデル
+		Model* model_;
+	};
 
 public: // 静的メンバ変数
 
@@ -63,7 +81,7 @@ public: // メンバ関数
 	/// <summary>
 	/// モデル作成
 	/// </summary>
-	void ModelCreate();
+	void ModelCreate(std::array<Model*, kCountofParticleModel> model);
 
 	/// <summary>
 	/// ビルボード更新
@@ -76,7 +94,7 @@ public: // メンバ関数
 	/// </summary>
 	/// <param name="transform"></param>
 	/// <param name="lifeTime"></param>
-	void EmitterCreate(const TransformStructure& transform, float lifeTime);
+	void EmitterCreate(const TransformStructure& transform, float lifeTime, uint32_t particleModelNum);
 
 	/// <summary>
 	/// エミッタ更新
@@ -86,7 +104,7 @@ public: // メンバ関数
 	/// <summary>
 	/// パーティクル追加
 	/// </summary>
-	void AddParticles(std::list<Particle*> particles);
+	void AddParticles(std::list<Particle*> particles, uint32_t particleModelNum);
 
 	/// <summary>
 	/// パーティクル更新
@@ -139,17 +157,10 @@ private: // メンバ変数
 
 	D3D12_GPU_DESCRIPTOR_HANDLE instancingSrvHandleGPU_;
 
-	//次に使うディスクリプタヒープの番号
-	uint32_t indexNextMap_ = 0u;
-
 	// パーティクル
-	std::list<Particle*> particles_;
+	std::array<ParticleData, kCountofParticleModel> particleDatas_;
 
-	// モデル
-	std::unique_ptr<Model> model_;
-
-	// 描画するインスタンス数
-	uint32_t instanceIndex_;
+	uint32_t instanceIndex_ = 0u;
 
 	// ビルボード
 	Matrix4x4 billBoardMatrix_;
