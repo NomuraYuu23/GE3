@@ -17,7 +17,13 @@ class ParticleManager
 public: // サブクラス
 
 	enum ParticleModel {
+		kUvChecker,
+		kCircle,
 		kCountofParticleModel
+	};
+
+	struct StartInstanceId {
+		uint32_t num;
 	};
 
 	//パーティクルリスト
@@ -26,7 +32,7 @@ public: // サブクラス
 		// 描画するインスタンス数
 		uint32_t instanceIndex_;
 		// 描画するとき開始インスタンス数
-		uint32_t startInstanceIndex_;
+		StartInstanceId startInstanceIndex_;
 		// パーティクルリスト
 		std::list<Particle*> particles_;
 		// モデル
@@ -65,7 +71,7 @@ public: // メンバ関数
 	/// 描画
 	/// </summary>
 	/// <param name="viewProjection"></param>
-	void Draw(const ViewProjection& viewProjection);
+	void Draw();
 
 	/// <summary>
 	/// マッピング
@@ -130,9 +136,9 @@ public: // アクセッサ
 
 	Matrix4x4 GetBillBoardMatrix() { return billBoardMatrix_; }
 
-	uint32_t GetStartInstanceIdMap() { return *startInstanceIdMap_; }
+	uint32_t GetStartInstanceIdMap() { return startInstanceIdMap_->num; }
 
-	void SetStartInstanceIdMap(uint32_t startInstanceIdMap) { *startInstanceIdMap_ = startInstanceIdMap; }
+	void SetStartInstanceIdMap(uint32_t startInstanceIdMap) { startInstanceIdMap_->num = startInstanceIdMap; }
 
 	ID3D12Resource* GetStartInstanceIdBuff() { return startInstanceIdBuff_.Get(); }
 
@@ -151,7 +157,7 @@ private: // メンバ変数
 	//スタートインスタンス用のリソースを作る。
 	Microsoft::WRL::ComPtr<ID3D12Resource> startInstanceIdBuff_;
 	//書き込むためのアドレスを取得
-	uint32_t* startInstanceIdMap_{};
+	StartInstanceId* startInstanceIdMap_{};
 
 	D3D12_CPU_DESCRIPTOR_HANDLE instancingSrvHandleCPU_;
 

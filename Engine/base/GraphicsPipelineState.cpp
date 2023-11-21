@@ -499,7 +499,7 @@ void GraphicsPipelineState::CreateForParticle(ID3D12Device* sDevice)
 	rootParameters[3].Descriptor.ShaderRegister = 1;
 	rootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;   //CBVを使う
 	rootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;//VertexShaderで使う
-	rootParameters[4].Descriptor.ShaderRegister = 2;
+	rootParameters[4].Descriptor.ShaderRegister = 0;
 	descriptionRootsignature.pParameters = rootParameters;             //ルートパラメータ配列へのポインタ
 	descriptionRootsignature.NumParameters = _countof(rootParameters); //配列の長さ
 

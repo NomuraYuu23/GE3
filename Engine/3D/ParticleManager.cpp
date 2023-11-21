@@ -29,15 +29,19 @@ void ParticleManager::Initialize()
 		particleForGPUMap_[i].color = {1.0f,1.0f,1.0f,1.0f};
 	}
 
-	//スタートインスタンス用のリソースを作る。
-	startInstanceIdBuff_ = BufferResource::CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(uint32_t));
-	//書き込むためのアドレスを取得
-	startInstanceIdBuff_->Map(0, nullptr, reinterpret_cast<void**>(&startInstanceIdMap_));
-	*startInstanceIdMap_ = 0;
-
 	SRVCreate();
 
 	billBoardMatrix_ = matrix4x4Calc->MakeIdentity4x4();
+
+	for (size_t i = 0; i < particleDatas_.size(); i++) {
+		particleDatas_[i].instanceIndex_ = 0;
+		particleDatas_[i].startInstanceIndex_ = { 0 };
+		//スタートインスタンス用のリソースを作る。
+		startInstanceIdBuff_ = BufferResource::CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(StartInstanceId));
+		//書き込むためのアドレスを取得
+		startInstanceIdBuff_->Map(0, nullptr, reinterpret_cast<void**>(&startInstanceIdMap_));
+
+	}
 
 }
 
@@ -71,13 +75,13 @@ void ParticleManager::Update(const Matrix4x4& cameraMatrix4x4)
 
 }
 
-void ParticleManager::Draw(const ViewProjection& viewProjection)
+void ParticleManager::Draw()
 {
 
 	for (uint32_t i = 0; i < kCountofParticleModel; i++) {
-		*startInstanceIdMap_ = particleDatas_[i].startInstanceIndex_;
+		startInstanceIdMap_->num = particleDatas_[i].startInstanceIndex_.num;
 		instanceIndex_ = particleDatas_[i].instanceIndex_;
-		particleDatas_[i].model_->ParticleDraw(viewProjection);
+		particleDatas_[i].model_->ParticleDraw();
 	}
 
 }
@@ -88,7 +92,7 @@ void ParticleManager::Map(const ViewProjection& viewProjection)
 	uint32_t instanceIndex = 0u;
 
 	for (uint32_t i = 0; i < kCountofParticleModel; i++) {
-		particleDatas_[i].startInstanceIndex_ = instanceIndex;
+		particleDatas_[i].startInstanceIndex_.num = instanceIndex;
 		std::list<Particle*>::iterator itr = particleDatas_[i].particles_.begin();
 		for (; itr != particleDatas_[i].particles_.end(); ++itr) {
 			Particle* particle = *itr;
@@ -163,7 +167,7 @@ void ParticleManager::AddParticles(std::list<Particle*> particles, uint32_t part
 {
 
 	particleDatas_[particleModelNum].particles_.splice(particleDatas_[particleModelNum].particles_.end(), particles);
-
+	particleDatas_[particleModelNum].instanceIndex_ = static_cast<uint32_t>(particleDatas_[particleModelNum].particles_.size());
 }
 
 void ParticleManager::ParticlesUpdate()
@@ -180,9 +184,10 @@ void ParticleManager::DeadDelete()
 {
 	
 	for (uint32_t i = 0; i < kCountofParticleModel; i++) {
-		particleDatas_[i].particles_.remove_if([](Particle* particle) {
+		particleDatas_[i].particles_.remove_if([=](Particle* particle) {
 			if (particle->IsDead()) {
 				delete particle;
+				particleDatas_[i].instanceIndex_--;
 				return true;
 			}
 			return false;
