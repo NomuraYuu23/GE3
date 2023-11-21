@@ -147,7 +147,14 @@ void GameScene::Initialize() {
 
 	//パーティクル
 	particleManager_ = ParticleManager::GetInstance();
-	particleManager_->ModelCreate();
+	std::array<Model*, ParticleManager::ParticleModel::kCountofParticleModel> particleModel;
+	particleModel[ParticleManager::ParticleModel::kUvChecker] = particleUvcheckerModel_.get();
+	particleModel[ParticleManager::ParticleModel::kCircle] = particleCircleModel_.get();
+	particleManager_->ModelCreate(particleModel);
+	TransformStructure emitter = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{-3.0f,0.0f,0.0f} };
+	particleManager_->EmitterCreate(emitter,300.0f, ParticleManager::ParticleModel::kUvChecker);
+	emitter.translate.x = 3.0f;
+	particleManager_->EmitterCreate(emitter, 300.0f, ParticleManager::ParticleModel::kCircle);
 
 	isDebugCameraActive_ = true;
 
@@ -249,10 +256,20 @@ void GameScene::Draw() {
 
 #endif // _DEBUG
 
+	Model::PostDraw();
+
+#pragma region パーティクル描画
+	Model::PreParticleDraw(dxCommon_->GetCommadList(), viewProjection_);
+
+	//光源
+	directionalLight_->Draw(dxCommon_->GetCommadList());
+
 	// パーティクルはここ
-	particleManager_->Draw(viewProjection_);
+	particleManager_->Draw();
 
 	Model::PostDraw();
+
+#pragma endregion
 
 #pragma region 前景スプライト描画
 	// 前景スプライト描画前処理
@@ -529,6 +546,8 @@ void GameScene::ModelCreate()
 	enemyModels_.push_back(Model::Create("Resources/AL4/enemy_Body/", "enemy_Body.obj", dxCommon_));
 	enemyModels_.push_back(Model::Create("Resources/AL4/enemy_Arm/", "enemy_Arm.obj", dxCommon_));
 	enemyModels_.push_back(Model::Create("Resources/AL4/enemy_Arm/", "enemy_Arm.obj", dxCommon_));
+	particleUvcheckerModel_.reset(Model::Create("Resources/default/", "plane.obj", dxCommon_));
+	particleCircleModel_.reset(Model::Create("Resources/Particle/", "plane.obj", dxCommon_));
 
 }
 

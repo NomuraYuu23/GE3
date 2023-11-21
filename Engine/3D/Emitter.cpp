@@ -1,7 +1,7 @@
 #include "Emitter.h"
 #include "../Math/DeltaTime.h"
 
-void Emitter::Initialize(const TransformStructure& transform, float lifeTime)
+void Emitter::Initialize(const TransformStructure& transform, float lifeTime, uint32_t particleModelNum)
 {
 
 	// トランスフォーム
@@ -20,6 +20,8 @@ void Emitter::Initialize(const TransformStructure& transform, float lifeTime)
 	toEmit_ = false;
 
 	isDead_ = false;
+
+	particleModelNum_ = particleModelNum;
 
 }
 
