@@ -138,10 +138,6 @@ void Player::Draw(const ViewProjection& viewProjection)
 	DrawImgui();
 
 	models_[int(ModelIndex::kModelIndexBody)]->Draw(worldTransformBody_, viewProjection);
-	//models_[int(ModelIndex::kModelIndexHead)]->Draw(worldTransformHead_, viewProjection);
-	//models_[int(ModelIndex::kModelIndexL_arm)]->Draw(worldTransformL_arm_, viewProjection);
-	//models_[int(ModelIndex::kModelIndexR_arm)]->Draw(worldTransformR_arm_, viewProjection);
-	//models_[int(ModelIndex::kModelIndexWeapon)]->Draw(worldTransformWeapon_, viewProjection);
 	models_[int(ModelIndex::kModelIndexExprode)]->Draw(worldTransformExprode_, viewProjection);
 
 }
@@ -416,15 +412,22 @@ void Player::Walk()
 
 void Player::Jump()
 {
-
+	if (exprosionNum_ == exprosionMin_)
+		return;
 	//インスタンス
 	Input* input = Input::GetInstance();
 
 	//移動
 	if (input->GetJoystickConnected()) {
 		
-		if (Input::GetInstance()->TriggerJoystick(0) && isLanding) {
+		if (Input::GetInstance()->TriggerJoystick(0) && !isLanding && !isExplosion_) {
 			Explosion();
+			velocity_.y = 0.0f;
+			velocity_.y += workRoot_.kJumpSpeed;
+		}
+		else if (Input::GetInstance()->TriggerJoystick(0) && velocity_.y <= 0.0f && !isExplosion_) {
+			Explosion();
+			velocity_.y = 0.0f;
 			velocity_.y += workRoot_.kJumpSpeed;
 			isLanding = false;
 			
