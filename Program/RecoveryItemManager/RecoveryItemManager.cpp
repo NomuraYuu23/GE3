@@ -137,9 +137,9 @@ void RecoveryItemManager::FileOverWrite(const std::string& stage){
 	int i = 0;
 	for (RecoveryItem* box : recoveryItems_) {
 		overWrite[i][0] = json::array(
-			{ box->GetMakeWorldTransform().transform_.scale.x,
-				box->GetMakeWorldTransform().transform_.scale.y,
-				box->GetMakeWorldTransform().transform_.scale.z
+			{ box->GetDrawWorldTransform().transform_.scale.x,
+				box->GetDrawWorldTransform().transform_.scale.y,
+				box->GetDrawWorldTransform().transform_.scale.z
 			});
 		overWrite[i][1] = json::array(
 			{ box->GetMakeWorldTransform().transform_.rotate.x,
