@@ -149,7 +149,7 @@ void GameScene::Initialize() {
 	particleManager_ = ParticleManager::GetInstance();
 	particleManager_->ModelCreate();
 
-	isDebugCameraActive_ = true;
+	isDebugCameraActive_ = false;
 
 	stageName_ = stages_[0].c_str();
 }
