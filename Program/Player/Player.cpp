@@ -24,24 +24,6 @@ void Player::Initialize(const std::vector<Model*>& models,
 	worldTransformBody_.parent_ = &worldTransform_;
 	worldTransformBody_.transform_.translate.y = 2.5f;
 	worldTransformBody_.transform_.scale = { 5.0f,5.0f,5.0f };
-	//worldTransformHead_.Initialize();
-	//worldTransformHead_.transform_.translate.y += 3.5f;
-	//worldTransformHead_.parent_ = &worldTransformBody_;
-	//worldTransformL_arm_.Initialize();
-	//worldTransformL_arm_.transform_.translate.y += 2.5f;
-	//worldTransformL_arm_.transform_.translate.x -= 1.0f;
-	//worldTransformL_arm_.parent_ = &worldTransformBody_;
-	//worldTransformR_arm_.Initialize();
-	//worldTransformR_arm_.transform_.translate.y += 2.5f;
-	//worldTransformR_arm_.transform_.translate.x += 1.0f;
-	//worldTransformR_arm_.parent_ = &worldTransformBody_;
-
-	//worldTransformWeapon_.Initialize();
-	//worldTransformWeapon_.transform_.translate.y += 3.0f;
-	//worldTransformWeapon_.parent_ = &worldTransform_;
-
-	
-
 
 	////浮遊ギミック
 	//InitializeFloatinggimmick();
@@ -65,19 +47,6 @@ void Player::Initialize(const std::vector<Model*>& models,
 	isExplosion_ = false;
 
 	exprosionNum_ = startExprosionNum_;
-	//// 攻撃
-	//
-	//workAttack_.attackCenterAdd_ = {0.0f,0.0,5.0f};
-
-	//workAttack_.attackRadius_ = 5.0f;
-
-	//// コライダー
-	//workAttack_.attackCollider_.Initialize(workAttack_.attackCenterAdd_, workAttack_.attackRadius_);
-
-	//// あたり判定を取るか
-	//workAttack_.isAttackJudgment_ = false;
-
-	// グローバル
 
 }
 
@@ -523,7 +492,7 @@ void Player::DashStart()
 
 void Player::Restart()
 {
-
+	exprosionNum_ -= 5;
 	worldTransform_.transform_.translate = workRoot_.kInitialPosition;
 	worldTransform_.transform_.rotate = workRoot_.kInitialRotate;
 	worldTransform_.parent_ = nullptr;
