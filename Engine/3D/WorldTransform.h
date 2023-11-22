@@ -19,7 +19,7 @@ struct WorldTransform
 	// 回転行列
 	Matrix4x4 rotateMatrix_;
 
-	// このフレームで直接回転行列をいれてるか
+	// 方向ベクトルで回転行列
 	bool usedDirection_;
 
 	// 方向ベクトル

@@ -1,60 +1,43 @@
 #include "GameScene.h"
-
-#include "../../externals/imgui/imgui_impl_dx12.h"
-#include "../../externals/imgui/imgui_impl_win32.h"
-extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
-#include "../base/WinApp.h"
-#include "../base/DirectXCommon.h"
-#include "../base/TextureManager.h"
-#include "../base/D3DResourceLeakChecker.h"
-#include <vector>
-
-/// <summary>
-/// コンストラクタ
-/// </summary>
-GameScene::GameScene(){
-	
-}
-
-/// <summary>
-/// デストラクタ
-/// </summary>
-GameScene::~GameScene(){
-}
+#include "../../base/WinApp.h"
+#include "../../base/TextureManager.h"
+#include "../../2D/ImguiManager.h"
+#include "../../base/D3DResourceLeakChecker.h"
 
 /// <summary>
 /// 初期化
 /// </summary>
 void GameScene::Initialize() {
-	
-	
-	//機能
-	dxCommon_ = DirectXCommon::GetInstance();
-	input_ = Input::GetInstance();
-	audio_ = Audio::GetInstance();
+
+
+	ModelCreate();
+	MaterialCreate();
+	TextureLoad();
 
 	// デバッグ描画
 	colliderDebugDraw_ = std::make_unique<ColliderDebugDraw>();
-	colliderSphereModel_.reset(Model::Create("Resources/TD2_November/collider/sphere/", "sphere.obj", dxCommon_));
-	colliderBoxModel_.reset(Model::Create("Resources/TD2_November/collider/box/", "box.obj", dxCommon_));
 	std::vector<Model*> colliderModels = { colliderSphereModel_.get(),colliderBoxModel_.get(),colliderBoxModel_.get() };
-	colliderMaterial_.reset(Material::Create());
 	colliderDebugDraw_->Initialize(colliderModels, colliderMaterial_.get());
 
-	//ビュープロジェクション
-	viewProjection_.Initialize();
+	pause_ = std::make_unique<Pause>();
+	pause_->Initialize(pauseTextureHandles_);
 
+	// ビュープロジェクション
 	viewProjection_.transform_.translate = { 0.0f,23.0f,-35.0f };
 	viewProjection_.transform_.rotate = { 0.58f,0.0f,0.0f };
 
-	//デバッグカメラ
-	debugCamera_ = std::make_unique<DebugCamera>();
-	debugCamera_->Initialize();
-	isDebugCameraActive_ = false;
+	//パーティクル
+	particleManager_ = ParticleManager::GetInstance();
+	std::array<Model*, ParticleManager::ParticleModel::kCountofParticleModel> particleModel;
+	particleModel[ParticleManager::ParticleModel::kUvChecker] = particleUvcheckerModel_.get();
+	particleModel[ParticleManager::ParticleModel::kCircle] = particleCircleModel_.get();
+	particleManager_->ModelCreate(particleModel);
+	TransformStructure emitter = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{-3.0f,0.0f,0.0f} };
+	particleManager_->EmitterCreate(emitter,300.0f, ParticleManager::ParticleModel::kUvChecker);
+	emitter.translate.x = 3.0f;
+	particleManager_->EmitterCreate(emitter, 300.0f, ParticleManager::ParticleModel::kCircle);
 
-	//光源
-	directionalLight.reset(DirectionalLight::Create());
+	isDebugCameraActive_ = true;
 
 	//Player
 	//マテリアル
@@ -182,7 +165,7 @@ void GameScene::Update(){
 	directionalLightData.color = { 1.0f,1.0f,1.0f,1.0f };
 	directionalLightData.direction = { 0.0f, -1.0f, 0.0f };
 	directionalLightData.intencity = 1.0f;
-	directionalLight->Update(directionalLightData);
+	directionalLight_->Update(directionalLightData);
 
 
 	//追従カメラの更新
@@ -211,6 +194,15 @@ void GameScene::Update(){
 
 	// デバッグ描画
 	colliderDebugDraw_->Update();
+	
+	//パーティクル
+	particleManager_->Update(debugCamera_->GetMatrix());
+
+	// ポーズ機能
+	pause_->Update();
+
+	// タイトルへ行く
+	GoToTheTitle();
 
 }
 
@@ -236,7 +228,7 @@ void GameScene::Draw() {
 	Model::PreDraw(dxCommon_->GetCommadList());
 
 	//光源
-	directionalLight->Draw(dxCommon_->GetCommadList());
+	directionalLight_->Draw(dxCommon_->GetCommadList());
 	//3Dオブジェクトはここ
 	player_->Draw(viewProjection_);
 	skydome_->Draw(viewProjection_);
@@ -253,6 +245,19 @@ void GameScene::Draw() {
 
 	Model::PostDraw();
 
+#pragma region パーティクル描画
+	Model::PreParticleDraw(dxCommon_->GetCommadList(), viewProjection_);
+
+	//光源
+	directionalLight_->Draw(dxCommon_->GetCommadList());
+
+	// パーティクルはここ
+	particleManager_->Draw();
+
+	Model::PostDraw();
+
+#pragma endregion
+
 #pragma region 前景スプライト描画
 	// 前景スプライト描画前処理
 	Sprite::PreDraw(dxCommon_->GetCommadList());
@@ -260,6 +265,8 @@ void GameScene::Draw() {
 
 	//背景
 	//前景スプライト描画
+	pause_->Draw();
+
 
 	// 前景スプライト描画後処理
 	Sprite::PostDraw();
@@ -296,5 +303,43 @@ void GameScene::DebugCameraUpdate()
 		viewProjection_.UpdateMatrix();
 	}
 #endif
+
+}
+
+void GameScene::GoToTheTitle()
+{
+
+	if (pause_->GoToTheTitle()) {
+		sceneNo = kTitle;
+	}
+
+}
+
+void GameScene::ModelCreate()
+{
+
+	colliderSphereModel_.reset(Model::Create("Resources/TD2_November/collider/sphere/", "sphere.obj", dxCommon_));
+	colliderBoxModel_.reset(Model::Create("Resources/TD2_November/collider/box/", "box.obj", dxCommon_));
+	particleUvcheckerModel_.reset(Model::Create("Resources/default/", "plane.obj", dxCommon_));
+	particleCircleModel_.reset(Model::Create("Resources/Particle/", "plane.obj", dxCommon_));
+
+}
+
+void GameScene::MaterialCreate()
+{
+
+	colliderMaterial_.reset(Material::Create());
+
+}
+
+void GameScene::TextureLoad()
+{
+
+	// ポーズ
+	pauseTextureHandles_ = {
+		TextureManager::Load("Resources/TD2_November/pause/pausing.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/pause/goToTitle.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/pause/returnToGame.png", dxCommon_),
+	};
 
 }

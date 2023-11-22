@@ -8,13 +8,13 @@
 
 void FollowCamera::Initialize() {
 
-	viewProjection_.Initialize();
+	BaseCamera::Initialize();
+
 	//y固定
 	viewProjection_.transform_.translate.y = 10.0f;
 	viewProjection_.transform_.rotate.x = 0.1f;
 
-	//ビュー更新
-	viewProjection_.UpdateMatrix();
+	BaseCamera::Update();
 
 
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
@@ -67,7 +67,7 @@ void FollowCamera::Update() {
 	viewProjection_.transform_.rotate.x = Math::LerpShortAngle(viewProjection_.transform_.rotate.x, destinationAngle_.x, rotateRate_);
 
 	//ビュー更新
-	viewProjection_.UpdateMatrix();
+	BaseCamera::Update();
 
 }
 

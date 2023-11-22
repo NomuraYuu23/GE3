@@ -11,7 +11,7 @@ void WorldTransform::Initialize() {
 	// 回転行列
 	rotateMatrix_ = matrix4x4Calc->MakeRotateXYZMatrix(transform_.rotate);
 
-	// このフレームで直接回転行列をいれてるか
+	// 方向ベクトルで回転行列
 	usedDirection_ = false;
 
 	// スケールを考えない
@@ -36,12 +36,13 @@ void WorldTransform::UpdateMatrix() {
 	//拡大縮小行列
 	Matrix4x4 scaleMatrix = matrix4x4Calc->MakeScaleMatrix(transform_.scale);
 
-	// 回転行列作るか
+	// どう回転行列作るか
 	if (usedDirection_) {
 		// 回転行列
 		rotateMatrix_ = matrix4x4Calc->DirectionToDirection(Vector3{0.0f,0.0f,1.0f}, direction_);
 	}
 	else {
+		// 回転行列
 		rotateMatrix_ = matrix4x4Calc->MakeRotateXYZMatrix(transform_.rotate);
 	}
 
@@ -70,12 +71,11 @@ void WorldTransform::MapSprite()
 	Matrix4x4Calc* matrix4x4Calc = Matrix4x4Calc::GetInstance();
 
 	//Sprite用のWorldViewProjectionMatrixを作る
-	Matrix4x4 WorldMatrixSprite = matrix4x4Calc->MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
 	Matrix4x4 viewMatrixSprite = matrix4x4Calc->MakeIdentity4x4();
 	Matrix4x4 projectionMatrixSprite = matrix4x4Calc->MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::kWindowWidth), float(WinApp::kWindowHeight), 0.0f, 100.0f);
-	Matrix4x4 worldViewProjectionMatrixSprite = matrix4x4Calc->Multiply(WorldMatrixSprite, matrix4x4Calc->Multiply(viewMatrixSprite, projectionMatrixSprite));
+	Matrix4x4 worldViewProjectionMatrixSprite = matrix4x4Calc->Multiply(worldMatrix_, matrix4x4Calc->Multiply(viewMatrixSprite, projectionMatrixSprite));
 	transformationMatrixMap_->WVP = worldViewProjectionMatrixSprite;
-	transformationMatrixMap_->World = WorldMatrixSprite;
+	transformationMatrixMap_->World = worldMatrix_;
 
 }
 

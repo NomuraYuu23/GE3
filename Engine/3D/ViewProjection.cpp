@@ -11,7 +11,7 @@ void ViewProjection::Initialize() {
 
 	nearClip_ = 0.1f;
 
-	farClip_ = 100.0f;
+	farClip_ = 1000.0f;
 
 	UpdateMatrix();
 

@@ -6,7 +6,7 @@
 /// </summary>
 void DebugCamera::Initialize() {
 
-	viewProjection_.Initialize();
+	BaseCamera::Initialize();
 
 	moveSpeed_ = 0.1f;
 	rotateSpeed_ = 0.01f;
@@ -52,6 +52,6 @@ void DebugCamera::Update() {
 		viewProjection_.transform_.rotate.x -= rotateSpeed_;
 	}
 
-	viewProjection_.UpdateMatrix();
+	BaseCamera::Update();
 
 }

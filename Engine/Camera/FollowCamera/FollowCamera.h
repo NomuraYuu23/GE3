@@ -1,20 +1,21 @@
 #pragma once
 #include "../../../Engine/3D/ViewProjection.h"
 #include "../../../Engine/3D/WorldTransform.h"
+#include "../BaseCamera.h"
 
-class FollowCamera {
+class FollowCamera : public BaseCamera{
 
 public:
 
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize();
+	void Initialize() override;
 
 	/// <summary>
 	/// 更新
 	/// </summary>
-	void Update();
+	void Update() override;
 
 	/// <summary>
 	/// リセット
@@ -50,9 +51,6 @@ private: // メンバ関数
 	void ApplyGlobalVariables();
 
 private:
-
-	//ビュープロジェクション
-	ViewProjection viewProjection_;
 
 	//追従対象
 	const WorldTransform* target_ = nullptr;

@@ -17,9 +17,9 @@ UINT Model::sDescriptorHandleIncrementSize;
 // コマンドリスト
 ID3D12GraphicsCommandList* Model::sCommandList = nullptr;
 // ルートシグネチャ
-ComPtr<ID3D12RootSignature> Model::sRootSignature;
+ID3D12RootSignature* Model::sRootSignature[GraphicsPipelineState::PipelineStateName::kCountOfPipelineStateName];
 // パイプラインステートオブジェクト
-ComPtr<ID3D12PipelineState> Model::sPipelineState;
+ID3D12PipelineState* Model::sPipelineState[GraphicsPipelineState::PipelineStateName::kCountOfPipelineStateName];
 //計算
 Matrix4x4Calc* Model::matrix4x4Calc = nullptr;
 
@@ -27,10 +27,9 @@ Matrix4x4Calc* Model::matrix4x4Calc = nullptr;
 /// 静的初期化
 /// </summary>
 /// <param name="device">デバイス</param>
-void Model::StaticInitialize(
-	ID3D12Device* device,
-	Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature,
-	Microsoft::WRL::ComPtr<ID3D12PipelineState> pipelineState) {
+void Model::StaticInitialize(ID3D12Device* device,
+	const std::array<ID3D12RootSignature*, GraphicsPipelineState::PipelineStateName::kCountOfPipelineStateName>& rootSignature,
+	const std::array<ID3D12PipelineState*, GraphicsPipelineState::PipelineStateName::kCountOfPipelineStateName>& pipelineState) {
 
 	assert(device);
 
@@ -39,8 +38,10 @@ void Model::StaticInitialize(
 	matrix4x4Calc = Matrix4x4Calc::GetInstance();
 
 	// グラフィックパイプライン生成
-	sRootSignature = rootSignature;
-	sPipelineState = pipelineState;
+	for (uint32_t i = 0u; i < GraphicsPipelineState::PipelineStateName::kCountOfPipelineStateName; i++) {
+		sRootSignature[i] = rootSignature[i];
+		sPipelineState[i] = pipelineState[i];
+	}
 
 }
 
@@ -55,10 +56,30 @@ void Model::PreDraw(ID3D12GraphicsCommandList* cmdList) {
 	sCommandList = cmdList;
 
 	//RootSignatureを設定。
-	sCommandList->SetPipelineState(sPipelineState.Get());//PS0を設定
-	sCommandList->SetGraphicsRootSignature(sRootSignature.Get());
+	sCommandList->SetPipelineState(sPipelineState[GraphicsPipelineState::PipelineStateName::kModel]);//PS0を設定
+	sCommandList->SetGraphicsRootSignature(sRootSignature[GraphicsPipelineState::PipelineStateName::kModel]);
+
 	//形状を設定。PS0に設定しているものとは別。
 	sCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+}
+
+void Model::PreParticleDraw(ID3D12GraphicsCommandList* cmdList, const ViewProjection& viewProjection)
+{
+
+	assert(sCommandList == nullptr);
+
+	sCommandList = cmdList;
+
+	//RootSignatureを設定。
+	sCommandList->SetPipelineState(sPipelineState[GraphicsPipelineState::PipelineStateName::kParticle]);//PS0を設定
+	sCommandList->SetGraphicsRootSignature(sRootSignature[GraphicsPipelineState::PipelineStateName::kParticle]);
+
+	//形状を設定。PS0に設定しているものとは別。
+	sCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	ParticleManager* particleManager = ParticleManager::GetInstance();
+	particleManager->Map(viewProjection);
 
 }
 
@@ -273,6 +294,33 @@ void Model::Draw(WorldTransform& worldTransform, const ViewProjection& viewProje
 
 	//描画
 	sCommandList->DrawInstanced(UINT(modelData.vertices.size()), 1, 0, 0);
+
+}
+
+void Model::ParticleDraw()
+{
+
+	// nullptrチェック
+	assert(sDevice);
+	assert(sCommandList);
+
+	ParticleManager* particleManager = ParticleManager::GetInstance();
+
+	sCommandList->IASetVertexBuffers(0, 1, &vbView_); //VBVを設定
+
+	//マテリアルCBufferの場所を設定
+	sCommandList->SetGraphicsRootConstantBufferView(0, defaultMaterial_->GetMaterialBuff()->GetGPUVirtualAddress());
+
+	//マテリアルCBufferの場所を設定
+	sCommandList->SetGraphicsRootConstantBufferView(4, particleManager->GetCurrentStartInstanceIdBuff()->GetGPUVirtualAddress());
+
+	//SRVのDescriptorTableの先頭を設定。2はrootParamenter[2]である
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(sCommandList, 2, textureHandle_);
+
+	sCommandList->SetGraphicsRootDescriptorTable(1, particleManager->GetInstancingSrvHandleGPU());
+
+	//描画
+	sCommandList->DrawInstanced(UINT(modelData.vertices.size()), particleManager->GetCurrentInstanceIndex(), 0, 0);
 
 }
 

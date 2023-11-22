@@ -131,14 +131,15 @@ Sprite::Sprite(
 
 	textureHandle_ = textureHandle;
 
-	// 位置
-	position_ = position;
-	// 回転
-	rotate_ = 0.0f;
-	//大きさ
-	size_ = size;
 	// ワールドトランスフォーム
 	worldTransform_.Initialize();
+
+	// 位置
+	SetPosition(position);
+	// 回転
+	SetRotate(rotate_);	
+	//大きさ
+	size_ = size;
 
 	//アンカーポイント
 	anchorPoint_ = { 0.5f, 0.5f };
@@ -151,11 +152,11 @@ Sprite::Sprite(
 	isInvisible_ = false;
 
 	// テクスチャのサイズ
-	textureSize_ = size_;
+	textureSize_ = size;
 	// 描画する
 	textureLeftTop_ = {0.0f,0.0f};
 	// テクスチャ初期サイズ
-	textureInitSize_ = size_;
+	textureInitSize_ = size;
 
 	// マテリアル
 	material_ = std::make_unique<Material>();
@@ -300,11 +301,10 @@ void Sprite::SetRotate(float rotate)
 void Sprite::SetSize(const Vector2& size)
 {
 
-	size_ = size;
+	size_.x = size.x;
+	size_.y = size.y;
 
-	worldTransform_.transform_.scale.x = size_.x;
-	worldTransform_.transform_.scale.y = size_.y;
-	worldTransform_.UpdateMatrix();
+	SetAnchorPoint(anchorPoint_);
 
 }
 
