@@ -64,20 +64,25 @@ private: // メンバ関数
 
 private:
 
-	// デバッグ描画
-	std::unique_ptr<ColliderDebugDraw> colliderDebugDraw_ = nullptr;
-	std::unique_ptr<Model> colliderSphereModel_ = nullptr;
-	std::unique_ptr<Model> colliderBoxModel_ = nullptr;
-	std::unique_ptr<Material> colliderMaterial_ = nullptr;
+	//// デバッグ描画
+	//std::unique_ptr<ColliderDebugDraw> colliderDebugDraw_ = nullptr;
+	//std::unique_ptr<Model> colliderSphereModel_ = nullptr;
+	//std::unique_ptr<Model> colliderBoxModel_ = nullptr;
+	//std::unique_ptr<Material> colliderMaterial_ = nullptr;
 
-	// ポーズ
-	// テクスチャハンドル
-	std::array<uint32_t, Pause::PauseTextureNo::kCountOfPauseTextureNo> pauseTextureHandles_;
-	std::unique_ptr<Pause> pause_ = nullptr;
+	//// ポーズ
+	//// テクスチャハンドル
+	//std::array<uint32_t, Pause::PauseTextureNo::kCountOfPauseTextureNo> pauseTextureHandles_;
+	//std::unique_ptr<Pause> pause_ = nullptr;
 
-	// パーティクルマネージャー
-	ParticleManager* particleManager_ = nullptr;
-	std::unique_ptr<Model> particleUvcheckerModel_ = nullptr;
-	std::unique_ptr<Model> particleCircleModel_ = nullptr;
+	//// パーティクルマネージャー
+	//ParticleManager* particleManager_ = nullptr;
+	//std::unique_ptr<Model> particleUvcheckerModel_ = nullptr;
+	//std::unique_ptr<Model> particleCircleModel_ = nullptr;
+
+	// MT4
+	Vector3 axis_;
+	float angle_;
+	Matrix4x4 rotateMatrix_;
 
 };

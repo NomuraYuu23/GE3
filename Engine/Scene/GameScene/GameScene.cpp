@@ -10,34 +10,39 @@
 void GameScene::Initialize() {
 
 
-	ModelCreate();
-	MaterialCreate();
-	TextureLoad();
+	//ModelCreate();
+	//MaterialCreate();
+	//TextureLoad();
 
-	// デバッグ描画
-	colliderDebugDraw_ = std::make_unique<ColliderDebugDraw>();
-	std::vector<Model*> colliderModels = { colliderSphereModel_.get(),colliderBoxModel_.get(),colliderBoxModel_.get() };
-	colliderDebugDraw_->Initialize(colliderModels, colliderMaterial_.get());
+	//// デバッグ描画
+	//colliderDebugDraw_ = std::make_unique<ColliderDebugDraw>();
+	//std::vector<Model*> colliderModels = { colliderSphereModel_.get(),colliderBoxModel_.get(),colliderBoxModel_.get() };
+	//colliderDebugDraw_->Initialize(colliderModels, colliderMaterial_.get());
 
-	pause_ = std::make_unique<Pause>();
-	pause_->Initialize(pauseTextureHandles_);
+	//pause_ = std::make_unique<Pause>();
+	//pause_->Initialize(pauseTextureHandles_);
 
 	// ビュープロジェクション
 	viewProjection_.transform_.translate = { 0.0f,23.0f,-35.0f };
 	viewProjection_.transform_.rotate = { 0.58f,0.0f,0.0f };
 
-	//パーティクル
-	particleManager_ = ParticleManager::GetInstance();
-	std::array<Model*, ParticleManager::ParticleModel::kCountofParticleModel> particleModel;
-	particleModel[ParticleManager::ParticleModel::kUvChecker] = particleUvcheckerModel_.get();
-	particleModel[ParticleManager::ParticleModel::kCircle] = particleCircleModel_.get();
-	particleManager_->ModelCreate(particleModel);
-	TransformStructure emitter = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{-3.0f,0.0f,0.0f} };
-	particleManager_->EmitterCreate(emitter,300.0f, ParticleManager::ParticleModel::kUvChecker);
-	emitter.translate.x = 3.0f;
-	particleManager_->EmitterCreate(emitter, 300.0f, ParticleManager::ParticleModel::kCircle);
+	////パーティクル
+	//particleManager_ = ParticleManager::GetInstance();
+	//std::array<Model*, ParticleManager::ParticleModel::kCountofParticleModel> particleModel;
+	//particleModel[ParticleManager::ParticleModel::kUvChecker] = particleUvcheckerModel_.get();
+	//particleModel[ParticleManager::ParticleModel::kCircle] = particleCircleModel_.get();
+	//particleManager_->ModelCreate(particleModel);
+	//TransformStructure emitter = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{-3.0f,0.0f,0.0f} };
+	//particleManager_->EmitterCreate(emitter,300.0f, ParticleManager::ParticleModel::kUvChecker);
+	//emitter.translate.x = 3.0f;
+	//particleManager_->EmitterCreate(emitter, 300.0f, ParticleManager::ParticleModel::kCircle);
 
 	isDebugCameraActive_ = true;
+
+	// MT4
+	axis_ = Vector3Calc::GetInstance()->Normalize({1.0f,1.0f,1.0f});
+	angle_ = 0.44f;
+	rotateMatrix_ = Matrix4x4Calc::GetInstance()->MakeRotateAxisAngle(axis_,angle_);
 
 }
 
@@ -58,17 +63,17 @@ void GameScene::Update(){
 	// デバッグカメラ
 	DebugCameraUpdate();
 	
-	// デバッグ描画
-	colliderDebugDraw_->Update();
-	
-	//パーティクル
-	particleManager_->Update(debugCamera_->GetMatrix());
+	//// デバッグ描画
+	//colliderDebugDraw_->Update();
+	//
+	////パーティクル
+	//particleManager_->Update(debugCamera_->GetMatrix());
 
-	// ポーズ機能
-	pause_->Update();
+	//// ポーズ機能
+	//pause_->Update();
 
-	// タイトルへ行く
-	GoToTheTitle();
+	//// タイトルへ行く
+	//GoToTheTitle();
 
 }
 
@@ -100,7 +105,7 @@ void GameScene::Draw() {
 #ifdef _DEBUG
 
 	// デバッグ描画
-	colliderDebugDraw_->Draw(viewProjection_);
+	//colliderDebugDraw_->Draw(viewProjection_);
 
 #endif // _DEBUG
 
@@ -113,7 +118,7 @@ void GameScene::Draw() {
 	directionalLight_->Draw(dxCommon_->GetCommadList());
 
 	// パーティクルはここ
-	particleManager_->Draw();
+	//particleManager_->Draw();
 
 	Model::PostDraw();
 
@@ -126,7 +131,7 @@ void GameScene::Draw() {
 
 	//背景
 	//前景スプライト描画
-	pause_->Draw();
+	//pause_->Draw();
 
 
 	// 前景スプライト描画後処理
@@ -139,6 +144,15 @@ void GameScene::Draw() {
 void GameScene::ImguiDraw(){
 #ifdef _DEBUG
 #endif // _DEBUG
+
+	//MT4
+	ImGui::Begin("MT01_01確認課題");
+	ImGui::Text("RotateMatrix");
+	for (uint32_t i = 0; i < 4; i++) {
+		ImGui::Text("%.3f,	%.3f,	%.3f,	%.3f", rotateMatrix_.m[i][0], rotateMatrix_.m[i][1], rotateMatrix_.m[i][2], rotateMatrix_.m[i][3]);
+	}
+	ImGui::End();
+
 }
 
 void GameScene::DebugCameraUpdate()
@@ -170,26 +184,26 @@ void GameScene::DebugCameraUpdate()
 void GameScene::GoToTheTitle()
 {
 
-	if (pause_->GoToTheTitle()) {
-		sceneNo = kTitle;
-	}
+	//if (pause_->GoToTheTitle()) {
+	//	sceneNo = kTitle;
+	//}
 
 }
 
 void GameScene::ModelCreate()
 {
 
-	colliderSphereModel_.reset(Model::Create("Resources/TD2_November/collider/sphere/", "sphere.obj", dxCommon_));
-	colliderBoxModel_.reset(Model::Create("Resources/TD2_November/collider/box/", "box.obj", dxCommon_));
-	particleUvcheckerModel_.reset(Model::Create("Resources/default/", "plane.obj", dxCommon_));
-	particleCircleModel_.reset(Model::Create("Resources/Particle/", "plane.obj", dxCommon_));
+	//colliderSphereModel_.reset(Model::Create("Resources/TD2_November/collider/sphere/", "sphere.obj", dxCommon_));
+	//colliderBoxModel_.reset(Model::Create("Resources/TD2_November/collider/box/", "box.obj", dxCommon_));
+	//particleUvcheckerModel_.reset(Model::Create("Resources/default/", "plane.obj", dxCommon_));
+	//particleCircleModel_.reset(Model::Create("Resources/Particle/", "plane.obj", dxCommon_));
 
 }
 
 void GameScene::MaterialCreate()
 {
 
-	colliderMaterial_.reset(Material::Create());
+	//colliderMaterial_.reset(Material::Create());
 
 }
 
@@ -197,10 +211,10 @@ void GameScene::TextureLoad()
 {
 
 	// ポーズ
-	pauseTextureHandles_ = {
-		TextureManager::Load("Resources/TD2_November/pause/pausing.png", dxCommon_),
-		TextureManager::Load("Resources/TD2_November/pause/goToTitle.png", dxCommon_),
-		TextureManager::Load("Resources/TD2_November/pause/returnToGame.png", dxCommon_),
-	};
+	//pauseTextureHandles_ = {
+	//	TextureManager::Load("Resources/TD2_November/pause/pausing.png", dxCommon_),
+	//	TextureManager::Load("Resources/TD2_November/pause/goToTitle.png", dxCommon_),
+	//	TextureManager::Load("Resources/TD2_November/pause/returnToGame.png", dxCommon_),
+	//};
 
 }
