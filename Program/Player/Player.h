@@ -3,6 +3,7 @@
 #include "../../Engine/3D/WorldTransform.h"
 #include <memory>
 #include <vector>
+#include <array>
 #include <optional>
 
 #include "../BaseCharacter/BaseCharacter.h"
@@ -27,6 +28,15 @@ public: // サブクラス
 		kRoot, // 通常状態
 		kAttack, //攻撃中
 		kDash, // ダッシュ中
+	};
+
+	// コンボフェーズ
+	enum ComboPhase {
+		kAnticipation,
+		kCharge,
+		kSwing,
+		kRecovery,
+		kCountOfComboPhase,
 	};
 
 	// 通常用ワーク
@@ -66,7 +76,11 @@ public: // サブクラス
 		//攻撃行動用の媒介変数
 		float behaviorAttackParameter_ = 0.0f;
 		// 攻撃行動用のサイクル<frame>
-		int32_t behaviorAttackPeriod_ = 60;
+		uint32_t behaviorAttackPeriod_ = 60;
+
+		uint32_t comboIndex_ = 0;
+		uint32_t inComboPhase_ = 0;
+		bool comboNext_ = false;
 
 	};
 
@@ -97,6 +111,19 @@ public: // サブクラス
 		//ぶらぶらギミックのサイクル<frame>
 		int32_t swingPeriod_ = 60;
 	};
+
+	// 攻撃用定数　時間<frame>
+	struct ConstAttack {
+		uint32_t time_[ComboPhase::kCountOfComboPhase];
+		float speed_[ComboPhase::kCountOfComboPhase];
+	};
+
+public: // 静的メンバ変数
+
+	// コンボの数
+	static const int kComboNum = 3;
+	// コンボ定数表
+	static const std::array<ConstAttack, kComboNum> kConstAttaks;
 
 public: // メンバ関数
 	/// <summary>
@@ -229,6 +256,28 @@ public: // メンバ関数
 	/// 親を失った
 	/// </summary>
 	void LostParent();
+
+public: // 攻撃関数
+
+	/// <summary>
+	/// コンボ継続判定
+	/// </summary>
+	void AttackComboContinuationJudgment();
+
+	/// <summary>
+	/// コンボフェーズ終了判定
+	/// </summary>
+	void AttackComboPhaseFinished();
+
+	/// <summary>
+	/// コンボ終了判定
+	/// </summary>
+	void AttackComboFinished();
+
+	/// <summary>
+	/// コンボ1段目
+	/// </summary>
+	void AttackCombo1st();
 
 private:
 
