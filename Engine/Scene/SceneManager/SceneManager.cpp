@@ -7,18 +7,18 @@ void SceneManager::Initialize()
 	// シーンファクトリー
 	sceneFacyory_ = SceneFactory::GetInstance();
 
+	// シーンの静的初期化
+	scene_->StaticInitialize();
+
 	// シーン(タイトル)
-	scene_.reset(sceneFacyory_->CreateScene(kTitle));
+	scene_.reset(sceneFacyory_->CreateScene(kGame));
 	scene_->Initialize();
 
 	// 初期シーン
-	currentSceneNo_ = kTitle;
+	currentSceneNo_ = kGame;
 
-	requestSeneNo_ = kTitle; // リクエストシーン
-	prevRequestSeneNo_ = kTitle; // 前のリクエストシーン
-
-	// シーンの静的初期化
-	scene_->StaticInitialize();
+	requestSeneNo_ = kGame; // リクエストシーン
+	prevRequestSeneNo_ = kGame; // 前のリクエストシーン
 
 	// シーン遷移ファクトリー
 	sceneTransitionFactory_ = SceneTransitionFactory::GetInstance();
