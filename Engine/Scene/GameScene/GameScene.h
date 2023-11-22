@@ -13,6 +13,7 @@
 #include"../../Camera/FollowCamera/FollowCamera.h"
 #include "../../Pause/Pause.h"
 #include"../../../Program/CheckPointManager/CheckPointManager.h"
+#include "../../../Program/ShadowManager/ShadowManager.h"
 
 class GameScene : public IScene
 {
@@ -201,4 +202,9 @@ private:
 	//エネミーのモデルとか
 	std::vector<Model*> enemyModels_;
 	std::vector<Material*> enemyMaterials_;
+
+	//影マネージャー
+	ShadowManager* shadowManager_;
+	std::unique_ptr<Model> shadowModel_ = nullptr;
+
 };
