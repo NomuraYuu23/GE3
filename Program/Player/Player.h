@@ -251,6 +251,8 @@ public: // アクセッサ
 
 	bool GetIsAttackJudgment() { return workAttack_.isAttackJudgment_; }
 
+	bool GetIsDead() { return isDead_; }
+
 private:
 	//全てのオブジェのUpdateMatrixをまとめたもの
 	void allUpdateMatrix();
@@ -295,6 +297,8 @@ private: // メンバ変数
 
 	// ぶらぶら
 	WorkSwing workSwing_;
+
+	bool isDead_ = false;
 
 };
 

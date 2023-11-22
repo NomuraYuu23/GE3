@@ -119,7 +119,7 @@ void Player::Update()
 	allUpdateMatrix();
 
 	if (worldTransform_.worldMatrix_.m[3][1] <= -10.0f) {
-		Restart();
+		isDead_ = true;
 	}
 
 	collider_.center_ = { worldTransform_.worldMatrix_.m[3][0], worldTransform_.worldMatrix_.m[3][1]+collider_.radius_, worldTransform_.worldMatrix_.m[3][2] };
@@ -492,6 +492,8 @@ void Player::Restart()
 	worldTransform_.direction_= workRoot_.kInitialDirection;
 	worldTransform_.parent_ = nullptr;
 	worldTransform_.UpdateMatrix();
+
+	isDead_ = false;
 
 }
 

@@ -8,6 +8,7 @@
 #include"../../../Engine/Camera/FollowCamera/FollowCamera.h"
 #include "../../Pause/Pause.h"
 #include "../../../Program/Skydome/Skydome.h"
+#include "../../../Program/EnemyManager/EnemyManager.h"
 
 class GameScene : public IScene
 {
@@ -45,6 +46,11 @@ public: //メンバ関数
 	/// タイトルへ行く
 	/// </summary>
 	void GoToTheTitle();
+
+	/// <summary>
+	/// リスタート
+	/// </summary>
+	void Restart();
 
 private: // メンバ関数
 
@@ -117,7 +123,7 @@ private:
 	std::unique_ptr<Model> goalModel_ = nullptr;
 
 	//エネミー
-	std::unique_ptr<Enemy> enemy_;
+	std::unique_ptr<EnemyManager> enemyManager_;
 
 	std::unique_ptr<Model> enemyBodyModel_ = nullptr;
 	std::unique_ptr<Model> enemyL_armModel_ = nullptr;

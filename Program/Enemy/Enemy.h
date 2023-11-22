@@ -15,7 +15,8 @@ public:
 	/// <param name="model">モデル</param>
 	/// <param name="textureHandle">テクスチャハンドル</param>
 	void Initialize(const std::vector<Model*>& models,
-		const std::vector<Material*>& materials);
+		const std::vector<Material*>& materials,
+		const Vector3& position);
 	/// <summary>
 	/// 更新
 	/// </summary>

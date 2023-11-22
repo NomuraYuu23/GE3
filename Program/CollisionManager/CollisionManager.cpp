@@ -1,7 +1,7 @@
 #include "CollisionManager.h"
 #include "Collision.h"
 
-void CollisionManager::Initialize(Player* player, FloorManager* floorManager, Goal* goal, Enemy* enemy)
+void CollisionManager::Initialize(Player* player, FloorManager* floorManager, Goal* goal, EnemyManager* enemyManager)
 {
 
 	v3Calc = Vector3Calc::GetInstance();
@@ -13,7 +13,7 @@ void CollisionManager::Initialize(Player* player, FloorManager* floorManager, Go
 
 	goal_ = goal;
 
-	enemy_ = enemy;
+	enemyManager_ = enemyManager;
 
 }
 
@@ -30,16 +30,21 @@ void CollisionManager::AllCollision()
 		
 	}
 
-	if (Collision::IsCollision(goal_->GetCollider(), player_->GetCollider()) || 
-		(Collision::IsCollision(enemy_->GetCollider(), player_->GetCollider()) &&
-			!enemy_->GetIsDead())) {
+	if (Collision::IsCollision(goal_->GetCollider(), player_->GetCollider())) {
 		player_->Restart();
-		enemy_->SetIsDead(false);
+		enemyManager_->Restart();
 	}
+	for (Enemy* enemy : enemyManager_->GetEnemies()) {
+		// あたり判定確認
+		if (Collision::IsCollision(enemy->GetCollider(), player_->GetCollider()) && !enemy->GetIsDead()) {
+			player_->Restart();
+			enemyManager_->Restart();
+		}
 
-	if (Collision::IsCollision(enemy_->GetCollider(), player_->GetAttackCollider()) &&
-		player_->GetIsAttackJudgment()) {
-		enemy_->SetIsDead(true);
+		if (Collision::IsCollision(enemy->GetCollider(), player_->GetAttackCollider()) &&
+			player_->GetIsAttackJudgment()) {
+			enemy->SetIsDead(true);
+		}
 	}
 
 }

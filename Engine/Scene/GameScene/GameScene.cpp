@@ -97,17 +97,12 @@ void GameScene::Initialize() {
 	floorManager_->AddFloor(Vector3(30.0f, 0.0f, 60.0f), Vector3(0.0f, 0.0f, 0.0f), true);
 	floorManager_->AddFloor(Vector3(60.0f, 0.0f, 60.0f), Vector3(0.0f, 0.0f, 0.0f), false);
 
-	floorManager_->AddFloor(Vector3(0.0f, 0.0f, -30.0f), Vector3(0.0f, 0.0f, 0.0f), false);
-	floorManager_->AddFloor(Vector3(0.0f, 0.0f, -50.0f), Vector3(0.0f, 0.0f, 0.0f), false);
-	floorManager_->AddFloor(Vector3(0.0f, 0.0f, -70.0f), Vector3(0.0f, 0.0f, 0.0f), false);
+	for (uint32_t i = 0; i < 5; i++) {
+		for (uint32_t j = 0; j < 5; j++) {
 
-	floorManager_->AddFloor(Vector3(20.0f, 0.0f, -30.0f), Vector3(0.0f, 0.0f, 0.0f), false);
-	floorManager_->AddFloor(Vector3(20.0f, 0.0f, -50.0f), Vector3(0.0f, 0.0f, 0.0f), false);
-	floorManager_->AddFloor(Vector3(20.0f, 0.0f, -70.0f), Vector3(0.0f, 0.0f, 0.0f), false);
-
-	floorManager_->AddFloor(Vector3(-20.0f, 0.0f, -30.0f), Vector3(0.0f, 0.0f, 0.0f), false);
-	floorManager_->AddFloor(Vector3(-20.0f, 0.0f, -50.0f), Vector3(0.0f, 0.0f, 0.0f), false);
-	floorManager_->AddFloor(Vector3(-20.0f, 0.0f, -70.0f), Vector3(0.0f, 0.0f, 0.0f), false);
+			floorManager_->AddFloor(Vector3(0.0f + j * -20.0f, 0.0f, -30.0f + i * -20.0f), Vector3(0.0f, 0.0f, 0.0f), false);
+		}
+	}
 
 	// ゴール
 	//マテリアル
@@ -121,7 +116,7 @@ void GameScene::Initialize() {
 	goal_->Initialize(goalModels, goalMaterials);
 
 	//エネミーの生成
-	enemy_ = std::make_unique<Enemy>();
+	enemyManager_ = std::make_unique<EnemyManager>();
 	enemyBodyMaterial_.reset(Material::Create());
 	enemyL_armMaterial_.reset(Material::Create());
 	enemyR_armMaterial_.reset(Material::Create());
@@ -142,15 +137,15 @@ void GameScene::Initialize() {
 	};
 
 	//エネミーの初期化
-	enemy_->Initialize(enemyModels, enemyMaterials);
+	enemyManager_->SetColliderDebugDraw(colliderDebugDraw_.get());
+	enemyManager_->Initialize(enemyModels, enemyMaterials);
 
 	// 衝突マネージャー
 	collisionManager_ = std::make_unique<CollisionManager>();
-	collisionManager_->Initialize(player_.get(), floorManager_.get(), goal_.get(), enemy_.get());
+	collisionManager_->Initialize(player_.get(), floorManager_.get(), goal_.get(), enemyManager_.get());
 
 	colliderDebugDraw_->AddCollider(&player_->GetCollider());
 	colliderDebugDraw_->AddCollider(&player_->GetAttackCollider());
-	colliderDebugDraw_->AddCollider(&enemy_->GetCollider());
 	colliderDebugDraw_->AddCollider(&goal_->GetCollider());
 
 }
@@ -185,7 +180,7 @@ void GameScene::Update(){
 	//フロア
 	floorManager_->Update();
 	//エネミー
-	enemy_->Update();
+	enemyManager_->Update();
 	// ゴール
 	goal_->Update();
 
@@ -197,6 +192,11 @@ void GameScene::Update(){
 	
 	//パーティクル
 	particleManager_->Update(debugCamera_->GetMatrix());
+
+	// リスタート
+	if (player_->GetIsDead()) {
+		Restart();
+	}
 
 	// ポーズ機能
 	pause_->Update();
@@ -234,7 +234,7 @@ void GameScene::Draw() {
 	skydome_->Draw(viewProjection_);
 	floorManager_->Draw(viewProjection_);
 	goal_->Draw(viewProjection_);
-	enemy_->Draw(viewProjection_);
+	enemyManager_->Draw(viewProjection_);
 
 #ifdef _DEBUG
 
@@ -312,6 +312,14 @@ void GameScene::GoToTheTitle()
 	if (pause_->GoToTheTitle()) {
 		sceneNo = kTitle;
 	}
+
+}
+
+void GameScene::Restart()
+{
+
+	player_->Restart();
+	enemyManager_->Restart();
 
 }
 

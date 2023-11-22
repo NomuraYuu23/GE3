@@ -9,7 +9,8 @@
 /// <param name="model">モデル</param>
 /// <param name="textureHandle">テクスチャハンドル</param>
 void Enemy::Initialize(const std::vector<Model*>& models,
-	const std::vector<Material*>& materials) {
+	const std::vector<Material*>& materials,
+	const Vector3& position) {
 
 	// nullポインタチェック
 	assert(models.front());
@@ -31,7 +32,7 @@ void Enemy::Initialize(const std::vector<Model*>& models,
 	worldTransformR_arm_.parent_ = &worldTransformBody_;
 
 	// ポジション
-	position_ = { 0.0f, 0.0f, -60.0f};
+	position_ = position;
 	worldTransform_.transform_.translate = position_;
 
 	// 移動用
