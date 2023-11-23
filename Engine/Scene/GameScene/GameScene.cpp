@@ -173,12 +173,14 @@ void GameScene::Update() {
 	
 	checkPointManager_->Update();
 
+	player_->Update();
+
 	collisionManager_->AllCollision();
 
 	// デバッグ描画
 	colliderDebugDraw_->Update();
 
-	player_->Update();
+	
 
 	enemyManager_->Update();
 

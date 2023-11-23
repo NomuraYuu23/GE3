@@ -231,7 +231,7 @@ public: // メンバ関数
 	/// <summary>
 	/// 壁との衝突
 	/// </summary>
-	void OnCollisionBox(WorldTransform* worldTransform, float boxSize);
+	void OnCollisionBox(WorldTransform* worldTransform, Vector3 boxSize, bool isMove);
 
 	/// <summary>
 	/// 回復アイテムとの衝突

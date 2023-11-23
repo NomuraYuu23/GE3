@@ -515,21 +515,50 @@ void Player::OnCollision(WorldTransform* worldTransform)
 
 }
 
-void Player::OnCollisionBox(WorldTransform* worldTransform, float boxSize){
-	if (true){
+void Player::OnCollisionBox(WorldTransform* worldTransform, Vector3 boxSize, bool isMove){
 
+	if (isMove){
+		if (worldTransform_.transform_.translate.y >= worldTransform->transform_.translate.y) {
 
-	}
-	if (velocity_.y <= 0.0f) {
+			if (!worldTransform_.parent_ ||
+				(worldTransform_.parent_ != worldTransform)) {
+				GotParent(worldTransform);
+			}
+			worldTransform_.transform_.translate.y = boxSize.y;
+			allUpdateMatrix();
 
-		if (!worldTransform_.parent_ ||
-			(worldTransform_.parent_ != worldTransform)) {
-			GotParent(worldTransform);
+			isLanding = true;
 		}
-		worldTransform_.transform_.translate.y = boxSize;
-		allUpdateMatrix();
+	}
+	else {
+		if (worldTransform_.transform_.translate.y >= worldTransform->transform_.translate.y + (boxSize.y)-(collider_.radius_ * 1.5f)) {
+			worldTransform_.transform_.translate.y = worldTransform->transform_.translate.y + boxSize.y;
+			allUpdateMatrix();
 
-		isLanding = true;
+			isLanding = true;
+		}
+		else {
+			bool isSideHit_ = false;
+			bool isVerticalHit_ = false;
+			Vector3Calc* v3Calc = Vector3Calc::GetInstance();
+			Vector3 length = (v3Calc->Subtract(worldTransform->transform_.translate, worldTransform_.transform_.translate));
+
+			if (sqrtf(length.x * length.x) > boxSize.x) {
+				isSideHit_ = true;
+				worldTransform_.transform_.translate.x -= velocity_.x;
+				allUpdateMatrix();					
+			}
+			if (sqrtf(length.z * length.z) > boxSize.z) {
+				isVerticalHit_ = true;
+				worldTransform_.transform_.translate.z -= velocity_.z;
+				allUpdateMatrix();
+			}
+			/*if (isSideHit_ && isVerticalHit_) {
+				worldTransform_.transform_.translate.z += (velocity_.z / 2.0f);
+				allUpdateMatrix();
+			}*/
+			
+		}
 	}
 }
 

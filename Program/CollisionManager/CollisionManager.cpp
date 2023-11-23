@@ -67,7 +67,7 @@ void CollisionManager::AllCollision()
 
 		// あたり判定確認
 		if (Collision::IsCollision(box_->GetCollider(), player_->GetCollider())) {
-			player_->OnCollisionBox(box_->GetWorldTransformAdress(), box_->GetSize().y);
+			player_->OnCollisionBox(box_->GetWorldTransformAdress(), box_->GetSize(), box_->GetMoveFlag());
 		}
 		/*for (RecoveryItem* item : recoveryItemManager_->GetItems_()) {
 			if (Collision::IsCollision(box_->GetCollider(), item->GetCollider())) {
@@ -86,7 +86,7 @@ void CollisionManager::AllCollision()
 	for (BreakBox* breakBox_ : breakBoxManager_->GetBoxes_()) {
 		// あたり判定確認
 		if (Collision::IsCollision(breakBox_->GetCollider(), player_->GetCollider())) {
-			player_->OnCollisionBox(breakBox_->GetWorldTransformAdress(), breakBox_->GetSize().y);
+			player_->OnCollisionBox(breakBox_->GetWorldTransformAdress(), breakBox_->GetSize(), breakBox_->GetMoveFlag());
 		}
 
 		if (Collision::IsCollision(breakBox_->GetCollider(), player_->GetExplosionCollider())) {
