@@ -126,7 +126,7 @@ public:
 	/// <param name="textureHandle"></param>
 	void SetTextureHandle(uint32_t textureHandle);
 
-	uint32_t GetTevtureHandle() { return textureHandle_; }
+	uint32_t GetTextureHandle() { return textureHandle_; }
 
 private:
 	// 頂点バッファ

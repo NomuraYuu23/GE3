@@ -7,6 +7,9 @@ void SceneManager::Initialize()
 	// シーンファクトリー
 	sceneFacyory_ = SceneFactory::GetInstance();
 
+	// シーンの静的初期化
+	scene_->StaticInitialize();
+
 	// シーン(タイトル)
 	scene_.reset(sceneFacyory_->CreateScene(kTitle));
 	scene_->Initialize();
@@ -16,9 +19,6 @@ void SceneManager::Initialize()
 
 	requestSeneNo_ = kTitle; // リクエストシーン
 	prevRequestSeneNo_ = kTitle; // 前のリクエストシーン
-
-	// シーンの静的初期化
-	scene_->StaticInitialize();
 
 	// シーン遷移ファクトリー
 	sceneTransitionFactory_ = SceneTransitionFactory::GetInstance();
