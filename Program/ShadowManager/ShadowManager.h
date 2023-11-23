@@ -15,6 +15,7 @@ public: // サブクラス
 	struct Shadow{
 		WorldTransform worldTransform_;
 		bool isDraw_;
+		WorldTransform* MakerWorldTransform_;
 	};
 
 	// 作る側
@@ -74,12 +75,12 @@ private: // メンバ関数
 private: // メンバ変数
 
 	ShadowManager() = default;
-	~ShadowManager() = default;
+	~ShadowManager();
 	ShadowManager(const ShadowManager&) = delete;
 	const ShadowManager& operator=(const ShadowManager&) = delete;
 
 	// 影
-	std::list<Shadow> shadows_;
+	std::list<Shadow*> shadows_;
 
 	// 影をつくるobj
 	std::list<Maker> makers_;
@@ -88,7 +89,7 @@ private: // メンバ変数
 	std::list<Floor> floors_;
 
 	// モデル
-	Model* model_;
+	Model* model_ = nullptr;
 
 };
 

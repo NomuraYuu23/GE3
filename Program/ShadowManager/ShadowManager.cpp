@@ -22,22 +22,24 @@ void ShadowManager::Update()
 	CheckIfItsGone();
 
 	// 影の位置(あたり判定)
-	WorldTransform* ansWorldTransform = nullptr;
+	WorldTransform* answerMakerWorldTransform = nullptr;
+	WorldTransform* answerFloorWorldTransform = nullptr;
+	float AddPositionY = 0.0f;
 	Vector3 makerPosition = {};
 	Vector3 makerRadius = {};
 	Vector3 floorPosition = {};
 	Vector3 floorRadius = {};
-	std::list<Shadow>::iterator itr = shadows_.begin();
+	std::list<Maker>::iterator itr = makers_.begin();
 
-	for (const Maker& maker : makers_) {
+	for (Shadow* shadow : shadows_) {
 		makerPosition = { 
-			maker.worldTransform_->worldMatrix_.m[3][0],
-			maker.worldTransform_->worldMatrix_.m[3][1],
-			maker.worldTransform_->worldMatrix_.m[3][2] };
+			itr->worldTransform_->worldMatrix_.m[3][0],
+			itr->worldTransform_->worldMatrix_.m[3][1],
+			itr->worldTransform_->worldMatrix_.m[3][2] };
 		makerRadius = {
-			maker.size_.x / 2.0f ,
-			maker.size_.y / 2.0f ,
-			maker.size_.z / 2.0f };
+			itr->size_.x / 2.0f ,
+			itr->size_.y / 2.0f ,
+			itr->size_.z / 2.0f };
 		for (const Floor& floor : floors_) {
 			floorPosition = {
 				floor.worldTransform_->worldMatrix_.m[3][0],
@@ -56,8 +58,10 @@ void ShadowManager::Update()
 
 				// yが m > f && f > a 
 				if (makerPosition.y >= floorPosition.y &&
-					(!ansWorldTransform || floorPosition.y > ansWorldTransform->worldMatrix_.m[3][1])) {
-					ansWorldTransform = maker.worldTransform_;
+					(!answerMakerWorldTransform || floorPosition.y > answerMakerWorldTransform->worldMatrix_.m[3][1])) {
+					answerMakerWorldTransform = itr->worldTransform_;
+					answerFloorWorldTransform = floor.worldTransform_;
+					AddPositionY = floorRadius.y;
 				}
 
 			}
@@ -65,24 +69,28 @@ void ShadowManager::Update()
 		}
 		
 		//ansWorldTransformがnullじゃない
-		if (ansWorldTransform) {
-			itr->worldTransform_ = *ansWorldTransform;
-			itr->isDraw_ = true;
+		if (answerMakerWorldTransform) {
+			shadow->worldTransform_.transform_.translate = Vector3{
+				answerMakerWorldTransform->worldMatrix_.m[3][0],
+				answerFloorWorldTransform->worldMatrix_.m[3][1] + AddPositionY + 0.1f,
+				answerMakerWorldTransform->worldMatrix_.m[3][2] };
+			shadow->isDraw_ = true;
 		}
 		else {
 			//描画しない
-			itr->isDraw_ = false;
+			shadow->isDraw_ = false;
 		}
 
 		// 後処理
 		itr++;
-		ansWorldTransform = nullptr;
+		answerMakerWorldTransform = nullptr;
+		answerFloorWorldTransform = nullptr;
 	}
 
 
 	// ワールドトランスフォーム更新
-	for (Shadow shadow : shadows_) {
-		shadow.worldTransform_.UpdateMatrix();
+	for (Shadow* shadow : shadows_) {
+		shadow->worldTransform_.UpdateMatrix();
 	}
 
 }
@@ -90,9 +98,9 @@ void ShadowManager::Update()
 void ShadowManager::Draw(const ViewProjection& viewProjection)
 {
 
-	for (Shadow shadow : shadows_) {
-		if (shadow.isDraw_) {
-			model_->Draw(shadow.worldTransform_, viewProjection);
+	for (Shadow* shadow : shadows_) {
+		if (shadow->isDraw_) {
+			model_->Draw(shadow->worldTransform_, viewProjection);
 		}
 	}
 
@@ -106,11 +114,11 @@ void ShadowManager::AddMeker(WorldTransform* worldTransform, Vector3 size)
 	maker.size_ = size;
 	makers_.push_back(maker);
 
-	Shadow shadow;
-	shadow.worldTransform_.Initialize();
-	shadow.worldTransform_.transform_.scale = size;
-	shadow.worldTransform_.parent_ = maker.worldTransform_;
-	shadow.isDraw_ = true;
+	Shadow* shadow = new Shadow();
+	shadow->worldTransform_.Initialize();
+	shadow->worldTransform_.transform_.scale = size;
+	shadow->MakerWorldTransform_ = maker.worldTransform_;
+	shadow->isDraw_ = true;
 	shadows_.push_back(shadow);
 
 }
@@ -129,9 +137,9 @@ void ShadowManager::CheckIfItsGone()
 {
 
 	// 影
-	shadows_.remove_if([](Shadow shadow) {
-		if (!shadow.worldTransform_.parent_) {
-			//return true;
+	shadows_.remove_if([](Shadow* shadow) {
+		if (!shadow->MakerWorldTransform_) {
+			return true;
 		}
 		return false;
 		});
@@ -150,6 +158,15 @@ void ShadowManager::CheckIfItsGone()
 			return true;
 		}
 		return false;
+		});
+
+}
+
+ShadowManager::~ShadowManager()
+{
+
+	shadows_.remove_if([](Shadow* shadow) {
+		return true;
 		});
 
 }
