@@ -156,6 +156,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Camera\FollowCamera\FollowCamera.cpp" />
     <ClCompile Include="Program\Goal\Goal.cpp" />
     <ClCompile Include="Engine\Collider\Plane\Plane.cpp" />
+    <ClCompile Include="Program\Particle\PlayerWalkParticle.cpp" />
     <ClCompile Include="Program\Player\Player.cpp" />
     <ClCompile Include="Program\RecoveryItemManager\RecoveryItemManager.cpp" />
     <ClCompile Include="Program\RecoveryItem\RecoveryItem.cpp" />
@@ -240,6 +241,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Camera\FollowCamera\FollowCamera.h" />
     <ClInclude Include="Program\Goal\Goal.h" />
     <ClInclude Include="Engine\Collider\Plane\Plane.h" />
+    <ClInclude Include="Program\Particle\PlayerWalkParticle.h" />
     <ClInclude Include="Program\Player\Player.h" />
     <ClInclude Include="Program\RecoveryItemManager\RecoveryItemManager.h" />
     <ClInclude Include="Program\RecoveryItem\RecoveryItem.h" />

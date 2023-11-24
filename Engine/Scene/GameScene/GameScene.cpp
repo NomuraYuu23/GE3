@@ -209,7 +209,7 @@ void GameScene::Update() {
 	colliderDebugDraw_->Update();
 	
 	//パーティクル
-	particleManager_->Update(debugCamera_->GetMatrix());
+	particleManager_->Update(followCamera_->GetMatrix());
 
 	// 影
 	shadowManager_->Update();

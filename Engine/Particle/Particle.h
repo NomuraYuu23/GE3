@@ -11,6 +11,7 @@
 
 enum PaeticleName {
 	kDefault,
+	kPlayerWalk, // プレイヤーが歩くとき
 	kCountOfPaeticleName,
 };
 
