@@ -1,7 +1,8 @@
 #include "Emitter.h"
 #include "../Math/DeltaTime.h"
+#include <cassert>
 
-void Emitter::Initialize(const TransformStructure& transform, float lifeTime, uint32_t particleModelNum)
+void Emitter::Initialize(const TransformStructure& transform, float lifeTime, uint32_t particleModelNum, uint32_t paeticleName)
 {
 
 	// トランスフォーム
@@ -22,6 +23,8 @@ void Emitter::Initialize(const TransformStructure& transform, float lifeTime, ui
 	isDead_ = false;
 
 	particleModelNum_ = particleModelNum;
+	
+	paeticleName_ = static_cast<PaeticleName>(paeticleName);
 
 }
 
@@ -53,7 +56,21 @@ std::list<Particle*> Emitter::Emit()
 
 Particle* Emitter::MakeParticle()
 {
-	Particle* particle = new Particle();
-	particle->Initialize(transform_.translate, transform_.scale);
+
+	Particle* particle = nullptr;
+
+	switch (paeticleName_)
+	{
+	case kDefault:
+		particle = new Particle();
+		particle->Initialize(transform_.translate, transform_.scale);
+		break;
+	case kCountOfPaeticleName:
+	default:
+		assert(0);
+		break;
+	}
+
 	return particle;
+
 }

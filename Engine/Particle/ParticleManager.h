@@ -102,7 +102,7 @@ public: // メンバ関数
 	/// </summary>
 	/// <param name="transform"></param>
 	/// <param name="lifeTime"></param>
-	void EmitterCreate(const TransformStructure& transform, float lifeTime, uint32_t particleModelNum);
+	void EmitterCreate(const TransformStructure& transform, float lifeTime, uint32_t particleModelNum, uint32_t paeticleName);
 
 	/// <summary>
 	/// エミッタ更新

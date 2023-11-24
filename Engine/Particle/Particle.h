@@ -9,6 +9,11 @@
 #include "../Math/Vector4.h"
 #include "ParticleForGPU.h"
 
+enum PaeticleName {
+	kDefault,
+	kCountOfPaeticleName,
+};
+
 class Particle
 {
 
