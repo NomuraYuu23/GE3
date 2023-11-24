@@ -58,6 +58,8 @@ void Player::Initialize(const std::vector<Model*>& models,
 
 	exprosionNum_ = startExprosionNum_;
 
+	particleManager_ = ParticleManager::GetInstance();
+
 }
 
 void Player::Update()
@@ -328,6 +330,10 @@ void Player::UpdateSwinggimmick()
 	worldTransformLeftLeg_.transform_.rotate.x = std::sinf(workSwing_.swingParameter_) / 2.0f;
 	worldTransformRightLeg_.transform_.rotate.x = -std::sinf(workSwing_.swingParameter_) / 2.0f;
 
+
+	if (std::fmod(workSwing_.swingParameter_ / step, 4.0f) <= 0.001f) {
+		WalkEffectInitialize();
+	}
 
 }
 
@@ -622,6 +628,19 @@ void Player::LostParent()
 	worldTransform_.transform_.translate = position;
 	worldTransform_.parent_ = nullptr;
 	worldTransform_.UpdateMatrix();
+
+}
+
+void Player::WalkEffectInitialize()
+{
+
+	TransformStructure  transformStructure = { 
+		{ 0.5f, 0.5f, 0.5f},
+		worldTransform_.transform_.rotate, 
+		{ worldTransform_.worldMatrix_.m[3][0], worldTransform_.worldMatrix_.m[3][1], worldTransform_.worldMatrix_.m[3][2]}};
+
+
+	particleManager_->EmitterCreate(transformStructure, 3, 0.01f, 0.1f, 1, 1);
 
 }
 

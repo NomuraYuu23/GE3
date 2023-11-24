@@ -7,6 +7,7 @@
 
 #include "../BaseCharacter/BaseCharacter.h"
 #include "../../Engine/Collider/Sphere/Sphere.h"
+#include "../../Engine/Particle/ParticleManager.h"
 
 class Player : public BaseCharacter
 {
@@ -260,6 +261,10 @@ public: // メンバ関数
 	/// </summary>
 	void LostParent();
 
+private: // エフェクト
+
+	void WalkEffectInitialize();
+
 public: // アクセッサ
 
 	WorldTransform* GetWorldTransformAddress() { return &worldTransform_; }
@@ -348,5 +353,9 @@ private: // メンバ変数
 
 	//アイテム関連の変数
 	int numCollectItem;
+
+	// パーティクルマネージャー
+	ParticleManager* particleManager_;
+
 };
 

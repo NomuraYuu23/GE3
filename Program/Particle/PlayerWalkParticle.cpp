@@ -7,7 +7,9 @@ void PlayerWalkParticle::Initialize(const Vector3& position, const Vector3& size
 
 	color_ = { 1.0f,1.0f,1.0f,1.0f };
 
-	speed_ = 0.2f;
+	speed_ = 0.1f;
+
+	lifeTime_ = 0.5f;
 
 }
 
