@@ -26,7 +26,7 @@
 #include <list>
 
 #include "../base/GraphicsPipelineState.h"
-#include "ParticleManager.h"
+#include "../Particle/ParticleManager.h"
 
 class Model
 {
