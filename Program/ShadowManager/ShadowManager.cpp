@@ -1,16 +1,12 @@
 #include "ShadowManager.h"
 
-// 影
-std::list<ShadowManager::Shadow> ShadowManager::shadows_;
+ShadowManager* ShadowManager::GetInstance()
+{
 
-// 影をつくるobj
-std::list<WorldTransform*> ShadowManager::makerWorldTransforms_;
+	static ShadowManager instance;
+	return &instance;
 
-// 影をうつすobj
-std::list<WorldTransform*> ShadowManager::floorWorldTransforms_;
-
-// モデル
-Model* ShadowManager::model_;
+}
 
 void ShadowManager::Initialize(Model* model)
 {
@@ -26,31 +22,33 @@ void ShadowManager::Update()
 	CheckIfItsGone();
 
 	// 影の位置(あたり判定)
-	WorldTransform* ansWorldTransform = nullptr;
+	WorldTransform* answerMakerWorldTransform = nullptr;
+	WorldTransform* answerFloorWorldTransform = nullptr;
+	float AddPositionY = 0.0f;
 	Vector3 makerPosition = {};
 	Vector3 makerRadius = {};
 	Vector3 floorPosition = {};
 	Vector3 floorRadius = {};
-	std::list<Shadow>::iterator itr = shadows_.begin();
+	std::list<Maker>::iterator itr = makers_.begin();
 
-	for (WorldTransform* makerWorldTransform : makerWorldTransforms_) {
+	for (Shadow* shadow : shadows_) {
 		makerPosition = { 
-			makerWorldTransform->worldMatrix_.m[3][0],
-			makerWorldTransform->worldMatrix_.m[3][1], 
-			makerWorldTransform->worldMatrix_.m[3][2] };
+			itr->worldTransform_->worldMatrix_.m[3][0],
+			itr->worldTransform_->worldMatrix_.m[3][1],
+			itr->worldTransform_->worldMatrix_.m[3][2] };
 		makerRadius = {
-			makerWorldTransform->transform_.scale.x / 2.0f,
-			makerWorldTransform->transform_.scale.y / 2.0f,
-			makerWorldTransform->transform_.scale.z / 2.0f };
-		for (WorldTransform* floorWorldTransform : floorWorldTransforms_) {
+			itr->size_.x / 2.0f ,
+			itr->size_.y / 2.0f ,
+			itr->size_.z / 2.0f };
+		for (const Floor& floor : floors_) {
 			floorPosition = {
-				floorWorldTransform->worldMatrix_.m[3][0],
-				floorWorldTransform->worldMatrix_.m[3][1],
-				floorWorldTransform->worldMatrix_.m[3][2] };
+				floor.worldTransform_->worldMatrix_.m[3][0],
+				floor.worldTransform_->worldMatrix_.m[3][1],
+				floor.worldTransform_->worldMatrix_.m[3][2] };
 			floorRadius = {
-				floorWorldTransform->transform_.scale.x / 2.0f ,
-				floorWorldTransform->transform_.scale.y / 2.0f,
-				floorWorldTransform->transform_.scale.z / 2.0f };
+				floor.size_.x / 2.0f ,
+				floor.size_.y / 2.0f ,
+				floor.size_.z / 2.0f };
 
 			// xとzで当たってるか
 			if (makerPosition.x + makerRadius.x > floorPosition.x - floorRadius.x &&
@@ -59,9 +57,11 @@ void ShadowManager::Update()
 				makerPosition.z - makerRadius.z < floorPosition.z + floorRadius.z ) {
 
 				// yが m > f && f > a 
-				if (makerPosition.y > floorPosition.y &&
-					(!ansWorldTransform || floorPosition.y > ansWorldTransform->worldMatrix_.m[3][1])) {
-					ansWorldTransform = floorWorldTransform;
+				if (makerPosition.y >= floorPosition.y &&
+					(!answerMakerWorldTransform || floorPosition.y > answerMakerWorldTransform->worldMatrix_.m[3][1])) {
+					answerMakerWorldTransform = itr->worldTransform_;
+					answerFloorWorldTransform = floor.worldTransform_;
+					AddPositionY = floorRadius.y;
 				}
 
 			}
@@ -69,25 +69,28 @@ void ShadowManager::Update()
 		}
 		
 		//ansWorldTransformがnullじゃない
-		if (ansWorldTransform) {
-			itr->worldTransform_ = *ansWorldTransform;
-			itr->worldTransform_.transform_.translate.y += floorRadius.y;
-			itr->isDraw_ = true;
+		if (answerMakerWorldTransform) {
+			shadow->worldTransform_.transform_.translate = Vector3{
+				answerMakerWorldTransform->worldMatrix_.m[3][0],
+				answerFloorWorldTransform->worldMatrix_.m[3][1] + AddPositionY + 0.1f,
+				answerMakerWorldTransform->worldMatrix_.m[3][2] };
+			shadow->isDraw_ = true;
 		}
 		else {
 			//描画しない
-			itr->isDraw_ = false;
+			shadow->isDraw_ = false;
 		}
 
 		// 後処理
 		itr++;
-		ansWorldTransform = nullptr;
+		answerMakerWorldTransform = nullptr;
+		answerFloorWorldTransform = nullptr;
 	}
 
 
 	// ワールドトランスフォーム更新
-	for (Shadow shadow : shadows_) {
-		shadow.worldTransform_.UpdateMatrix();
+	for (Shadow* shadow : shadows_) {
+		shadow->worldTransform_.UpdateMatrix();
 	}
 
 }
@@ -95,30 +98,38 @@ void ShadowManager::Update()
 void ShadowManager::Draw(const ViewProjection& viewProjection)
 {
 
-	for (Shadow shadow : shadows_) {
-		if (shadow.isDraw_) {
-			model_->Draw(shadow.worldTransform_, viewProjection);
+	for (Shadow* shadow : shadows_) {
+		if (shadow->isDraw_) {
+			model_->Draw(shadow->worldTransform_, viewProjection);
 		}
 	}
 
 }
 
-void ShadowManager::AddMeker(WorldTransform* worldTransform)
+void ShadowManager::AddMeker(WorldTransform* worldTransform, Vector3 size)
 {
 
-	makerWorldTransforms_.push_back(worldTransform);
-	Shadow shadow;
-	shadow.worldTransform_.Initialize();
-	shadow.worldTransform_.parent_ = worldTransform;
-	shadow.isDraw_ = true;
+	Maker maker;
+	maker.worldTransform_ = worldTransform;
+	maker.size_ = size;
+	makers_.push_back(maker);
+
+	Shadow* shadow = new Shadow();
+	shadow->worldTransform_.Initialize();
+	shadow->worldTransform_.transform_.scale = size;
+	shadow->MakerWorldTransform_ = maker.worldTransform_;
+	shadow->isDraw_ = true;
 	shadows_.push_back(shadow);
 
 }
 
-void ShadowManager::AddFloor(WorldTransform* worldTransform)
+void ShadowManager::AddFloor(WorldTransform* worldTransform, Vector3 size)
 {
 
-	floorWorldTransforms_.push_back(worldTransform);
+	Floor floor;
+	floor.worldTransform_ = worldTransform;
+	floor.size_ = size;
+	floors_.push_back(floor);
 
 }
 
@@ -126,27 +137,36 @@ void ShadowManager::CheckIfItsGone()
 {
 
 	// 影
-	shadows_.remove_if([](Shadow shadow) {
-		if (!shadow.worldTransform_.parent_) {
+	shadows_.remove_if([](Shadow* shadow) {
+		if (!shadow->MakerWorldTransform_) {
 			return true;
 		}
 		return false;
 		});
 
 	// 影をつくるobj
-	makerWorldTransforms_.remove_if([](WorldTransform* worldTransform) {
-		if (!worldTransform) {
+	makers_.remove_if([](Maker maker) {
+		if (!maker.worldTransform_) {
 			return true;
 		}
 		return false;
 		});
 
 	// 影をうつすobj
-	floorWorldTransforms_.remove_if([](WorldTransform* worldTransform) {
-		if (!worldTransform) {
+	floors_.remove_if([](Floor floor) {
+		if (!floor.worldTransform_) {
 			return true;
 		}
 		return false;
+		});
+
+}
+
+ShadowManager::~ShadowManager()
+{
+
+	shadows_.remove_if([](Shadow* shadow) {
+		return true;
 		});
 
 }

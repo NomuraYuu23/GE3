@@ -104,7 +104,7 @@ public:
 	/// <param name="textureHandle"></param>
 	void SetTextureHandle(uint32_t textureHandle);
 
-	uint32_t GetTevtureHandle() { return textureHandle_; }
+	uint32_t GetTextureHandle() { return textureHandle_; }
 
 	/// <summary>
 	/// 描画
@@ -177,6 +177,8 @@ public: // アクセッサ(ワールドトランスフォーム)
 	Vector2 GetTextureLeftTop() { return textureLeftTop_; }
 	// テクスチャ初期サイズ
 	Vector2 GetTextureInitSize() { return textureInitSize_; }
+
+	bool GetIsInvisible() { return isInvisible_; }
 
 private: // メンバ変数(ワールドトランスフォーム)
 

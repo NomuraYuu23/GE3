@@ -142,16 +142,26 @@ void GameScene::Initialize() {
 		"Stage4"
 	};
 
-	/// aaaaa
-	///bbbbb
+	stageName_ = stages_[0].c_str();
 
 	//パーティクル
 	particleManager_ = ParticleManager::GetInstance();
-	particleManager_->ModelCreate();
+	std::array<Model*, ParticleManager::ParticleModel::kCountofParticleModel> particleModel;
+	particleModel[ParticleManager::ParticleModel::kUvChecker] = particleUvcheckerModel_.get();
+	particleModel[ParticleManager::ParticleModel::kCircle] = particleCircleModel_.get();
+	particleManager_->ModelCreate(particleModel);
 
 	isDebugCameraActive_ = false;
 
-	stageName_ = stages_[0].c_str();
+	shadowManager_ = ShadowManager::GetInstance();
+	shadowManager_->Initialize(shadowModel_.get());
+	Vector3 playerSize = {
+		player_->GetColliderRadius() * 2.0f,
+		player_->GetColliderRadius() * 2.0f,
+		player_->GetColliderRadius() * 2.0f
+	};
+	shadowManager_->AddMeker(player_->GetWorldTransformAddress(), playerSize);
+
 }
 
 /// <summary>
@@ -201,6 +211,9 @@ void GameScene::Update() {
 	//パーティクル
 	particleManager_->Update(debugCamera_->GetMatrix());
 
+	// 影
+	shadowManager_->Update();
+
 	// ポーズ機能
 	pause_->Update();
 
@@ -242,6 +255,8 @@ void GameScene::Draw() {
 	player_->Draw(viewProjection_);
 	enemyManager_->Draw(viewProjection_);
 
+	shadowManager_->Draw(viewProjection_);
+
 #ifdef _DEBUG
 
 	// デバッグ描画
@@ -249,10 +264,20 @@ void GameScene::Draw() {
 
 #endif // _DEBUG
 
+	Model::PostDraw();
+
+#pragma region パーティクル描画
+	Model::PreParticleDraw(dxCommon_->GetCommadList(), viewProjection_);
+
+	//光源
+	directionalLight_->Draw(dxCommon_->GetCommadList());
+
 	// パーティクルはここ
-	particleManager_->Draw(viewProjection_);
+	particleManager_->Draw();
 
 	Model::PostDraw();
+
+#pragma endregion
 
 #pragma region 前景スプライト描画
 	// 前景スプライト描画前処理
@@ -529,6 +554,13 @@ void GameScene::ModelCreate()
 	enemyModels_.push_back(Model::Create("Resources/AL4/enemy_Body/", "enemy_Body.obj", dxCommon_));
 	enemyModels_.push_back(Model::Create("Resources/AL4/enemy_Arm/", "enemy_Arm.obj", dxCommon_));
 	enemyModels_.push_back(Model::Create("Resources/AL4/enemy_Arm/", "enemy_Arm.obj", dxCommon_));
+
+	// パーティクルモデル
+	particleUvcheckerModel_.reset(Model::Create("Resources/default/", "plane.obj", dxCommon_));
+	particleCircleModel_.reset(Model::Create("Resources/Particle/", "plane.obj", dxCommon_));
+
+	// 影モデル
+	shadowModel_.reset(Model::Create("Resources/TD2_November/shadow/", "shadow.obj", dxCommon_));
 
 }
 
