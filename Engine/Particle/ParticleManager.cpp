@@ -138,11 +138,12 @@ void ParticleManager::BillBoardUpdate(const Matrix4x4& cameraMatrix4x4)
 
 }
 
-void ParticleManager::EmitterCreate(const TransformStructure& transform, float lifeTime, uint32_t particleModelNum, uint32_t paeticleName)
+void ParticleManager::EmitterCreate(const TransformStructure& transform, uint32_t instanceCount,
+	float frequency, float lifeTime, uint32_t particleModelNum, uint32_t paeticleName)
 {
 
 	Emitter* emitter = new Emitter();
-	emitter->Initialize(transform, lifeTime, particleModelNum, paeticleName);
+	emitter->Initialize(transform, instanceCount, frequency, lifeTime, particleModelNum, paeticleName);
 
 	emitters_.push_back(emitter);
 

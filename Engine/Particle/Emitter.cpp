@@ -2,15 +2,16 @@
 #include "../Math/DeltaTime.h"
 #include <cassert>
 
-void Emitter::Initialize(const TransformStructure& transform, float lifeTime, uint32_t particleModelNum, uint32_t paeticleName)
+void Emitter::Initialize(const TransformStructure& transform, uint32_t instanceCount,
+	float frequency, float lifeTime, uint32_t particleModelNum, uint32_t paeticleName)
 {
 
 	// トランスフォーム
 	transform_ = transform;
 	// 発生させるインスタンス数
-	instanceCount_ = 4;
+	instanceCount_ = instanceCount;
 	// 発生頻度
-	frequency_ = 0.5;
+	frequency_ = frequency;
 	// 発生時間
 	frequencyTime_ = 0.0f;
 	// 生存時間

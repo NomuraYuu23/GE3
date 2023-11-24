@@ -11,7 +11,8 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(const TransformStructure& transform, float lifeTime, uint32_t particleModelNum, uint32_t paeticleName);
+	void Initialize(const TransformStructure& transform, uint32_t instanceCount,
+		float frequency, float lifeTime, uint32_t particleModelNum, uint32_t paeticleName);
 
 	/// <summary>
 	/// 更新
