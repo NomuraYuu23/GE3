@@ -63,6 +63,9 @@ public: //メンバ関数
 
 private: // メンバ関数
 
+	/// <summary>
+	/// 回転
+	/// </summary>
 	void Rotation();
 
 public: // アクセッサ
