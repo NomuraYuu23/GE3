@@ -16,12 +16,9 @@ public: // サブクラス
 	// モデル
 	enum class ModelIndex {
 		kModelIndexBody = 0,
-		//kModelIndexHead = 1,
-		//kModelIndexL_arm = 2,
-		//kModelIndexR_arm = 3,
-		//kModelIndexWeapon = 4,
-		//kModelIndexExprode = 5
-		kModelIndexExprode = 1
+		kModelIndexLeftLeg = 1,
+		lModelIndexRightLeg = 2,
+		kModelIndexExprode = 3
 	};
 
 	// 振るまい
@@ -94,6 +91,10 @@ public: // サブクラス
 		float swingParameter_ = 0.0f;
 		//ぶらぶらギミックのサイクル<frame>
 		int32_t swingPeriod_ = 60;
+		// 継続するか
+		bool continue_ = false;
+		// ギミック中か
+		bool doing_ = false;
 	};
 
 public: // メンバ関数
@@ -321,10 +322,8 @@ private: // メンバ変数
 
 	//ワールド変換データ
 	WorldTransform worldTransformBody_;
-	//WorldTransform worldTransformHead_;
-	//WorldTransform worldTransformL_arm_;
-	//WorldTransform worldTransformR_arm_;
-	//WorldTransform worldTransformWeapon_;
+	WorldTransform worldTransformLeftLeg_;
+	WorldTransform worldTransformRightLeg_;
 	WorldTransform worldTransformExprode_;
 
 	//振るまい

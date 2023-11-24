@@ -534,11 +534,9 @@ void GameScene::ModelCreate()
 	//フロアマネージャー
 	floorModel_.reset(Model::Create("Resources/AL4/floor/", "floor.obj", dxCommon_));
 	//プレイヤー関連
-	playerModels_.push_back(Model::Create("Resources/TD2_November/Player/", "playerBomb.obj", dxCommon_));
-	//playerModels_.push_back(Model::Create("Resources/AL4/float_Head/", "float_Head.obj", dxCommon_));
-	//playerModels_.push_back(Model::Create("Resources/AL4/float_L_arm/", "float_L_arm.obj", dxCommon_));
-	//playerModels_.push_back(Model::Create("Resources/AL4/float_R_arm/", "float_R_arm.obj", dxCommon_));
-	//playerModels_.push_back(Model::Create("Resources/AL4/player_Weapon/", "player_Weapon.obj", dxCommon_));
+	playerModels_.push_back(Model::Create("Resources/TD2_November/Player/playerBody", "playerBody.obj", dxCommon_));
+	playerModels_.push_back(Model::Create("Resources/TD2_November/Player/playerLeftLeg", "playerLeftLeg.obj", dxCommon_));
+	playerModels_.push_back(Model::Create("Resources/TD2_November/Player/playerRightLeg", "playerRightLeg.obj", dxCommon_));
 	playerModels_.push_back(Model::Create("Resources/TD2_November/exprode/", "sphere.obj", dxCommon_));
 	//ボックスマネージャー
 	boxModel_.reset(Model::Create("Resources/TD2_November/floorBox/", "box.obj", dxCommon_));

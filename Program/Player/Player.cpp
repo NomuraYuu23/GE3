@@ -25,11 +25,21 @@ void Player::Initialize(const std::vector<Model*>& models,
 	worldTransformBody_.transform_.translate.y = 2.5f;
 	worldTransformBody_.transform_.scale = { 5.0f,5.0f,5.0f };
 
+	worldTransformLeftLeg_.Initialize();
+	worldTransformLeftLeg_.parent_ = &worldTransform_;
+	worldTransformLeftLeg_.transform_.translate.y = 2.5f;
+	worldTransformLeftLeg_.transform_.scale = { 5.0f,5.0f,5.0f };
+
+	worldTransformRightLeg_.Initialize();
+	worldTransformRightLeg_.parent_ = &worldTransform_;
+	worldTransformRightLeg_.transform_.translate.y = 2.5f;
+	worldTransformRightLeg_.transform_.scale = { 5.0f,5.0f,5.0f };
+
 	////浮遊ギミック
-	//InitializeFloatinggimmick();
+	InitializeFloatinggimmick();
 
 	////ぶらぶらギミック
-	//InitializeSwinggimmick();
+	InitializeSwinggimmick();
 
 	velocity_ = {0.0f,0.0f,0.0f};
 
@@ -107,6 +117,8 @@ void Player::Draw(const ViewProjection& viewProjection)
 	DrawImgui();
 
 	models_[int(ModelIndex::kModelIndexBody)]->Draw(worldTransformBody_, viewProjection);
+	models_[int(ModelIndex::kModelIndexLeftLeg)]->Draw(worldTransformLeftLeg_, viewProjection);
+	models_[int(ModelIndex::lModelIndexRightLeg)]->Draw(worldTransformRightLeg_, viewProjection);
 	models_[int(ModelIndex::kModelIndexExprode)]->Draw(worldTransformExprode_, viewProjection);
 
 }
@@ -119,9 +131,6 @@ void Player::BehaviorRootInitialize()
 
 	// ぶらぶらギミック
 	InitializeSwinggimmick();
-
-	//武器角度
-	//worldTransformWeapon_.transform_.rotate.x = 0.0f;
 
 }
 
@@ -145,7 +154,9 @@ void Player::BehaviorRootUpdate()
 	//UpdateFloatinggimmick();
 
 	// ぶらぶらギミック
-	UpdateSwinggimmick();
+	if (workSwing_.doing_) {
+		UpdateSwinggimmick();
+	}
 
 }
 
@@ -289,7 +300,7 @@ void Player::InitializeSwinggimmick()
 	// ぶらぶらアニメーションの媒介変数
 	workSwing_.swingParameter_ = 0.0f;
 	// ぶらぶらアニメーションのサイクル<frame>
-	workSwing_.swingPeriod_ = 60;
+	workSwing_.swingPeriod_ = 30;
 
 }
 
@@ -304,10 +315,18 @@ void Player::UpdateSwinggimmick()
 	// パラメータを1ステップ分加算
 	workSwing_.swingParameter_ += step;
 	// 2πを超えたら0に戻す
-	workSwing_.swingParameter_ = std::fmod(workSwing_.swingParameter_, 2.0f * pi);
+	if (workSwing_.swingParameter_ >= 2.0f * pi){
+		if (workSwing_.continue_) {
+			workSwing_.swingParameter_ = std::fmod(workSwing_.swingParameter_, 2.0f * pi);
+		}
+		else {
+			workSwing_.swingParameter_ = 0.0f;
+			workSwing_.doing_ = false;
+		}
+	}
 
-	//worldTransformL_arm_.transform_.rotate.x = std::sinf(workSwing_.swingParameter_) / 2.0f;
-	//worldTransformR_arm_.transform_.rotate.x = std::sinf(workSwing_.swingParameter_) / 2.0f;
+	worldTransformLeftLeg_.transform_.rotate.x = std::sinf(workSwing_.swingParameter_) / 2.0f;
+	worldTransformRightLeg_.transform_.rotate.x = -std::sinf(workSwing_.swingParameter_) / 2.0f;
 
 
 }
@@ -366,11 +385,25 @@ void Player::Walk()
 			// 移動方向に見た目を合わせる(Y軸)
 			workRoot_.targetAngle_ = std::atan2f(move.x, move.z);
 
+			// アニメーション
+			if (workSwing_.doing_) {
+				workSwing_.continue_ = true;
+			}
+			else {
+				workSwing_.doing_ = true;
+			}
+
 		}
 		else {
 			// 移動
 			velocity_.x = 0.0f;
 			velocity_.z = 0.0f;
+			
+			// アニメーション
+			if (workSwing_.doing_) {
+				workSwing_.continue_ = false;
+			}
+
 		}
 
 		// 角度補間
@@ -595,10 +628,8 @@ void Player::LostParent()
 void Player::allUpdateMatrix(){
 	worldTransform_.UpdateMatrix();
 	worldTransformBody_.UpdateMatrix();
-	//worldTransformHead_.UpdateMatrix();
-	//worldTransformL_arm_.UpdateMatrix();
-	//worldTransformR_arm_.UpdateMatrix();
-	//worldTransformWeapon_.UpdateMatrix();
+	worldTransformLeftLeg_.UpdateMatrix();
+	worldTransformRightLeg_.UpdateMatrix();
 	worldTransformExprode_.UpdateMatrix();
 }
 
