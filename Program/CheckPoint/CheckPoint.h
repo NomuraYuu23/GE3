@@ -33,6 +33,11 @@ public: //メンバ関数
 	/// 衝突
 	/// </summary>
 	void OnCollisiin();
+
+private: // メンバ関数
+
+	void SmokeEffect();
+
 public: // アクセッサ
 
 	WorldTransform GetWorldTransform() { return worldTransform_; }
@@ -76,5 +81,9 @@ private:
 
 	//起動させたかどうか
 	bool isStarting_;
+
+	// スモークアニメーション
+	float SmokeElapsedTime_;
+
 };
 

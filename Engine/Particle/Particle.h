@@ -14,6 +14,7 @@ enum PaeticleName {
 	kPlayerWalk, // プレイヤーが歩くとき
 	kPlayerJump, // プレイヤー飛ぶとき
 	kPlayerExplosion, // プレイヤーが爆発するとき
+	kSmoke, // 狼煙
 	kCountOfPaeticleName,
 };
 

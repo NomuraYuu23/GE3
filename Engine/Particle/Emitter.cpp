@@ -4,6 +4,7 @@
 #include "../../Program/Particle/PlayerWalkParticle.h"
 #include "../../Program/Particle/PlayerJumpParticle.h"
 #include "../../Program/Particle/PlayerExplosionParticle.h"
+#include "../../Program/Particle/SmokeParticle.h"
 
 void Emitter::Initialize(const TransformStructure& transform, uint32_t instanceCount,
 	float frequency, float lifeTime, uint32_t particleModelNum, uint32_t paeticleName)
@@ -79,6 +80,10 @@ Particle* Emitter::MakeParticle()
 		break;
 	case kPlayerExplosion:
 		particle = new PlayerExplosionParticle();
+		particle->Initialize(transform_.translate, transform_.scale);
+		break;
+	case kSmoke:
+		particle = new SmokeParticle();
 		particle->Initialize(transform_.translate, transform_.scale);
 		break;
 	case kCountOfPaeticleName:
