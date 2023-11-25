@@ -7,8 +7,8 @@
 // コンボ定数表
 const std::array<Player::ConstAttack, Player::kComboNum> Player::kConstAttaks = {
 	{
-		{ { 10, 10, 10, 10}, { 0.0f, 0.0f, 0.2f, 0.0f} },
-		{ { 5, 5, 5, 5}, { 0.2f, 0.0f, 0.0f, 0.0f} },
+		{ { 20, 20, 20, 20}, { 0.0f, 0.0f, 0.2f, 0.0f} },
+		{ { 10, 10, 10, 10}, { 0.2f, 0.0f, 0.0f, 0.0f} },
 		{ { 10, 10, 60, 30}, { 0.0f, 0.0f, 0.2f, 0.0f} },
 	}
 };
@@ -146,8 +146,9 @@ void Player::Draw(const ViewProjection& viewProjection)
 	models_[int(ModelIndex::kModelIndexHead)]->Draw(worldTransformHead_, viewProjection);
 	models_[int(ModelIndex::kModelIndexL_arm)]->Draw(worldTransformL_arm_, viewProjection);
 	models_[int(ModelIndex::kModelIndexR_arm)]->Draw(worldTransformR_arm_, viewProjection);
-	models_[int(ModelIndex::kModelIndexWeapon)]->Draw(worldTransformWeapon_, viewProjection);
-
+	if (behavior_ == Behavior::kAttack && workAttack_.inComboPhase_ < kRecovery) {
+		models_[int(ModelIndex::kModelIndexWeapon)]->Draw(worldTransformWeapon_, viewProjection);
+	}
 
 }
 
@@ -197,7 +198,6 @@ void Player::BehaviorAttackInitialize()
 	workAttack_.behaviorAttackParameter_ = 0.0f;
 	workAttack_.attackCollider_->center_ = { -100.0f,-100.0f,-100.0f };
 	workAttack_.attackCollider_->worldTransformUpdate();
-
 
 	workAttack_.behaviorAttackPeriod_ =	kConstAttaks[workAttack_.comboIndex_].time_[workAttack_.inComboPhase_];
 
@@ -615,6 +615,11 @@ void Player::AttackCombo1st()
 	// エンド
 	Vector3 endRotate = { 0.0F, 0.0f, 0.0f };
 
+	// 武器
+	Vector3 startWeaponRotate = { 0.0f, 0.0f, 0.0f };
+	// エンド
+	Vector3 endWeaponRotate = { 0.0F, 0.0f, 0.0f };
+
 	switch (inComboPhase)
 	{
 	case Player::kAnticipation:
@@ -624,6 +629,9 @@ void Player::AttackCombo1st()
 		endRotate = { -pi - pi / 8.0f, 0.0f, 0.0f };
 		worldTransformL_arm_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseOutQuart, startRotate, endRotate, workAttack_.behaviorAttackParameter_);
 		worldTransformR_arm_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseOutQuart, startRotate, endRotate, workAttack_.behaviorAttackParameter_);
+		startWeaponRotate = { pi, 0.0f, 0.0f };
+		endWeaponRotate = { -pi - pi / 8.0f + pi, 0.0f, 0.0f };
+		worldTransformWeapon_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseOutQuart, startWeaponRotate, endWeaponRotate, workAttack_.behaviorAttackParameter_);
 
 		break;
 	case Player::kCharge:
@@ -634,6 +642,9 @@ void Player::AttackCombo1st()
 		endRotate = { -pi / 2.0f, 0.0f, 0.0f };
 		worldTransformL_arm_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseOutQuart, startRotate, endRotate, workAttack_.behaviorAttackParameter_);
 		worldTransformR_arm_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseOutQuart, startRotate, endRotate, workAttack_.behaviorAttackParameter_);
+		startWeaponRotate = { -pi - pi / 8.0f + pi, 0.0f, 0.0f };
+		endWeaponRotate = { -pi / 2.0f + pi, 0.0f, 0.0f };
+		worldTransformWeapon_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseOutQuart, startWeaponRotate, endWeaponRotate, workAttack_.behaviorAttackParameter_);
 
 		break;
 	case Player::kRecovery:
@@ -642,6 +653,9 @@ void Player::AttackCombo1st()
 		endRotate = { 0.0f, 0.0f, 0.0f };
 		worldTransformL_arm_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseInQuart, startRotate, endRotate, workAttack_.behaviorAttackParameter_);
 		worldTransformR_arm_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseInQuart, startRotate, endRotate, workAttack_.behaviorAttackParameter_);
+		startWeaponRotate = { -pi / 2.0f, 0.0f, 0.0f };
+		endWeaponRotate = { pi, 0.0f, 0.0f };
+		worldTransformWeapon_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseOutQuart, startWeaponRotate, endWeaponRotate, workAttack_.behaviorAttackParameter_);
 
 		break;
 	case Player::kCountOfComboPhase:
@@ -695,6 +709,11 @@ void Player::AttackCombo2nd()
 	// エンド
 	Vector3 endRotate = { 0.0F, 0.0f, 0.0f };
 
+	// 武器
+	Vector3 startWeaponRotate = { 0.0f, 0.0f, 0.0f };
+	// エンド
+	Vector3 endWeaponRotate = { 0.0F, 0.0f, 0.0f };
+
 	switch (inComboPhase)
 	{
 	case Player::kAnticipation:
@@ -706,6 +725,10 @@ void Player::AttackCombo2nd()
 		worldTransformR_arm_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseOutQuart, startRotate, endRotate, workAttack_.behaviorAttackParameter_);
 		worldTransformBody_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseOutQuart, startRotate, endRotate, workAttack_.behaviorAttackParameter_);
 		worldTransformBody_.transform_.rotate.x = 0.0f;
+
+		startWeaponRotate = { pi, 0.0f, 0.0f };
+		endWeaponRotate = { -pi / 2.0f + pi,  -pi / 2.0f, 0.0f };
+		worldTransformWeapon_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseOutQuart, startWeaponRotate, endWeaponRotate, workAttack_.behaviorAttackParameter_);
 
 		break;
 	case Player::kCharge:
@@ -719,6 +742,10 @@ void Player::AttackCombo2nd()
 		worldTransformBody_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseOutQuart, startRotate, endRotate, workAttack_.behaviorAttackParameter_);
 		worldTransformBody_.transform_.rotate.x = 0.0f;
 
+		startWeaponRotate = { -pi / 2.0f + pi,  -pi / 2.0f, 0.0f };
+		endWeaponRotate = { -pi / 2.0f + pi,  pi / 2.0f, 0.0f };
+		worldTransformWeapon_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseOutQuart, startWeaponRotate, endWeaponRotate, workAttack_.behaviorAttackParameter_);
+
 		break;
 	case Player::kRecovery:
 
@@ -728,6 +755,10 @@ void Player::AttackCombo2nd()
 		worldTransformR_arm_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseInQuart, startRotate, endRotate, workAttack_.behaviorAttackParameter_);
 		worldTransformBody_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseOutQuart, startRotate, endRotate, workAttack_.behaviorAttackParameter_);
 		worldTransformBody_.transform_.rotate.x = 0.0f;
+
+		startWeaponRotate = { -pi / 2.0f + pi,  pi / 2.0f, 0.0f };
+		endWeaponRotate = { pi, 0.0f, 0.0f };
+		worldTransformWeapon_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseOutQuart, startWeaponRotate, endWeaponRotate, workAttack_.behaviorAttackParameter_);
 
 		break;
 	case Player::kCountOfComboPhase:
@@ -780,6 +811,10 @@ void Player::AttackCombo3rd()
 	Vector3 startRotate = { 0.0f, 0.0f, 0.0f };
 	// エンド
 	Vector3 endRotate = { 0.0F, 0.0f, 0.0f };
+	// 武器
+	Vector3 startWeaponRotate = { 0.0f, 0.0f, 0.0f };
+	// エンド
+	Vector3 endWeaponRotate = { 0.0F, 0.0f, 0.0f };
 
 	switch (inComboPhase)
 	{
@@ -793,6 +828,10 @@ void Player::AttackCombo3rd()
 		worldTransformBody_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseOutQuart, startRotate, endRotate, workAttack_.behaviorAttackParameter_);
 		worldTransformBody_.transform_.rotate.x = 0.0f;
 
+		startWeaponRotate = { pi,  0.0f, 0.0f };
+		endWeaponRotate = { -pi / 2.0f + pi, 0.0f, 0.0f };
+		worldTransformWeapon_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseOutQuart, startWeaponRotate, endWeaponRotate, workAttack_.behaviorAttackParameter_);
+
 		break;
 	case Player::kCharge:
 		break;
@@ -805,6 +844,10 @@ void Player::AttackCombo3rd()
 		worldTransformBody_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseOutQuart, startRotate, endRotate, workAttack_.behaviorAttackParameter_);
 		worldTransformBody_.transform_.rotate.x = 0.0f;
 
+		startWeaponRotate = { -pi / 2.0f + pi,  0.0f, 0.0f };
+		endWeaponRotate = { -pi / 2.0f + pi, pi * 6.0f, 0.0f };
+		worldTransformWeapon_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseOutQuart, startWeaponRotate, endWeaponRotate, workAttack_.behaviorAttackParameter_);
+
 		break;
 	case Player::kRecovery:
 
@@ -814,6 +857,10 @@ void Player::AttackCombo3rd()
 		worldTransformR_arm_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseInQuart, startRotate, endRotate, workAttack_.behaviorAttackParameter_);
 		worldTransformBody_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseOutQuart, startRotate, endRotate, workAttack_.behaviorAttackParameter_);
 		worldTransformBody_.transform_.rotate.x = 0.0f;
+
+		startWeaponRotate = { -pi / 2.0f + pi,  0.0f, 0.0f };
+		endWeaponRotate = { pi, 0.0f, 0.0f };
+		worldTransformWeapon_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseOutQuart, startWeaponRotate, endWeaponRotate, workAttack_.behaviorAttackParameter_);
 
 		break;
 	case Player::kCountOfComboPhase:

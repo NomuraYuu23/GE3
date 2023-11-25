@@ -37,7 +37,7 @@ void GameScene::Initialize() {
 	emitter.translate.x = 3.0f;
 	particleManager_->EmitterCreate(emitter, 300.0f, ParticleManager::ParticleModel::kCircle);
 
-	isDebugCameraActive_ = true;
+	isDebugCameraActive_ = false;
 
 	//Player
 	//マテリアル
