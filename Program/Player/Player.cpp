@@ -7,9 +7,9 @@
 // コンボ定数表
 const std::array<Player::ConstAttack, Player::kComboNum> Player::kConstAttaks = {
 	{
-		{ { 60, 30, 60, 60}, { 0.0f, 0.0f, 0.2f, 0.0f} },
-		{ { 60, 30, 120, 60}, { 0.2f, 0.0f, 0.0f, 0.0f} },
-	//{	 { 15, 10, 15, 30}, { 0.2f, 0.0f, 0.0f, 0.0f} },
+		{ { 10, 10, 10, 10}, { 0.0f, 0.0f, 0.2f, 0.0f} },
+		{ { 5, 5, 5, 5}, { 0.2f, 0.0f, 0.0f, 0.0f} },
+		{ { 10, 10, 60, 30}, { 0.0f, 0.0f, 0.2f, 0.0f} },
 	}
 };
 
@@ -206,11 +206,8 @@ void Player::BehaviorAttackInitialize()
 void Player::BehaviorAttackUpdate()
 {
 
-	//π
-	const float pi = 3.14f;
-
 	// 1フレームでのパラメータ加算値
-	const float step = 2.0f * pi / workAttack_.behaviorAttackPeriod_;
+	const float step = 1.0f / static_cast<float>(workAttack_.behaviorAttackPeriod_);
 
 	// パラメータを1ステップ分加算
 	workAttack_.behaviorAttackParameter_ += step;
@@ -222,7 +219,7 @@ void Player::BehaviorAttackUpdate()
 		AttackCombo2nd();
 	}
 	else {
-		//AttackCombo3nd();
+		AttackCombo3rd();
 	}
 
 	AttackComboContinuationJudgment();
@@ -565,12 +562,12 @@ void Player::AttackComboPhaseFinished()
 {
 
 	if (workAttack_.behaviorAttackParameter_ >= 1.0f) {
-		workAttack_.behaviorAttackParameter_ = 0.0f;
 		workAttack_.inComboPhase_++;
+		BehaviorAttackInitialize();
 		if (workAttack_.inComboPhase_ == static_cast<uint32_t>(ComboPhase::kCountOfComboPhase)) {
 			AttackComboFinished();
 			workAttack_.isAttackJudgment_ = false;
-			workAttack_.attackCollider_->center_ = { -2048.0f, -2048.0f,	-2048.0f };
+			workAttack_.attackCollider_->center_ = { -2048.0f, -2048.0f, -2048.0f };
 			workAttack_.attackCollider_->worldTransformUpdate();
 		}
 		else if (workAttack_.inComboPhase_ >= static_cast<uint32_t>(ComboPhase::kSwing)) {
@@ -578,7 +575,7 @@ void Player::AttackComboPhaseFinished()
 		}
 		else {
 			workAttack_.isAttackJudgment_ = false;
-			workAttack_.attackCollider_->center_ = { -2048.0f, -2048.0f,	-2048.0f };
+			workAttack_.attackCollider_->center_ = { -2048.0f, -2048.0f, -2048.0f };
 			workAttack_.attackCollider_->worldTransformUpdate();
 		}
 	}
@@ -766,6 +763,93 @@ void Player::AttackCombo2nd()
 		worldTransform_.worldMatrix_.m[3][2] + attackCenterAdd.z };
 		workAttack_.attackCollider_->worldTransformUpdate();
 	}
+
+}
+
+void Player::AttackCombo3rd()
+{
+
+	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
+	Matrix4x4Calc* m4Calc = Matrix4x4Calc::GetInstance();
+
+	//π
+	const float pi = 3.14f;
+
+	ComboPhase inComboPhase = static_cast<ComboPhase>(workAttack_.inComboPhase_);
+	// スタート
+	Vector3 startRotate = { 0.0f, 0.0f, 0.0f };
+	// エンド
+	Vector3 endRotate = { 0.0F, 0.0f, 0.0f };
+
+	switch (inComboPhase)
+	{
+	case Player::kAnticipation:
+		// 振りかぶり
+
+		startRotate = { 0.0f, 0.0f, 0.0f };
+		endRotate = { -pi / 2.0f,  0.0f, 0.0f };
+		worldTransformL_arm_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseOutQuart, startRotate, endRotate, workAttack_.behaviorAttackParameter_);
+		worldTransformR_arm_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseOutQuart, startRotate, endRotate, workAttack_.behaviorAttackParameter_);
+		worldTransformBody_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseOutQuart, startRotate, endRotate, workAttack_.behaviorAttackParameter_);
+		worldTransformBody_.transform_.rotate.x = 0.0f;
+
+		break;
+	case Player::kCharge:
+		break;
+	case Player::kSwing:
+
+		startRotate = { -pi / 2.0f, 0.0f, 0.0f };
+		endRotate = { -pi / 2.0f,  pi * 6.0f, 0.0f };
+		worldTransformL_arm_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseOutQuart, startRotate, endRotate, workAttack_.behaviorAttackParameter_);
+		worldTransformR_arm_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseOutQuart, startRotate, endRotate, workAttack_.behaviorAttackParameter_);
+		worldTransformBody_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseOutQuart, startRotate, endRotate, workAttack_.behaviorAttackParameter_);
+		worldTransformBody_.transform_.rotate.x = 0.0f;
+
+		break;
+	case Player::kRecovery:
+
+		startRotate = { -pi / 2.0f,  0.0f, 0.0f };
+		endRotate = { 0.0f, 0.0f, 0.0f };
+		worldTransformL_arm_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseInQuart, startRotate, endRotate, workAttack_.behaviorAttackParameter_);
+		worldTransformR_arm_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseInQuart, startRotate, endRotate, workAttack_.behaviorAttackParameter_);
+		worldTransformBody_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseOutQuart, startRotate, endRotate, workAttack_.behaviorAttackParameter_);
+		worldTransformBody_.transform_.rotate.x = 0.0f;
+
+		break;
+	case Player::kCountOfComboPhase:
+	default:
+		assert(0);
+		break;
+	}
+
+	// 移動量
+	Vector3 move = { 0.0f, 0.0f, 1.0f };
+	// 移動量に速さを反映
+	move = v3Calc->Multiply(kConstAttaks[workAttack_.comboIndex_].speed_[workAttack_.inComboPhase_], v3Calc->Normalize(move));
+
+	// 移動ベクトルをカメラの角度だけ回転する
+	move = m4Calc->TransformNormal(move, worldTransform_.rotateMatrix_);
+
+	worldTransform_.transform_.translate.x += move.x;
+	worldTransform_.transform_.translate.z += move.z;
+
+	// 移動方向に見た目を合わせる(Y軸)
+	if (std::fabsf(move.x) > 0.1 || std::fabsf(move.z) > 0.1) {
+		// あたん
+		worldTransform_.direction_.x = v3Calc->Normalize(move).x;
+		worldTransform_.direction_.z = v3Calc->Normalize(move).z;
+	}
+
+	// あたり判定
+	if (workAttack_.isAttackJudgment_) {
+		Vector3 attackCenterAdd = m4Calc->TransformNormal(workAttack_.attackCenterAdd_, worldTransform_.worldMatrix_);
+
+		workAttack_.attackCollider_->center_ = { worldTransform_.worldMatrix_.m[3][0] + attackCenterAdd.x,
+		worldTransform_.worldMatrix_.m[3][1] + attackCenterAdd.y,
+		worldTransform_.worldMatrix_.m[3][2] + attackCenterAdd.z };
+		workAttack_.attackCollider_->worldTransformUpdate();
+	}
+
 
 }
 
