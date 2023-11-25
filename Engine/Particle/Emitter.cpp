@@ -2,6 +2,7 @@
 #include "../Math/DeltaTime.h"
 #include <cassert>
 #include "../../Program/Particle/PlayerWalkParticle.h"
+#include "../../Program/Particle/PlayerJumpParticle.h"
 
 void Emitter::Initialize(const TransformStructure& transform, uint32_t instanceCount,
 	float frequency, float lifeTime, uint32_t particleModelNum, uint32_t paeticleName)
@@ -69,6 +70,10 @@ Particle* Emitter::MakeParticle()
 		break;
 	case kPlayerWalk:
 		particle = new PlayerWalkParticle();
+		particle->Initialize(transform_.translate, transform_.scale);
+		break;
+	case kPlayerJump:
+		particle = new PlayerJumpParticle();
 		particle->Initialize(transform_.translate, transform_.scale);
 		break;
 	case kCountOfPaeticleName:

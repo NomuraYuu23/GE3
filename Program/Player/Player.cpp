@@ -438,6 +438,8 @@ void Player::Jump()
 			velocity_.y = 0.0f;
 			velocity_.y += workRoot_.kJumpSpeed;
 			isLanding = false;
+
+			JumpEffectInitialize();
 			
 		}
 
@@ -545,6 +547,7 @@ void Player::OnCollision(WorldTransform* worldTransform)
 		if (!worldTransform_.parent_ ||
 			(worldTransform_.parent_ != worldTransform)) {
 			GotParent(worldTransform);
+			JumpEffectInitialize();
 		}
 		worldTransform_.transform_.translate.y = 0;
 		allUpdateMatrix();
@@ -564,6 +567,7 @@ void Player::OnCollisionBox(WorldTransform* worldTransform, float boxSize){
 		if (!worldTransform_.parent_ ||
 			(worldTransform_.parent_ != worldTransform)) {
 			GotParent(worldTransform);
+			JumpEffectInitialize();
 		}
 		worldTransform_.transform_.translate.y = boxSize;
 		allUpdateMatrix();
@@ -641,6 +645,19 @@ void Player::WalkEffectInitialize()
 
 
 	particleManager_->EmitterCreate(transformStructure, 3, 0.01f, 0.1f, 1, 1);
+
+}
+
+void Player::JumpEffectInitialize()
+{
+
+	TransformStructure  transformStructure = {
+	{ 0.5f, 0.5f, 0.5f},
+	worldTransform_.transform_.rotate,
+	{ worldTransform_.worldMatrix_.m[3][0], worldTransform_.worldMatrix_.m[3][1], worldTransform_.worldMatrix_.m[3][2]} };
+
+
+	particleManager_->EmitterCreate(transformStructure, 10, 0.01f, 0.02f, 1, 2);
 
 }
 

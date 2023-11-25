@@ -265,6 +265,8 @@ private: // エフェクト
 
 	void WalkEffectInitialize();
 
+	void JumpEffectInitialize();
+
 public: // アクセッサ
 
 	WorldTransform* GetWorldTransformAddress() { return &worldTransform_; }
