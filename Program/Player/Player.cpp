@@ -440,6 +440,7 @@ void Player::Jump()
 			isLanding = false;
 
 			JumpEffectInitialize();
+			ExplosionEffectInitialize();
 			
 		}
 
@@ -658,6 +659,19 @@ void Player::JumpEffectInitialize()
 
 
 	particleManager_->EmitterCreate(transformStructure, 10, 0.01f, 0.02f, 1, 2);
+
+}
+
+void Player::ExplosionEffectInitialize()
+{
+
+	TransformStructure  transformStructure = {
+	{ 0.5f, 0.5f, 0.5f},
+	worldTransform_.transform_.rotate,
+	{ worldTransform_.worldMatrix_.m[3][0], worldTransform_.worldMatrix_.m[3][1], worldTransform_.worldMatrix_.m[3][2]} };
+
+
+	particleManager_->EmitterCreate(transformStructure, 20, 0.01f, 0.02f, 1, 3);
 
 }
 

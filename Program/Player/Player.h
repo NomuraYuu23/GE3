@@ -267,6 +267,8 @@ private: // エフェクト
 
 	void JumpEffectInitialize();
 
+	void ExplosionEffectInitialize();
+
 public: // アクセッサ
 
 	WorldTransform* GetWorldTransformAddress() { return &worldTransform_; }
