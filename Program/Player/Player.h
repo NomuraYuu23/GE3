@@ -121,7 +121,7 @@ public: // サブクラス
 public: // 静的メンバ変数
 
 	// コンボの数
-	static const int kComboNum = 1;
+	static const int kComboNum = 2;
 	// コンボ定数表
 	static const std::array<Player::ConstAttack, Player::kComboNum> kConstAttaks;
 
@@ -278,6 +278,11 @@ public: // 攻撃関数
 	/// コンボ1段目
 	/// </summary>
 	void AttackCombo1st();
+
+	/// <summary>
+	/// コンボ2段目
+	/// </summary>
+	void AttackCombo2nd();
 
 private:
 
