@@ -19,7 +19,7 @@ void ParticleManager::Initialize()
 	Matrix4x4Calc* matrix4x4Calc = Matrix4x4Calc::GetInstance();
 
 	//WVP用のリソースを作る。
-	particleForGPUBuff_ = BufferResource::CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(TransformationMatrix) * kNumInstanceMax_);
+	particleForGPUBuff_ = BufferResource::CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(ParticleForGPU) * kNumInstanceMax_);
 	//書き込むためのアドレスを取得
 	particleForGPUBuff_->Map(0, nullptr, reinterpret_cast<void**>(&particleForGPUMap_));
 
