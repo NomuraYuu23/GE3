@@ -54,7 +54,7 @@ void EnemyManager::AddEnemy(const Vector3& position)
 
 	enemies_.push_back(enemy);
 
-	colliderDebugDraw_->AddCollider(&enemy->GetCollider());
+	colliderDebugDraw_->AddCollider(enemy->GetCollider());
 
 }
 

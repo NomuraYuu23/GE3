@@ -65,7 +65,7 @@ public: // サブクラス
 	// 攻撃用ワーク
 	struct WorkAttack {
 		// コライダー
-		Sphere attackCollider_;
+		std::unique_ptr<Sphere> attackCollider_;
 		// プレイヤーと攻撃コライダーの中心までの距離
 		Vector3 attackCenterAdd_;
 		// 攻撃半径
@@ -121,9 +121,9 @@ public: // サブクラス
 public: // 静的メンバ変数
 
 	// コンボの数
-	static const int kComboNum = 3;
+	static const int kComboNum = 1;
 	// コンボ定数表
-	static const std::array<ConstAttack, kComboNum> kConstAttaks;
+	static const std::array<Player::ConstAttack, Player::kComboNum> kConstAttaks;
 
 public: // メンバ関数
 	/// <summary>
@@ -294,9 +294,9 @@ public: // アクセッサ
 
 	float GetColliderRadius() { return workRoot_.kColliderSize; }
 
-	Sphere& GetCollider() { return collider_; }
+	Sphere* GetCollider() { return collider_.get(); }
 
-	Sphere& GetAttackCollider() { return workAttack_.attackCollider_; }
+	Sphere* GetAttackCollider() { return workAttack_.attackCollider_.get(); }
 
 	bool GetIsAttackJudgment() { return workAttack_.isAttackJudgment_; }
 
@@ -318,7 +318,7 @@ private: // メンバ変数
 	ViewProjection* viewProjection_ = nullptr;
 
 	// コライダー
-	Sphere collider_;
+	std::unique_ptr<Sphere> collider_;
 
 	//ワールド変換データ
 	WorldTransform worldTransformBody_;

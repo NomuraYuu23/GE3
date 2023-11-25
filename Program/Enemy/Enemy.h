@@ -51,7 +51,7 @@ public:
 
 	float GetColliderRadius() { return kColliderSize; }
 
-	Sphere& GetCollider() { return collider_; }
+	Sphere* GetCollider() { return collider_.get(); }
 
 	bool GetIsDead() { return isDead_; }
 
@@ -88,7 +88,7 @@ private:
 	const float kColliderSize = 1.0f;
 
 	// コライダー
-	Sphere collider_;
+	std::unique_ptr<Sphere> collider_;
 
 	// 死亡フラグ
 	bool isDead_;

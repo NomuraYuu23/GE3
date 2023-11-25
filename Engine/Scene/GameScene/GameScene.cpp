@@ -144,8 +144,8 @@ void GameScene::Initialize() {
 	collisionManager_ = std::make_unique<CollisionManager>();
 	collisionManager_->Initialize(player_.get(), floorManager_.get(), goal_.get(), enemyManager_.get());
 
-	colliderDebugDraw_->AddCollider(&player_->GetCollider());
-	colliderDebugDraw_->AddCollider(&player_->GetAttackCollider());
+	colliderDebugDraw_->AddCollider(player_->GetCollider());
+	colliderDebugDraw_->AddCollider(player_->GetAttackCollider());
 	colliderDebugDraw_->AddCollider(&goal_->GetCollider());
 
 }

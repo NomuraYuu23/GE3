@@ -1,4 +1,4 @@
-﻿#include "ColliderDebugDraw.h"
+#include "ColliderDebugDraw.h"
 #include "../../2D/ImguiManager.h"
 
 void ColliderDebugDraw::Initialize(const std::vector<Model*> models, Material* material)
@@ -30,7 +30,7 @@ void ColliderDebugDraw::Update()
 {
 
 	spheres_.remove_if([](Sphere* sphere) {
-		if (!sphere) {
+		if (std::fabsf(sphere->radius_) >= 2048.0f) {
 			return true;
 		}
 		return false;

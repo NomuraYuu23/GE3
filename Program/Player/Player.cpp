@@ -5,11 +5,11 @@
 #include "../../Engine/GlobalVariables/GlobalVariables.h"
 
 // コンボ定数表
-const std::array<Player::ConstAttack, Player::kComboNum> kConstAttaks = {
+const std::array<Player::ConstAttack, Player::kComboNum> Player::kConstAttaks = {
 	{
-		{ { 0, 0, 20, 0}, { 0.0f, 0.0f, 0.15f, 0.0f} },
-		{ { 15, 10, 15, 0}, { 0.2f, 0.0f, 0.0f, 0.0f} },
-		{ { 15, 10, 15, 30}, { 0.2f, 0.0f, 0.0f, 0.0f} },
+		{ { 60, 60, 60, 60}, { 0.0f, 0.0f, 0.15f, 0.0f} },
+	//	{ { 15, 10, 15, 0}, { 0.2f, 0.0f, 0.0f, 0.0f} },
+	//{	 { 15, 10, 15, 30}, { 0.2f, 0.0f, 0.0f, 0.0f} },
 	}
 };
 
@@ -59,7 +59,8 @@ void Player::Initialize(const std::vector<Model*>& models,
 
 	isLanding = true;
 
-	collider_.Initialize(worldTransform_.transform_.translate, workRoot_.kColliderSize);
+	collider_ = std::make_unique<Sphere>();
+	collider_->Initialize(worldTransform_.transform_.translate, workRoot_.kColliderSize);
 
 	// 攻撃
 	//
@@ -68,7 +69,8 @@ void Player::Initialize(const std::vector<Model*>& models,
 	workAttack_.attackRadius_ = 5.0f;
 
 	// コライダー
-	workAttack_.attackCollider_.Initialize(workAttack_.attackCenterAdd_, workAttack_.attackRadius_);
+	workAttack_.attackCollider_ = std::make_unique<Sphere>();
+	workAttack_.attackCollider_->Initialize(workAttack_.attackCenterAdd_, workAttack_.attackRadius_);
 
 	// あたり判定を取るか
 	workAttack_.isAttackJudgment_ = false;
@@ -132,8 +134,8 @@ void Player::Update()
 		isDead_ = true;
 	}
 
-	collider_.center_ = { worldTransform_.worldMatrix_.m[3][0], worldTransform_.worldMatrix_.m[3][1]+collider_.radius_, worldTransform_.worldMatrix_.m[3][2] };
-	collider_.worldTransformUpdate();
+	collider_->center_ = { worldTransform_.worldMatrix_.m[3][0], worldTransform_.worldMatrix_.m[3][1] + collider_->radius_, worldTransform_.worldMatrix_.m[3][2] };
+	collider_->worldTransformUpdate();
 
 }
 
@@ -193,8 +195,8 @@ void Player::BehaviorAttackInitialize()
 
 	// 攻撃行動用の媒介変数
 	workAttack_.behaviorAttackParameter_ = 0.0f;
-	workAttack_.attackCollider_.center_ = { -100.0f,-100.0f,-100.0f };
-	workAttack_.attackCollider_.worldTransformUpdate();
+	workAttack_.attackCollider_->center_ = { -100.0f,-100.0f,-100.0f };
+	workAttack_.attackCollider_->worldTransformUpdate();
 
 
 	workAttack_.behaviorAttackPeriod_ =	kConstAttaks[workAttack_.comboIndex_].time_[workAttack_.inComboPhase_];
@@ -204,10 +206,6 @@ void Player::BehaviorAttackInitialize()
 void Player::BehaviorAttackUpdate()
 {
 
-	//インスタンス
-	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
-	Matrix4x4Calc* m4Calc = Matrix4x4Calc::GetInstance();
-
 	//π
 	const float pi = 3.14f;
 
@@ -216,6 +214,13 @@ void Player::BehaviorAttackUpdate()
 
 	// パラメータを1ステップ分加算
 	workAttack_.behaviorAttackParameter_ += step;
+
+	if (workAttack_.comboIndex_ == 0) {
+		AttackCombo1st();
+	}
+	AttackComboContinuationJudgment();
+	AttackComboPhaseFinished();
+
 
 }
 
@@ -541,7 +546,7 @@ void Player::AttackComboContinuationJudgment()
 
 	Input* input = Input::GetInstance();
 
-	if (workAttack_.comboIndex_ < kComboNum) {
+	if (workAttack_.comboIndex_ < kComboNum - 1) {
 		if (input->TriggerJoystick(1)) {
 			workAttack_.comboNext_ = true;
 		}
@@ -557,6 +562,17 @@ void Player::AttackComboPhaseFinished()
 		workAttack_.inComboPhase_++;
 		if (workAttack_.inComboPhase_ == static_cast<uint32_t>(ComboPhase::kCountOfComboPhase)) {
 			AttackComboFinished();
+			workAttack_.isAttackJudgment_ = false;
+			workAttack_.attackCollider_->center_ = { -2048.0f, -2048.0f,	-2048.0f };
+			workAttack_.attackCollider_->worldTransformUpdate();
+		}
+		else if (workAttack_.inComboPhase_ >= static_cast<uint32_t>(ComboPhase::kSwing)) {
+			workAttack_.isAttackJudgment_ = true;
+		}
+		else {
+			workAttack_.isAttackJudgment_ = false;
+			workAttack_.attackCollider_->center_ = { -2048.0f, -2048.0f,	-2048.0f };
+			workAttack_.attackCollider_->worldTransformUpdate();
 		}
 	}
 
@@ -589,62 +605,129 @@ void Player::AttackCombo1st()
 	//π
 	const float pi = 3.14f;
 
+	ComboPhase inComboPhase = static_cast<ComboPhase>(workAttack_.inComboPhase_);
+	// スタート
+	Vector3 startRotate = { 0.0f, 0.0f, 0.0f };
+	// エンド
+	Vector3 endRotate = { 0.0F, 0.0f, 0.0f };
 
+	switch (inComboPhase)
+	{
+	case Player::kAnticipation:
+		// 振りかぶり
 
-	if(workAttack_.behaviorAttackParameter_ <= 1.0f)
+		startRotate = { 0.0f, 0.0f, 0.0f };
+		endRotate = { -pi - pi / 8.0f, 0.0f, 0.0f };
+		worldTransformL_arm_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseOutQuart, startRotate, endRotate, workAttack_.behaviorAttackParameter_);
+		worldTransformR_arm_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseOutQuart, startRotate, endRotate, workAttack_.behaviorAttackParameter_);
 
+		break;
+	case Player::kCharge:
+		break;
+	case Player::kSwing:
 
-	if (workAttack_.behaviorAttackParameter_ >= 0.8f * pi &&
-		workAttack_.behaviorAttackParameter_ <= 1.5f * pi) {
+		startRotate = { -pi - pi / 8.0f, 0.0f, 0.0f };
+		endRotate = { -pi / 2.0f, 0.0f, 0.0f };
+		worldTransformL_arm_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseOutQuart, startRotate, endRotate, workAttack_.behaviorAttackParameter_);
+		worldTransformR_arm_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseOutQuart, startRotate, endRotate, workAttack_.behaviorAttackParameter_);
 
-		worldTransformL_arm_.transform_.rotate.x = workAttack_.behaviorAttackParameter_;
-		worldTransformR_arm_.transform_.rotate.x = workAttack_.behaviorAttackParameter_;
-		worldTransformWeapon_.transform_.rotate.x = workAttack_.behaviorAttackParameter_ + pi;
+		break;
+	case Player::kRecovery:
 
-		// 速さ
-		const float speed = 0.3f;
+		startRotate = { -pi / 2.0f, 0.0f, 0.0f };
+		endRotate = { 0.0f, 0.0f, 0.0f };
+		worldTransformL_arm_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseInQuart, startRotate, endRotate, workAttack_.behaviorAttackParameter_);
+		worldTransformR_arm_.transform_.rotate = Ease::Easing(Ease::EaseName::EaseInQuart, startRotate, endRotate, workAttack_.behaviorAttackParameter_);
 
-		// 移動量
-		Vector3 move = { 0.0f, 0.0f, 1.0f };
-		// 移動量に速さを反映
-		move = v3Calc->Multiply(workRoot_.kWalkSpeed, v3Calc->Normalize(move));
-
-		// 移動ベクトルをカメラの角度だけ回転する
-		move = m4Calc->TransformNormal(move, worldTransform_.rotateMatrix_);
-
-		worldTransform_.transform_.translate.x += move.x;
-		worldTransform_.transform_.translate.z += move.z;
-
-		// 移動方向に見た目を合わせる(Y軸)
-		if (std::fabsf(move.x) > 0.1 || std::fabsf(move.z) > 0.1) {
-			// あたん
-			worldTransform_.direction_.x = v3Calc->Normalize(move).x;
-			worldTransform_.direction_.z = v3Calc->Normalize(move).z;
-		}
+		break;
+	case Player::kCountOfComboPhase:
+	default:
+		assert(0);
+		break;
 	}
-	else if (workAttack_.behaviorAttackParameter_ < 0.8f * pi) {
-		//	振りかぶり
-		worldTransformL_arm_.transform_.rotate.x = -workAttack_.behaviorAttackParameter_;
-		worldTransformR_arm_.transform_.rotate.x = -workAttack_.behaviorAttackParameter_;
 
+	// 移動量
+	Vector3 move = { 0.0f, 0.0f, 1.0f };
+	// 移動量に速さを反映
+	move = v3Calc->Multiply(kConstAttaks[workAttack_.comboIndex_].speed_[workAttack_.inComboPhase_], v3Calc->Normalize(move));
+
+	// 移動ベクトルをカメラの角度だけ回転する
+	move = m4Calc->TransformNormal(move, worldTransform_.rotateMatrix_);
+
+	worldTransform_.transform_.translate.x += move.x;
+	worldTransform_.transform_.translate.z += move.z;
+
+	// 移動方向に見た目を合わせる(Y軸)
+	if (std::fabsf(move.x) > 0.1 || std::fabsf(move.z) > 0.1) {
+		// あたん
+		worldTransform_.direction_.x = v3Calc->Normalize(move).x;
+		worldTransform_.direction_.z = v3Calc->Normalize(move).z;
 	}
-	else if (workAttack_.behaviorAttackParameter_ >= 2.0f * pi) {
-		// 2πを超えたら振るまい変更
-		behaviorRequest_ = Behavior::kRoot;
 
-		workAttack_.isAttackJudgment_ = false;
-	}
-	else {
-		// 攻撃のあたり判定をだす
-		workAttack_.isAttackJudgment_ = true;
-
+	// あたり判定
+	if (workAttack_.isAttackJudgment_) {
 		Vector3 attackCenterAdd = m4Calc->TransformNormal(workAttack_.attackCenterAdd_, worldTransform_.worldMatrix_);
 
-		workAttack_.attackCollider_.center_ = { worldTransform_.worldMatrix_.m[3][0] + attackCenterAdd.x,
+		workAttack_.attackCollider_->center_ = { worldTransform_.worldMatrix_.m[3][0] + attackCenterAdd.x,
 		worldTransform_.worldMatrix_.m[3][1] + attackCenterAdd.y,
 		worldTransform_.worldMatrix_.m[3][2] + attackCenterAdd.z };
-		workAttack_.attackCollider_.worldTransformUpdate();
+		workAttack_.attackCollider_->worldTransformUpdate();
 	}
+
+	//if(workAttack_.behaviorAttackParameter_ <= 1.0f)
+
+
+	//if (workAttack_.behaviorAttackParameter_ >= 0.8f * pi &&
+	//	workAttack_.behaviorAttackParameter_ <= 1.5f * pi) {
+
+	//	worldTransformL_arm_.transform_.rotate.x = workAttack_.behaviorAttackParameter_;
+	//	worldTransformR_arm_.transform_.rotate.x = workAttack_.behaviorAttackParameter_;
+	//	worldTransformWeapon_.transform_.rotate.x = workAttack_.behaviorAttackParameter_ + pi;
+
+	//	// 速さ
+	//	const float speed = 0.3f;
+
+	//	// 移動量
+	//	Vector3 move = { 0.0f, 0.0f, 1.0f };
+	//	// 移動量に速さを反映
+	//	move = v3Calc->Multiply(workRoot_.kWalkSpeed, v3Calc->Normalize(move));
+
+	//	// 移動ベクトルをカメラの角度だけ回転する
+	//	move = m4Calc->TransformNormal(move, worldTransform_.rotateMatrix_);
+
+	//	worldTransform_.transform_.translate.x += move.x;
+	//	worldTransform_.transform_.translate.z += move.z;
+
+	//	// 移動方向に見た目を合わせる(Y軸)
+	//	if (std::fabsf(move.x) > 0.1 || std::fabsf(move.z) > 0.1) {
+	//		// あたん
+	//		worldTransform_.direction_.x = v3Calc->Normalize(move).x;
+	//		worldTransform_.direction_.z = v3Calc->Normalize(move).z;
+	//	}
+	//}
+	//else if (workAttack_.behaviorAttackParameter_ < 0.8f * pi) {
+	//	//	振りかぶり
+	//	worldTransformL_arm_.transform_.rotate.x = -workAttack_.behaviorAttackParameter_;
+	//	worldTransformR_arm_.transform_.rotate.x = -workAttack_.behaviorAttackParameter_;
+
+	//}
+	//else if (workAttack_.behaviorAttackParameter_ >= 2.0f * pi) {
+	//	// 2πを超えたら振るまい変更
+	//	behaviorRequest_ = Behavior::kRoot;
+
+	//	workAttack_.isAttackJudgment_ = false;
+	//}
+	//else {
+	//	// 攻撃のあたり判定をだす
+	//	workAttack_.isAttackJudgment_ = true;
+
+	//	Vector3 attackCenterAdd = m4Calc->TransformNormal(workAttack_.attackCenterAdd_, worldTransform_.worldMatrix_);
+
+	//	workAttack_.attackCollider_.center_ = { worldTransform_.worldMatrix_.m[3][0] + attackCenterAdd.x,
+	//	worldTransform_.worldMatrix_.m[3][1] + attackCenterAdd.y,
+	//	worldTransform_.worldMatrix_.m[3][2] + attackCenterAdd.z };
+	//	workAttack_.attackCollider_.worldTransformUpdate();
+	//}
 
 }
 

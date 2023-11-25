@@ -24,24 +24,24 @@ void CollisionManager::AllCollision()
 	for (Floor* floor : floorManager_->GetFloors()) {
 
 		// あたり判定確認
-		if (Collision::IsCollision(floor->GetCollider(), player_->GetCollider())) {
+		if (Collision::IsCollision(floor->GetCollider(), *player_->GetCollider())) {
 			player_->OnCollision(floor->GetWorldTransformAdress());
 		}
 		
 	}
 
-	if (Collision::IsCollision(goal_->GetCollider(), player_->GetCollider())) {
+	if (Collision::IsCollision(goal_->GetCollider(), *player_->GetCollider())) {
 		player_->Restart();
 		enemyManager_->Restart();
 	}
 	for (Enemy* enemy : enemyManager_->GetEnemies()) {
 		// あたり判定確認
-		if (Collision::IsCollision(enemy->GetCollider(), player_->GetCollider()) && !enemy->GetIsDead()) {
+		if (Collision::IsCollision(*enemy->GetCollider(), *player_->GetCollider()) && !enemy->GetIsDead()) {
 			player_->Restart();
 			enemyManager_->Restart();
 		}
 
-		if (Collision::IsCollision(enemy->GetCollider(), player_->GetAttackCollider()) &&
+		if (Collision::IsCollision(*enemy->GetCollider(), *player_->GetAttackCollider()) &&
 			player_->GetIsAttackJudgment()) {
 			enemy->SetIsDead(true);
 		}
