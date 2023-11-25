@@ -5,7 +5,7 @@ void CollisionManager::Initialize(Player* player, FloorManager* floorManager,
 	BoxManager* boxManager, BreakBoxManager* breakBoxManager, 
 	RecoveryItemManager* recoveryItemManager, EnemyManager* enemyManager,
 	CollectibleItemManager* collectibleItemManager, CheckPointManager* checkPointManager//,
-	/*BurningBoxManager* burningBoxManager*//*, Goal* goal, Enemy* enemy*/)
+	/*BurningBoxManager* burningBoxManager*/, Goal* goal)
 {
 
 	v3Calc = Vector3Calc::GetInstance();
@@ -29,11 +29,7 @@ void CollisionManager::Initialize(Player* player, FloorManager* floorManager,
 
 	checkPointManager_ = checkPointManager;
 
-
-
-	/*goal_ = goal;
-
-	enemy_ = enemy;*/
+	goal_ = goal;
 
 }
 
@@ -139,14 +135,11 @@ void CollisionManager::AllCollision()
 		}
 	}
 
-	/*if (Collision::IsCollision(goal_->GetCollider(), player_->GetCollider()) || 
-		(Collision::IsCollision(enemy_->GetCollider(), player_->GetCollider()) &&
-			!enemy_->GetIsDead())) {
-		player_->Restart();
-		enemy_->SetIsDead(false);
+	if (Collision::IsCollision(goal_->GetCollider(), player_->GetCollider())){
+		player_->OnCollisionGoal();
 	}
 
-	if (Collision::IsCollision(enemy_->GetCollider(), player_->GetAttackCollider()) &&
+	/*if (Collision::IsCollision(enemy_->GetCollider(), player_->GetAttackCollider()) &&
 		player_->GetIsAttackJudgment()) {
 		enemy_->SetIsDead(true);
 	}*/

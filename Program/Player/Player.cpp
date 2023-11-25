@@ -48,6 +48,8 @@ void Player::Initialize(const std::vector<Model*>& models,
 
 	exprosionNum_ = startExprosionNum_;
 
+	isGoal_ = false;
+
 }
 
 void Player::Update()
@@ -562,6 +564,10 @@ void Player::OnCollisionBox(WorldTransform* worldTransform, Vector3 boxSize, boo
 	}
 }
 
+void Player::OnCollisionGoal(){
+	isGoal_ = true;
+}
+
 void Player::OnCollisionRecoveryItem(int recoveryValue){
 	exprosionNum_ += recoveryValue;
 	if (exprosionNum_>exprosionMax_){
@@ -661,5 +667,6 @@ void Player::DrawImgui(){
 		}
 		ImGui::EndMenuBar();
 	}
+	ImGui::Text("ゴールしたか = %d", isGoal_);
 	ImGui::End();
 }

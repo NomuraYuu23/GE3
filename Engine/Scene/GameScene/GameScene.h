@@ -13,6 +13,7 @@
 #include"../../Camera/FollowCamera/FollowCamera.h"
 #include "../../Pause/Pause.h"
 #include"../../../Program/CheckPointManager/CheckPointManager.h"
+#include"../../../Program/Goal/Goal.h"
 
 class GameScene : public IScene
 {
@@ -199,4 +200,12 @@ private:
 	//エネミーのモデルとか
 	std::vector<Model*> enemyModels_;
 	std::vector<Material*> enemyMaterials_;
+
+	/*ゴール*/
+	std::unique_ptr<Goal> goal_;
+	//ゴールのモデル
+	std::unique_ptr<Model> goalModel_;
+	std::unique_ptr<Material> goalMaterial_;
+
+
 };

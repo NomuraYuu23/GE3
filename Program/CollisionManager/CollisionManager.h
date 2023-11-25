@@ -24,7 +24,7 @@ public: // メンバ関数
 		BoxManager* boxManager, BreakBoxManager* breakBoxManager,
 		RecoveryItemManager* recoveryItemManager, EnemyManager* enemyManager,
 		CollectibleItemManager* collectibleItemManager, CheckPointManager* checkPointManager//,
-		/*BurningBoxManager* burningBoxManager*//*, Goal* goal, Enemy* enemy*/);
+		/*BurningBoxManager* burningBoxManager*/, Goal* goal);
 
 	/// <summary>
 	/// 衝突
@@ -49,7 +49,6 @@ private: // メンバ変数
 	EnemyManager* enemyManager_ = nullptr;
 	CollectibleItemManager* collectibleItemManager_ = nullptr;
 	CheckPointManager* checkPointManager_ = nullptr;
-	/*Goal* goal_ = nullptr;
-	Enemy* enemy_ = nullptr;*/
+	Goal* goal_ = nullptr;
 
 };

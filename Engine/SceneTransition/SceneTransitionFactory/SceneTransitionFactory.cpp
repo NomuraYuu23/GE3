@@ -19,7 +19,9 @@ ISceneTransition* SceneTransitionFactory::CreateSceneTransition(int sceneName, i
 	}
 	else {
 		// 現在のシーンから次のシーンへ行くときの遷移が設定されてない
-		assert(0);
+		//assert(0);
+		//ループチェックのためにとりあえず
+		newSceneTransition = new SceneTransitionBlackOut();
 	}
 
 	return newSceneTransition;
