@@ -17,6 +17,9 @@ struct  ViewProjection
 
 	Matrix4x4 viewProjectionMatrix_;
 
+	Matrix4x4 viewMatrix_;
+	Matrix4x4 projectionMatrix_;
+
 	void Initialize();
 
 	void UpdateMatrix();

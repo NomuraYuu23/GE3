@@ -22,9 +22,9 @@ void ViewProjection::UpdateMatrix() {
 	Matrix4x4Calc* calc = Matrix4x4Calc::GetInstance();
 
 	Matrix4x4 transformMatrix = calc->MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
-	Matrix4x4 viewMatrix = calc->Inverse(transformMatrix);
-	Matrix4x4 projectionMatrix = calc->MakePerspectiveFovMatrix(fovY_, aspectRatio_, nearClip_, farClip_);
+	viewMatrix_ = calc->Inverse(transformMatrix);
+	projectionMatrix_ = calc->MakePerspectiveFovMatrix(fovY_, aspectRatio_, nearClip_, farClip_);
 
-	viewProjectionMatrix_ = calc->Multiply(viewMatrix, projectionMatrix);
+	viewProjectionMatrix_ = calc->Multiply(viewMatrix_, projectionMatrix_);
 
 }
