@@ -191,7 +191,7 @@ void GameScene::Update(){
 	colliderDebugDraw_->Update();
 	
 	//パーティクル
-	particleManager_->Update(debugCamera_->GetMatrix());
+	particleManager_->Update(followCamera_->GetMatrix());
 
 	// リスタート
 	if (player_->GetIsDead()) {
@@ -249,7 +249,7 @@ void GameScene::Draw() {
 	Model::PreParticleDraw(dxCommon_->GetCommadList(), viewProjection_);
 
 	//光源
-	directionalLight_->Draw(dxCommon_->GetCommadList());
+	//directionalLight_->Draw(dxCommon_->GetCommadList());
 
 	// パーティクルはここ
 	particleManager_->Draw();

@@ -312,6 +312,8 @@ public: // アクセッサ
 
 	bool GetIsDead() { return isDead_; }
 
+	uint32_t GetComboIndex() { return workAttack_.comboIndex_; }
+
 private:
 	//全てのオブジェのUpdateMatrixをまとめたもの
 	void allUpdateMatrix();
