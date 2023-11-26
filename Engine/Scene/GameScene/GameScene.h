@@ -9,6 +9,7 @@
 #include "../../Pause/Pause.h"
 #include "../../../Program/Skydome/Skydome.h"
 #include "../../../Program/EnemyManager/EnemyManager.h"
+#include "../../../Program/LockOn/LockOn.h"
 
 class GameScene : public IScene
 {
@@ -134,5 +135,9 @@ private:
 
 	// 衝突マネージャー
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
+
+	// ロックオン
+	std::unique_ptr<LockOn> lockOn_;
+	uint32_t lockOnTextureHandle_;
 
 };

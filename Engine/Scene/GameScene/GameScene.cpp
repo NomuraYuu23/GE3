@@ -148,6 +148,9 @@ void GameScene::Initialize() {
 	colliderDebugDraw_->AddCollider(player_->GetAttackCollider());
 	colliderDebugDraw_->AddCollider(&goal_->GetCollider());
 
+	// ロックオン
+	lockOn_->Initialize(lockOnTextureHandle_);
+
 }
 
 /// <summary>
@@ -186,6 +189,9 @@ void GameScene::Update(){
 
 	// 衝突処理
 	collisionManager_->AllCollision();
+
+	// ロックオン
+	lockOn_->Update(enemyManager_->GetEnemies(), viewProjection_);
 
 	// デバッグ描画
 	colliderDebugDraw_->Update();
@@ -264,7 +270,9 @@ void GameScene::Draw() {
 	
 
 	//背景
+
 	//前景スプライト描画
+	lockOn_->Draw();
 	pause_->Draw();
 
 
@@ -349,5 +357,7 @@ void GameScene::TextureLoad()
 		TextureManager::Load("Resources/TD2_November/pause/goToTitle.png", dxCommon_),
 		TextureManager::Load("Resources/TD2_November/pause/returnToGame.png", dxCommon_),
 	};
+
+	lockOnTextureHandle_ = TextureManager::Load("Resources/Al4/lockOn/lockOn.png", dxCommon_);
 
 }
