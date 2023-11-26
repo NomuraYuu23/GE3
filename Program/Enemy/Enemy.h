@@ -47,6 +47,16 @@ public:
 	/// </summary>
 	void UpdateArmRotationgimmick();
 
+	/// <summary>
+	/// 消える
+	/// </summary>
+	void DisappearUpdate();
+
+	/// <summary>
+	/// 吹っ飛び方向設定
+	/// </summary>
+	void SetBlowOffDirection(const Vector3& vector);
+
 public:
 
 	float GetColliderRadius() { return kColliderSize; }
@@ -56,6 +66,10 @@ public:
 	bool GetIsDead() { return isDead_; }
 
 	void SetIsDead(bool isDead) { isDead_ = isDead; }
+
+	bool GetDisappear() { return disappear_; }
+
+	void SetDisappear(bool disappear) { disappear_ = disappear; }
 
 private:
 
@@ -92,5 +106,18 @@ private:
 
 	// 死亡フラグ
 	bool isDead_;
+
+	// 消えるか
+	bool disappear_;
+	// 色
+	Vector4 color_;
+	// タイム
+	float disappearTime_;
+	// タイム
+	uint32_t disappearPeriod_;
+	// 単独マテリアル
+	std::unique_ptr<Material> singleMaterial_;
+	// 吹っ飛び方向
+	Vector3 blowOffDirection_;
 
 };

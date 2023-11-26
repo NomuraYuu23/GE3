@@ -53,7 +53,7 @@ void Material::Initialize() {
 	//白を書き込んでみる
 	materialMap_->color = { 1.0f, 1.0f, 1.0f, 1.0f };
 	//SpriteはLightingしないのでfalseを設定する
-	materialMap_->enableLighting = None;	//UVTransfome初期化
+	materialMap_->enableLighting = HalfLambert;	//UVTransfome初期化
 	materialMap_->uvTransform = Matrix4x4Calc::GetInstance()->MakeIdentity4x4();
 
 	uvTransform = {

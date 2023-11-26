@@ -36,14 +36,16 @@ void CollisionManager::AllCollision()
 	}
 	for (Enemy* enemy : enemyManager_->GetEnemies()) {
 		// あたり判定確認
-		if (Collision::IsCollision(*enemy->GetCollider(), *player_->GetCollider()) && !enemy->GetIsDead()) {
+		if (Collision::IsCollision(*enemy->GetCollider(), *player_->GetCollider()) && !enemy->GetDisappear()) {
 			player_->Restart();
 			enemyManager_->Restart();
 		}
 
 		if (Collision::IsCollision(*enemy->GetCollider(), *player_->GetAttackCollider()) &&
 			player_->GetIsAttackJudgment()) {
-			enemy->SetIsDead(true);
+			enemy->SetDisappear(true);
+			Vector3 position = { player_->GetWorldTransform().worldMatrix_.m[3][0],player_->GetWorldTransform().worldMatrix_.m[3][1], player_->GetWorldTransform().worldMatrix_.m[3][2]};
+			enemy->SetBlowOffDirection(position);
 		}
 	}
 

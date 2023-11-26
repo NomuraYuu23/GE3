@@ -53,6 +53,19 @@ void Enemy::Initialize(const std::vector<Model*>& models,
 
 	isDead_ = false;
 
+	disappear_ = false;
+
+	color_ = { 1.0f,1.0f,1.0f,1.0f };
+
+	// タイム
+	disappearTime_ = 0.0f;
+	// タイム
+	disappearPeriod_ = 60;
+
+	singleMaterial_.reset(Material::Create());
+
+	blowOffDirection_ = { 0.0f,0.0f,0.0f };
+
 }
 
 /// <summary>
@@ -60,7 +73,7 @@ void Enemy::Initialize(const std::vector<Model*>& models,
 /// </summary>
 void Enemy::Update() {
 
-	if (!isDead_) {
+	if (!disappear_) {
 		// 回転
 		Rotation();
 
@@ -70,16 +83,21 @@ void Enemy::Update() {
 		// 腕回転ギミック
 		UpdateArmRotationgimmick();
 
-		//ワールド変換データ更新
-		worldTransform_.UpdateMatrix();
-
-		worldTransformBody_.UpdateMatrix();
-		worldTransformL_arm_.UpdateMatrix();
-		worldTransformR_arm_.UpdateMatrix();
-
-		collider_->center_ = { worldTransform_.worldMatrix_.m[3][0],worldTransform_.worldMatrix_.m[3][1], worldTransform_.worldMatrix_.m[3][2] };
-		collider_->worldTransformUpdate();
 	}
+	else {
+		DisappearUpdate();
+	}
+
+	//ワールド変換データ更新
+	worldTransform_.UpdateMatrix();
+
+	worldTransformBody_.UpdateMatrix();
+	worldTransformL_arm_.UpdateMatrix();
+	worldTransformR_arm_.UpdateMatrix();
+
+	collider_->center_ = { worldTransform_.worldMatrix_.m[3][0],worldTransform_.worldMatrix_.m[3][1], worldTransform_.worldMatrix_.m[3][2] };
+	collider_->worldTransformUpdate();
+
 }
 
 /// <summary>
@@ -89,9 +107,9 @@ void Enemy::Update() {
 void Enemy::Draw(const ViewProjection& viewProjection) {
 
 	if (!isDead_) {
-		models_[0]->Draw(worldTransformBody_, viewProjection);
-		models_[1]->Draw(worldTransformL_arm_, viewProjection);
-		models_[2]->Draw(worldTransformR_arm_, viewProjection);
+		models_[0]->Draw(worldTransformBody_, viewProjection, singleMaterial_.get());
+		models_[1]->Draw(worldTransformL_arm_, viewProjection, singleMaterial_.get());
+		models_[2]->Draw(worldTransformR_arm_, viewProjection, singleMaterial_.get());
 	}
 
 }
@@ -155,5 +173,43 @@ void Enemy::UpdateArmRotationgimmick() {
 
 	worldTransformL_arm_.transform_.rotate.x = armRotationParameter_;
 	worldTransformR_arm_.transform_.rotate.x = armRotationParameter_;
+
+}
+
+void Enemy::DisappearUpdate()
+{
+
+	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
+	float speed = 1.0f;
+
+	// 吹っ飛ぶ
+	worldTransform_.transform_.translate = v3Calc->Add(worldTransform_.transform_.translate,
+		v3Calc->Multiply(speed, blowOffDirection_));
+
+	// 消える
+	disappearTime_ += 1.0f / disappearPeriod_;
+	if (disappearTime_ >= 1.0f) {
+		isDead_ = true;
+	}
+	else {
+		color_.w = 1.0f - disappearTime_;
+		TransformStructure uvTransform = {
+				{1.0f,1.0f,1.0f},
+				{0.0f,0.0f,0.0f},
+				{0.0f,0.0f,0.0f},
+		};
+		singleMaterial_->Update(uvTransform, color_, HalfLambert);
+	}
+
+}
+
+void Enemy::SetBlowOffDirection(const Vector3& vector)
+{
+
+	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
+
+	Vector3 position = { worldTransform_.worldMatrix_.m[3][0],worldTransform_.worldMatrix_.m[3][1], worldTransform_.worldMatrix_.m[3][2] };
+
+	blowOffDirection_ = v3Calc->Normalize(v3Calc->Subtract(position, vector));
 
 }
