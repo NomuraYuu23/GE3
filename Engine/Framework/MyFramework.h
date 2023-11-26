@@ -40,7 +40,7 @@
 #include "../GlobalVariables/GlobalVariables.h"
 
 // パーティクル
-#include "../3D/ParticleManager.h"
+#include "../Particle/ParticleManager.h"
 
 class MyFramework
 {

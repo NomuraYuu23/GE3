@@ -10,7 +10,7 @@
 #include "../../3D/Model.h"
 #include "../../3D/Material.h"
 #include "../../3D/DirectionalLight.h"
-#include "../../3D/ParticleManager.h"
+#include "../../Particle/ParticleManager.h"
 
 // シーン名
 enum SceneName {
