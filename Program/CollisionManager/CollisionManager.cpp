@@ -1,6 +1,6 @@
 #include "CollisionManager.h"
 #include "Collision.h"
-#include "../../Engine/3D/ParticleManager.h"
+#include "../../Engine/Particle/ParticleManager.h"
 
 void CollisionManager::Initialize(Player* player, FloorManager* floorManager, Goal* goal, EnemyManager* enemyManager)
 {
@@ -43,7 +43,7 @@ void CollisionManager::AllCollision()
 		}
 
 		if (Collision::IsCollision(*enemy->GetCollider(), *player_->GetAttackCollider()) &&
-			player_->GetIsAttackJudgment()) {
+			player_->GetIsAttackJudgment() && !enemy->GetDisappear()) {
 			if (player_->GetComboIndex() == 2) {
 				enemy->SetDisappear(true);
 				Vector3 position = { player_->GetWorldTransform().worldMatrix_.m[3][0],player_->GetWorldTransform().worldMatrix_.m[3][1], player_->GetWorldTransform().worldMatrix_.m[3][2] };
@@ -52,9 +52,10 @@ void CollisionManager::AllCollision()
 			TransformStructure transformStructure = { 
 				{1.0f,1.0f,1.0f},
 				{0.0f,0.0f,0.0f}, 
-				{0.0f,0.0f,0.0f},
+				{enemy->GetWorldTransform().worldMatrix_.m[3][0],enemy->GetWorldTransform().worldMatrix_.m[3][1], enemy->GetWorldTransform().worldMatrix_.m[3][2]},
 			};
-			ParticleManager::GetInstance()->EmitterCreate(transformStructure, 10.0f, 1);
+
+			ParticleManager::GetInstance()->EmitterCreate(transformStructure, 3, 0.5f, 10.0f, ParticleManager::ParticleModel::kCircle, 0);
 		}
 	}
 
