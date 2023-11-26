@@ -28,19 +28,26 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
+private: // メンバ関数
+
+	/// <summary>
+	/// 範囲外判定
+	/// </summary>
+	bool OutOfRangeJudgment(const ViewProjection& viewProjection);
+
 private: // メンバ変数
 
 	// ロックオンマーク用スプライト
 	std::unique_ptr<Sprite> lockOnMark_;
 
 	// ロックオン対策
-	const Enemy* target_ = nullptr;
+	Enemy* target_ = nullptr;
 
 	// 最小距離
 	float minDistance_ = 10.0f;
 
 	// 最大距離
-	float maxDistance_ = 30.0f;
+	float maxDistance_ = 80.0f;
 
 	// 角度範囲
 	float angleRange_ = 20.0f * 3.14f / 180.0f;
