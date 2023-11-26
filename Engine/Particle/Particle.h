@@ -9,6 +9,15 @@
 #include "../Math/Vector4.h"
 #include "ParticleForGPU.h"
 
+enum PaeticleName {
+	kDefault,
+	kPlayerWalk, // プレイヤーが歩くとき
+	kPlayerJump, // プレイヤー飛ぶとき
+	kPlayerExplosion, // プレイヤーが爆発するとき
+	kSmoke, // 狼煙
+	kCountOfPaeticleName,
+};
+
 class Particle
 {
 
