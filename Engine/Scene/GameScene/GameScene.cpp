@@ -149,6 +149,7 @@ void GameScene::Initialize() {
 	colliderDebugDraw_->AddCollider(&goal_->GetCollider());
 
 	// ロックオン
+	lockOn_ = std::make_unique<LockOn>();
 	lockOn_->Initialize(lockOnTextureHandle_);
 
 }
