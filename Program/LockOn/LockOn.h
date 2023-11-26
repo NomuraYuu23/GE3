@@ -44,7 +44,7 @@ private: // メンバ変数
 	Enemy* target_ = nullptr;
 
 	// 最小距離
-	float minDistance_ = 10.0f;
+	float minDistance_ = 50.0f;
 
 	// 最大距離
 	float maxDistance_ = 80.0f;
