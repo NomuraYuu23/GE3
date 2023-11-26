@@ -39,7 +39,7 @@ void LockOn::Update(const std::list<Enemy*>& enemies, const ViewProjection& view
 					enemy->GetWorldTransform().worldMatrix_.m[3][2]
 				};
 				// ワールドからビュー座標変換
-				Vector3 positionView = m4Calc->Transform(positionWorld, viewProjection.viewProjectionMatrix_);
+				Vector3 positionView = m4Calc->Transform(positionWorld, viewProjection.viewMatrix_);
 
 				// 距離条件チェック
 				if (minDistance_ <= positionView.z && positionView.z <= maxDistance_) {
