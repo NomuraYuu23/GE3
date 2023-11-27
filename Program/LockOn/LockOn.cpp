@@ -56,11 +56,11 @@ void LockOn::Update(const std::list<Enemy*>& enemies, const ViewProjection& view
 				if (minDistance_ <= positionView.z && positionView.z <= maxDistance_) {
 
 					// カメラ前方との角度を計算
-					float arcTargent = std::atan2(
-					std::sqrtf(positionView.x * positionView.x + positionView.y * positionView.y), positionView.z);
-					if (std::fabsf(arcTargent) <= angleRange_) {
-						targets.emplace_back(std::make_pair(positionView.z, enemy));
-					}
+					//float arcTargent = std::atan2(
+					//std::sqrtf(positionView.x * positionView.x + positionView.y * positionView.y), positionView.z);
+					//if (std::fabsf(arcTargent) <= angleRange_) {
+					//	targets.emplace_back(std::make_pair(positionView.z, enemy));
+					//}
 
 					//Matrix4x4 rotateMatrix1 = m4Calc->DirectionToDirection(Vector3{ 0.0f,0.0f,1.0f }, Vector3{ std::sqrtf(positionView.x * positionView.x + positionView.y * positionView.y), 0.0f, positionView.z });
 					//Matrix4x4 rotateMatrix2 = m4Calc->MakeRotateYMatrix(angleRange_);
@@ -74,6 +74,7 @@ void LockOn::Update(const std::list<Enemy*>& enemies, const ViewProjection& view
 					//	targets.emplace_back(std::make_pair(positionView.z, enemy));
 					//}
 
+					targets.emplace_back(std::make_pair(positionView.z, enemy));
 
 				}
 
@@ -159,11 +160,11 @@ bool LockOn::OutOfRangeJudgment(const ViewProjection& viewProjection)
 	if (minDistance_ <= positionView.z && positionView.z <= maxDistance_) {
 	
 		// カメラ前方との角度を計算
-		float arcTargent = std::atan2(
-			std::sqrtf(positionView.x * positionView.x + positionView.y * positionView.y), positionView.z);
-		if (std::fabsf(arcTargent) <= angleRange_) {
-			return false;
-		}
+		//float arcTargent = std::atan2(
+		//	std::sqrtf(positionView.x * positionView.x + positionView.y * positionView.y), positionView.z);
+		//if (std::fabsf(arcTargent) <= angleRange_) {
+		//	return false;
+		//}
 
 		//Vector3 a = v3Calc->Normalize(v3Calc->Subtract(positionWorld, viewProjection.transform_.translate));
 		//Matrix4x4 m = m4Calc->MakeRotateXYZMatrix(viewProjection.transform_.rotate);
@@ -172,6 +173,8 @@ bool LockOn::OutOfRangeJudgment(const ViewProjection& viewProjection)
 		//if (1.0f - std::sinf(angleRange_) <= Dot) {
 		//	return false;
 		//}
+
+		return false;
 
 	}
 
