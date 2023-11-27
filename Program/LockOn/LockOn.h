@@ -28,6 +28,18 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
+	/// <summary>
+	/// ロックオン対象の座標取得
+	/// </summary>
+	/// <returns></returns>
+	Vector3 GetTargetPosition() const;
+
+	/// <summary>
+	/// ロックオン中か
+	/// </summary>
+	/// <returns></returns>
+	bool ExistTarget() const { return target_ ? true : false; }
+
 private: // メンバ関数
 
 	/// <summary>

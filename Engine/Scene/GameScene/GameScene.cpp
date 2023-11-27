@@ -151,6 +151,8 @@ void GameScene::Initialize() {
 	// ロックオン
 	lockOn_ = std::make_unique<LockOn>();
 	lockOn_->Initialize(lockOnTextureHandle_);
+	followCamera_->SetLockOn(lockOn_.get());
+	player_->SetLockOn(lockOn_.get());
 
 }
 

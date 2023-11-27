@@ -3,6 +3,7 @@
 #include "../../Engine/Math/Math.h"
 #include "../../Engine/Math/Ease.h"
 #include "../../Engine/GlobalVariables/GlobalVariables.h"
+#include "../LockOn/LockOn.h"
 
 // コンボ定数表
 const std::array<Player::ConstAttack, Player::kComboNum> Player::kConstAttaks = {
@@ -381,6 +382,24 @@ void Player::Walk()
 			// あたん
 			workRoot_.targetDirection_.x = v3Calc->Normalize(move).x;
 			workRoot_.targetDirection_.z = v3Calc->Normalize(move).z;
+
+		}
+		else if (lockOn_ && lockOn_->ExistTarget()) {
+			// 自キャラをロックオン対象の方向に向ける処理
+			// ロックオン座標
+			Vector3 lockOn = lockOn_->GetTargetPosition();
+			// ワールド座標
+			Vector3 worldPosition = { worldTransform_.worldMatrix_.m[3][0],worldTransform_.worldMatrix_.m[3][1] ,worldTransform_.worldMatrix_.m[3][2] };
+
+			// 追従対象からロックオン対象へのベクトル
+			Vector3 sub = v3Calc->Subtract(lockOn, worldPosition);
+
+			workRoot_.targetDirection_.x = v3Calc->Normalize(sub).x;
+			workRoot_.targetDirection_.z = v3Calc->Normalize(sub).z;
+
+			// 移動
+			velocity_.x = 0.0f;
+			velocity_.z = 0.0f;
 
 		}
 		else {

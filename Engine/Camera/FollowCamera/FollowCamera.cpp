@@ -5,6 +5,7 @@
 #include "../../Math/Ease.h"
 #include "../../Math/Math.h"
 #include "../../GlobalVariables/GlobalVariables.h"
+#include "../../../Program/LockOn/LockOn.h"
 
 void FollowCamera::Initialize() {
 
@@ -15,7 +16,6 @@ void FollowCamera::Initialize() {
 	viewProjection_.transform_.rotate.x = 0.1f;
 
 	BaseCamera::Update();
-
 
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
 	const char* groupName = "FollowCamera";
@@ -37,14 +37,30 @@ void FollowCamera::Update() {
 	ApplyGlobalVariables();
 #endif // _DEBUG
 
+	// ロックオン中
+	if (lockOn_->ExistTarget()) {
+		// カメラをロックオン対象の方に向ける処理
 
+		// ロックオン座標
+		Vector3 lockOnPosition = lockOn_->GetTargetPosition();
+		// ターゲット座標
+		Vector3 targetPosition = { target_->worldMatrix_.m[3][0], target_->worldMatrix_.m[3][1], target_->worldMatrix_.m[3][2] };
+		// 追従対象からロックオン対象へのベクトル
+		Vector3 sub = v3Calc->Subtract(lockOnPosition, targetPosition);
 
-	if (input->GetJoystickConnected()) {
+		// y軸周り角度
+		destinationAngle_.y = std::atan2(sub.x, sub.z);
 
-		const float RotateSpeed = 0.000001f;
+	}
+	else {
+		// スティック入力で角度を変更処理
+		if (input->GetJoystickConnected()) {
 
-		destinationAngle_.y += input->GetRightAnalogstick().x * RotateSpeed;
-		destinationAngle_.x += input->GetRightAnalogstick().y * RotateSpeed;
+			const float RotateSpeed = 0.000001f;
+
+			destinationAngle_.y += input->GetRightAnalogstick().x * RotateSpeed;
+			destinationAngle_.x += input->GetRightAnalogstick().y * RotateSpeed;
+		}
 	}
 
 	//追従対象がいれば

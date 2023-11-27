@@ -9,6 +9,8 @@
 #include "../BaseCharacter/BaseCharacter.h"
 #include "../../Engine/Collider/Sphere/Sphere.h"
 
+class LockOn;
+
 class Player : public BaseCharacter
 {
 
@@ -314,6 +316,8 @@ public: // アクセッサ
 
 	uint32_t GetComboIndex() { return workAttack_.comboIndex_; }
 
+	void SetLockOn(LockOn* lockOn) { lockOn_ = lockOn; }
+
 private:
 	//全てのオブジェのUpdateMatrixをまとめたもの
 	void allUpdateMatrix();
@@ -360,6 +364,8 @@ private: // メンバ変数
 	WorkSwing workSwing_;
 
 	bool isDead_ = false;
+
+	LockOn* lockOn_ = nullptr;
 
 };
 

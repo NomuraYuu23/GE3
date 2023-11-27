@@ -119,6 +119,22 @@ void LockOn::Draw()
 
 }
 
+Vector3 LockOn::GetTargetPosition() const
+{
+	
+	if (target_) {
+		Vector3 position = { 
+			target_->GetWorldTransform().worldMatrix_.m[3][0],
+			target_->GetWorldTransform().worldMatrix_.m[3][1],
+			target_->GetWorldTransform().worldMatrix_.m[3][2] 
+		};
+		return position;
+	}
+
+	return Vector3();
+
+}
+
 bool LockOn::OutOfRangeJudgment(const ViewProjection& viewProjection)
 {
 

@@ -3,6 +3,8 @@
 #include "../../../Engine/3D/WorldTransform.h"
 #include "../BaseCamera.h"
 
+class LockOn;
+
 class FollowCamera : public BaseCamera{
 
 public:
@@ -40,6 +42,9 @@ public:
 	/// <returns></returns>
 	ViewProjection* GetViewProjectionAddress() { return &viewProjection_; }
 
+	void SetLockOn(LockOn* lockOn) { lockOn_ = lockOn; }
+
+
 private: // メンバ関数
 
 	// 追従対象からのオフセットを計算する
@@ -62,6 +67,8 @@ private:
 
 	float moveRate_ = 0.1f;
 	float rotateRate_ = 0.1f;
+
+	LockOn* lockOn_ = nullptr;
 
 };
 
