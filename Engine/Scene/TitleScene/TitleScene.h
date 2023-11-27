@@ -2,6 +2,8 @@
 #include "../IScene/IScene.h"
 #include <memory>
 
+#include "../../../Program/Skydome/Skydome.h"
+
 class TitleScene : public IScene
 {
 
@@ -75,6 +77,16 @@ private: // メンバ変数
 	Vector4 startColor_;
 
 	StartAnimationVariables startAnimationVariables_;
+
+	// スカイドーム
+	std::unique_ptr<Skydome> skydome_ = nullptr;
+	std::unique_ptr<Model> skydomeModel_ = nullptr;
+	std::unique_ptr<Material> skydomeMaterial_ = nullptr;
+
+	// プレイヤー
+	WorldTransform playerWorldTransform_;
+	std::unique_ptr<Model> playerModel_ = nullptr;
+	std::unique_ptr<Material> playerMaterial_ = nullptr;
 
 };
 
