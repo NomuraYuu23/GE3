@@ -29,6 +29,7 @@ void Particle::Initialize(const Vector3& position, const Vector3& size)
 	std::uniform_real_distribution<float> distributionZ(distributionMin.z, distributionMax.z);
 	std::uniform_real_distribution<float> distColor(0.0f, 1.0f);
 	std::uniform_real_distribution<float> distTime(1.0f, 3.0f);
+	std::uniform_real_distribution<float> distSpeed(-3.0f, 3.0f);
 
 	transform_.scale = {1.0f,1.0f,1.0f};
 	transform_.rotate = { 0.0f,0.0f,0.0f };
@@ -48,6 +49,8 @@ void Particle::Initialize(const Vector3& position, const Vector3& size)
 
 	isDead_ = false;
 
+	velocity_ = { distSpeed(randomEngine), distSpeed(randomEngine), distSpeed(randomEngine) };
+
 }
 
 void Particle::Update(const Matrix4x4& billBoardMatrix)
@@ -55,6 +58,7 @@ void Particle::Update(const Matrix4x4& billBoardMatrix)
 	if (lifeTime_ <= currentTime_) {
 		isDead_ = true;
 	}
+	Move();
 	TimeElapsed();
 	GraduallyDisappear();
 	UpdateMatrix(billBoardMatrix);
@@ -105,5 +109,14 @@ void Particle::GraduallyDisappear()
 {
 
 	color_.w = 1.0f - (currentTime_ / lifeTime_);
+
+}
+
+void Particle::Move()
+{
+
+	Vector3Calc* vector3Calc = Vector3Calc::GetInstance();
+
+	transform_.translate = vector3Calc->Add(transform_.translate,velocity_);
 
 }

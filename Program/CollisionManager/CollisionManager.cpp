@@ -55,7 +55,7 @@ void CollisionManager::AllCollision()
 				{enemy->GetWorldTransform().worldMatrix_.m[3][0],enemy->GetWorldTransform().worldMatrix_.m[3][1], enemy->GetWorldTransform().worldMatrix_.m[3][2]},
 			};
 
-			ParticleManager::GetInstance()->EmitterCreate(transformStructure, 3, 0.5f, 10.0f, ParticleManager::ParticleModel::kCircle, 0);
+			ParticleManager::GetInstance()->EmitterCreate(transformStructure, 2, 0.1f, 0.2f, ParticleManager::ParticleModel::kCircle, 0);
 		}
 	}
 

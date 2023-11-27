@@ -66,6 +66,11 @@ public:
 	/// <param name="num"></param>
 	void GraduallyDisappear();
 
+	/// <summary>
+	/// 移動
+	/// </summary>
+	void Move();
+
 public: // アクセッサ
 
 	/// <summary>
