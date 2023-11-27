@@ -40,12 +40,27 @@ public: // メンバ関数
 	/// <returns></returns>
 	bool ExistTarget() const { return target_ ? true : false; }
 
+	/// <summary>
+	/// リスタート
+	/// </summary>
+	void Restart();
+
 private: // メンバ関数
 
 	/// <summary>
 	/// 範囲外判定
 	/// </summary>
 	bool OutOfRangeJudgment(const ViewProjection& viewProjection);
+
+	/// <summary>
+	/// ロックオンモード変更
+	/// </summary>
+	void LockOnModeChange();
+
+	/// <summary>
+	/// ImGui表示
+	/// </summary>
+	void ImGuiDraw();
 
 private: // メンバ変数
 
@@ -59,10 +74,13 @@ private: // メンバ変数
 	float minDistance_ = 50.0f;
 
 	// 最大距離
-	float maxDistance_ = 80.0f;
+	float maxDistance_ = 200.0f;
 
 	// 角度範囲
 	float angleRange_ = 20.0f * 3.14f / 180.0f;
+
+	// 自動ロックオンか
+	bool isAutomatic_ = false;
 
 };
 

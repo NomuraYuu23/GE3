@@ -1,6 +1,7 @@
 #include "LockOn.h"
 #include "../../Engine/Input/Input.h"
 #include <cmath>
+#include "../../Engine/2D/ImguiManager.h"
 
 void LockOn::Initialize(uint32_t textureHandle)
 {
@@ -19,10 +20,16 @@ void LockOn::Update(const std::list<Enemy*>& enemies, const ViewProjection& view
 	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
 	Matrix4x4Calc* m4Calc = Matrix4x4Calc::GetInstance();
 
+	// ロックオンモード変更する
+	if (input->TriggerJoystick(9)) {
+		LockOnModeChange();
+	}
+
+
 	// ロックオン状態なら
 	if (target_) {
 		// ロックオン解除処理
-		if (input->TriggerJoystick(4)) {
+		if (input->TriggerJoystick(4) && !isAutomatic_) {
 			// ロックオンを外す
 			target_ = nullptr;
 		}
@@ -31,11 +38,52 @@ void LockOn::Update(const std::list<Enemy*>& enemies, const ViewProjection& view
 			// ロックオンを外す
 			target_ = nullptr;
 		}
+		else if (input->TriggerJoystick(5)) {
+			// ロックオン対象の検索
+// ロックオン対象の絞り込み
+// 目標
+			std::list<std::pair<float, Enemy*>> targets;
+
+			// 全ての敵に対して順にロックオン判定
+			for (Enemy* enemy : enemies) {
+				// 敵ロックオン座標取得
+				Vector3 positionWorld = {
+					enemy->GetWorldTransform().worldMatrix_.m[3][0],
+					enemy->GetWorldTransform().worldMatrix_.m[3][1],
+					enemy->GetWorldTransform().worldMatrix_.m[3][2]
+				};
+				// ワールドからビュー座標変換
+				Vector3 positionView = m4Calc->Transform(positionWorld, viewProjection.viewMatrix_);
+
+				// 距離条件チェック
+				if (minDistance_ <= positionView.z && positionView.z <= maxDistance_ && enemy != target_) {
+
+					// カメラ前方との角度を計算
+					//float arcTargent = std::atan2(
+					//std::sqrtf(positionView.x * positionView.x + positionView.y * positionView.y), positionView.z);
+					//if (std::fabsf(arcTargent) <= angleRange_) {
+					//	targets.emplace_back(std::make_pair(positionView.z, enemy));
+					//}
+
+					targets.emplace_back(std::make_pair(positionView.z, enemy));
+
+				}
+
+				// ロックオン対象をリセット
+				target_ = nullptr;
+				if (targets.size() > 0) {
+					// 距離で昇順にソート
+					targets.sort([](auto& pair1, auto& pair2) {return pair1.first < pair2.first; });
+					// ソートの結果一番近い敵をロックオン対象とする
+					target_ = targets.front().second;
+				}
+			}
+		}
 
 	}
 	else {
 		// ロックオン対象の検索
-		if (input->TriggerJoystick(4)) {
+		if (input->TriggerJoystick(4) || isAutomatic_) {
 			// ロックオン対象の検索
 			// ロックオン対象の絞り込み
 			// 目標
@@ -59,18 +107,6 @@ void LockOn::Update(const std::list<Enemy*>& enemies, const ViewProjection& view
 					//float arcTargent = std::atan2(
 					//std::sqrtf(positionView.x * positionView.x + positionView.y * positionView.y), positionView.z);
 					//if (std::fabsf(arcTargent) <= angleRange_) {
-					//	targets.emplace_back(std::make_pair(positionView.z, enemy));
-					//}
-
-					//Matrix4x4 rotateMatrix1 = m4Calc->DirectionToDirection(Vector3{ 0.0f,0.0f,1.0f }, Vector3{ std::sqrtf(positionView.x * positionView.x + positionView.y * positionView.y), 0.0f, positionView.z });
-					//Matrix4x4 rotateMatrix2 = m4Calc->MakeRotateYMatrix(angleRange_);
-
-
-					//Vector3 a = v3Calc->Normalize(v3Calc->Subtract(positionWorld, viewProjection.transform_.translate));
-					//Matrix4x4 m = m4Calc->MakeRotateXYZMatrix(viewProjection.transform_.rotate);
-					//Vector3 b = v3Calc->Normalize(m4Calc->Transform(Vector3{ 0.0f,0.0f,1.0f}, m));
-					//float Dot = v3Calc->Dot(a, b);
-					//if (1.0f - std::sinf(angleRange_) <= Dot) {
 					//	targets.emplace_back(std::make_pair(positionView.z, enemy));
 					//}
 
@@ -122,6 +158,12 @@ void LockOn::Draw()
 		lockOnMark_->Draw();
 	}
 
+#ifdef _DEBUG
+
+	ImGuiDraw();
+
+#endif // _DEBUG
+
 }
 
 Vector3 LockOn::GetTargetPosition() const
@@ -137,6 +179,14 @@ Vector3 LockOn::GetTargetPosition() const
 	}
 
 	return Vector3();
+
+}
+
+void LockOn::Restart()
+{
+
+	// ロックオンを外す
+	target_ = nullptr;
 
 }
 
@@ -166,18 +216,38 @@ bool LockOn::OutOfRangeJudgment(const ViewProjection& viewProjection)
 		//	return false;
 		//}
 
-		//Vector3 a = v3Calc->Normalize(v3Calc->Subtract(positionWorld, viewProjection.transform_.translate));
-		//Matrix4x4 m = m4Calc->MakeRotateXYZMatrix(viewProjection.transform_.rotate);
-		//Vector3 b = v3Calc->Normalize(m4Calc->Transform(Vector3{ 0.0f,0.0f,1.0f }, m));
-		//float Dot = v3Calc->Dot(a, b);
-		//if (1.0f - std::sinf(angleRange_) <= Dot) {
-		//	return false;
-		//}
-
 		return false;
 
 	}
 
 	return true;
+
+}
+
+void LockOn::LockOnModeChange()
+{
+
+	if (isAutomatic_) {
+		isAutomatic_ = false;
+	}
+	else {
+		isAutomatic_ = true;
+	}
+
+	target_ = nullptr;
+
+}
+
+void LockOn::ImGuiDraw()
+{
+
+	ImGui::Begin("LockOnMode");
+	if (isAutomatic_) {
+		ImGui::Text("Automatic");
+	}
+	else {
+		ImGui::Text("Manual");
+	}
+	ImGui::End();
 
 }

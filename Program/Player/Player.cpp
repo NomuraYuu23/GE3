@@ -478,6 +478,8 @@ void Player::Restart()
 	worldTransform_.parent_ = nullptr;
 	worldTransform_.UpdateMatrix();
 
+	lockOn_->Restart();
+
 	isDead_ = false;
 
 }
