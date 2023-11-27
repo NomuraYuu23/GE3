@@ -1,5 +1,6 @@
 #include "LockOn.h"
 #include "../../Engine/Input/Input.h"
+#include <cmath>
 
 void LockOn::Initialize(uint32_t textureHandle)
 {
@@ -55,20 +56,23 @@ void LockOn::Update(const std::list<Enemy*>& enemies, const ViewProjection& view
 				if (minDistance_ <= positionView.z && positionView.z <= maxDistance_) {
 
 					// カメラ前方との角度を計算
-					//Vector3 normPositionView = v3Calc->Normalize(positionView);
-					//Vector3 referenceLineView = v3Calc->Normalize(m4Calc->Transform(viewProjection.transform_.translate, viewProjection.viewMatrix_));
-					//float Dot = v3Calc->Dot(normPositionView, referenceLineView);
-					//if (1.0f - std::cosf(angleRange_) <= Dot) {
-					//	targets.emplace_back(std::make_pair(positionView.z, enemy));
-					//}
-
-					Vector3 a = v3Calc->Normalize(v3Calc->Subtract(positionWorld, viewProjection.transform_.translate));
-					Matrix4x4 m = m4Calc->MakeRotateXYZMatrix(viewProjection.transform_.rotate);
-					Vector3 b = v3Calc->Normalize(m4Calc->Transform(Vector3{ 0.0f,0.0f,1.0f}, m));
-					float Dot = v3Calc->Dot(a, b);
-					if (1.0f - std::sinf(angleRange_) <= Dot) {
+					float arcTargent = std::atan2(
+					std::sqrtf(positionView.x * positionView.x + positionView.y * positionView.y), positionView.z);
+					if (std::fabsf(arcTargent) <= angleRange_) {
 						targets.emplace_back(std::make_pair(positionView.z, enemy));
 					}
+
+					//Matrix4x4 rotateMatrix1 = m4Calc->DirectionToDirection(Vector3{ 0.0f,0.0f,1.0f }, Vector3{ std::sqrtf(positionView.x * positionView.x + positionView.y * positionView.y), 0.0f, positionView.z });
+					//Matrix4x4 rotateMatrix2 = m4Calc->MakeRotateYMatrix(angleRange_);
+
+
+					//Vector3 a = v3Calc->Normalize(v3Calc->Subtract(positionWorld, viewProjection.transform_.translate));
+					//Matrix4x4 m = m4Calc->MakeRotateXYZMatrix(viewProjection.transform_.rotate);
+					//Vector3 b = v3Calc->Normalize(m4Calc->Transform(Vector3{ 0.0f,0.0f,1.0f}, m));
+					//float Dot = v3Calc->Dot(a, b);
+					//if (1.0f - std::sinf(angleRange_) <= Dot) {
+					//	targets.emplace_back(std::make_pair(positionView.z, enemy));
+					//}
 
 
 				}
@@ -154,21 +158,20 @@ bool LockOn::OutOfRangeJudgment(const ViewProjection& viewProjection)
 	// 距離条件チェック
 	if (minDistance_ <= positionView.z && positionView.z <= maxDistance_) {
 	
-		//// カメラ前方との角度を計算
-		//Vector3 normPositionView = v3Calc->Normalize(positionView);
-		//Vector3 referenceLineView = v3Calc->Normalize(m4Calc->Transform(viewProjection.transform_.translate, viewProjection.viewMatrix_));
-		//float Dot = v3Calc->Dot(normPositionView, referenceLineView);
-		//if (1.0f - std::cosf(angleRange_) <= Dot) {
-		//	return false;
-		//}
-
-		Vector3 a = v3Calc->Normalize(v3Calc->Subtract(positionWorld, viewProjection.transform_.translate));
-		Matrix4x4 m = m4Calc->MakeRotateXYZMatrix(viewProjection.transform_.rotate);
-		Vector3 b = v3Calc->Normalize(m4Calc->Transform(Vector3{ 0.0f,0.0f,1.0f }, m));
-		float Dot = v3Calc->Dot(a, b);
-		if (1.0f - std::sinf(angleRange_) <= Dot) {
+		// カメラ前方との角度を計算
+		float arcTargent = std::atan2(
+			std::sqrtf(positionView.x * positionView.x + positionView.y * positionView.y), positionView.z);
+		if (std::fabsf(arcTargent) <= angleRange_) {
 			return false;
 		}
+
+		//Vector3 a = v3Calc->Normalize(v3Calc->Subtract(positionWorld, viewProjection.transform_.translate));
+		//Matrix4x4 m = m4Calc->MakeRotateXYZMatrix(viewProjection.transform_.rotate);
+		//Vector3 b = v3Calc->Normalize(m4Calc->Transform(Vector3{ 0.0f,0.0f,1.0f }, m));
+		//float Dot = v3Calc->Dot(a, b);
+		//if (1.0f - std::sinf(angleRange_) <= Dot) {
+		//	return false;
+		//}
 
 	}
 

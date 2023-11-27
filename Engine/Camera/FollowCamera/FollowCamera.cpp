@@ -37,6 +37,8 @@ void FollowCamera::Update() {
 	ApplyGlobalVariables();
 #endif // _DEBUG
 
+	viewProjection_.usedRotate_ = true;
+
 	// ロックオン中
 	if (lockOn_->ExistTarget()) {
 		// カメラをロックオン対象の方に向ける処理
@@ -45,14 +47,11 @@ void FollowCamera::Update() {
 		Vector3 lockOnPosition = lockOn_->GetTargetPosition();
 		// ターゲット座標
 		Vector3 targetPosition = { target_->worldMatrix_.m[3][0], target_->worldMatrix_.m[3][1], target_->worldMatrix_.m[3][2] };
-		// 追従対象からロックオン対象へのベクトル
-		Vector3 sub = v3Calc->Subtract(lockOnPosition, targetPosition);
+		// 追従対象からロックオン対象へのベクトル(正規化)
+		Vector3 sub = v3Calc->Normalize(v3Calc->Subtract(lockOnPosition, targetPosition));
 
-		Vector3 viewXZ = v3Calc->Normalize(Vector3{ sub.x, 0.0f, sub.z});
-		Vector3 viewZ = v3Calc->Normalize(Vector3{ 0.0f, 0.0f, sub.z });
-
-		// y軸周り角度
-		destinationAngle_ = v3Calc->Multiply(-1.0f, v3Calc->Cross(viewXZ, viewZ));
+		viewProjection_.rotateMatrix_ = m4Calc->DirectionToDirection(Vector3{0.0f,0.0f,1.0f}, Vector3{ sub.x, 0.0f, sub.z });
+		viewProjection_.usedRotate_ = false;
 
 	}
 	else {
@@ -84,6 +83,11 @@ void FollowCamera::Update() {
 
 	viewProjection_.transform_.rotate.y = Math::LerpShortAngle(viewProjection_.transform_.rotate.y, destinationAngle_.y, rotateRate_);
 	viewProjection_.transform_.rotate.x = Math::LerpShortAngle(viewProjection_.transform_.rotate.x, destinationAngle_.x, rotateRate_);
+
+	if (viewProjection_.usedRotate_) {
+		viewProjection_.rotateMatrix_ = m4Calc->MakeRotateXYZMatrix(viewProjection_.transform_.rotate);
+		viewProjection_.usedRotate_ = false;
+	}
 
 	//ビュー更新
 	BaseCamera::Update();
@@ -124,13 +128,20 @@ Vector3 FollowCamera::OffsetCalc() const
 	//追従対象からカメラまでのオフセット
 	Vector3 offset = { 0.0f, 5.0f, -50.0f };
 
-	//カメラの角度から回転行列を計算する
-	Matrix4x4 rotateMatrixX = m4Calc->MakeRotateXMatrix(viewProjection_.transform_.rotate.x);
-	Matrix4x4 rotateMatrixY = m4Calc->MakeRotateYMatrix(viewProjection_.transform_.rotate.y);
-	Matrix4x4 rotateMatrixZ = m4Calc->MakeRotateZMatrix(viewProjection_.transform_.rotate.z);
+	Matrix4x4 rotateMatrix;
 
-	Matrix4x4 rotateMatrix = m4Calc->Multiply(
-		rotateMatrixX, m4Calc->Multiply(rotateMatrixY, rotateMatrixZ));
+	if (viewProjection_.usedRotate_) {
+		//カメラの角度から回転行列を計算する
+		Matrix4x4 rotateMatrixX = m4Calc->MakeRotateXMatrix(viewProjection_.transform_.rotate.x);
+		Matrix4x4 rotateMatrixY = m4Calc->MakeRotateYMatrix(viewProjection_.transform_.rotate.y);
+		Matrix4x4 rotateMatrixZ = m4Calc->MakeRotateZMatrix(viewProjection_.transform_.rotate.z);
+
+		rotateMatrix = m4Calc->Multiply(
+			rotateMatrixX, m4Calc->Multiply(rotateMatrixY, rotateMatrixZ));
+	}
+	else {
+		rotateMatrix = viewProjection_.rotateMatrix_;
+	}
 
 	//オフセットをカメラの回転に合わせて回転させる
 	offset = m4Calc->TransformNormal(offset, rotateMatrix);

@@ -13,6 +13,12 @@ void ViewProjection::Initialize() {
 
 	farClip_ = 1000.0f;
 
+	// 回転行列
+	rotateMatrix_ = Matrix4x4Calc::GetInstance()->MakeRotateXYZMatrix(transform_.rotate);
+
+	// 方向ベクトルで回転行列
+	usedRotate_ = true;
+
 	UpdateMatrix();
 
 }
@@ -21,7 +27,19 @@ void ViewProjection::UpdateMatrix() {
 
 	Matrix4x4Calc* calc = Matrix4x4Calc::GetInstance();
 
-	Matrix4x4 transformMatrix = calc->MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
+	//拡大縮小行列
+	Matrix4x4 scaleMatrix = calc->MakeScaleMatrix(transform_.scale);
+
+	// どう回転行列作るか
+	if (usedRotate_) {
+		// 回転行列
+		rotateMatrix_ = calc->MakeRotateXYZMatrix(transform_.rotate);
+	}
+
+	//平行移動行列
+	Matrix4x4 translateMatrix = calc->MakeTranslateMatrix(transform_.translate);
+
+	Matrix4x4 transformMatrix = calc->Multiply(scaleMatrix, calc->Multiply(rotateMatrix_, translateMatrix));
 	viewMatrix_ = calc->Inverse(transformMatrix);
 	projectionMatrix_ = calc->MakePerspectiveFovMatrix(fovY_, aspectRatio_, nearClip_, farClip_);
 

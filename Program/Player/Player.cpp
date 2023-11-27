@@ -358,12 +358,7 @@ void Player::Walk()
 			move = v3Calc->Multiply(workRoot_.kWalkSpeed, v3Calc->Normalize(move));
 
 			// カメラの角度から回転行列を計算する
-			Matrix4x4 rotateMatrixX = m4Calc->MakeRotateXMatrix(viewProjection_->transform_.rotate.x);
-			Matrix4x4 rotateMatrixY = m4Calc->MakeRotateYMatrix(viewProjection_->transform_.rotate.y);
-			Matrix4x4 rotateMatrixZ = m4Calc->MakeRotateZMatrix(viewProjection_->transform_.rotate.z);
-
-			Matrix4x4 rotateMatrix = m4Calc->Multiply(
-				rotateMatrixX, m4Calc->Multiply(rotateMatrixY, rotateMatrixZ));
+			Matrix4x4 rotateMatrix = viewProjection_->rotateMatrix_;
 
 			// 移動ベクトルをカメラの角度だけ回転する
 			move = m4Calc->TransformNormal(move, rotateMatrix);
