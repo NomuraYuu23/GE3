@@ -48,8 +48,11 @@ void FollowCamera::Update() {
 		// 追従対象からロックオン対象へのベクトル
 		Vector3 sub = v3Calc->Subtract(lockOnPosition, targetPosition);
 
+		Vector3 viewXZ = v3Calc->Normalize(Vector3{ sub.x, 0.0f, sub.z});
+		Vector3 viewZ = v3Calc->Normalize(Vector3{ 0.0f, 0.0f, sub.z });
+
 		// y軸周り角度
-		destinationAngle_.y = std::atan2(sub.x, sub.z);
+		destinationAngle_ = v3Calc->Multiply(-1.0f, v3Calc->Cross(viewXZ, viewZ));
 
 	}
 	else {
