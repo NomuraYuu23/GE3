@@ -78,7 +78,7 @@ void Enemy::Update() {
 		Rotation();
 
 		// 移動
-		//Move();
+		Move();
 
 		// 腕回転ギミック
 		UpdateArmRotationgimmick();
