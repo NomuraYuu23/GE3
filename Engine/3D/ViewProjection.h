@@ -23,8 +23,14 @@ struct  ViewProjection
 	// 回転行列
 	Matrix4x4 rotateMatrix_;
 
+	// 回転行列
+	Matrix4x4 rotateAngleMatrix_;
+
+	// 回転行列
+	Matrix4x4 rotateDirectionMatrix_;
+
 	// 方向ベクトルで回転行列
-	bool usedRotate_;
+	//bool usedRotate_;
 
 	void Initialize();
 
