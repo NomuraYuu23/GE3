@@ -6,6 +6,8 @@
 #include "../Goal/Goal.h"
 #include "../EnemyManager/EnemyManager.h"
 
+#include "../../Engine/Camera/FollowCamera/FollowCamera.h"
+
 class CollisionManager
 {
 
@@ -14,7 +16,7 @@ public: // メンバ関数
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(Player* player, FloorManager* floorManager, Goal* goal, EnemyManager* enemyManager);
+	void Initialize(Player* player, FloorManager* floorManager, Goal* goal, EnemyManager* enemyManager, FollowCamera* followCamera);
 
 	/// <summary>
 	/// 衝突
@@ -34,5 +36,7 @@ private: // メンバ変数
 	FloorManager* floorManager_ = nullptr;
 	Goal* goal_ = nullptr;
 	EnemyManager* enemyManager_ = nullptr;
+
+	FollowCamera* followCamera_ = nullptr;
 
 };

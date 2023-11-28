@@ -122,6 +122,15 @@ void FollowCamera::SetTarget(const WorldTransform* target)
 	Reset();
 }
 
+void FollowCamera::Restart()
+{
+
+	interTarget_ = { target_->worldMatrix_.m[3][0], target_->worldMatrix_.m[3][1], target_->worldMatrix_.m[3][2] };
+	viewProjection_.transform_.rotate = { 0.0f,0.0f,0.0f };
+	destinationAngle_ = { 0.0f,0.0f,0.0f };
+
+}
+
 Vector3 FollowCamera::OffsetCalc() const
 {
 

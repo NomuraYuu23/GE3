@@ -31,6 +31,11 @@ public:
 	void SetTarget(const WorldTransform* target);
 
 	/// <summary>
+	/// リスタート
+	/// </summary>
+	void Restart();
+
+	/// <summary>
 	/// ビュープロジェクションゲッター
 	/// </summary>
 	/// <returns></returns>
@@ -43,7 +48,6 @@ public:
 	ViewProjection* GetViewProjectionAddress() { return &viewProjection_; }
 
 	void SetLockOn(LockOn* lockOn) { lockOn_ = lockOn; }
-
 
 private: // メンバ関数
 

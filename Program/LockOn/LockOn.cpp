@@ -187,6 +187,7 @@ void LockOn::Restart()
 
 	// ロックオンを外す
 	target_ = nullptr;
+	isAutomatic_ = false;
 
 }
 

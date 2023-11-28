@@ -2,7 +2,7 @@
 #include "Collision.h"
 #include "../../Engine/Particle/ParticleManager.h"
 
-void CollisionManager::Initialize(Player* player, FloorManager* floorManager, Goal* goal, EnemyManager* enemyManager)
+void CollisionManager::Initialize(Player* player, FloorManager* floorManager, Goal* goal, EnemyManager* enemyManager, FollowCamera* followCamera)
 {
 
 	v3Calc = Vector3Calc::GetInstance();
@@ -15,6 +15,8 @@ void CollisionManager::Initialize(Player* player, FloorManager* floorManager, Go
 	goal_ = goal;
 
 	enemyManager_ = enemyManager;
+
+	followCamera_ = followCamera;
 
 }
 
@@ -34,12 +36,14 @@ void CollisionManager::AllCollision()
 	if (Collision::IsCollision(goal_->GetCollider(), *player_->GetCollider())) {
 		player_->Restart();
 		enemyManager_->Restart();
+		followCamera_->Restart();
 	}
 	for (Enemy* enemy : enemyManager_->GetEnemies()) {
 		// あたり判定確認
 		if (Collision::IsCollision(*enemy->GetCollider(), *player_->GetCollider()) && !enemy->GetDisappear()) {
 			player_->Restart();
 			enemyManager_->Restart();
+			followCamera_->Restart();
 		}
 
 		if (Collision::IsCollision(*enemy->GetCollider(), *player_->GetAttackCollider()) &&

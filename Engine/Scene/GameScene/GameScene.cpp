@@ -142,7 +142,7 @@ void GameScene::Initialize() {
 
 	// 衝突マネージャー
 	collisionManager_ = std::make_unique<CollisionManager>();
-	collisionManager_->Initialize(player_.get(), floorManager_.get(), goal_.get(), enemyManager_.get());
+	collisionManager_->Initialize(player_.get(), floorManager_.get(), goal_.get(), enemyManager_.get(), followCamera_.get());
 
 	colliderDebugDraw_->AddCollider(player_->GetCollider());
 	colliderDebugDraw_->AddCollider(player_->GetAttackCollider());
@@ -331,6 +331,7 @@ void GameScene::Restart()
 
 	player_->Restart();
 	enemyManager_->Restart();
+	followCamera_->Restart();
 
 }
 
