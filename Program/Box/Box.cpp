@@ -2,7 +2,7 @@
 #include <cmath>
 #include"../../externals/imgui/imgui.h"
 
-void Box::Initialize(Model* model, Material* material, TransformStructure transform_, bool isMoving, bool isVertical){
+void Box::Initialize(Model* model, Material* material, TransformStructure transform_, Vector3 pos, bool isMoving, bool isVertical){
 	// nullポインタチェック
 	assert(model);
 
@@ -22,7 +22,7 @@ void Box::Initialize(Model* model, Material* material, TransformStructure transf
 	drawWorldTransform_.transform_.scale = transform_.scale;
 	drawWorldTransform_.UpdateMatrix();
 
-	position_ = transform_.translate;
+	position_ = pos;
 
 	size_ = { drawWorldTransform_.transform_.scale.x + 0.1f,drawWorldTransform_.transform_.scale.y + 0.1f,drawWorldTransform_.transform_.scale.z + 0.1f, };
 
@@ -114,8 +114,13 @@ void Box::verticalMove(){
 }
 
 void Box::DrawImgui(){
+	if (isMoving_){
+		ImGui::DragFloat3("箱の座標", &position_.x, 0.1f);
+	}
+	else {
+		ImGui::DragFloat3("箱の座標", &drawWorldTransform_.transform_.translate.x, 0.1f);
+	}
 	
-	ImGui::DragFloat3("箱の座標", &drawWorldTransform_.transform_.translate.x, 0.1f);
 	ImGui::DragFloat3("箱の回転", &drawWorldTransform_.transform_.rotate.x, 0.1f);
 	ImGui::DragFloat3("箱の大きさ", &drawWorldTransform_.transform_.scale.x, 0.1f, 0.0f, 300.0f);
 	ImGui::Checkbox("動くかどうか", &isMoving_);
@@ -124,5 +129,5 @@ void Box::DrawImgui(){
 		isDelete_ = true;
 	}
 	worldTransform_.transform_.translate = drawWorldTransform_.transform_.translate;
-	position_ = drawWorldTransform_.transform_.translate;
+	//position_ = drawWorldTransform_.transform_.translate;
 }

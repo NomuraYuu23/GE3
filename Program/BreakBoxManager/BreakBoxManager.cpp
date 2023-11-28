@@ -63,7 +63,7 @@ void BreakBoxManager::DrawImgui(){
 
 void BreakBoxManager::AddBox(TransformStructure box, bool isMoving, bool isVertical){
 	BreakBox* box_ = new BreakBox();
-	box_->Initialize(model_, material_, box, isMoving, isVertical);
+	box_->Initialize(model_, material_, box, box.translate, isMoving, isVertical);
 
 	breakBoxes_.push_back(box_);
 
@@ -155,6 +155,11 @@ void BreakBoxManager::FileOverWrite(const std::string& stage){
 			});
 		overWrite[i][3] = box->GetMoveFlag();
 		overWrite[i][4] = box->GetVerticalFlag();
+		overWrite[i][5] = json::array(
+			{ box->GetPosition().x,
+				box->GetPosition().y,
+				box->GetPosition().z
+			});
 		i++;
 	}
 
@@ -288,6 +293,7 @@ void BreakBoxManager::LoadFile(const std::string& groupName, const std::string& 
 	for (const auto& i : root[groupName][stage]) {
 		int count = 0;
 		TransformStructure newTrans{};
+		Vector3 pos{};
 		bool isNewMove = false;
 		bool isVerticalMove = false;
 		for (const auto& j : i) {
@@ -310,12 +316,16 @@ void BreakBoxManager::LoadFile(const std::string& groupName, const std::string& 
 			else if (count == 4) {
 				isVerticalMove = j;
 			}
+			else if (count == 5) {
+				from_json(j, v);
+				pos = v;
+			}
 			count++;
 
 		}
 
 		BreakBox* box_ = new BreakBox();
-		box_->Initialize(model_, material_, newTrans, isNewMove, isVerticalMove);
+		box_->Initialize(model_, material_, newTrans, pos, isNewMove, isVerticalMove);
 
 		breakBoxes_.push_back(box_);
 
