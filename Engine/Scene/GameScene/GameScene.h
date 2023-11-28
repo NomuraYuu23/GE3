@@ -14,6 +14,7 @@
 #include "../../Pause/Pause.h"
 #include"../../../Program/CheckPointManager/CheckPointManager.h"
 #include"../../../Program/Goal/Goal.h"
+#include "../../../Program/ShadowManager/ShadowManager.h"
 
 class GameScene : public IScene
 {
@@ -193,6 +194,8 @@ private:
 
 	// パーティクルマネージャー
 	ParticleManager* particleManager_ = nullptr;
+	std::unique_ptr<Model> particleUvcheckerModel_ = nullptr;
+	std::unique_ptr<Model> particleCircleModel_ = nullptr;
 
 	//エネミー関連
 	//エネミー
@@ -207,5 +210,10 @@ private:
 	std::unique_ptr<Model> goalModel_;
 	std::unique_ptr<Material> goalMaterial_;
 
+
+
+	//影マネージャー
+	ShadowManager* shadowManager_;
+	std::unique_ptr<Model> shadowModel_ = nullptr;
 
 };

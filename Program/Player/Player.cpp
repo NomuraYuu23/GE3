@@ -43,11 +43,21 @@ void Player::Initialize(const std::vector<Model*>& models,
 	worldTransformBody_.transform_.translate.y = 2.5f;
 	worldTransformBody_.transform_.scale = { 5.0f,5.0f,5.0f };
 
+	worldTransformLeftLeg_.Initialize();
+	worldTransformLeftLeg_.parent_ = &worldTransform_;
+	worldTransformLeftLeg_.transform_.translate.y = 2.5f;
+	worldTransformLeftLeg_.transform_.scale = { 5.0f,5.0f,5.0f };
+
+	worldTransformRightLeg_.Initialize();
+	worldTransformRightLeg_.parent_ = &worldTransform_;
+	worldTransformRightLeg_.transform_.translate.y = 2.5f;
+	worldTransformRightLeg_.transform_.scale = { 5.0f,5.0f,5.0f };
+
 	////浮遊ギミック
-	//InitializeFloatinggimmick();
+	InitializeFloatinggimmick();
 
 	////ぶらぶらギミック
-	//InitializeSwinggimmick();
+	InitializeSwinggimmick();
 
 	velocity_ = {0.0f,0.0f,0.0f};
 
@@ -67,6 +77,8 @@ void Player::Initialize(const std::vector<Model*>& models,
 	exprosionNum_ = startExprosionNum_;
 
 	isGoal_ = false;
+
+	particleManager_ = ParticleManager::GetInstance();
 
 }
 
@@ -127,6 +139,8 @@ void Player::Draw(const ViewProjection& viewProjection)
 	DrawImgui();
 
 	models_[int(ModelIndex::kModelIndexBody)]->Draw(worldTransformBody_, viewProjection);
+	models_[int(ModelIndex::kModelIndexLeftLeg)]->Draw(worldTransformLeftLeg_, viewProjection);
+	models_[int(ModelIndex::lModelIndexRightLeg)]->Draw(worldTransformRightLeg_, viewProjection);
 	models_[int(ModelIndex::kModelIndexExprode)]->Draw(worldTransformExprode_, viewProjection);
 
 }
@@ -139,9 +153,6 @@ void Player::BehaviorRootInitialize()
 
 	// ぶらぶらギミック
 	InitializeSwinggimmick();
-
-	//武器角度
-	//worldTransformWeapon_.transform_.rotate.x = 0.0f;
 
 }
 
@@ -165,7 +176,9 @@ void Player::BehaviorRootUpdate()
 	//UpdateFloatinggimmick();
 
 	// ぶらぶらギミック
-	UpdateSwinggimmick();
+	if (workSwing_.doing_) {
+		UpdateSwinggimmick();
+	}
 
 }
 
@@ -309,7 +322,7 @@ void Player::InitializeSwinggimmick()
 	// ぶらぶらアニメーションの媒介変数
 	workSwing_.swingParameter_ = 0.0f;
 	// ぶらぶらアニメーションのサイクル<frame>
-	workSwing_.swingPeriod_ = 60;
+	workSwing_.swingPeriod_ = 30;
 
 }
 
@@ -324,11 +337,23 @@ void Player::UpdateSwinggimmick()
 	// パラメータを1ステップ分加算
 	workSwing_.swingParameter_ += step;
 	// 2πを超えたら0に戻す
-	workSwing_.swingParameter_ = std::fmod(workSwing_.swingParameter_, 2.0f * pi);
+	if (workSwing_.swingParameter_ >= 2.0f * pi){
+		if (workSwing_.continue_) {
+			workSwing_.swingParameter_ = std::fmod(workSwing_.swingParameter_, 2.0f * pi);
+		}
+		else {
+			workSwing_.swingParameter_ = 0.0f;
+			workSwing_.doing_ = false;
+		}
+	}
 
-	//worldTransformL_arm_.transform_.rotate.x = std::sinf(workSwing_.swingParameter_) / 2.0f;
-	//worldTransformR_arm_.transform_.rotate.x = std::sinf(workSwing_.swingParameter_) / 2.0f;
+	worldTransformLeftLeg_.transform_.rotate.x = std::sinf(workSwing_.swingParameter_) / 2.0f;
+	worldTransformRightLeg_.transform_.rotate.x = -std::sinf(workSwing_.swingParameter_) / 2.0f;
 
+
+	if (std::fmod(workSwing_.swingParameter_ / step, 4.0f) <= 0.001f) {
+		WalkEffectInitialize();
+	}
 
 }
 
@@ -386,11 +411,25 @@ void Player::Walk()
 			// 移動方向に見た目を合わせる(Y軸)
 			workRoot_.targetAngle_ = std::atan2f(move.x, move.z);
 
+			// アニメーション
+			if (workSwing_.doing_) {
+				workSwing_.continue_ = true;
+			}
+			else {
+				workSwing_.doing_ = true;
+			}
+
 		}
 		else {
 			// 移動
 			velocity_.x = 0.0f;
 			velocity_.z = 0.0f;
+			
+			// アニメーション
+			if (workSwing_.doing_) {
+				workSwing_.continue_ = false;
+			}
+
 		}
 
 		// 角度補間
@@ -419,6 +458,9 @@ void Player::Jump()
 			velocity_.y = 0.0f;
 			velocity_.y += workRoot_.kJumpSpeed;
 			isLanding = false;
+
+			JumpEffectInitialize();
+			ExplosionEffectInitialize();
 			
 		}
 
@@ -526,6 +568,7 @@ void Player::OnCollision(WorldTransform* worldTransform)
 		if (!worldTransform_.parent_ ||
 			(worldTransform_.parent_ != worldTransform)) {
 			GotParent(worldTransform);
+			JumpEffectInitialize();
 		}
 		worldTransform_.transform_.translate.y = 0;
 		allUpdateMatrix();
@@ -546,6 +589,7 @@ void Player::OnCollisionBox(WorldTransform* worldTransform, Vector3 boxSize, boo
 			}
 			worldTransform_.transform_.translate.y = boxSize.y;
 			allUpdateMatrix();
+			JumpEffectInitialize();
 
 			isLanding = true;
 		}
@@ -645,13 +689,50 @@ void Player::LostParent()
 
 }
 
+void Player::WalkEffectInitialize()
+{
+
+	TransformStructure  transformStructure = { 
+		{ 0.5f, 0.5f, 0.5f},
+		worldTransform_.transform_.rotate, 
+		{ worldTransform_.worldMatrix_.m[3][0], worldTransform_.worldMatrix_.m[3][1], worldTransform_.worldMatrix_.m[3][2]}};
+
+
+	particleManager_->EmitterCreate(transformStructure, 3, 0.01f, 0.1f, 1, 1);
+
+}
+
+void Player::JumpEffectInitialize()
+{
+
+	TransformStructure  transformStructure = {
+	{ 0.5f, 0.5f, 0.5f},
+	worldTransform_.transform_.rotate,
+	{ worldTransform_.worldMatrix_.m[3][0], worldTransform_.worldMatrix_.m[3][1], worldTransform_.worldMatrix_.m[3][2]} };
+
+
+	particleManager_->EmitterCreate(transformStructure, 10, 0.01f, 0.02f, 1, 2);
+
+}
+
+void Player::ExplosionEffectInitialize()
+{
+
+	TransformStructure  transformStructure = {
+	{ 0.5f, 0.5f, 0.5f},
+	worldTransform_.transform_.rotate,
+	{ worldTransform_.worldMatrix_.m[3][0], worldTransform_.worldMatrix_.m[3][1], worldTransform_.worldMatrix_.m[3][2]} };
+
+
+	particleManager_->EmitterCreate(transformStructure, 20, 0.01f, 0.02f, 1, 3);
+
+}
+
 void Player::allUpdateMatrix(){
 	worldTransform_.UpdateMatrix();
 	worldTransformBody_.UpdateMatrix();
-	//worldTransformHead_.UpdateMatrix();
-	//worldTransformL_arm_.UpdateMatrix();
-	//worldTransformR_arm_.UpdateMatrix();
-	//worldTransformWeapon_.UpdateMatrix();
+	worldTransformLeftLeg_.UpdateMatrix();
+	worldTransformRightLeg_.UpdateMatrix();
 	worldTransformExprode_.UpdateMatrix();
 }
 

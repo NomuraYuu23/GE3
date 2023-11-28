@@ -1,6 +1,7 @@
 #include"RecoveryItem.h"
 #include <cmath>
 #include"../../externals/imgui/imgui.h"
+#include "../../Engine/Math/Ease.h"
 
 void RecoveryItem::Initialize(Model* model, Material* material, TransformStructure transform_, int recoveryValue/*, bool isMoving, bool isVertical*/){
 	// nullポインタチェック
@@ -50,6 +51,7 @@ void RecoveryItem::Update(){
 		isDelete_ = true;
 	}
 
+	Rotation();
 
 	Vector3 WorldPosition = { drawWorldTransform_.worldMatrix_.m[3][0] , drawWorldTransform_.worldMatrix_.m[3][1] , drawWorldTransform_.worldMatrix_.m[3][2] };
 	size_ = { drawWorldTransform_.transform_.scale.x + 0.1f,drawWorldTransform_.transform_.scale.y + 0.1f,drawWorldTransform_.transform_.scale.z + 0.1f, };
@@ -172,4 +174,17 @@ void RecoveryItem::OnCollisionBox(WorldTransform* worldTransform, float boxSize)
 
 void RecoveryItem::OnCollisionPlayer(){
 	isDelete_ = true;
+}
+
+void RecoveryItem::Rotation()
+{
+
+	float speed = 0.01f;
+
+	rotateParameter_ += speed;
+
+	rotateParameter_ = std::fmodf(rotateParameter_, 1.0f);
+
+	drawWorldTransform_.transform_.rotate.y = Ease::Easing(Ease::EaseName::EaseInQuart, 0.0f, 6.28f, rotateParameter_);
+
 }

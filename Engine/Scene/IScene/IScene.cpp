@@ -2,7 +2,7 @@
 
 //タイトルシーンで初期化
 int IScene::sceneNo = kTitle;
-int IScene::requestSeneNo = kGame;
+int IScene::requestSeneNo = kTitle;
 
 DirectXCommon* IScene::dxCommon_ = nullptr;
 Input* IScene::input_ = nullptr;

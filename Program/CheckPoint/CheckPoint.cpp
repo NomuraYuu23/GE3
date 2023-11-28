@@ -1,5 +1,8 @@
 #include "CheckPoint.h"
 #include"../../externals/imgui/imgui.h"
+#include "../../Engine/Particle/ParticleManager.h"
+#include "../../Engine/Math/DeltaTime.h"
+
 void CheckPoint::Initialize(Model* model, Material* material, TransformStructure transform){
 	// nullポインタチェック
 	assert(model);
@@ -30,6 +33,9 @@ void CheckPoint::Initialize(Model* model, Material* material, TransformStructure
 	Vector3 colliderMin_ = { position_.x - size_.x, position_.y - size_.y, position_.z - size_.z };
 
 	collider_.Initialize(colliderMin_, colliderMax_);
+
+	SmokeElapsedTime_ = 1024.0f;
+
 }
 
 void CheckPoint::Update(){
@@ -41,6 +47,9 @@ void CheckPoint::Update(){
 	worldTransform_.UpdateMatrix();
 	drawWorldTransform_.UpdateMatrix();
 	collider_.worldTransformUpdate();
+
+	SmokeEffect();
+
 }
 
 void CheckPoint::Draw(const ViewProjection& viewProjection){
@@ -59,4 +68,24 @@ void CheckPoint::DrawImgui(){
 
 void CheckPoint::OnCollisiin(){
 	isStarting_ = true;
+}
+
+void CheckPoint::SmokeEffect()
+{
+
+	float lifeTime = 1024.0f;
+
+	SmokeElapsedTime_ += kDeltaTime_;
+	if (SmokeElapsedTime_ >= lifeTime) {
+		SmokeElapsedTime_ = 0.0f;
+
+		TransformStructure transformStructure = {
+			{ 1.0f, 1.0f, 1.0f},
+			worldTransform_.transform_.rotate,
+			{worldTransform_.worldMatrix_.m[3][0], worldTransform_.worldMatrix_.m[3][1] + 2.0f, worldTransform_.worldMatrix_.m[3][2]}
+		};
+
+		ParticleManager::GetInstance()->EmitterCreate(transformStructure, 10, 0.1f, lifeTime, 1, 4);
+	}
+
 }

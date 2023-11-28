@@ -61,6 +61,13 @@ public: //メンバ関数
 	/// </summary>
 	void OnCollisionPlayer();
 
+private: // メンバ関数
+
+	/// <summary>
+	/// 回転
+	/// </summary>
+	void Rotation();
+
 public: // アクセッサ
 
 	WorldTransform GetWorldTransform() { return worldTransform_; }
@@ -123,4 +130,8 @@ private:
 	Vector3 position_;
 
 	AABB collider_;
+
+	// アニメーション
+	float rotateParameter_ = 0.0f;
+
 };

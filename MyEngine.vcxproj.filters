@@ -207,16 +207,16 @@
     <ClCompile Include="Engine\Pause\Pause.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3D\ParticleManager.cpp">
+    <ClCompile Include="Engine\Particle\ParticleManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3D\Particle.cpp">
+    <ClCompile Include="Engine\Particle\Particle.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Camera\BaseCamera.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3D\Emitter.cpp">
+    <ClCompile Include="Engine\Particle\Emitter.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Program\Box\Box.cpp">
@@ -290,6 +290,21 @@
     </ClCompile>
     <ClCompile Include="Program\FenceManager\FenceManager.cpp">
       <Filter>AL\ソースファイル\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\Particle\PlayerWalkParticle.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\Particle\PlayerJumpParticle.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\Particle\PlayerExplosionParticle.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\Particle\SmokeParticle.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\UI\UI.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -470,19 +485,19 @@
     <ClInclude Include="Engine\Pause\Pause.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3D\ParticleManager.h">
+    <ClInclude Include="Engine\Particle\ParticleManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3D\Particle.h">
+    <ClInclude Include="Engine\Particle\Particle.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3D\ParticleForGPU.h">
+    <ClInclude Include="Engine\Particle\ParticleForGPU.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Camera\BaseCamera.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3D\Emitter.h">
+    <ClInclude Include="Engine\Particle\Emitter.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Math\DeltaTime.h">
@@ -562,6 +577,21 @@
     </ClInclude>
     <ClInclude Include="Program\FenceManager\FenceManager.h">
       <Filter>AL\ヘッダーファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\Particle\PlayerWalkParticle.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\Particle\PlayerJumpParticle.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\Particle\PlayerExplosionParticle.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\Particle\SmokeParticle.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\UI\UI.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

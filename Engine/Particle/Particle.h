@@ -1,13 +1,22 @@
 #pragma once
-#include "TransformStructure.h"
+#include "../3D/TransformStructure.h"
 #include "../Math/Matrix4x4.h"
 
-#include "TransformationMatrix.h"
+#include "../3D/TransformationMatrix.h"
 #include <wrl.h>
 #include <d3d12.h>
-#include "ViewProjection.h"
+#include "../3D/ViewProjection.h"
 #include "../Math/Vector4.h"
 #include "ParticleForGPU.h"
+
+enum PaeticleName {
+	kDefault,
+	kPlayerWalk, // プレイヤーが歩くとき
+	kPlayerJump, // プレイヤー飛ぶとき
+	kPlayerExplosion, // プレイヤーが爆発するとき
+	kSmoke, // 狼煙
+	kCountOfPaeticleName,
+};
 
 class Particle
 {

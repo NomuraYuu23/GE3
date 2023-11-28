@@ -26,7 +26,7 @@
 #include <list>
 
 #include "../base/GraphicsPipelineState.h"
-#include "ParticleManager.h"
+#include "../Particle/ParticleManager.h"
 
 class Model
 {
@@ -57,6 +57,12 @@ public:
 	/// </summary>
 	/// <param name="cmdList">描画コマンドリスト</param>
 	static void PreDraw(ID3D12GraphicsCommandList* cmdList);
+
+	/// <summary>
+	/// 静的前処理
+	/// </summary>
+	/// <param name="cmdList">描画コマンドリスト</param>
+	static void PreParticleDraw(ID3D12GraphicsCommandList* cmdList, const ViewProjection& viewProjection);
 
 	/// <summary>
 	/// 描画後処理
@@ -101,7 +107,7 @@ public:
 	/// </summary>
 	void Draw(WorldTransform& worldTransform, const ViewProjection& viewProjection);
 	void Draw(WorldTransform& worldTransform, const ViewProjection& viewProjection, Material* material);
-	void ParticleDraw(const ViewProjection& viewProjection);
+	void ParticleDraw();
 
 	/// <summary>
 	/// メッシュデータ生成
@@ -120,7 +126,7 @@ public:
 	/// <param name="textureHandle"></param>
 	void SetTextureHandle(uint32_t textureHandle);
 
-	uint32_t GetTevtureHandle() { return textureHandle_; }
+	uint32_t GetTextureHandle() { return textureHandle_; }
 
 private:
 	// 頂点バッファ

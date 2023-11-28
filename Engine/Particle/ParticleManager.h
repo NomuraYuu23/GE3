@@ -1,11 +1,12 @@
 #pragma once
 #include <cstdint>
-#include "TransformationMatrix.h"
+#include "../3D/TransformationMatrix.h"
 #include "../base/BufferResource.h"
 #include "Particle.h"
 #include "Emitter.h"
 #include <list>
 #include <memory>
+#include <array>
 #include "ParticleForGPU.h"
 
 class Model;
@@ -14,6 +15,31 @@ class ParticleManager
 {
 
 public: // サブクラス
+
+	enum ParticleModel {
+		kUvChecker,
+		kCircle,
+		kCountofParticleModel
+	};
+
+	struct StartInstanceId {
+		uint32_t num;
+	};
+
+	//パーティクルリスト
+	struct ParticleData
+	{
+		// 描画するインスタンス数
+		uint32_t instanceIndex_;
+		//スタートインスタンス用のリソースを作る。
+		Microsoft::WRL::ComPtr<ID3D12Resource> startInstanceIdBuff_;
+		//書き込むためのアドレスを取得
+		StartInstanceId* startInstanceIdMap_{};
+		// パーティクルリスト
+		std::list<Particle*> particles_;
+		// モデル
+		Model* model_;
+	};
 
 public: // 静的メンバ変数
 
@@ -47,7 +73,7 @@ public: // メンバ関数
 	/// 描画
 	/// </summary>
 	/// <param name="viewProjection"></param>
-	void Draw(const ViewProjection& viewProjection);
+	void Draw();
 
 	/// <summary>
 	/// マッピング
@@ -63,7 +89,7 @@ public: // メンバ関数
 	/// <summary>
 	/// モデル作成
 	/// </summary>
-	void ModelCreate();
+	void ModelCreate(std::array<Model*, kCountofParticleModel> model);
 
 	/// <summary>
 	/// ビルボード更新
@@ -76,7 +102,8 @@ public: // メンバ関数
 	/// </summary>
 	/// <param name="transform"></param>
 	/// <param name="lifeTime"></param>
-	void EmitterCreate(const TransformStructure& transform, float lifeTime);
+	void EmitterCreate(const TransformStructure& transform, uint32_t instanceCount,
+		float frequency, float lifeTime, uint32_t particleModelNum, uint32_t paeticleName);
 
 	/// <summary>
 	/// エミッタ更新
@@ -86,7 +113,7 @@ public: // メンバ関数
 	/// <summary>
 	/// パーティクル追加
 	/// </summary>
-	void AddParticles(std::list<Particle*> particles);
+	void AddParticles(std::list<Particle*> particles, uint32_t particleModelNum);
 
 	/// <summary>
 	/// パーティクル更新
@@ -108,13 +135,20 @@ public: // アクセッサ
 
 	ID3D12Resource* GetParticleForGPUBuff() { return particleForGPUBuff_.Get(); }
 
-	uint32_t GetInstanceIndex() { return instanceIndex_; }
+	uint32_t GetCurrentInstanceIndex() { return particleDatas_[currentModel_].instanceIndex_; }
 
 	Matrix4x4 GetBillBoardMatrix() { return billBoardMatrix_; }
 
+	ID3D12Resource* GetCurrentStartInstanceIdBuff() { return particleDatas_[currentModel_].startInstanceIdBuff_.Get(); }
+
 private: // メンバ変数
 
-	//WVP用のリソースを作る。Matrix4x4 1つ分のサイズを用意する
+	ParticleManager() = default;
+	~ParticleManager() = default;
+	ParticleManager(const ParticleManager&) = delete;
+	const ParticleManager& operator=(const ParticleManager&) = delete;
+
+	//WVP用のリソースを作る。
 	Microsoft::WRL::ComPtr<ID3D12Resource> particleForGPUBuff_;
 	//書き込むためのアドレスを取得
 	ParticleForGPU* particleForGPUMap_{};
@@ -123,23 +157,17 @@ private: // メンバ変数
 
 	D3D12_GPU_DESCRIPTOR_HANDLE instancingSrvHandleGPU_;
 
-	//次に使うディスクリプタヒープの番号
-	uint32_t indexNextMap_ = 0u;
-
 	// パーティクル
-	std::list<Particle*> particles_;
-
-	// モデル
-	std::unique_ptr<Model> model_;
-
-	// 描画するインスタンス数
-	uint32_t instanceIndex_;
+	std::array<ParticleData, kCountofParticleModel> particleDatas_;
 
 	// ビルボード
 	Matrix4x4 billBoardMatrix_;
 
 	// エミッタ
 	std::list<Emitter*> emitters_;
+
+	// 現在のモデル
+	uint32_t currentModel_ = 0u;
 
 };
 
