@@ -19,7 +19,7 @@ public: // サブクラス
 		kJumpOperation,
 		kMoveOperation,
 		kPauseOperation,
-		kRemainingExplosion,
+		//kRemainingExplosion,
 		kCountOfTextureHandleIndex
 	};
 
