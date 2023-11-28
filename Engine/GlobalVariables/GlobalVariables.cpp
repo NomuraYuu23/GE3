@@ -1,4 +1,4 @@
-﻿#include "GlobalVariables.h"
+#include "GlobalVariables.h"
 #include "../2D/ImGuiManager.h"
 #include "../../externals/nlohmann/json.hpp"
 #include <fstream>
@@ -193,19 +193,19 @@ void GlobalVariables::Update() {
 			// int32_t型の値を保持していれば
 			if (std::holds_alternative<int32_t>(item)) {
 				int32_t* ptr = std::get_if<int32_t>(&item);
-				ImGui::SliderInt(itemName.c_str(), ptr, 0, 100);
+				ImGui::DragInt(itemName.c_str(), ptr);
 			}
 
 			// float型の値を保持していれば
 			if (std::holds_alternative<float>(item)) {
 				float* ptr = std::get_if<float>(&item);
-				ImGui::SliderFloat(itemName.c_str(), ptr, -100.0f, 100.0f);
+				ImGui::DragFloat(itemName.c_str(), ptr, 0.01f);
 			}
 
 			// Vector3型の値を保持していれば
 			if (std::holds_alternative<Vector3>(item)) {
 				Vector3* ptr = std::get_if<Vector3>(&item);
-				ImGui::SliderFloat3(itemName.c_str(), reinterpret_cast<float*>(ptr), -10.0f, 10.0f);
+				ImGui::DragFloat3(itemName.c_str(), reinterpret_cast<float*>(ptr), 0.01f);
 			}
 
 		}

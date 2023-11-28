@@ -292,6 +292,8 @@ public: // アクセッサ
 
 	bool GetIsGoal() { return isGoal_; }
 
+	uint32_t GetExprosionNum() { return	exprosionNum_; }
+
 private:
 	//全てのオブジェのUpdateMatrixをまとめたもの
 	void allUpdateMatrix();

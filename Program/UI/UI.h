@@ -16,10 +16,15 @@ public: // サブクラス
 		kJumpButton,
 		kMoveButton,
 		kPauseButton,
+		kCameraButton,
 		kJumpOperation,
 		kMoveOperation,
 		kPauseOperation,
+		kCameraOperation,
 		kRemainingExplosion,
+		kNumHundred,
+		kNumTen,
+		kNumOne,
 		kCountOfTextureHandleIndex
 	};
 
@@ -36,6 +41,8 @@ public: // サブクラス
 		Vector4 color_;
 
 		void Initialize(uint32_t textureHandle);
+
+		void Update();
 
 	};
 
@@ -60,6 +67,33 @@ public: // メンバ関数
 	/// セットプレイヤー
 	/// </summary>
 	void SetPlayer(Player* player) { player_ = player; }
+
+	/// <summary>
+	/// グローバル変数
+	/// </summary>
+	void ApplyGlobalVariables();
+
+private: // メンバ関数
+
+	/// <summary>
+	/// 操作説明初期化
+	/// </summary>
+	void OperationInitialize();
+
+	/// <summary>
+	/// 操作説明更新
+	/// </summary>
+	void OperationUpdate();
+
+	/// <summary>
+	/// 自爆回数初期化
+	/// </summary>
+	void RemainingExplosionInitialize();
+
+	/// <summary>
+	/// 自爆回数更新
+	/// </summary>
+	void RemainingExplosionUpdate();
 
 private: // メンバ変数
 
