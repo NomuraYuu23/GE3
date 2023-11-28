@@ -58,7 +58,7 @@ void ShadowManager::Update()
 
 				// yが m > f && f > a 
 				if (makerPosition.y >= floorPosition.y &&
-					(!answerMakerWorldTransform || floorPosition.y > answerMakerWorldTransform->worldMatrix_.m[3][1])) {
+					(!answerMakerWorldTransform || floorPosition.y > answerFloorWorldTransform->worldMatrix_.m[3][1])) {
 					answerMakerWorldTransform = itr->worldTransform_;
 					answerFloorWorldTransform = floor.worldTransform_;
 					AddPositionY = floorRadius.y;

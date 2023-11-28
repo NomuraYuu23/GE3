@@ -1,5 +1,6 @@
 #include"RecoveryItemManager.h"
 #include"../../Engine/2D/ImguiManager.h"
+#include "../ShadowManager/ShadowManager.h"
 
 RecoveryItemManager::~RecoveryItemManager(){
 	//解放
@@ -316,6 +317,12 @@ void RecoveryItemManager::LoadFile(const std::string& groupName, const std::stri
 		recoveryItems_.push_back(box_);
 
 		colliderDebugDraw_->AddCollider(&box_->GetCollider());
+		Vector3 size = box_->GetWorldTransform().transform_.scale;
+		size.x *= 2.0f;
+		size.y *= 2.0f;
+		size.z *= 2.0f;
+		ShadowManager::GetInstance()->AddMeker(box_->GetDrawWorldTransformAdress(), size);
+
 	}
 
 }

@@ -46,6 +46,10 @@ void GameScene::Initialize() {
 	std::vector<Model*> colliderModels = { colliderSphereModel_.get(),colliderBoxModel_.get(),colliderBoxModel_.get() };
 	colliderDebugDraw_->Initialize(colliderModels, colliderMaterial_.get());
 
+	// 影
+	shadowManager_ = ShadowManager::GetInstance();
+	shadowManager_->Initialize(shadowModel_.get());
+
 	//フロアマネージャー
 	floorManager_ = std::make_unique<FloorManager>();
 	floorManager_->Initialize(floorModel_.get(), floorMaterial_.get());
@@ -126,7 +130,12 @@ void GameScene::Initialize() {
 	player_ = std::make_unique<Player>();
 	player_->Initialize(playerModels_, playerMaterials_);
 	player_->SetViewProjection(followCamera_->GetViewProjectionAddress());
-
+	Vector3 playerSize = {
+		player_->GetColliderRadius() * 2.0f,
+		player_->GetColliderRadius() * 2.0f,
+		player_->GetColliderRadius() * 2.0f
+	};
+	shadowManager_->AddMeker(player_->GetWorldTransformAddress(), playerSize);
 	//enemyManager_->SetPlayer(player_.get());
 
 	followCamera_->SetTarget(player_->GetWorldTransformAddress());
@@ -156,15 +165,6 @@ void GameScene::Initialize() {
 	particleManager_->ModelCreate(particleModel);
 
 	isDebugCameraActive_ = false;
-
-	shadowManager_ = ShadowManager::GetInstance();
-	shadowManager_->Initialize(shadowModel_.get());
-	Vector3 playerSize = {
-		player_->GetColliderRadius() * 2.0f,
-		player_->GetColliderRadius() * 2.0f,
-		player_->GetColliderRadius() * 2.0f
-	};
-	shadowManager_->AddMeker(player_->GetWorldTransformAddress(), playerSize);
 
 	// ui
 	ui = std::make_unique<UI>();
@@ -204,8 +204,6 @@ void GameScene::Update() {
 
 	// デバッグ描画
 	colliderDebugDraw_->Update();
-
-	
 
 	enemyManager_->Update();
 
