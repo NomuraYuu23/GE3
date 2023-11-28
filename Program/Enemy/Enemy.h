@@ -32,6 +32,26 @@ public:
 	void Move();
 
 	/// <summary>
+	/// 落下
+	/// </summary>
+	void Fall();
+
+	/// <summary>
+	/// 着地
+	/// </summary>
+	void Landing();
+
+	/// <summary>
+	/// 衝突
+	/// </summary>
+	void OnCollision(WorldTransform* worldTransform);
+
+	/// <summary>
+	/// 壁との衝突
+	/// </summary>
+	void OnCollisionBox(WorldTransform* worldTransform, Vector3 boxSize, bool isMove);
+
+	/// <summary>
 	/// 回転
 	/// </summary>
 	void Rotation();
@@ -46,8 +66,24 @@ public:
 	/// </summary>
 	void UpdateArmRotationgimmick();
 
+	/// <summary>
+	/// 親を得た
+	/// </summary>
+	void GotParent(WorldTransform* parent);
+
+
+	/// <summary>
+	/// 親を失った
+	/// </summary>
+	void LostParent();
+
+	//imguiの表示まとめ
+	void DrawImgui();
+
 public:
 	WorldTransform* GetWorldTransformAddress() { return &worldTransform_; }
+
+	WorldTransform GetWorldTransform()const { return worldTransform_; }
 
 	float GetColliderRadius() { return kColliderSize; }
 
@@ -56,6 +92,14 @@ public:
 	bool GetIsDead() { return isDead_; }
 
 	void SetIsDead(bool isDead) { isDead_ = isDead; }
+
+private:
+	//全てのオブジェのUpdateMatrixをまとめたもの
+	void allUpdateMatrix();
+
+	bool isFall_ = false;
+
+	bool isMove_ = false;
 
 private:
 
@@ -70,6 +114,8 @@ private:
 	// 移動用
 	// 速度
 	Vector3 velocity_ = { 0.0f, 0.0f, 0.0f };
+
+	float fallSpeed_ = 0.0f;
 	// 速さ
 	float kMoveSpeed;
 
@@ -92,5 +138,8 @@ private:
 
 	// 死亡フラグ
 	bool isDead_;
+
+	// 着地しているか
+	bool isLanding;
 
 };
