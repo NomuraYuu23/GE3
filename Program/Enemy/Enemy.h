@@ -112,9 +112,9 @@ private:
 private:
 
 	// ワールド変換データ
-	WorldTransform worldTransformBody_;
+	WorldTransform worldTransformBody_;/*
 	WorldTransform worldTransformL_arm_;
-	WorldTransform worldTransformR_arm_;
+	WorldTransform worldTransformR_arm_;*/
 
 	// ポジション
 	Vector3 position_;

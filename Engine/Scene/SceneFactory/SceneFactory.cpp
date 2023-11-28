@@ -3,6 +3,7 @@
 #include "../SelectScene/SelectScene.h"
 #include "../GameScene/GameScene.h"
 #include "../ClearScene/ClearScene.h"
+#include "../GameOverScene/GameOverScene.h"
 
 SceneFactory* SceneFactory::GetInstance()
 {
@@ -30,6 +31,8 @@ IScene* SceneFactory::CreateScene(int sceneName)
 	case kClear:  // クリア
 		newScene = new ClearScene();
 		break;
+	case kGameOver: // ゲームオーバー
+		newScene = new GameOverScene();
 	case kCountOfSceneName: // 使用不可
 		break;
 	default:

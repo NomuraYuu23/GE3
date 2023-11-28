@@ -1,6 +1,6 @@
-#include "ClearScene.h"
+#include "GameOverScene.h"
 
-void ClearScene::Initialize()
+void GameOverScene::Initialize()
 {
 
 	ModelCreate();
@@ -9,9 +9,8 @@ void ClearScene::Initialize()
 
 }
 
-void ClearScene::Update()
+void GameOverScene::Update()
 {
-	if (input_->GetJoystickConnected()) {
 
 	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerJoystick(0)) {
 		// 行きたいシーンへ
@@ -20,7 +19,7 @@ void ClearScene::Update()
 
 }
 
-void ClearScene::Draw()
+void GameOverScene::Draw()
 {
 
 #pragma region 背景スプライト描画
@@ -56,14 +55,14 @@ void ClearScene::Draw()
 
 }
 
-void ClearScene::ModelCreate()
+void GameOverScene::ModelCreate()
 {
 }
 
-void ClearScene::MaterialCreate()
+void GameOverScene::MaterialCreate()
 {
 }
 
-void ClearScene::TextureLoad()
+void GameOverScene::TextureLoad()
 {
 }

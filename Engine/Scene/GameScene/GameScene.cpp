@@ -166,6 +166,11 @@ void GameScene::Initialize() {
 	};
 	shadowManager_->AddMeker(player_->GetWorldTransformAddress(), playerSize);
 
+	// ui
+	ui = std::make_unique<UI>();
+	ui->Initialize(uiTextureHandles_);
+	ui->SetPlayer(player_.get());
+
 }
 
 /// <summary>
@@ -221,6 +226,9 @@ void GameScene::Update() {
 
 	// 影
 	shadowManager_->Update();
+
+	//ui
+	ui->Update();
 
 	// ポーズ機能
 	pause_->Update();
@@ -300,6 +308,10 @@ void GameScene::Draw() {
 
 	//背景
 	//前景スプライト描画
+
+	//ui
+	ui->Draw();
+
 	pause_->Draw();
 
 	// 前景スプライト描画後処理
@@ -557,7 +569,7 @@ void GameScene::GoToTheTitle()
 {
 
 	if (pause_->GoToTheTitle()) {
-		sceneNo = kTitle;
+		requestSeneNo = kTitle;
 	}
 
 }
@@ -585,11 +597,12 @@ void GameScene::ModelCreate()
 	//チェックポイント生成
 	checkPointModel_.reset(Model::Create("Resources/TD2_November/torch/", "torch.obj", dxCommon_));
 	//エネミー関連
-	enemyModels_.push_back(Model::Create("Resources/AL4/enemy_Body/", "enemy_Body.obj", dxCommon_));
-	enemyModels_.push_back(Model::Create("Resources/AL4/enemy_Arm/", "enemy_Arm.obj", dxCommon_));
-	enemyModels_.push_back(Model::Create("Resources/AL4/enemy_Arm/", "enemy_Arm.obj", dxCommon_));
+	enemyModels_.push_back(Model::Create("Resources/TD2_November/enemy/", "bombEnemy.obj", dxCommon_));
+	//enemyModels_.push_back(Model::Create("Resources/AL4/enemy_Arm/", "enemy_Arm.obj", dxCommon_));
+	//enemyModels_.push_back(Model::Create("Resources/AL4/enemy_Arm/", "enemy_Arm.obj", dxCommon_));
 	//ゴール関連
 	goalModel_.reset(Model::Create("Resources/TD2_November/goal/", "box.obj", dxCommon_));
+
 
 	// パーティクルモデル
 	particleUvcheckerModel_.reset(Model::Create("Resources/default/", "plane.obj", dxCommon_));
@@ -636,6 +649,24 @@ void GameScene::TextureLoad()
 		TextureManager::Load("Resources/TD2_November/pause/pausing.png", dxCommon_),
 		TextureManager::Load("Resources/TD2_November/pause/goToTitle.png", dxCommon_),
 		TextureManager::Load("Resources/TD2_November/pause/returnToGame.png", dxCommon_),
+	};
+
+	// ui
+	uiTextureHandles_ = {
+		TextureManager::Load("Resources/TD2_November/UI/buttonA.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/UI/stickL.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/UI/buttonPause.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/UI/stickR.png", dxCommon_),
+
+		TextureManager::Load("Resources/TD2_November/UI/jumpOperation.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/UI/moveOperation.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/UI/pauseOperation.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/UI/cameraOperation.png", dxCommon_),
+
+		TextureManager::Load("Resources/TD2_November/UI/remainingExplosion.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/UI/num.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/UI/num.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/UI/num.png", dxCommon_),
 	};
 
 }

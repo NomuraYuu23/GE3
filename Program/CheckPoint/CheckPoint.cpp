@@ -82,7 +82,7 @@ void CheckPoint::SmokeEffect()
 		TransformStructure transformStructure = {
 			{ 1.0f, 1.0f, 1.0f},
 			worldTransform_.transform_.rotate,
-			{worldTransform_.worldMatrix_.m[3][0], worldTransform_.worldMatrix_.m[3][1] + 2.0f, worldTransform_.worldMatrix_.m[3][2]}
+			{drawWorldTransform_.worldMatrix_.m[3][0], drawWorldTransform_.worldMatrix_.m[3][1] + drawWorldTransform_.transform_.scale.y, drawWorldTransform_.worldMatrix_.m[3][2]}
 		};
 
 		ParticleManager::GetInstance()->EmitterCreate(transformStructure, 10, 0.1f, lifeTime, 1, 4);

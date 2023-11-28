@@ -112,6 +112,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\SceneTransition\SceneTransitionBlackOut\SceneTransitionBlackOut.cpp" />
     <ClCompile Include="Engine\SceneTransition\SceneTransitionFactory\SceneTransitionFactory.cpp" />
     <ClCompile Include="Engine\Scene\ClearScene\ClearScene.cpp" />
+    <ClCompile Include="Engine\Scene\GameOverScene\GameOverScene.cpp" />
     <ClCompile Include="Engine\Scene\SceneFactory\SceneFactory.cpp" />
     <ClCompile Include="Engine\Scene\SceneManager\SceneManager.cpp" />
     <ClCompile Include="Engine\Scene\SelectScene\SelectScene.cpp" />
@@ -202,6 +203,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\SceneTransition\ISceneTransition\ISceneTransition.h" />
     <ClInclude Include="Engine\SceneTransition\SceneTransitionFactory\SceneTransitionFactory.h" />
     <ClInclude Include="Engine\Scene\ClearScene\ClearScene.h" />
+    <ClInclude Include="Engine\Scene\GameOverScene\GameOverScene.h" />
     <ClInclude Include="Engine\Scene\SceneFactory\AbstractSceneFactory.h" />
     <ClInclude Include="Engine\Scene\SceneFactory\SceneFactory.h" />
     <ClInclude Include="Engine\Scene\SceneManager\SceneManager.h" />

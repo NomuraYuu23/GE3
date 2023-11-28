@@ -1,0 +1,28 @@
+{
+    "UI": {
+        "kCameraButtonPositionX": 50.0,
+        "kCameraButtonPositionY": 570.0,
+        "kCameraOperationPositionX": 150.0,
+        "kCameraOperationPositionY": 570.0,
+        "kJumpButtonPositionX": 50.0,
+        "kJumpButtonPositionY": 620.0,
+        "kJumpOperationPositionX": 150.0,
+        "kJumpOperationPositionY": 620.0,
+        "kMoveButtonPositionX": 50.0,
+        "kMoveButtonPositionY": 520.0,
+        "kMoveOperationPositionX": 150.0,
+        "kMoveOperationPositionY": 520.0,
+        "kNumHundredPositionX": 1020.0,
+        "kNumHundredPositionY": 550.0,
+        "kNumOnePositionX": 1180.0,
+        "kNumOnePositionY": 550.0,
+        "kNumTenPositionX": 1100.0,
+        "kNumTenPositionY": 550.0,
+        "kPauseButtonPositionX": 50.0,
+        "kPauseButtonPositionY": 670.0,
+        "kPauseOperationPositionX": 150.0,
+        "kPauseOperationPositionY": 670.0,
+        "kRemainingExplosionPositionX": 1100.0,
+        "kRemainingExplosionPositionY": 630.0
+    }
+}
