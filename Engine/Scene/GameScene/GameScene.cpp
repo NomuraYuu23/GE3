@@ -127,6 +127,8 @@ void GameScene::Initialize() {
 	player_->Initialize(playerModels_, playerMaterials_);
 	player_->SetViewProjection(followCamera_->GetViewProjectionAddress());
 
+	//enemyManager_->SetPlayer(player_.get());
+
 	followCamera_->SetTarget(player_->GetWorldTransformAddress());
 
 	collisionManager_ = std::make_unique<CollisionManager>();
@@ -422,6 +424,16 @@ void GameScene::ImguiDraw() {
 				}
 				ImGui::TreePop();
 			}
+			if (ImGui::TreeNode("敵生成")) {
+				ImGui::DragFloat3("敵の座標", &firstEnemyTransform_.translate.x, 0.1f);
+				ImGui::DragFloat3("敵の回転", &firstEnemyTransform_.rotate.x, 0.01f);
+				ImGui::DragFloat3("敵の大きさ", &firstEnemyTransform_.scale.x, 0.1f, 0.1f, 999.0f, "%.1f");
+
+				if (ImGui::Button("敵の追加")) {
+					enemyManager_->AddEnemy(firstEnemyTransform_);
+				}
+				ImGui::TreePop();
+			}
 
 			ImGui::EndMenu();
 		}
@@ -448,6 +460,10 @@ void GameScene::ImguiDraw() {
 			}
 			if (ImGui::BeginMenu("チェックポイント一覧")) {
 				checkPointManager_->DrawImgui();
+				ImGui::EndMenu();
+			}
+			if (ImGui::BeginMenu("敵一覧")) {
+				enemyManager_->DrawImgui();
 				ImGui::EndMenu();
 			}
 
@@ -512,6 +528,7 @@ void GameScene::DebugCameraUpdate()
 
 void GameScene::FilesSave(const std::vector<std::string>& stages){
 	goal_->SaveFile(stages);
+	enemyManager_->SaveFile(stages);
 	/*floorManager_->SaveFile(stages);
 	boxManager_->SaveFile(stages);
 	breakBoxManager_->SaveFile(stages);
@@ -523,6 +540,7 @@ void GameScene::FilesSave(const std::vector<std::string>& stages){
 }
 
 void GameScene::FilesOverWrite(const std::string& stage){
+	enemyManager_->FileOverWrite(stage);
 	floorManager_->FileOverWrite(stage);
 	boxManager_->FileOverWrite(stage);
 	breakBoxManager_->FileOverWrite(stage);
@@ -535,6 +553,7 @@ void GameScene::FilesOverWrite(const std::string& stage){
 }
 
 void GameScene::FilesLoad(const std::vector<std::string>& stages, const std::string& stage){
+	enemyManager_->LoadFiles(stage);
 	floorManager_->LoadFiles(stage);
 	boxManager_->LoadFiles(stage);
 	breakBoxManager_->LoadFiles(stage);

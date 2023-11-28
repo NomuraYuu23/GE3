@@ -8,6 +8,7 @@
 #include "../BaseCharacter/BaseCharacter.h"
 #include "../../Engine/Collider/Sphere/Sphere.h"
 #include "../../Engine/Particle/ParticleManager.h"
+#include "../../Engine/GlobalVariables/GlobalVariables.h"
 
 class Player : public BaseCharacter
 {
@@ -99,6 +100,8 @@ public: // サブクラス
 	};
 
 public: // メンバ関数
+	//調整項目
+	void ApplyGlobalVariables();
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -278,6 +281,8 @@ public: // アクセッサ
 
 	WorldTransform* GetWorldTransformAddress() { return &worldTransform_; }
 
+	const Vector3& GetTransform() const { return worldTransform_.transform_.translate; }
+
 	void SetViewProjection(ViewProjection* viewProjection) { viewProjection_ = viewProjection;}
 
 	float GetColliderRadius() { return workRoot_.kColliderSize; }
@@ -322,7 +327,7 @@ private: // メンバ変数
 	//爆破を広げるためのスイッチ
 	bool isExplosion_;
 	//爆破時間
-	const int baseExplosionTimer_ = 30;
+	int baseExplosionTimer_ = 30;
 
 	int explosionTimer_;
 
