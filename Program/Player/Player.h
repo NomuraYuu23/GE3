@@ -233,7 +233,12 @@ public: // メンバ関数
 	/// <summary>
 	/// 壁との衝突
 	/// </summary>
-	void OnCollisionBox(WorldTransform* worldTransform, float boxSize);
+	void OnCollisionBox(WorldTransform* worldTransform, Vector3 boxSize, bool isMove);
+
+	/// <summary>
+	/// 壁との衝突
+	/// </summary>
+	void OnCollisionGoal();
 
 	/// <summary>
 	/// 回復アイテムとの衝突
@@ -284,6 +289,8 @@ public: // アクセッサ
 	Sphere& GetAttackCollider() { return workAttack_.attackCollider_; }
 
 	bool GetIsAttackJudgment() { return workAttack_.isAttackJudgment_; }
+
+	bool GetIsGoal() { return isGoal_; }
 
 private:
 	//全てのオブジェのUpdateMatrixをまとめたもの
@@ -357,6 +364,8 @@ private: // メンバ変数
 
 	//アイテム関連の変数
 	int numCollectItem;
+
+	bool isGoal_;
 
 	// パーティクルマネージャー
 	ParticleManager* particleManager_;

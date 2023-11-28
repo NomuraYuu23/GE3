@@ -83,6 +83,7 @@ void CollectibleItem::DrawImgui(){
 	if (ImGui::Button("このオブジェを削除")) {
 		isDelete_ = true;
 	}
+
 	worldTransform_.transform_.translate = drawWorldTransform_.transform_.translate;
 }
 

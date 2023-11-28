@@ -142,14 +142,14 @@ void CollectibleItemManager::FileOverWrite(const std::string& stage){
 				box->GetDrawWorldTransform().transform_.scale.z
 			});
 		overWrite[i][1] = json::array(
-			{ box->GetMakeWorldTransform().transform_.rotate.x,
-				box->GetMakeWorldTransform().transform_.rotate.y,
-				box->GetMakeWorldTransform().transform_.rotate.z
+			{ box->GetDrawWorldTransform().transform_.rotate.x,
+				box->GetDrawWorldTransform().transform_.rotate.y,
+				box->GetDrawWorldTransform().transform_.rotate.z
 			});
 		overWrite[i][2] = json::array(
-			{ box->GetMakeWorldTransform().transform_.translate.x,
-				box->GetMakeWorldTransform().transform_.translate.y,
-				box->GetMakeWorldTransform().transform_.translate.z
+			{ box->GetDrawWorldTransform().transform_.translate.x,
+				box->GetDrawWorldTransform().transform_.translate.y,
+				box->GetDrawWorldTransform().transform_.translate.z
 			});
 		overWrite[i][3] = box->GetisFalling();
 		i++;
