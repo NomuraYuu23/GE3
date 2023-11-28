@@ -58,6 +58,7 @@ void SceneManager::Update()
 		if (sceneTransition_->GetSwitchScene()) {
 			// シーン切り替え
 			TextureManager::GetInstance()->ResetTexture();
+			TextureManager::Load("Resources/default/white2x2.png", DirectXCommon::GetInstance());
 			currentSceneNo_ = requestSeneNo_;
 			scene_.reset(sceneFacyory_->CreateScene(currentSceneNo_));
 			scene_->Initialize();

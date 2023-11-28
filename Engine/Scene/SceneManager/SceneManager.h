@@ -50,5 +50,15 @@ private: // メンバ変数
 	// シーン遷移を保持するメンバ変数
 	std::unique_ptr<ISceneTransition> sceneTransition_;
 
+
+private: // 
+
+	// ステージ番号保存
+	uint32_t stageNum_ = 0;
+
+public: // 
+
+	void SetStageNum(uint32_t stageNum) { stageNum_ = stageNum; }
+
 };
 
