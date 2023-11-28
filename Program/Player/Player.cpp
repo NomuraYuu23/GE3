@@ -3,9 +3,27 @@
 #include "../../Engine/Math/Math.h"
 #include"../../Engine/2D/ImguiManager.h"
 
+void Player::ApplyGlobalVariables(){
+	GlobalVariables* item = GlobalVariables::GetInstance();
+	const char* groupName = "Player";
+
+	explosionSpeed_ = item->GetFloatValue(groupName, "explosionSpeed");
+	baseExplosionTimer_ = item->GetIntValue(groupName, "baseExplosionTimer");
+	startExprosionNum_ = item->GetIntValue(groupName, "startExprosionNum");
+}
+
 void Player::Initialize(const std::vector<Model*>& models,
 	const std::vector<Material*>& materials)
 {
+	GlobalVariables* adjustment_item = GlobalVariables::GetInstance();
+	const char* groupName = "Player";
+	//グループを追加
+	adjustment_item->CreateGroup(groupName);
+	//アイテムの追加
+	adjustment_item->AddItem(groupName, "explosionSpeed", explosionSpeed_);
+	adjustment_item->AddItem(groupName, "baseExplosionTimer", baseExplosionTimer_);
+	adjustment_item->AddItem(groupName, "startExprosionNum", startExprosionNum_);
+
 	workRoot_.kInitialPosition = { 0.0f,5.0f,0.0f };
 	//nullポインタチェック
 	assert(models.front());
@@ -54,7 +72,7 @@ void Player::Initialize(const std::vector<Model*>& models,
 
 void Player::Update()
 {
-
+	ApplyGlobalVariables();
 	if (behaviorRequest_) {
 		//振るまいを変更する
 		behavior_ = behaviorRequest_.value();
@@ -656,7 +674,7 @@ void Player::DrawImgui(){
 
 		if (ImGui::BeginMenu("爆破関係")) {
 			ImGui::DragFloat3("爆破の中心", &explosionCollider_.center_.x, 0.1f);
-			ImGui::DragFloat("広がる速度", &explosionSpeed_, 0.01f, 0.0f, 2.0f);
+			//ImGui::DragFloat("広がる速度", &explosionSpeed_, 0.01f, 0.0f, 2.0f);
 			ImGui::DragInt("残り爆発回数", &exprosionNum_, 1.0f, exprosionMin_, exprosionMax_);
 			ImGui::EndMenu();
 		}
