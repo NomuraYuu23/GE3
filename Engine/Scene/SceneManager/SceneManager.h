@@ -3,6 +3,7 @@
 #include "../IScene/IScene.h"
 #include "../TitleScene/TitleScene.h"
 #include "../GameScene/GameScene.h"
+#include "../SelectScene/SelectScene.h"
 #include "../SceneFactory/SceneFactory.h"
 #include "../../SceneTransition/ISceneTransition/ISceneTransition.h"
 #include "../../SceneTransition/SceneTransitionFactory/SceneTransitionFactory.h"

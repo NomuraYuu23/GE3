@@ -16,6 +16,9 @@ void Skydome::Initialize(Model* model, Material* material) {
 
 	// ワールド変換データの初期化
 	worldTransform_.Initialize();
+	worldTransform_.transform_.scale = { 10.0f,10.0f, 10.0f };
+	worldTransform_.UpdateMatrix();
+
 }
 
 /// <summary>

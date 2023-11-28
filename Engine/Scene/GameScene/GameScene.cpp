@@ -509,6 +509,15 @@ void GameScene::ImguiDraw() {
 
 }
 
+void GameScene::LoadStage(uint32_t stageIndex)
+{
+
+	stageName_ = stages_[stageIndex].c_str();
+
+	FilesLoad(stages_, stageName_);
+
+}
+
 void GameScene::DebugCameraUpdate()
 {
 

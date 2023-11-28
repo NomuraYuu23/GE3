@@ -61,8 +61,6 @@ private: // メンバ関数
 
 private: // メンバ関数
 
-	void SpriteUpdate();
-
 	void SelectChange();
 
 	void SelectDecision();
@@ -70,6 +68,8 @@ private: // メンバ関数
 	void SelectReturn();
 
 	void BackGroundInitialize();
+
+	void BackGroundUpdate();
 
 	void SelectionSquareInitialize();
 
@@ -103,6 +103,9 @@ private: // メンバ変数
 	SelectUIData decisionButton_;
 	SelectUIData moveButton_;
 	SelectUIData returnButton_;
+
+	// 名前スプライト
+	SelectUIData name_;
 
 	// 選択クールタイム
 	float selectCooltime_ = 0.3f;

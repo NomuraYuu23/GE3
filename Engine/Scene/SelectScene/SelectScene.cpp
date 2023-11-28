@@ -21,6 +21,8 @@ void SelectScene::Initialize()
 void SelectScene::Update()
 {
 
+	BackGroundUpdate();
+
 	SelectChange();
 
 	// タイトルへ
@@ -66,6 +68,7 @@ void SelectScene::Draw()
 		
 	// 背景スプライト
 	background_.sprite_->Draw();
+	name_.sprite_->Draw();
 
 	// 選択マススプライト
 	for (uint32_t i = 0; i < selectionSquareMax_; i++) {
@@ -97,10 +100,6 @@ void SelectScene::MaterialCreate()
 }
 
 void SelectScene::TextureLoad()
-{
-}
-
-void SelectScene::SpriteUpdate()
 {
 }
 
@@ -176,6 +175,25 @@ void SelectScene::BackGroundInitialize()
 	background_.position_ = { 640.0f,360.0f };
 	background_.sprite_->SetSize(Vector2{ 1280.0f, 720.0f });
 	background_.Update();
+
+	name_.Initialize(TextureManager::Load("Resources/TD2_November/select/stageSelect.png", dxCommon_));
+	name_.position_ = { 640.0f,180.0f };
+	//name_.sprite_->SetSize(Vector2{ 1280.0f, 720.0f });
+	name_.Update();
+
+}
+
+void SelectScene::BackGroundUpdate()
+{
+
+	Vector2 leftTop = background_.sprite_->GetTextureLeftTop();
+	float speed = 2.0f;
+
+
+	leftTop.x += speed;
+	leftTop.x = std::fmodf(leftTop.x, background_.sprite_->GetTextureInitSize().x);
+
+	background_.sprite_->SetTextureLeftTop(leftTop);
 
 }
 
