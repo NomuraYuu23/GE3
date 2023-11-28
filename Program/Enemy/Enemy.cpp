@@ -4,6 +4,8 @@
 
 #include "Enemy.h"
 #include"../../Engine/2D/ImguiManager.h"
+#include"../Player/Player.h"
+
 /// <summary>
 /// 初期化
 /// </summary>
@@ -52,6 +54,8 @@ void Enemy::Initialize(TransformStructure transform,const std::vector<Model*>& m
 
 	collider_.Initialize(worldTransform_.transform_.translate, kColliderSize);
 
+	searchCollider_.Initialize(worldTransform_.transform_.translate, kSearchColliderSize);
+
 	isDead_ = false;
 
 }
@@ -61,7 +65,7 @@ void Enemy::Initialize(TransformStructure transform,const std::vector<Model*>& m
 /// </summary>
 void Enemy::Update() {	
 	// 回転
-	Rotation();
+	//Rotation();
 	if (isMove_){
 		// 移動
 		Move();
@@ -85,6 +89,8 @@ void Enemy::Update() {
 
 	collider_.center_ = { worldTransform_.worldMatrix_.m[3][0],worldTransform_.worldMatrix_.m[3][1], worldTransform_.worldMatrix_.m[3][2] };
 	collider_.worldTransformUpdate();
+	searchCollider_.center_ = { worldTransform_.worldMatrix_.m[3][0],worldTransform_.worldMatrix_.m[3][1], worldTransform_.worldMatrix_.m[3][2] };
+	searchCollider_.worldTransformUpdate();
 	
 }
 
@@ -106,24 +112,35 @@ void Enemy::Draw(const ViewProjection& viewProjection) {
 /// 移動
 /// </summary>
 void Enemy::Move() {
-	Rotation();
 	Fall();
 
 	Matrix4x4Calc* m4Calc = Matrix4x4Calc::GetInstance();
 	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
-	
-	//移動速度
-	Vector3 velocity(0.0f, 0.0f, kMoveSpeed);
+	if (!player_) {
+		Rotation();
+		
+		//移動速度
+		Vector3 velocity(0.0f, 0.0f, kMoveSpeed);
 
-	//速度ベクトルを向きに合わせて回転させる
-	velocity_ = m4Calc->TransformNormal(velocity, worldTransform_.worldMatrix_);
-	if (isFall_){
-		velocity_.y += fallSpeed_;
+		//速度ベクトルを向きに合わせて回転させる
+		velocity_ = m4Calc->TransformNormal(velocity, worldTransform_.worldMatrix_);
+		if (isFall_) {
+			velocity_.y += fallSpeed_;
+		}
+
+		//移動
+		worldTransform_.transform_.translate = v3Calc->Add(worldTransform_.transform_.translate, velocity_);
 	}
-	
-	//移動
-	worldTransform_.transform_.translate = v3Calc->Add(worldTransform_.transform_.translate, velocity_);
+	else {
+		//移動速度
+		Vector3 velocity = v3Calc->Subtract(worldTransform_.transform_.translate,player_->GetTransform());
+		velocity.y = 0.0f;
+		velocity_ =v3Calc->Multiply(kMoveSpeed, (v3Calc->Normalize(velocity)));
 
+		worldTransform_.transform_.rotate.y = std::atan2(velocity_.x, velocity_.z) + (1.57f * 2.0f);
+
+		worldTransform_.transform_.translate = v3Calc->Add(worldTransform_.transform_.translate, velocity_);
+	}
 }
 
 void Enemy::Fall(){
