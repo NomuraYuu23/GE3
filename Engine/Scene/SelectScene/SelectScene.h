@@ -69,13 +69,17 @@ private: // メンバ関数
 
 	void SelectReturn();
 
-	void SetSceneManager(SceneManager* sceneManager) { sceneManager_ = sceneManager; }
-
 	void BackGroundInitialize();
 
 	void SelectionSquareInitialize();
 
+	void SelectionSquareUpdate();
+
 	void OperationInitialize();
+
+public:  // メンバ関数
+
+	void SetSceneManager(SceneManager* sceneManager) { sceneManager_ = sceneManager; }
 
 private: // メンバ変数
 
@@ -101,7 +105,7 @@ private: // メンバ変数
 	SelectUIData returnButton_;
 
 	// 選択クールタイム
-	float selectCooltime_ = 2.0f;
+	float selectCooltime_ = 0.3f;
 	
 	// 選択クールタイム
 	float selectElapsedCooltime_ = 0.0f;

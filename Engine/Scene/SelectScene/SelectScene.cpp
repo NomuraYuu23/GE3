@@ -16,6 +16,8 @@ void SelectScene::Initialize()
 
 	OperationInitialize();
 
+	instance_ = this;
+
 }
 
 void SelectScene::Update()
@@ -100,6 +102,10 @@ void SelectScene::TextureLoad()
 {
 }
 
+void SelectScene::SpriteUpdate()
+{
+}
+
 void SelectScene::SelectChange()
 {
 
@@ -119,17 +125,24 @@ void SelectScene::SelectChange()
 			selectElapsedCooltime_ = selectCooltime_;
 
 			if (move.x > 0) {
-				selectionSquareNum_++;
-				if (selectionSquareNum_ == selectionSquareMax_) {
+				if (selectionSquareNum_ == selectionSquareMax_ - 1) {
 					selectionSquareNum_ = 0;
+				}
+				else {
+					selectionSquareNum_++;
 				}
 			}
 			else {
-				selectionSquareNum_--;
-				if (selectionSquareNum_ == selectionSquareMax_) {
+				if (selectionSquareNum_ == 0) {
 					selectionSquareNum_ = selectionSquareMax_ - 1;
 				}
+				else {
+					selectionSquareNum_--;
+				}
 			}
+
+			SelectionSquareUpdate();
+
 		}
 	}
 	else if (selectElapsedCooltime_ > 0.0f) {
@@ -174,12 +187,37 @@ void SelectScene::SelectionSquareInitialize()
 	float sizeMagnification = 1.0f;
 	Vector2 size = { 0.0f,0.0f };
 
+
+	selectionSquare_[0].Initialize(TextureManager::Load("Resources/TD2_November/select/select1.png", dxCommon_));
+	selectionSquare_[1].Initialize(TextureManager::Load("Resources/TD2_November/select/select2.png", dxCommon_));
+	selectionSquare_[2].Initialize(TextureManager::Load("Resources/TD2_November/select/select3.png", dxCommon_));
+	selectionSquare_[3].Initialize(TextureManager::Load("Resources/TD2_November/select/select4.png", dxCommon_));
+
 	// 選択マススプライト
 	for (uint32_t i = 0; i < selectionSquareMax_; i++) {
-		selectionSquare_[i].Initialize(TextureManager::Load("Resources/TD2_November/UI/stickL.png", dxCommon_));
 		size = { selectionSquare_[i].sprite_->GetSize().x * sizeMagnification, selectionSquare_[i].sprite_->GetSize().y * sizeMagnification };
 		selectionSquare_[i].sprite_->SetSize(size);
 		// ポジションをここでかえる
+		selectionSquare_[i].position_.x = 213.3f + 284.4f * i;
+		selectionSquare_[i].position_.y = 360.0f;
+		selectionSquare_[i].Update();
+	}
+
+	SelectionSquareUpdate();
+
+}
+
+void SelectScene::SelectionSquareUpdate()
+{
+
+	// 選択マススプライト
+	for (uint32_t i = 0; i < selectionSquareMax_; i++) {
+		if (i == selectionSquareNum_) {
+			selectionSquare_[i].color_ = { 1.0f, 1.0f, 0.1f, 1.0f};
+		}
+		else {
+			selectionSquare_[i].color_ = { 1.0f, 1.0f, 1.0f,1.0f };
+		}
 		selectionSquare_[i].Update();
 	}
 
@@ -189,43 +227,43 @@ void SelectScene::OperationInitialize()
 {
 
 	Vector2 size = { 0.0f,0.0f };
-	float sizeMagnification = 0.3f;
+	float sizeMagnification = 0.5f;
 
 	// 操作説明スプライト
 	decisionOperation_.Initialize(TextureManager::Load("Resources/TD2_November/UI/decisionOperation.png", dxCommon_));
 	size = { decisionOperation_.sprite_->GetSize().x * sizeMagnification, decisionOperation_.sprite_->GetSize().y * sizeMagnification };
 	decisionOperation_.sprite_->SetSize(size);
-	decisionOperation_.position_ = { 150.0f, 550.0f };
+	decisionOperation_.position_ = { 310.0f, 600.0f };
 	decisionOperation_.Update();
 
 	moveOperation_.Initialize(TextureManager::Load("Resources/TD2_November/UI/moveOperation.png", dxCommon_));
 	size = { moveOperation_.sprite_->GetSize().x * sizeMagnification, moveOperation_.sprite_->GetSize().y * sizeMagnification };
 	moveOperation_.sprite_->SetSize(size);
-	moveOperation_.position_ = { 450.0f, 550.0f };
+	moveOperation_.position_ = { 670.0f, 600.0f };
 	moveOperation_.Update();
 	
 	returnOperation_.Initialize(TextureManager::Load("Resources/TD2_November/UI/returnOperation.png", dxCommon_));
 	size = { returnOperation_.sprite_->GetSize().x * sizeMagnification, returnOperation_.sprite_->GetSize().y * sizeMagnification };
 	returnOperation_.sprite_->SetSize(size);
-	returnOperation_.position_ = { 750.0f, 550.0f };
+	returnOperation_.position_ = { 1030.0f, 600.0f };
 	returnOperation_.Update();
 
 	decisionButton_.Initialize(TextureManager::Load("Resources/TD2_November/UI/buttonA.png", dxCommon_));
 	size = { decisionButton_.sprite_->GetSize().x * sizeMagnification, decisionButton_.sprite_->GetSize().y * sizeMagnification };
 	decisionButton_.sprite_->SetSize(size);
-	decisionButton_.position_ = { 100.0f, 550.0f };
+	decisionButton_.position_ = { 210.0f, 600.0f };
 	decisionButton_.Update();
 	
 	moveButton_.Initialize(TextureManager::Load("Resources/TD2_November/UI/stickL.png", dxCommon_));
 	size = { moveButton_.sprite_->GetSize().x * sizeMagnification, moveButton_.sprite_->GetSize().y * sizeMagnification };
 	moveButton_.sprite_->SetSize(size);
-	moveButton_.position_ = { 400.0f, 550.0f };
+	moveButton_.position_ = { 570.0f, 600.0f };
 	moveButton_.Update();
 	
 	returnButton_.Initialize(TextureManager::Load("Resources/TD2_November/UI/buttonB.png", dxCommon_));
 	size = { returnButton_.sprite_->GetSize().x * sizeMagnification, returnButton_.sprite_->GetSize().y * sizeMagnification };
 	returnButton_.sprite_->SetSize(size);
-	returnButton_.position_ = { 700.0f, 550.0f };
+	returnButton_.position_ = { 930.0f, 600.0f };
 	returnButton_.Update();
 
 }

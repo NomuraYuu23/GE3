@@ -1,5 +1,6 @@
 #include "SceneManager.h"
 #include "../../base/TextureManager.h"
+#include "../SelectScene/SelectScene.h"
 
 void SceneManager::Initialize()
 {
@@ -62,6 +63,9 @@ void SceneManager::Update()
 			currentSceneNo_ = requestSeneNo_;
 			scene_.reset(sceneFacyory_->CreateScene(currentSceneNo_));
 			scene_->Initialize();
+			if (currentSceneNo_ == kSelect) {
+				static_cast<SelectScene*>(scene_->GetInstance())->SetSceneManager(this);
+			}
 			sceneTransition_->SetSwitchScene(false);
 		}
 		else if (!sceneTransition_->GetTransitioning()) {

@@ -97,5 +97,13 @@ protected:  // メンバ関数
 	/// </summary>
 	virtual void TextureLoad();
 
+protected: 
+
+	void* instance_ = nullptr;
+
+public: 
+
+	void* GetInstance() { return this; }
+	
 };
 
