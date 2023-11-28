@@ -151,6 +151,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Program\CollisionManager\CollisionManager.cpp" />
     <ClCompile Include="Program\EnemyManager\EnemyManager.cpp" />
     <ClCompile Include="Program\Enemy\Enemy.cpp" />
+    <ClCompile Include="Program\FenceManager\FenceManager.cpp" />
+    <ClCompile Include="Program\Fence\Fence.cpp" />
     <ClCompile Include="Program\FloorManager\FloorManager.cpp" />
     <ClCompile Include="Program\Floor\Floor.cpp" />
     <ClCompile Include="Engine\Camera\FollowCamera\FollowCamera.cpp" />
@@ -235,6 +237,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Program\CollisionManager\CollisionManager.h" />
     <ClInclude Include="Program\EnemyManager\EnemyManager.h" />
     <ClInclude Include="Program\Enemy\Enemy.h" />
+    <ClInclude Include="Program\FenceManager\FenceManager.h" />
+    <ClInclude Include="Program\Fence\Fence.h" />
     <ClInclude Include="Program\FloorManager\FloorManager.h" />
     <ClInclude Include="Program\Floor\Floor.h" />
     <ClInclude Include="Engine\Camera\FollowCamera\FollowCamera.h" />
