@@ -21,16 +21,16 @@ void Enemy::Initialize(TransformStructure transform,const std::vector<Model*>& m
 
 	worldTransformBody_.Initialize();
 	worldTransformBody_.parent_ = &worldTransform_;
-	worldTransformL_arm_.Initialize();
-	worldTransformL_arm_.transform_.translate.x -= 2.0f;
-	worldTransformL_arm_.transform_.translate.y += 1.0f;
-	worldTransformL_arm_.transform_.rotate.x += float(std::numbers::pi) / 2.0f;
-	worldTransformL_arm_.parent_ = &worldTransformBody_;
-	worldTransformR_arm_.Initialize();
-	worldTransformR_arm_.transform_.translate.x += 2.0f;
-	worldTransformR_arm_.transform_.translate.y += 1.0f;
-	worldTransformR_arm_.transform_.rotate.x += float(std::numbers::pi) / 2.0f;
-	worldTransformR_arm_.parent_ = &worldTransformBody_;
+	//worldTransformL_arm_.Initialize();
+	//worldTransformL_arm_.transform_.translate.x -= 2.0f;
+	//worldTransformL_arm_.transform_.translate.y += 1.0f;
+	//worldTransformL_arm_.transform_.rotate.x += float(std::numbers::pi) / 2.0f;
+	//worldTransformL_arm_.parent_ = &worldTransformBody_;
+	//worldTransformR_arm_.Initialize();
+	//worldTransformR_arm_.transform_.translate.x += 2.0f;
+	//worldTransformR_arm_.transform_.translate.y += 1.0f;
+	//worldTransformR_arm_.transform_.rotate.x += float(std::numbers::pi) / 2.0f;
+	//worldTransformR_arm_.parent_ = &worldTransformBody_;
 
 	// ポジション
 	/*position_ = { -0.2f, 0.0f, 60.0f};
@@ -72,8 +72,8 @@ void Enemy::Update() {
 	worldTransform_.UpdateMatrix();
 
 	worldTransformBody_.UpdateMatrix();
-	worldTransformL_arm_.UpdateMatrix();
-	worldTransformR_arm_.UpdateMatrix();
+	//worldTransformL_arm_.UpdateMatrix();
+	//worldTransformR_arm_.UpdateMatrix();
 
 	collider_.center_ = { worldTransform_.worldMatrix_.m[3][0],worldTransform_.worldMatrix_.m[3][1], worldTransform_.worldMatrix_.m[3][2] };
 	collider_.worldTransformUpdate();
@@ -88,8 +88,8 @@ void Enemy::Draw(const ViewProjection& viewProjection) {
 
 	if (!isDead_) {
 		models_[0]->Draw(worldTransformBody_, viewProjection);
-		models_[1]->Draw(worldTransformL_arm_, viewProjection);
-		models_[2]->Draw(worldTransformR_arm_, viewProjection);
+		//models_[1]->Draw(worldTransformL_arm_, viewProjection);
+		//models_[2]->Draw(worldTransformR_arm_, viewProjection);
 	}
 
 }
@@ -149,7 +149,7 @@ void Enemy::UpdateArmRotationgimmick() {
 	armRotationParameter_ += step;
 	armRotationParameter_ = std::fmod(armRotationParameter_, 2.0f * float(std::numbers::pi));
 
-	worldTransformL_arm_.transform_.rotate.x = armRotationParameter_;
-	worldTransformR_arm_.transform_.rotate.x = armRotationParameter_;
+	//worldTransformL_arm_.transform_.rotate.x = armRotationParameter_;
+	//worldTransformR_arm_.transform_.rotate.x = armRotationParameter_;
 
 }

@@ -561,9 +561,9 @@ void GameScene::ModelCreate()
 	//チェックポイント生成
 	checkPointModel_.reset(Model::Create("Resources/TD2_November/torch/", "torch.obj", dxCommon_));
 	//エネミー関連
-	enemyModels_.push_back(Model::Create("Resources/AL4/enemy_Body/", "enemy_Body.obj", dxCommon_));
-	enemyModels_.push_back(Model::Create("Resources/AL4/enemy_Arm/", "enemy_Arm.obj", dxCommon_));
-	enemyModels_.push_back(Model::Create("Resources/AL4/enemy_Arm/", "enemy_Arm.obj", dxCommon_));
+	enemyModels_.push_back(Model::Create("Resources/TD2_November/enemy/", "bombEnemy.obj", dxCommon_));
+	//enemyModels_.push_back(Model::Create("Resources/AL4/enemy_Arm/", "enemy_Arm.obj", dxCommon_));
+	//enemyModels_.push_back(Model::Create("Resources/AL4/enemy_Arm/", "enemy_Arm.obj", dxCommon_));
 
 	// パーティクルモデル
 	particleUvcheckerModel_.reset(Model::Create("Resources/default/", "plane.obj", dxCommon_));
