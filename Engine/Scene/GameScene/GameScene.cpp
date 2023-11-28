@@ -551,7 +551,7 @@ void GameScene::ModelCreate()
 	playerModels_.push_back(Model::Create("Resources/TD2_November/Player/playerRightLeg", "playerRightLeg.obj", dxCommon_));
 	playerModels_.push_back(Model::Create("Resources/TD2_November/exprode/", "sphere.obj", dxCommon_));
 	//ボックスマネージャー
-	boxModel_.reset(Model::Create("Resources/TD2_November/floorBox/", "box.obj", dxCommon_));
+	boxModel_.reset(Model::Create("Resources/TD2_November/block/", "block.obj", dxCommon_));
 	//壊れるボックス生成
 	breakBoxModel_.reset(Model::Create("Resources/TD2_November/breakBox/", "box.obj", dxCommon_));
 	//回復アイテム生成
