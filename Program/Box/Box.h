@@ -11,7 +11,7 @@ public: //メンバ関数
 	/// 初期化
 	/// </summary>
 	/// <param name="model">モデル</param>
-	void Initialize(Model* model, Material* material, TransformStructure transform_, bool isMoving, bool isVertical);
+	void Initialize(Model* model, Material* material, TransformStructure transform_, Vector3 pos, bool isMoving, bool isVertical);
 
 	/// <summary>
 	/// 更新
@@ -55,6 +55,8 @@ public: // アクセッサ
 	bool GetDeleteFlag() { return isDelete_; }
 
 	Vector3 GetSize() { return size_; }
+
+	Vector3 GetPosition() { return position_; }
 
 	AABB& GetCollider() { return collider_; }
 

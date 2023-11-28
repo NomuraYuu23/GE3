@@ -105,7 +105,7 @@ void CollisionManager::AllCollision()
 
 	for (Enemy* enemy:enemyManager_->GetEnemys_()){
 		if (Collision::IsCollision(enemy->GetCollider(),player_->GetCollider())){
-			player_->Restart();
+			player_->OnCollisionEnemy();
 		}
 		if (Collision::IsCollision(enemy->GetSearchCollider(),player_->GetCollider())){
 			enemy->SetPlayer(player_);
