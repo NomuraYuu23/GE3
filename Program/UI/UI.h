@@ -21,7 +21,10 @@ public: // サブクラス
 		kMoveOperation,
 		kPauseOperation,
 		kCameraOperation,
-		//kRemainingExplosion,
+		kRemainingExplosion,
+		kNumHundred,
+		kNumTen,
+		kNumOne,
 		kCountOfTextureHandleIndex
 	};
 
@@ -69,6 +72,28 @@ public: // メンバ関数
 	/// グローバル変数
 	/// </summary>
 	void ApplyGlobalVariables();
+
+private: // メンバ関数
+
+	/// <summary>
+	/// 操作説明初期化
+	/// </summary>
+	void OperationInitialize();
+
+	/// <summary>
+	/// 操作説明更新
+	/// </summary>
+	void OperationUpdate();
+
+	/// <summary>
+	/// 自爆回数初期化
+	/// </summary>
+	void RemainingExplosionInitialize();
+
+	/// <summary>
+	/// 自爆回数更新
+	/// </summary>
+	void RemainingExplosionUpdate();
 
 private: // メンバ変数
 

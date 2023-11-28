@@ -622,6 +622,11 @@ void GameScene::TextureLoad()
 		TextureManager::Load("Resources/TD2_November/UI/moveOperation.png", dxCommon_),
 		TextureManager::Load("Resources/TD2_November/UI/pauseOperation.png", dxCommon_),
 		TextureManager::Load("Resources/TD2_November/UI/cameraOperation.png", dxCommon_),
+
+		TextureManager::Load("Resources/TD2_November/UI/remainingExplosion.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/UI/num.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/UI/num.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/UI/num.png", dxCommon_),
 	};
 
 }

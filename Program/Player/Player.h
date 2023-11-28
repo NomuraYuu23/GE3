@@ -285,6 +285,8 @@ public: // アクセッサ
 
 	bool GetIsAttackJudgment() { return workAttack_.isAttackJudgment_; }
 
+	uint32_t GetExprosionNum() { return	exprosionNum_; }
+
 private:
 	//全てのオブジェのUpdateMatrixをまとめたもの
 	void allUpdateMatrix();
