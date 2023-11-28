@@ -116,7 +116,10 @@ void Player::Update()
 
 void Player::Draw(const ViewProjection& viewProjection)
 {
+#ifdef _DEBUG
 	DrawImgui();
+#endif // _DEBUG
+
 
 	models_[int(ModelIndex::kModelIndexBody)]->Draw(worldTransformBody_, viewProjection);
 	models_[int(ModelIndex::kModelIndexLeftLeg)]->Draw(worldTransformLeftLeg_, viewProjection);
