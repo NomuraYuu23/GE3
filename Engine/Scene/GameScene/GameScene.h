@@ -14,6 +14,7 @@
 #include "../../Pause/Pause.h"
 #include"../../../Program/CheckPointManager/CheckPointManager.h"
 #include "../../../Program/ShadowManager/ShadowManager.h"
+#include "../../../Program/UI/UI.h"
 
 class GameScene : public IScene
 {
@@ -206,5 +207,9 @@ private:
 	//影マネージャー
 	ShadowManager* shadowManager_;
 	std::unique_ptr<Model> shadowModel_ = nullptr;
+
+	// UI
+	std::unique_ptr <UI> ui;
+	std::array<uint32_t, UI::kTextureHandleIndex::kCountOfTextureHandleIndex> uiTextureHandles_;
 
 };

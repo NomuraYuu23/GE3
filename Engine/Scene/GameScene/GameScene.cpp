@@ -162,6 +162,11 @@ void GameScene::Initialize() {
 	};
 	shadowManager_->AddMeker(player_->GetWorldTransformAddress(), playerSize);
 
+	// ui
+	ui = std::make_unique<UI>();
+	ui->Initialize(uiTextureHandles_);
+	ui->SetPlayer(player_.get());
+
 }
 
 /// <summary>
@@ -213,6 +218,9 @@ void GameScene::Update() {
 
 	// 影
 	shadowManager_->Update();
+
+	//ui
+	ui->Update();
 
 	// ポーズ機能
 	pause_->Update();
@@ -286,6 +294,10 @@ void GameScene::Draw() {
 
 	//背景
 	//前景スプライト描画
+
+	//ui
+	ui->Draw();
+
 	pause_->Draw();
 
 	// 前景スプライト描画後処理
@@ -597,6 +609,16 @@ void GameScene::TextureLoad()
 		TextureManager::Load("Resources/TD2_November/pause/pausing.png", dxCommon_),
 		TextureManager::Load("Resources/TD2_November/pause/goToTitle.png", dxCommon_),
 		TextureManager::Load("Resources/TD2_November/pause/returnToGame.png", dxCommon_),
+	};
+
+	// ui
+	uiTextureHandles_ = {
+		TextureManager::Load("Resources/TD2_November/UI/buttonA.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/UI/stickL.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/UI/buttonPause.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/UI/jumpOperation.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/UI/moveOperation.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/UI/pauseOperation.png", dxCommon_),
 	};
 
 }

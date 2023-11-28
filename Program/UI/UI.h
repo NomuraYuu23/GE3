@@ -37,6 +37,8 @@ public: // サブクラス
 
 		void Initialize(uint32_t textureHandle);
 
+		void Update();
+
 	};
 
 public: // メンバ関数
@@ -60,6 +62,11 @@ public: // メンバ関数
 	/// セットプレイヤー
 	/// </summary>
 	void SetPlayer(Player* player) { player_ = player; }
+
+	/// <summary>
+	/// グローバル変数
+	/// </summary>
+	void ApplyGlobalVariables();
 
 private: // メンバ変数
 

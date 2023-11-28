@@ -1,0 +1,16 @@
+{
+    "UI": {
+        "kJumpButtonPositionX": 70.0,
+        "kJumpButtonPositionY": 650.0,
+        "kJumpOperationPositionX": 262.0,
+        "kJumpOperationPositionY": 650.0,
+        "kMoveButtonPositionX": 454.0,
+        "kMoveButtonPositionY": 650.0,
+        "kMoveOperationPositionX": 582.0,
+        "kMoveOperationPositionY": 650.0,
+        "kPauseButtonPositionX": 710.0,
+        "kPauseButtonPositionY": 650.0,
+        "kPauseOperationPositionX": 870.0,
+        "kPauseOperationPositionY": 650.0
+    }
+}
