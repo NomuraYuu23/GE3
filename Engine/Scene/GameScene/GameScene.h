@@ -53,6 +53,12 @@ public:
 	/// </summary>
 	void ImguiDraw();
 
+	/// <summary>
+	/// ステージロード
+	/// </summary>
+	/// <param name="stageIndex"></param>
+	void LoadStage(uint32_t stageIndex);
+
 public: //メンバ関数
 
 	/// <summary>
