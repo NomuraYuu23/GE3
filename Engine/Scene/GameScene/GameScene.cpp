@@ -107,6 +107,8 @@ void GameScene::Initialize() {
 	followCamera_ = std::make_unique<FollowCamera>();
 	followCamera_->Initialize();
 
+	goal_ = std::make_unique<Goal>();
+	goal_->Initialize(goalModel_.get(), goalMaterial_.get());
 
 	//エネミー関連
 	enemyManager_ = std::make_unique<EnemyManager>();
@@ -125,12 +127,14 @@ void GameScene::Initialize() {
 	player_->Initialize(playerModels_, playerMaterials_);
 	player_->SetViewProjection(followCamera_->GetViewProjectionAddress());
 
+	//enemyManager_->SetPlayer(player_.get());
+
 	followCamera_->SetTarget(player_->GetWorldTransformAddress());
 
 	collisionManager_ = std::make_unique<CollisionManager>();
-	collisionManager_->Initialize(player_.get(), floorManager_.get(), boxManager_.get(), 
-		breakBoxManager_.get(), recoveryItemManager_.get(), enemyManager_.get(), 
-		collectibleItemManager_.get(), checkPointManager_.get());
+	collisionManager_->Initialize(player_.get(), floorManager_.get(), boxManager_.get(),
+		breakBoxManager_.get(), recoveryItemManager_.get(), enemyManager_.get(),
+		collectibleItemManager_.get(), checkPointManager_.get(), goal_.get());
 
 	colliderDebugDraw_->AddCollider(&player_->GetCollider());
 	colliderDebugDraw_->AddCollider(&player_->GetExplosionCollider());
@@ -192,12 +196,16 @@ void GameScene::Update() {
 	
 	checkPointManager_->Update();
 
+	goal_->Update();
+
+	player_->Update();
+
 	collisionManager_->AllCollision();
 
 	// デバッグ描画
 	colliderDebugDraw_->Update();
 
-	player_->Update();
+	
 
 	enemyManager_->Update();
 
@@ -228,6 +236,10 @@ void GameScene::Update() {
 
 	// ポーズ機能
 	pause_->Update();
+
+	if (player_->GetIsGoal()){
+		requestSeneNo = kClear;
+	}
 
 	// タイトルへ行く
 	GoToTheTitle();
@@ -261,6 +273,8 @@ void GameScene::Draw() {
 	breakBoxManager_->Draw(viewProjection_);
 	floorManager_->Draw(viewProjection_);
 	checkPointManager_->Draw(viewProjection_);
+
+	goal_->Draw(viewProjection_);
 	
 	recoveryItemManager_->Draw(viewProjection_);
 	collectibleItemManager_->Draw(viewProjection_);
@@ -325,6 +339,8 @@ void GameScene::ImguiDraw() {
 	ImGui::DragFloat3("カメラの回転", &viewProjection_.transform_.rotate.x, 0.01f);
 
 	ImGui::End();
+
+	goal_->DrawImgui();
 
 	ImGui::Begin("ステージ関連", nullptr, ImGuiWindowFlags_MenuBar);
 
@@ -413,6 +429,16 @@ void GameScene::ImguiDraw() {
 				}
 				ImGui::TreePop();
 			}
+			if (ImGui::TreeNode("敵生成")) {
+				ImGui::DragFloat3("敵の座標", &firstEnemyTransform_.translate.x, 0.1f);
+				ImGui::DragFloat3("敵の回転", &firstEnemyTransform_.rotate.x, 0.01f);
+				ImGui::DragFloat3("敵の大きさ", &firstEnemyTransform_.scale.x, 0.1f, 0.1f, 999.0f, "%.1f");
+
+				if (ImGui::Button("敵の追加")) {
+					enemyManager_->AddEnemy(firstEnemyTransform_);
+				}
+				ImGui::TreePop();
+			}
 
 			ImGui::EndMenu();
 		}
@@ -441,6 +467,10 @@ void GameScene::ImguiDraw() {
 				checkPointManager_->DrawImgui();
 				ImGui::EndMenu();
 			}
+			if (ImGui::BeginMenu("敵一覧")) {
+				enemyManager_->DrawImgui();
+				ImGui::EndMenu();
+			}
 
 			ImGui::EndMenu();
 		}
@@ -451,9 +481,9 @@ void GameScene::ImguiDraw() {
 				}
 				
 			}
-			/*if (ImGui::Button("jsonファイルを作る")) {
+			if (ImGui::Button("jsonファイルを作る")) {
 				FilesSave(stages_);
-			}*/
+			}
 			if (ImGui::Button("上書きセーブ")) {
 				FilesOverWrite(stageName_);
 			}
@@ -502,34 +532,40 @@ void GameScene::DebugCameraUpdate()
 }
 
 void GameScene::FilesSave(const std::vector<std::string>& stages){
-	floorManager_->SaveFile(stages);
+	goal_->SaveFile(stages);
+	enemyManager_->SaveFile(stages);
+	/*floorManager_->SaveFile(stages);
 	boxManager_->SaveFile(stages);
 	breakBoxManager_->SaveFile(stages);
 	checkPointManager_->SaveFile(stages);
 	collectibleItemManager_->SaveFile(stages);
-	recoveryItemManager_->SaveFile(stages);
+	recoveryItemManager_->SaveFile(stages);*/
 	std::string message = std::format("{}.json created.", "all");
 	MessageBoxA(nullptr, message.c_str(), "StagesObject", 0);
 }
 
 void GameScene::FilesOverWrite(const std::string& stage){
+	enemyManager_->FileOverWrite(stage);
 	floorManager_->FileOverWrite(stage);
 	boxManager_->FileOverWrite(stage);
 	breakBoxManager_->FileOverWrite(stage);
 	checkPointManager_->FileOverWrite(stage);
 	collectibleItemManager_->FileOverWrite(stage);
 	recoveryItemManager_->FileOverWrite(stage);
+	goal_->FileOverWrite(stage);
 	std::string message = std::format("{}.json OverWrite.", "all");
 	MessageBoxA(nullptr, message.c_str(), "StagesObject", 0);
 }
 
 void GameScene::FilesLoad(const std::vector<std::string>& stages, const std::string& stage){
+	enemyManager_->LoadFiles(stage);
 	floorManager_->LoadFiles(stage);
 	boxManager_->LoadFiles(stage);
 	breakBoxManager_->LoadFiles(stage);
 	checkPointManager_->LoadFiles(stage);
 	collectibleItemManager_->LoadFiles(stage);
 	recoveryItemManager_->LoadFiles(stage);
+	goal_->LoadFiles(stage);
 	std::string message = std::format("{}.json loaded.", "all");
 	MessageBoxA(nullptr, message.c_str(), "StagesObject", 0);
 }
@@ -569,6 +605,9 @@ void GameScene::ModelCreate()
 	enemyModels_.push_back(Model::Create("Resources/TD2_November/enemy/", "bombEnemy.obj", dxCommon_));
 	//enemyModels_.push_back(Model::Create("Resources/AL4/enemy_Arm/", "enemy_Arm.obj", dxCommon_));
 	//enemyModels_.push_back(Model::Create("Resources/AL4/enemy_Arm/", "enemy_Arm.obj", dxCommon_));
+	//ゴール関連
+	goalModel_.reset(Model::Create("Resources/TD2_November/goal/", "box.obj", dxCommon_));
+
 
 	// パーティクルモデル
 	particleUvcheckerModel_.reset(Model::Create("Resources/default/", "plane.obj", dxCommon_));
@@ -606,6 +645,7 @@ void GameScene::MaterialCreate()
 	for (size_t i = 0; i < enemyModels_.size(); i++) {
 		enemyMaterials_.push_back(Material::Create());
 	}
+	goalMaterial_.reset(Material::Create());
 
 	// スカイドーム
 	skydomeMaterial_.reset(Material::Create());

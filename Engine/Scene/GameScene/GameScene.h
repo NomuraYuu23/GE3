@@ -13,6 +13,7 @@
 #include"../../Camera/FollowCamera/FollowCamera.h"
 #include "../../Pause/Pause.h"
 #include"../../../Program/CheckPointManager/CheckPointManager.h"
+#include"../../../Program/Goal/Goal.h"
 #include "../../../Program/ShadowManager/ShadowManager.h"
 #include "../../../Program/UI/UI.h"
 #include "../../../Program/Skydome/Skydome.h"
@@ -204,6 +205,14 @@ private:
 	//エネミーのモデルとか
 	std::vector<Model*> enemyModels_;
 	std::vector<Material*> enemyMaterials_;
+
+	/*ゴール*/
+	std::unique_ptr<Goal> goal_;
+	//ゴールのモデル
+	std::unique_ptr<Model> goalModel_;
+	std::unique_ptr<Material> goalMaterial_;
+
+
 
 	//影マネージャー
 	ShadowManager* shadowManager_;

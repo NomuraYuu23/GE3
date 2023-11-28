@@ -3,9 +3,27 @@
 #include "../../Engine/Math/Math.h"
 #include"../../Engine/2D/ImguiManager.h"
 
+void Player::ApplyGlobalVariables(){
+	GlobalVariables* item = GlobalVariables::GetInstance();
+	const char* groupName = "Player";
+
+	explosionSpeed_ = item->GetFloatValue(groupName, "explosionSpeed");
+	baseExplosionTimer_ = item->GetIntValue(groupName, "baseExplosionTimer");
+	startExprosionNum_ = item->GetIntValue(groupName, "startExprosionNum");
+}
+
 void Player::Initialize(const std::vector<Model*>& models,
 	const std::vector<Material*>& materials)
 {
+	GlobalVariables* adjustment_item = GlobalVariables::GetInstance();
+	const char* groupName = "Player";
+	//グループを追加
+	adjustment_item->CreateGroup(groupName);
+	//アイテムの追加
+	adjustment_item->AddItem(groupName, "explosionSpeed", explosionSpeed_);
+	adjustment_item->AddItem(groupName, "baseExplosionTimer", baseExplosionTimer_);
+	adjustment_item->AddItem(groupName, "startExprosionNum", startExprosionNum_);
+
 	workRoot_.kInitialPosition = { 0.0f,5.0f,0.0f };
 	//nullポインタチェック
 	assert(models.front());
@@ -58,13 +76,15 @@ void Player::Initialize(const std::vector<Model*>& models,
 
 	exprosionNum_ = startExprosionNum_;
 
+	isGoal_ = false;
+
 	particleManager_ = ParticleManager::GetInstance();
 
 }
 
 void Player::Update()
 {
-
+	ApplyGlobalVariables();
 	if (behaviorRequest_) {
 		//振るまいを変更する
 		behavior_ = behaviorRequest_.value();
@@ -558,23 +578,56 @@ void Player::OnCollision(WorldTransform* worldTransform)
 
 }
 
-void Player::OnCollisionBox(WorldTransform* worldTransform, float boxSize){
-	if (true){
+void Player::OnCollisionBox(WorldTransform* worldTransform, Vector3 boxSize, bool isMove){
 
+	if (isMove){
+		if (worldTransform_.transform_.translate.y >= worldTransform->transform_.translate.y) {
 
-	}
-	if (velocity_.y <= 0.0f) {
-
-		if (!worldTransform_.parent_ ||
-			(worldTransform_.parent_ != worldTransform)) {
-			GotParent(worldTransform);
+			if (!worldTransform_.parent_ ||
+				(worldTransform_.parent_ != worldTransform)) {
+				GotParent(worldTransform);
+			}
+			worldTransform_.transform_.translate.y = boxSize.y;
+			allUpdateMatrix();
 			JumpEffectInitialize();
-		}
-		worldTransform_.transform_.translate.y = boxSize;
-		allUpdateMatrix();
 
-		isLanding = true;
+			isLanding = true;
+		}
 	}
+	else {
+		if (worldTransform_.transform_.translate.y >= worldTransform->transform_.translate.y + (boxSize.y)-(collider_.radius_ * 1.5f)) {
+			worldTransform_.transform_.translate.y = worldTransform->transform_.translate.y + boxSize.y;
+			allUpdateMatrix();
+
+			isLanding = true;
+		}
+		else {
+			bool isSideHit_ = false;
+			bool isVerticalHit_ = false;
+			Vector3Calc* v3Calc = Vector3Calc::GetInstance();
+			Vector3 length = (v3Calc->Subtract(worldTransform->transform_.translate, worldTransform_.transform_.translate));
+
+			if (sqrtf(length.x * length.x) > boxSize.x) {
+				isSideHit_ = true;
+				worldTransform_.transform_.translate.x -= velocity_.x;
+				allUpdateMatrix();					
+			}
+			if (sqrtf(length.z * length.z) > boxSize.z) {
+				isVerticalHit_ = true;
+				worldTransform_.transform_.translate.z -= velocity_.z;
+				allUpdateMatrix();
+			}
+			/*if (isSideHit_ && isVerticalHit_) {
+				worldTransform_.transform_.translate.z += (velocity_.z / 2.0f);
+				allUpdateMatrix();
+			}*/
+			
+		}
+	}
+}
+
+void Player::OnCollisionGoal(){
+	isGoal_ = true;
 }
 
 void Player::OnCollisionRecoveryItem(int recoveryValue){
@@ -702,7 +755,7 @@ void Player::DrawImgui(){
 
 		if (ImGui::BeginMenu("爆破関係")) {
 			ImGui::DragFloat3("爆破の中心", &explosionCollider_.center_.x, 0.1f);
-			ImGui::DragFloat("広がる速度", &explosionSpeed_, 0.01f, 0.0f, 2.0f);
+			//ImGui::DragFloat("広がる速度", &explosionSpeed_, 0.01f, 0.0f, 2.0f);
 			ImGui::DragInt("残り爆発回数", &exprosionNum_, 1.0f, exprosionMin_, exprosionMax_);
 			ImGui::EndMenu();
 		}
@@ -713,5 +766,6 @@ void Player::DrawImgui(){
 		}
 		ImGui::EndMenuBar();
 	}
+	ImGui::Text("ゴールしたか = %d", isGoal_);
 	ImGui::End();
 }

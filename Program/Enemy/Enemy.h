@@ -6,6 +6,8 @@
 #include "../BaseCharacter/BaseCharacter.h"
 #include "../../Engine/Collider/Sphere/Sphere.h"
 
+class Player;
+
 class Enemy : public BaseCharacter {
 
 public:
@@ -32,9 +34,31 @@ public:
 	void Move();
 
 	/// <summary>
+	/// 落下
+	/// </summary>
+	void Fall();
+
+	/// <summary>
+	/// 着地
+	/// </summary>
+	void Landing();
+
+	/// <summary>
+	/// 衝突
+	/// </summary>
+	void OnCollision(WorldTransform* worldTransform);
+
+	/// <summary>
+	/// 壁との衝突
+	/// </summary>
+	void OnCollisionBox(WorldTransform* worldTransform, Vector3 boxSize, bool isMove);
+
+	/// <summary>
 	/// 回転
 	/// </summary>
 	void Rotation();
+
+
 
 	/// <summary>
 	/// 腕回転ギミック初期化
@@ -46,16 +70,44 @@ public:
 	/// </summary>
 	void UpdateArmRotationgimmick();
 
+	/// <summary>
+	/// 親を得た
+	/// </summary>
+	void GotParent(WorldTransform* parent);
+
+
+	/// <summary>
+	/// 親を失った
+	/// </summary>
+	void LostParent();
+
+	//imguiの表示まとめ
+	void DrawImgui();
+
 public:
 	WorldTransform* GetWorldTransformAddress() { return &worldTransform_; }
+
+	WorldTransform GetWorldTransform()const { return worldTransform_; }
 
 	float GetColliderRadius() { return kColliderSize; }
 
 	Sphere& GetCollider() { return collider_; }
 
+	Sphere& GetSearchCollider() { return searchCollider_; }
+
 	bool GetIsDead() { return isDead_; }
 
 	void SetIsDead(bool isDead) { isDead_ = isDead; }
+
+	void SetPlayer(const Player* player) { player_ = player; }
+
+private:
+	//全てのオブジェのUpdateMatrixをまとめたもの
+	void allUpdateMatrix();
+
+	bool isFall_ = false;
+
+	bool isMove_ = false;
 
 private:
 
@@ -70,6 +122,8 @@ private:
 	// 移動用
 	// 速度
 	Vector3 velocity_ = { 0.0f, 0.0f, 0.0f };
+
+	float fallSpeed_ = 0.0f;
 	// 速さ
 	float kMoveSpeed;
 
@@ -87,10 +141,18 @@ private:
 	// コライダーサイズ
 	const float kColliderSize = 1.0f;
 
+	const float kSearchColliderSize = 40.0f;
+
 	// コライダー
 	Sphere collider_;
+
+	Sphere searchCollider_;
 
 	// 死亡フラグ
 	bool isDead_;
 
+	// 着地しているか
+	bool isLanding;
+
+	const Player* player_ = nullptr;
 };

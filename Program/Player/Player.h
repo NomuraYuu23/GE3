@@ -8,6 +8,7 @@
 #include "../BaseCharacter/BaseCharacter.h"
 #include "../../Engine/Collider/Sphere/Sphere.h"
 #include "../../Engine/Particle/ParticleManager.h"
+#include "../../Engine/GlobalVariables/GlobalVariables.h"
 
 class Player : public BaseCharacter
 {
@@ -99,6 +100,8 @@ public: // サブクラス
 	};
 
 public: // メンバ関数
+	//調整項目
+	void ApplyGlobalVariables();
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -233,7 +236,12 @@ public: // メンバ関数
 	/// <summary>
 	/// 壁との衝突
 	/// </summary>
-	void OnCollisionBox(WorldTransform* worldTransform, float boxSize);
+	void OnCollisionBox(WorldTransform* worldTransform, Vector3 boxSize, bool isMove);
+
+	/// <summary>
+	/// 壁との衝突
+	/// </summary>
+	void OnCollisionGoal();
 
 	/// <summary>
 	/// 回復アイテムとの衝突
@@ -273,6 +281,8 @@ public: // アクセッサ
 
 	WorldTransform* GetWorldTransformAddress() { return &worldTransform_; }
 
+	const Vector3& GetTransform() const { return worldTransform_.transform_.translate; }
+
 	void SetViewProjection(ViewProjection* viewProjection) { viewProjection_ = viewProjection;}
 
 	float GetColliderRadius() { return workRoot_.kColliderSize; }
@@ -284,6 +294,8 @@ public: // アクセッサ
 	Sphere& GetAttackCollider() { return workAttack_.attackCollider_; }
 
 	bool GetIsAttackJudgment() { return workAttack_.isAttackJudgment_; }
+
+	bool GetIsGoal() { return isGoal_; }
 
 	uint32_t GetExprosionNum() { return	exprosionNum_; }
 
@@ -315,7 +327,7 @@ private: // メンバ変数
 	//爆破を広げるためのスイッチ
 	bool isExplosion_;
 	//爆破時間
-	const int baseExplosionTimer_ = 30;
+	int baseExplosionTimer_ = 30;
 
 	int explosionTimer_;
 
@@ -359,6 +371,8 @@ private: // メンバ変数
 
 	//アイテム関連の変数
 	int numCollectItem;
+
+	bool isGoal_;
 
 	// パーティクルマネージャー
 	ParticleManager* particleManager_;
