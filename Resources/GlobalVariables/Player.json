@@ -1,7 +1,7 @@
 {
     "Player": {
-        "baseExplosionTimer": 30,
-        "explosionSpeed": 0.510000085830688,
-        "startExprosionNum": 5
+        "baseExplosionTimer": 15,
+        "explosionSpeed": 0.5,
+        "startExprosionNum": 1
     }
 }

@@ -239,9 +239,14 @@ public: // メンバ関数
 	void OnCollisionBox(WorldTransform* worldTransform, Vector3 boxSize, bool isMove);
 
 	/// <summary>
-	/// 壁との衝突
+	/// ゴールとの衝突
 	/// </summary>
 	void OnCollisionGoal();
+
+	/// <summary>
+	/// 敵との衝突
+	/// </summary>
+	void OnCollisionEnemy();
 
 	/// <summary>
 	/// 回復アイテムとの衝突
@@ -298,6 +303,8 @@ public: // アクセッサ
 	bool GetIsGoal() { return isGoal_; }
 
 	uint32_t GetExprosionNum() { return	exprosionNum_; }
+
+	int GetExprosionNumInt() { return	exprosionNum_; }
 
 private:
 	//全てのオブジェのUpdateMatrixをまとめたもの
@@ -373,6 +380,8 @@ private: // メンバ変数
 	int numCollectItem;
 
 	bool isGoal_;
+
+	bool isRotate_;
 
 	// パーティクルマネージャー
 	ParticleManager* particleManager_;

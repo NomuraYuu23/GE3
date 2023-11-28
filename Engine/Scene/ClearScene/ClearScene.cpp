@@ -9,14 +9,14 @@ void ClearScene::Initialize()
 
 }
 
-void ClearScene::Update()
-{
+void ClearScene::Update(){
+	if (input_->GetJoystickConnected()) {
 
-	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerJoystick(0)) {
-		// 行きたいシーンへ
-		requestSeneNo = kTitle;
+		if (input_->TriggerKey(DIK_SPACE) || input_->TriggerJoystick(0)) {
+			// 行きたいシーンへ
+			requestSeneNo = kTitle;
+		}
 	}
-
 }
 
 void ClearScene::Draw()

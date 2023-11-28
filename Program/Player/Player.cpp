@@ -118,12 +118,16 @@ void Player::Update()
 		BehaviorDashUpdate();
 		break;
 	}
+	
 
 	//行列を定数バッファに転送
 	allUpdateMatrix();
 
 	if (worldTransform_.worldMatrix_.m[3][1] <= -30.0f) {
-		Restart();
+		Explosion();
+		exprosionNum_ -= 5;
+		velocity_.y = 3.0f;
+		isRotate_ = true;
 	}
 
 	collider_.center_ = { worldTransform_.worldMatrix_.m[3][0], worldTransform_.worldMatrix_.m[3][1]+collider_.radius_, worldTransform_.worldMatrix_.m[3][2] };
@@ -362,6 +366,12 @@ void Player::Move()
 
 	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
 	worldTransform_.transform_.translate = v3Calc->Add(worldTransform_.transform_.translate, velocity_);
+	if (isRotate_){
+		worldTransform_.transform_.rotate.x += 0.5f;
+	}
+	else {
+		worldTransform_.transform_.rotate.x = 0.0f;
+	}
 
 }
 
@@ -452,13 +462,14 @@ void Player::Jump()
 			Explosion();
 			velocity_.y = 0.0f;
 			velocity_.y += workRoot_.kJumpSpeed;
+			isRotate_ = true;
 		}
 		else if (Input::GetInstance()->TriggerJoystick(0) && velocity_.y <= 0.0f && !isExplosion_) {
 			Explosion();
 			velocity_.y = 0.0f;
 			velocity_.y += workRoot_.kJumpSpeed;
 			isLanding = false;
-
+			isRotate_ = true;
 			JumpEffectInitialize();
 			ExplosionEffectInitialize();
 			
@@ -501,7 +512,7 @@ void Player::ExplosionMove(){
 	//爆破関係
 	if (isExplosion_){
 		explosionCollider_.radius_ += explosionSpeed_;
-		//worldTransformExprode_.transform_.rotate.y += 0.15f;
+		worldTransformExprode_.transform_.rotate.y += 0.15f;
 	}
 	else {
 		explosionCollider_.radius_ = 0.0f;
@@ -528,6 +539,7 @@ void Player::Landing()
 	}
 	else {
 		velocity_.y = 0.0f;
+		isRotate_ = false;
 	}
 	isLanding = false;
 }
@@ -554,7 +566,7 @@ void Player::DashStart()
 
 void Player::Restart()
 {
-	exprosionNum_ -= 5;
+	
 	worldTransform_.transform_.translate = workRoot_.kInitialPosition;
 	worldTransform_.transform_.rotate = workRoot_.kInitialRotate;
 	worldTransform_.parent_ = nullptr;
@@ -628,6 +640,13 @@ void Player::OnCollisionBox(WorldTransform* worldTransform, Vector3 boxSize, boo
 
 void Player::OnCollisionGoal(){
 	isGoal_ = true;
+}
+
+void Player::OnCollisionEnemy(){
+	Explosion();
+	exprosionNum_ -= 5;
+	velocity_.y = 1.8f;
+	isRotate_ = true;
 }
 
 void Player::OnCollisionRecoveryItem(int recoveryValue){

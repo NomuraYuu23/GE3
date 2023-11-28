@@ -285,6 +285,12 @@
     <ClCompile Include="Program\ShadowManager\ShadowManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Program\Fence\Fence.cpp">
+      <Filter>AL\ソースファイル\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\FenceManager\FenceManager.cpp">
+      <Filter>AL\ソースファイル\Stage</Filter>
+    </ClCompile>
     <ClCompile Include="Program\Particle\PlayerWalkParticle.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -299,15 +305,6 @@
     </ClCompile>
     <ClCompile Include="Program\UI\UI.cpp">
       <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Scene\GameOverScene\GameOverScene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Program\Fence\Fence.cpp">
-      <Filter>AL\ソースファイル\Stage</Filter>
-    </ClCompile>
-    <ClCompile Include="Program\FenceManager\FenceManager.cpp">
-      <Filter>AL\ソースファイル\Stage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -575,6 +572,12 @@
     <ClInclude Include="Program\ShadowManager\ShadowManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Program\Fence\Fence.h">
+      <Filter>AL\ヘッダーファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\FenceManager\FenceManager.h">
+      <Filter>AL\ヘッダーファイル\Stage</Filter>
+    </ClInclude>
     <ClInclude Include="Program\Particle\PlayerWalkParticle.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -589,15 +592,6 @@
     </ClInclude>
     <ClInclude Include="Program\UI\UI.h">
       <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Scene\GameOverScene\GameOverScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Program\Fence\Fence.h">
-      <Filter>AL\ヘッダーファイル\Stage</Filter>
-    </ClInclude>
-    <ClInclude Include="Program\FenceManager\FenceManager.h">
-      <Filter>AL\ヘッダーファイル\Stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

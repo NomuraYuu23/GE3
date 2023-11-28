@@ -241,6 +241,10 @@ void GameScene::Update() {
 		requestSeneNo = kClear;
 	}
 
+	/*if (player_->GetExprosionNumInt() < 0) {
+		requestSeneNo = kGameOver;
+	}*/
+
 	// タイトルへ行く
 	GoToTheTitle();
 

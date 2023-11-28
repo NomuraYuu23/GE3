@@ -16,8 +16,6 @@ void SelectScene::Initialize()
 
 	OperationInitialize();
 
-	instance_ = this;
-
 }
 
 void SelectScene::Update()
