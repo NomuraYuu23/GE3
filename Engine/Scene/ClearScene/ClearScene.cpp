@@ -11,10 +11,16 @@ void ClearScene::Initialize()
 
 void ClearScene::Update()
 {
+	if (input_->GetJoystickConnected()) {
+
+		if (Input::GetInstance()->TriggerJoystick(0)) {
+			// 行きたいシーンへ
+			requestSeneNo = kTitle;
+		}
+	}
 
 	if (input_->TriggerKey(DIK_SPACE)) {
-		// 行きたいシーンへ
-		requestSeneNo = kTitle;
+		
 	}
 
 }
