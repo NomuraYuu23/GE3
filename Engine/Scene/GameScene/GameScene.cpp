@@ -162,6 +162,8 @@ void GameScene::Initialize() {
 	};
 	shadowManager_->AddMeker(player_->GetWorldTransformAddress(), playerSize);
 
+	FilesLoad(stages_, "Stage1");
+
 }
 
 /// <summary>
@@ -514,7 +516,7 @@ void GameScene::FilesLoad(const std::vector<std::string>& stages, const std::str
 	collectibleItemManager_->LoadFiles(stage);
 	recoveryItemManager_->LoadFiles(stage);
 	std::string message = std::format("{}.json loaded.", "all");
-	MessageBoxA(nullptr, message.c_str(), "StagesObject", 0);
+	//MessageBoxA(nullptr, message.c_str(), "StagesObject", 0);
 }
 
 void GameScene::GoToTheTitle()

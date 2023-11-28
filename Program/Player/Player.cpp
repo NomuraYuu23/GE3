@@ -516,9 +516,9 @@ void Player::AttackStart()
 {
 
 	//攻撃
-	if (Input::GetInstance()->TriggerJoystick(1)) {
-		behaviorRequest_ = Behavior::kAttack;
-	}
+	//if (Input::GetInstance()->TriggerJoystick(1)) {
+	//	behaviorRequest_ = Behavior::kAttack;
+	//}
 
 }
 
@@ -526,9 +526,9 @@ void Player::DashStart()
 {
 
 	//ダッシュ
-	if (Input::GetInstance()->TriggerJoystick(2)) {
-		behaviorRequest_ = Behavior::kDash;
-	}
+	//if (Input::GetInstance()->TriggerJoystick(2)) {
+	//	behaviorRequest_ = Behavior::kDash;
+	//}
 
 }
 
