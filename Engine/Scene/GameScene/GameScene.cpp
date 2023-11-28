@@ -167,6 +167,10 @@ void GameScene::Initialize() {
 	ui->Initialize(uiTextureHandles_);
 	ui->SetPlayer(player_.get());
 
+	// スカイドーム
+	skydome_ = std::make_unique<Skydome>();
+	skydome_->Initialize(skydomeModel_.get(), skydomeMaterial_.get());
+
 }
 
 /// <summary>
@@ -262,8 +266,9 @@ void GameScene::Draw() {
 	collectibleItemManager_->Draw(viewProjection_);
 	player_->Draw(viewProjection_);
 	enemyManager_->Draw(viewProjection_);
-
 	shadowManager_->Draw(viewProjection_);
+
+	skydome_->Draw(viewProjection_);
 
 #ifdef _DEBUG
 
@@ -572,6 +577,9 @@ void GameScene::ModelCreate()
 	// 影モデル
 	shadowModel_.reset(Model::Create("Resources/TD2_November/shadow/", "shadow.obj", dxCommon_));
 
+	// スカイドーム
+	skydomeModel_.reset(Model::Create("Resources/TD2_November/skydome/", "skydome.obj", dxCommon_));
+
 }
 
 void GameScene::MaterialCreate()
@@ -598,6 +606,9 @@ void GameScene::MaterialCreate()
 	for (size_t i = 0; i < enemyModels_.size(); i++) {
 		enemyMaterials_.push_back(Material::Create());
 	}
+
+	// スカイドーム
+	skydomeMaterial_.reset(Material::Create());
 
 }
 

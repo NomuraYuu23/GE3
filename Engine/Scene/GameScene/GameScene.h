@@ -15,6 +15,7 @@
 #include"../../../Program/CheckPointManager/CheckPointManager.h"
 #include "../../../Program/ShadowManager/ShadowManager.h"
 #include "../../../Program/UI/UI.h"
+#include "../../../Program/Skydome/Skydome.h"
 
 class GameScene : public IScene
 {
@@ -209,7 +210,12 @@ private:
 	std::unique_ptr<Model> shadowModel_ = nullptr;
 
 	// UI
-	std::unique_ptr <UI> ui;
+	std::unique_ptr<UI> ui;
 	std::array<uint32_t, UI::kTextureHandleIndex::kCountOfTextureHandleIndex> uiTextureHandles_;
+
+	// スカイドーム
+	std::unique_ptr<Skydome> skydome_;
+	std::unique_ptr<Model> skydomeModel_;
+	std::unique_ptr<Material> skydomeMaterial_;
 
 };
