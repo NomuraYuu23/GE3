@@ -299,9 +299,9 @@ void Enemy::LostParent(){
 
 void Enemy::allUpdateMatrix(){
 	worldTransform_.UpdateMatrix();
-	worldTransformBody_.UpdateMatrix();
+	worldTransformBody_.UpdateMatrix();/*
 	worldTransformL_arm_.UpdateMatrix();
-	worldTransformR_arm_.UpdateMatrix();
+	worldTransformR_arm_.UpdateMatrix();*/
 }
 
 void Enemy::DrawImgui(){
