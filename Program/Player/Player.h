@@ -268,6 +268,8 @@ public: // アクセッサ
 
 	WorldTransform* GetWorldTransformAddress() { return &worldTransform_; }
 
+	const Vector3& GetTransform() const { return worldTransform_.transform_.translate; }
+
 	void SetViewProjection(ViewProjection* viewProjection) { viewProjection_ = viewProjection;}
 
 	float GetColliderRadius() { return workRoot_.kColliderSize; }

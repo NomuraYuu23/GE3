@@ -35,12 +35,14 @@ void EnemyManager::Update(){
 		});
 
 	for (Enemy* enemy_ : enemys_) {
+		//enemy_->SetPlayer(player_);
 		enemy_->Update();
 	}
 }
 
 void EnemyManager::Draw(const ViewProjection& viewProjection){
 	for (Enemy* enemy_ : enemys_) {
+		
 		enemy_->Draw(viewProjection);
 	}
 }

@@ -6,6 +6,8 @@
 #include "../BaseCharacter/BaseCharacter.h"
 #include "../../Engine/Collider/Sphere/Sphere.h"
 
+class Player;
+
 class Enemy : public BaseCharacter {
 
 public:
@@ -56,6 +58,8 @@ public:
 	/// </summary>
 	void Rotation();
 
+
+
 	/// <summary>
 	/// 腕回転ギミック初期化
 	/// </summary>
@@ -89,9 +93,13 @@ public:
 
 	Sphere& GetCollider() { return collider_; }
 
+	Sphere& GetSearchCollider() { return searchCollider_; }
+
 	bool GetIsDead() { return isDead_; }
 
 	void SetIsDead(bool isDead) { isDead_ = isDead; }
+
+	void SetPlayer(const Player* player) { player_ = player; }
 
 private:
 	//全てのオブジェのUpdateMatrixをまとめたもの
@@ -133,8 +141,12 @@ private:
 	// コライダーサイズ
 	const float kColliderSize = 1.0f;
 
+	const float kSearchColliderSize = 40.0f;
+
 	// コライダー
 	Sphere collider_;
+
+	Sphere searchCollider_;
 
 	// 死亡フラグ
 	bool isDead_;
@@ -142,4 +154,5 @@ private:
 	// 着地しているか
 	bool isLanding;
 
+	const Player* player_ = nullptr;
 };

@@ -27,6 +27,8 @@ public:
 	/// </summary>
 	void Update();
 
+	
+
 	/// <summary>
 	/// 描画
 	/// </summary>
@@ -58,6 +60,8 @@ public: // アクセッサ
 	/// </summary>
 	/// <param name="colliderDebugDraw"></param>
 	void SetColliderDebugDraw(ColliderDebugDraw* colliderDebugDraw) { colliderDebugDraw_ = colliderDebugDraw; }
+
+	void SetPlayer(Player* player) { player_ = player; }
 
 public:
 	using json = nlohmann::json;
@@ -104,6 +108,8 @@ private:
 
 	// 床リスト
 	std::list<Enemy*> enemys_;
+
+	const Player* player_ = nullptr;
 
 	// デバッグ描画
 	ColliderDebugDraw* colliderDebugDraw_ = nullptr;

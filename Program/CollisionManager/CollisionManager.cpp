@@ -107,6 +107,9 @@ void CollisionManager::AllCollision()
 		if (Collision::IsCollision(enemy->GetCollider(),player_->GetCollider())){
 			player_->Restart();
 		}
+		if (Collision::IsCollision(enemy->GetSearchCollider(),player_->GetCollider())){
+			enemy->SetPlayer(player_);
+		}
 		if (Collision::IsCollision(enemy->GetCollider(), player_->GetExplosionCollider())) {
 			enemy->SetIsDead(true);
 		}

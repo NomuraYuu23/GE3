@@ -127,6 +127,8 @@ void GameScene::Initialize() {
 	player_->Initialize(playerModels_, playerMaterials_);
 	player_->SetViewProjection(followCamera_->GetViewProjectionAddress());
 
+	//enemyManager_->SetPlayer(player_.get());
+
 	followCamera_->SetTarget(player_->GetWorldTransformAddress());
 
 	collisionManager_ = std::make_unique<CollisionManager>();
