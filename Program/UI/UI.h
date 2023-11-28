@@ -16,9 +16,11 @@ public: // サブクラス
 		kJumpButton,
 		kMoveButton,
 		kPauseButton,
+		kCameraButton,
 		kJumpOperation,
 		kMoveOperation,
 		kPauseOperation,
+		kCameraOperation,
 		//kRemainingExplosion,
 		kCountOfTextureHandleIndex
 	};

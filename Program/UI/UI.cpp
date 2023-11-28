@@ -13,7 +13,7 @@ void UI::UIData::Initialize(uint32_t textureHandle)
 
 	sprite_.reset(Sprite::Create(textureHandle_, position_, color_));
 
-	Vector2 size = { sprite_->GetSize().x * 0.5f,sprite_->GetSize().y * 0.5f };
+	Vector2 size = { sprite_->GetSize().x * 0.3f, sprite_->GetSize().y * 0.3f };
 	sprite_->SetSize(size);
 
 }
@@ -50,6 +50,9 @@ void UI::Initialize(const std::array<uint32_t, kCountOfTextureHandleIndex>& text
 	globalVariables->AddItem(groupName, "kPauseButtonPositionX", static_cast<float>(uiDatas_[kPauseButton].position_.x));
 	globalVariables->AddItem(groupName, "kPauseButtonPositionY", static_cast<float>(uiDatas_[kPauseButton].position_.y));
 
+	globalVariables->AddItem(groupName, "kCameraButtonPositionX", static_cast<float>(uiDatas_[kCameraButton].position_.x));
+	globalVariables->AddItem(groupName, "kCameraButtonPositionY", static_cast<float>(uiDatas_[kCameraButton].position_.y));
+
 	globalVariables->AddItem(groupName, "kJumpOperationPositionX", static_cast<float>(uiDatas_[kJumpOperation].position_.x));
 	globalVariables->AddItem(groupName, "kJumpOperationPositionY", static_cast<float>(uiDatas_[kJumpOperation].position_.y));
 
@@ -58,6 +61,9 @@ void UI::Initialize(const std::array<uint32_t, kCountOfTextureHandleIndex>& text
 	
 	globalVariables->AddItem(groupName, "kPauseOperationPositionX", static_cast<float>(uiDatas_[kPauseOperation].position_.x));
 	globalVariables->AddItem(groupName, "kPauseOperationPositionY", static_cast<float>(uiDatas_[kPauseOperation].position_.y));
+
+	globalVariables->AddItem(groupName, "kCameraOperationPositionX", static_cast<float>(uiDatas_[kCameraOperation].position_.x));
+	globalVariables->AddItem(groupName, "kCameraOperationPositionY", static_cast<float>(uiDatas_[kCameraOperation].position_.y));
 
 	ApplyGlobalVariables();
 
@@ -98,6 +104,9 @@ void UI::ApplyGlobalVariables()
 	uiDatas_[kPauseButton].position_.x = globalVariables->GetFloatValue(groupName, "kPauseButtonPositionX");
 	uiDatas_[kPauseButton].position_.y = globalVariables->GetFloatValue(groupName, "kPauseButtonPositionY");
 
+	uiDatas_[kCameraButton].position_.x = globalVariables->GetFloatValue(groupName, "kCameraButtonPositionX");
+	uiDatas_[kCameraButton].position_.y = globalVariables->GetFloatValue(groupName, "kCameraButtonPositionY");
+
 	uiDatas_[kJumpOperation].position_.x = globalVariables->GetFloatValue(groupName, "kJumpOperationPositionX");
 	uiDatas_[kJumpOperation].position_.y = globalVariables->GetFloatValue(groupName, "kJumpOperationPositionY");
 
@@ -106,5 +115,8 @@ void UI::ApplyGlobalVariables()
 
 	uiDatas_[kPauseOperation].position_.x = globalVariables->GetFloatValue(groupName, "kPauseOperationPositionX");
 	uiDatas_[kPauseOperation].position_.y = globalVariables->GetFloatValue(groupName, "kPauseOperationPositionY");
+
+	uiDatas_[kCameraOperation].position_.x = globalVariables->GetFloatValue(groupName, "kCameraOperationPositionX");
+	uiDatas_[kCameraOperation].position_.y = globalVariables->GetFloatValue(groupName, "kCameraOperationPositionY");
 
 }

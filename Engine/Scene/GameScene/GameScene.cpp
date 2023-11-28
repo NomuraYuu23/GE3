@@ -533,7 +533,7 @@ void GameScene::GoToTheTitle()
 {
 
 	if (pause_->GoToTheTitle()) {
-		sceneNo = kTitle;
+		requestSeneNo = kTitle;
 	}
 
 }
@@ -616,9 +616,12 @@ void GameScene::TextureLoad()
 		TextureManager::Load("Resources/TD2_November/UI/buttonA.png", dxCommon_),
 		TextureManager::Load("Resources/TD2_November/UI/stickL.png", dxCommon_),
 		TextureManager::Load("Resources/TD2_November/UI/buttonPause.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/UI/stickR.png", dxCommon_),
+
 		TextureManager::Load("Resources/TD2_November/UI/jumpOperation.png", dxCommon_),
 		TextureManager::Load("Resources/TD2_November/UI/moveOperation.png", dxCommon_),
 		TextureManager::Load("Resources/TD2_November/UI/pauseOperation.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/UI/cameraOperation.png", dxCommon_),
 	};
 
 }

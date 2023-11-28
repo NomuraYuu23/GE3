@@ -45,7 +45,7 @@ void Pause::Draw()
 void Pause::PoseSwitching()
 {
 
-	if (input_->TriggerKey(DIK_TAB)) {
+	if (input_->TriggerKey(DIK_TAB) || input_->TriggerJoystick(7)) {
 		if (isPause_) {
 			isPause_ = false;
 		}
@@ -61,19 +61,26 @@ void Pause::PoseSwitching()
 void Pause::PauseMenuOperation()
 {
 
-	// メニュー移動(上)
-	if (input_->TriggerKey(DIK_W) || input_->TriggerKey(DIK_UP)) {
-		pauseMenuSelect_--;
-		if (pauseMenuSelect_ < 0) {
-			pauseMenuSelect_ = PauseMenu::kCountOfPauseMenu - 1;
-		}
+	//// メニュー移動(上)
+	//if (input_->TriggerKey(DIK_W) || input_->TriggerKey(DIK_UP) || input_->TriggerJoystick(13)) {
+	//	pauseMenuSelect_--;
+	//	if (pauseMenuSelect_ < 0) {
+	//		pauseMenuSelect_ = PauseMenu::kCountOfPauseMenu - 1;
+	//	}
+	//}
+	//// メニュー移動(下)
+	//else if (input_->TriggerKey(DIK_S) || input_->TriggerKey(DIK_DOWN) || input_->TriggerJoystick(14)) {
+	//	pauseMenuSelect_++;
+	//	if (pauseMenuSelect_ == PauseMenu::kCountOfPauseMenu) {
+	//		pauseMenuSelect_ = 0;
+	//	}
+	//}
+
+	if (input_->TriggerKey(DIK_W) || input_->TriggerKey(DIK_UP) || input_->TriggerJoystick(1)) {
+		pauseMenuSelect_ = PauseMenu::kGoToTitle;
 	}
-	// メニュー移動(下)
-	else if (input_->TriggerKey(DIK_S) || input_->TriggerKey(DIK_DOWN)) {
-		pauseMenuSelect_++;
-		if (pauseMenuSelect_ == PauseMenu::kCountOfPauseMenu) {
-			pauseMenuSelect_ = 0;
-		}
+	else if (input_->TriggerKey(DIK_S) || input_->TriggerKey(DIK_DOWN) || input_->TriggerJoystick(0)) {
+			pauseMenuSelect_ = PauseMenu::kReturnToGame;
 	}
 
 	switch (pauseMenuSelect_)
@@ -93,14 +100,17 @@ void Pause::PauseMenuOperation()
 void Pause::PauseMenuGoToTitle()
 {
 
-	// 選択している部分を色変更(黒)
-	Vector4 black = { 0.0f,0.0f,0.0f,1.0f };
-	Vector4 white = { 1.0f,1.0f,1.0f,1.0f };
+	//// 選択している部分を色変更(黒)
+	//Vector4 black = { 0.0f,0.0f,0.0f,1.0f };
+	//Vector4 white = { 1.0f,1.0f,1.0f,1.0f };
 
-	goToTitleSprite_->SetColor(black);
-	returnToGameSprite_->SetColor(white);
+	Vector4 red = { 1.0f,0.0f,0.0f,1.0f };
+	Vector4 green = { 0.0f,1.0f,0.0f,1.0f };
 
-	if (input_->TriggerKey(DIK_SPACE)) {
+	returnToGameSprite_->SetColor(green);
+	goToTitleSprite_->SetColor(red);
+
+	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerJoystick(1)) {
 		goToTheTitle_ = true;
 	}
 
@@ -110,14 +120,18 @@ void Pause::PauseMenuGoToTitle()
 void Pause::PauseMenuReturnToGame()
 {
 
-	// 選択している部分を色変更(黒)
-	Vector4 black = { 0.0f,0.0f,0.0f,1.0f };
-	Vector4 white = { 1.0f,1.0f,1.0f,1.0f };
+	//// 選択している部分を色変更(黒)
+	//Vector4 black = { 0.0f,0.0f,0.0f,1.0f };
+	//Vector4 white = { 1.0f,1.0f,1.0f,1.0f };
 
-	returnToGameSprite_->SetColor(black);
-	goToTitleSprite_->SetColor(white);
 
-	if (input_->TriggerKey(DIK_SPACE)) {
+	Vector4 red = { 1.0f,0.0f,0.0f,1.0f };
+	Vector4 green = { 0.0f,1.0f,0.0f,1.0f };
+
+	returnToGameSprite_->SetColor(green);
+	goToTitleSprite_->SetColor(red);
+
+	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerJoystick(0)) {
 		isPause_ = false;
 	}
 
