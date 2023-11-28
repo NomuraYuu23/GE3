@@ -3,6 +3,7 @@
 #include <numbers>
 
 #include "Enemy.h"
+#include"../../Engine/2D/ImguiManager.h"
 /// <summary>
 /// 初期化
 /// </summary>
@@ -61,9 +62,12 @@ void Enemy::Initialize(TransformStructure transform,const std::vector<Model*>& m
 void Enemy::Update() {	
 	// 回転
 	Rotation();
-
-	// 移動
-	//Move();
+	if (isMove_){
+		// 移動
+		Move();
+	}
+	//落下
+	Fall();
 
 	// 腕回転ギミック
 	UpdateArmRotationgimmick();
@@ -71,6 +75,10 @@ void Enemy::Update() {
 	//ワールド変換データ更新
 	worldTransform_.UpdateMatrix();
 
+	Landing();
+
+	//ワールド変換データ更新
+	worldTransform_.UpdateMatrix();
 	worldTransformBody_.UpdateMatrix();
 	worldTransformL_arm_.UpdateMatrix();
 	worldTransformR_arm_.UpdateMatrix();
@@ -99,6 +107,7 @@ void Enemy::Draw(const ViewProjection& viewProjection) {
 /// </summary>
 void Enemy::Move() {
 	Rotation();
+	Fall();
 
 	Matrix4x4Calc* m4Calc = Matrix4x4Calc::GetInstance();
 	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
@@ -108,10 +117,90 @@ void Enemy::Move() {
 
 	//速度ベクトルを向きに合わせて回転させる
 	velocity_ = m4Calc->TransformNormal(velocity, worldTransform_.worldMatrix_);
-
+	if (isFall_){
+		velocity_.y += fallSpeed_;
+	}
+	
 	//移動
 	worldTransform_.transform_.translate = v3Calc->Add(worldTransform_.transform_.translate, velocity_);
 
+}
+
+void Enemy::Fall(){
+	if (!isLanding) {
+		fallSpeed_ -= 0.05f;
+	}
+}
+
+void Enemy::Landing(){
+	if (!isLanding) {
+		if (worldTransform_.parent_) {
+			LostParent();
+		}
+	}
+	else {
+		fallSpeed_ = 0.0f;
+	}
+	
+}
+
+void Enemy::OnCollision(WorldTransform* worldTransform){
+	if (velocity_.y <= 0.0f) {
+		if (!worldTransform_.parent_ ||
+			(worldTransform_.parent_ != worldTransform)) {
+			GotParent(worldTransform);
+		}
+		worldTransform_.transform_.translate.y = 0;
+		allUpdateMatrix();
+
+		isLanding = true;
+	}
+}
+
+void Enemy::OnCollisionBox(WorldTransform* worldTransform, Vector3 boxSize, bool isMove){
+	if (isMove) {
+		if (worldTransform_.transform_.translate.y >= worldTransform->transform_.translate.y) {
+
+			if (!worldTransform_.parent_ ||
+				(worldTransform_.parent_ != worldTransform)) {
+				GotParent(worldTransform);
+			}
+			worldTransform_.transform_.translate.y = boxSize.y;
+			allUpdateMatrix();
+
+			isLanding = true;
+		}
+	}
+	else {
+		if (worldTransform_.transform_.translate.y >= worldTransform->transform_.translate.y + (boxSize.y) - (collider_.radius_ * 1.5f)) {
+			worldTransform_.transform_.translate.y = worldTransform->transform_.translate.y + boxSize.y;
+			allUpdateMatrix();
+
+			isLanding = true;
+		}
+		else {
+			bool isSideHit_ = false;
+			bool isVerticalHit_ = false;
+			Vector3Calc* v3Calc = Vector3Calc::GetInstance();
+			Vector3 length = (v3Calc->Subtract(worldTransform->transform_.translate, worldTransform_.transform_.translate));
+
+			if (sqrtf(length.x * length.x) > boxSize.x) {
+				isSideHit_ = true;
+				worldTransform_.transform_.translate.x -= velocity_.x;
+				allUpdateMatrix();
+			}
+			if (sqrtf(length.z * length.z) > boxSize.z) {
+				isVerticalHit_ = true;
+				worldTransform_.transform_.translate.z -= velocity_.z;
+				allUpdateMatrix();
+			}
+			/*if (isSideHit_ && isVerticalHit_) {
+				worldTransform_.transform_.translate.z += (velocity_.z / 2.0f);
+				allUpdateMatrix();
+			}*/
+
+		}
+	}
 }
 
 /// <summary>
@@ -152,4 +241,59 @@ void Enemy::UpdateArmRotationgimmick() {
 	worldTransformL_arm_.transform_.rotate.x = armRotationParameter_;
 	worldTransformR_arm_.transform_.rotate.x = armRotationParameter_;
 
+}
+
+void Enemy::GotParent(WorldTransform* parent){
+	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
+	Matrix4x4Calc* m4Calc = Matrix4x4Calc::GetInstance();
+
+	if (worldTransform_.parent_) {
+		LostParent();
+	}
+
+	//位置
+	Vector3 position = { worldTransform_.worldMatrix_.m[3][0] - parent->worldMatrix_.m[3][0],
+						worldTransform_.worldMatrix_.m[3][1] - parent->worldMatrix_.m[3][1],
+						worldTransform_.worldMatrix_.m[3][2] - parent->worldMatrix_.m[3][2] };
+
+	// 親の角度から回転行列を計算する
+	Matrix4x4 rotateMatrixX = m4Calc->MakeRotateXMatrix(-parent->transform_.rotate.x);
+	Matrix4x4 rotateMatrixY = m4Calc->MakeRotateYMatrix(-parent->transform_.rotate.y);
+	Matrix4x4 rotateMatrixZ = m4Calc->MakeRotateZMatrix(-parent->transform_.rotate.z);
+
+	Matrix4x4 rotateMatrix = m4Calc->Multiply(
+		rotateMatrixX, m4Calc->Multiply(rotateMatrixY, rotateMatrixZ));
+
+	// 位置を親の角度だけ回転する
+	position = m4Calc->TransformNormal(position, rotateMatrix);
+
+	worldTransform_.transform_.translate = position;
+	worldTransform_.parent_ = parent;
+	worldTransform_.UpdateMatrix();
+}
+
+void Enemy::LostParent(){
+	Vector3 position = { worldTransform_.worldMatrix_.m[3][0] ,worldTransform_.worldMatrix_.m[3][1] ,worldTransform_.worldMatrix_.m[3][2] };
+
+	worldTransform_.transform_.translate = position;
+	worldTransform_.parent_ = nullptr;
+	worldTransform_.UpdateMatrix();
+}
+
+void Enemy::allUpdateMatrix(){
+	worldTransform_.UpdateMatrix();
+	worldTransformBody_.UpdateMatrix();
+	worldTransformL_arm_.UpdateMatrix();
+	worldTransformR_arm_.UpdateMatrix();
+}
+
+void Enemy::DrawImgui(){
+	ImGui::DragFloat3("アイテムの座標", &worldTransform_.transform_.translate.x, 0.1f);
+	ImGui::DragFloat3("アイテムの回転", &worldTransform_.transform_.rotate.x, 0.1f);
+	ImGui::DragFloat3("アイテムの大きさ", &worldTransform_.transform_.scale.x, 0.1f, 0.0f, 300.0f);
+	ImGui::Checkbox("落ちるようにする", &isFall_);
+	ImGui::Checkbox("動くようにする", &isMove_);
+	if (ImGui::Button("このオブジェを削除")) {
+		isDead_ = true;
+	}
 }
