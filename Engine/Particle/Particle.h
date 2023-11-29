@@ -15,6 +15,7 @@ enum PaeticleName {
 	kPlayerJump, // プレイヤー飛ぶとき
 	kPlayerExplosion, // プレイヤーが爆発するとき
 	kSmoke, // 狼煙
+	kCollectibleItemsParticle, // コレクトアイテムパーティクル
 	kCountOfPaeticleName,
 };
 

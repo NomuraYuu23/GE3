@@ -4,7 +4,7 @@
 #include "../3D/Model.h"
 #include "../Math/DeltaTime.h"
 
-uint32_t ParticleManager::kNumInstanceMax_ = 4096;
+uint32_t ParticleManager::kNumInstanceMax_ = 8192;
 
 ParticleManager* ParticleManager::GetInstance()
 {

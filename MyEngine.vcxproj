@@ -159,6 +159,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Camera\FollowCamera\FollowCamera.cpp" />
     <ClCompile Include="Program\Goal\Goal.cpp" />
     <ClCompile Include="Engine\Collider\Plane\Plane.cpp" />
+    <ClCompile Include="Program\Particle\CollectibleItemsParticle.cpp" />
     <ClCompile Include="Program\Particle\PlayerExplosionParticle.cpp" />
     <ClCompile Include="Program\Particle\PlayerJumpParticle.cpp" />
     <ClCompile Include="Program\Particle\PlayerWalkParticle.cpp" />
@@ -252,6 +253,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Camera\FollowCamera\FollowCamera.h" />
     <ClInclude Include="Program\Goal\Goal.h" />
     <ClInclude Include="Engine\Collider\Plane\Plane.h" />
+    <ClInclude Include="Program\Particle\CollectibleItemsParticle.h" />
     <ClInclude Include="Program\Particle\PlayerExplosionParticle.h" />
     <ClInclude Include="Program\Particle\PlayerJumpParticle.h" />
     <ClInclude Include="Program\Particle\PlayerWalkParticle.h" />
