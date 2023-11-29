@@ -242,7 +242,7 @@ void GameScene::Update() {
 	// ポーズ機能
 	pause_->Update();
 
-	if (player_->GetIsGoal()){
+	if (player_->GetIsGoal() && requestSeneNo != kClear){
 		requestSeneNo = kClear;
 		Audio::GetInstance()->PlayWave(Audio::AudioHandleIndex::kGoal, false, 1.0f);
 	}
