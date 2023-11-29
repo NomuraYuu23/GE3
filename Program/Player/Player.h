@@ -122,7 +122,7 @@ public: // メンバ関数
 	/// <param name="model">モデル</param>
 	/// <param name="textureHandle">テクスチャハンドル</param>
 	void Initialize(const std::vector<Model*>& models,
-		const std::vector<Material*>& materials);
+		const std::vector<Material*>& materials, const Vector3& initPosition);
 
 	/// <summary>
 	/// 更新
@@ -328,6 +328,10 @@ public: // アクセッサ
 	uint32_t GetExprosionNum() { return	exprosionNum_; }
 
 	int GetExprosionNumInt() { return	exprosionNum_; }
+
+	Vector3 GetInitialPosition() { return workRoot_.kInitialPosition; }
+
+	void SetInitialPosition(const Vector3& kInitialPosition) { workRoot_.kInitialPosition = kInitialPosition; }
 
 private:
 	//全てのオブジェのUpdateMatrixをまとめたもの

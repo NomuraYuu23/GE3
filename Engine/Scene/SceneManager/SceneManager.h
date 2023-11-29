@@ -57,9 +57,16 @@ private: //
 	// ステージ番号保存
 	uint32_t stageNum_ = 0;
 
+	// リス位置
+	Vector3 respawnPosition_;
+
 public: // 
 
 	void SetStageNum(uint32_t stageNum) { stageNum_ = stageNum; }
+
+	Vector3 GetRespawnPosition() { return respawnPosition_; }
+
+	void SetRespawnPosition(const Vector3& respawnPosition) { respawnPosition_ = respawnPosition; }
 
 };
 

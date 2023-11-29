@@ -14,6 +14,8 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg
 #include "../../base/D3DResourceLeakChecker.h"
 #include <vector>
 
+#include "../SceneManager/SceneManager.h"
+
 /// <summary>
 /// コンストラクタ
 /// </summary>
@@ -129,7 +131,7 @@ void GameScene::Initialize() {
 	//プレイヤー関連
 
 	player_ = std::make_unique<Player>();
-	player_->Initialize(playerModels_, playerMaterials_);
+	player_->Initialize(playerModels_, playerMaterials_, sceneManager_->GetRespawnPosition());
 	player_->SetViewProjection(followCamera_->GetViewProjectionAddress());
 	Vector3 playerSize = {
 		player_->GetColliderRadius() * 2.0f,
@@ -242,6 +244,7 @@ void GameScene::Update() {
 
 	if (player_->GetExprosionNumInt() < 0) {
 		requestSeneNo = kGameOver;
+		sceneManager_->SetRespawnPosition(player_->GetInitialPosition());
 	}
 
 	// タイトルへ行く

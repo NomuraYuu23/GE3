@@ -12,6 +12,8 @@
 #include "../../3D/DirectionalLight.h"
 #include "../../Particle/ParticleManager.h"
 
+class SceneManager;
+
 // シーン名
 enum SceneName {
 	kTitle, // タイトル
@@ -49,12 +51,15 @@ protected: // 静的メンバ変数
 	//光源
 	static std::unique_ptr<DirectionalLight> directionalLight_;
 
+	// シーンマネージャー
+	static SceneManager* sceneManager_;
+
 public: // メンバ関数
 
 	/// <summary>
 	/// 静的初期化
 	/// </summary>
-	void StaticInitialize();
+	void StaticInitialize(SceneManager* sceneManager);
 
 	/// <summary>
 	/// 初期化

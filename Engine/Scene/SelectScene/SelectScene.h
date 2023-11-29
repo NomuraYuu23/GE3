@@ -58,10 +58,6 @@ private: // メンバ関数
 
 	void OperationInitialize();
 
-public:  // メンバ関数
-
-	void SetSceneManager(SceneManager* sceneManager) { sceneManager_ = sceneManager; }
-
 private: // メンバ変数
 
 	Input* input_ = Input::GetInstance();
@@ -93,9 +89,6 @@ private: // メンバ変数
 	
 	// 選択クールタイム
 	float selectElapsedCooltime_ = 0.0f;
-
-	// シーンマネージャー
-	SceneManager* sceneManager_;
 
 };
 

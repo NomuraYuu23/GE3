@@ -1,6 +1,7 @@
 #include "GameOverScene.h"
 #include "../../Math/DeltaTime.h"
 #include "../../base/TextureManager.h"
+#include "../SceneManager/SceneManager.h"
 
 void GameOverScene::Initialize()
 {
@@ -141,6 +142,7 @@ void GameOverScene::Decision()
 	else {
 		// 行きたいシーンへ
 		requestSeneNo = kSelect;
+		sceneManager_->SetRespawnPosition(Vector3{0.0f,0.0f,0.0f});
 	}
 
 }

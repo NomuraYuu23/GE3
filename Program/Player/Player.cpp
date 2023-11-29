@@ -14,7 +14,7 @@ void Player::ApplyGlobalVariables(){
 }
 
 void Player::Initialize(const std::vector<Model*>& models,
-	const std::vector<Material*>& materials)
+	const std::vector<Material*>& materials, const Vector3& initPosition)
 {
 	GlobalVariables* adjustment_item = GlobalVariables::GetInstance();
 	const char* groupName = "Player";
@@ -25,7 +25,7 @@ void Player::Initialize(const std::vector<Model*>& models,
 	adjustment_item->AddItem(groupName, "baseExplosionTimer", baseExplosionTimer_);
 	adjustment_item->AddItem(groupName, "startExprosionNum", startExprosionNum_);
 
-	workRoot_.kInitialPosition = { 0.0f,5.0f,0.0f };
+	workRoot_.kInitialPosition = initPosition;
 	//nullポインタチェック
 	assert(models.front());
 	//基底クラスの初期化
@@ -730,7 +730,7 @@ void Player::OpeningAnimationInitialize()
 
 	workOpening_.startPosition_ = { 0.0f, 50.0f,-250.0f };
 
-	workOpening_.endPosition_ = {0.0f,0.0f,0.0f};
+	workOpening_.endPosition_ = workRoot_.kInitialPosition;
 
 	workOpening_.parameter_ = 0.0f;
 

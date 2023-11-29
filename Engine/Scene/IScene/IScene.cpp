@@ -18,8 +18,11 @@ bool IScene::isDebugCameraActive_;
 //光源
 std::unique_ptr<DirectionalLight> IScene::directionalLight_;
 
+// シーンマネージャー
+SceneManager* IScene::sceneManager_;
 
-void IScene::StaticInitialize()
+
+void IScene::StaticInitialize(SceneManager* sceneManager)
 {
 	//機能
 	dxCommon_ = DirectXCommon::GetInstance();
@@ -37,6 +40,7 @@ void IScene::StaticInitialize()
 	//光源
 	directionalLight_.reset(DirectionalLight::Create());
 
+	sceneManager_ = sceneManager;
 
 }
 

@@ -8,7 +8,7 @@ void SceneManager::Initialize()
 	sceneFacyory_ = SceneFactory::GetInstance();
 
 	// シーンの静的初期化
-	scene_->StaticInitialize();
+	scene_->StaticInitialize(this);
 
 	// シーン(タイトル)
 	scene_.reset(sceneFacyory_->CreateScene(kTitle));
@@ -65,7 +65,7 @@ void SceneManager::Update()
 			sceneTransition_->SetSwitchScene(false);
 			
 			if (currentSceneNo_ == kSelect) {
-				static_cast<SelectScene*>(scene_->GetInstance())->SetSceneManager(this);
+				
 			}
 			if (currentSceneNo_ == kGame) {
 				static_cast<GameScene*>(scene_->GetInstance())->LoadStage(stageNum_);
