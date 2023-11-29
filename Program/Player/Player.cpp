@@ -183,7 +183,8 @@ void Player::BehaviorRootUpdate()
 	
 	Walk();
 	ExplosionMove();
-	
+	if (isGoal_)
+		return;
 	if (exprosionNum_ < 0) {
 		Explosion();
 		return;
