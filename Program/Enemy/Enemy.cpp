@@ -58,6 +58,7 @@ void Enemy::Initialize(TransformStructure transform,const std::vector<Model*>& m
 
 	isDead_ = false;
 
+	isMove_ = true;
 }
 
 /// <summary>
@@ -221,6 +222,33 @@ void Enemy::OnCollisionBox(WorldTransform* worldTransform, Vector3 boxSize, bool
 
 		}
 	}
+}
+
+void Enemy::OnCollisionEnemy(WorldTransform* worldTransform, float size){
+	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
+	Vector3 length = (v3Calc->Subtract(worldTransform->transform_.translate, worldTransform_.transform_.translate));
+	Vector3 myNextPosition = v3Calc->Add(worldTransform_.transform_.translate, velocity_);
+
+	if (sqrtf(length.x * length.x) > size) {
+		float minWidth = worldTransform->transform_.translate.x - size;
+		float maxWidth = worldTransform->transform_.translate.x + size;
+		if (myNextPosition.x >= minWidth && myNextPosition.x <= maxWidth||
+			worldTransform_.transform_.translate.x >= minWidth && worldTransform_.transform_.translate.x <= maxWidth){
+			worldTransform_.transform_.translate.x -= (velocity_.x * 1.1f);
+			allUpdateMatrix();
+		}
+		
+	}
+	if (sqrtf(length.z * length.z) > size) {
+		float minWidth = worldTransform->transform_.translate.z - size;
+		float maxWidth = worldTransform->transform_.translate.z + size;
+		if (myNextPosition.z >= minWidth && myNextPosition.z <= maxWidth ||
+			worldTransform_.transform_.translate.z >= minWidth && worldTransform_.transform_.translate.z <= maxWidth) {
+			worldTransform_.transform_.translate.z -= (velocity_.z * 1.1f);
+			allUpdateMatrix();
+		}
+	}
+
 }
 
 /// <summary>

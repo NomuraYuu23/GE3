@@ -128,6 +128,13 @@ void CollisionManager::AllCollision()
 		if (Collision::IsCollision(enemy->GetCollider(), player_->GetExplosionCollider())) {
 			enemy->SetIsDead(true);
 		}
+		for (Enemy* enemy2 : enemyManager_->GetEnemys_()) {
+			if (enemy == enemy2)
+				continue;
+			if (Collision::IsCollision(enemy->GetCollider(), enemy2->GetCollider())) {
+				enemy->OnCollisionEnemy(enemy2->GetWorldTransformAddress(), enemy2->GetColliderRadius());
+			}
+		}
 	}
 
 	if (Collision::IsCollision(goal_->GetCollider(), player_->GetCollider())){
