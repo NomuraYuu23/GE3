@@ -99,6 +99,20 @@ public: // サブクラス
 		bool doing_ = false;
 	};
 
+	// オープニングアニメーション
+	struct WorkOpening
+	{
+		// 実行中か
+		bool isRunning_;
+		// 移動位置
+		Vector3 startPosition_;
+		Vector3 endPosition_;
+		//媒介変数
+		float parameter_ = 0.0f;
+		// 秒数<frame>
+		int32_t period_ = 60;
+	};
+
 public: // メンバ関数
 	//調整項目
 	void ApplyGlobalVariables();
@@ -268,11 +282,20 @@ public: // メンバ関数
 	/// </summary>
 	void GotParent(WorldTransform* parent);
 
-
 	/// <summary>
 	/// 親を失った
 	/// </summary>
 	void LostParent();
+
+	/// <summary>
+	/// オープニングアニメーション
+	/// </summary>
+	void OpeningAnimationInitialize();
+
+	/// <summary>
+	/// オープニングアニメーション
+	/// </summary>
+	void OpeningAnimationUpdate();
 
 private: // エフェクト
 
@@ -385,6 +408,9 @@ private: // メンバ変数
 
 	// パーティクルマネージャー
 	ParticleManager* particleManager_;
+
+	// アニメーション
+	WorkOpening workOpening_;
 
 };
 
