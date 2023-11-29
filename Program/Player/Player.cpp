@@ -88,6 +88,7 @@ void Player::Initialize(const std::vector<Model*>& models,
 void Player::Update()
 {
 	ApplyGlobalVariables();
+	
 
 	if (workOpening_.isRunning_) {
 		OpeningAnimationUpdate();
@@ -173,8 +174,14 @@ void Player::BehaviorRootInitialize()
 
 void Player::BehaviorRootUpdate()
 {
-
+	
 	Walk();
+	ExplosionMove();
+	
+	if (exprosionNum_ < 0) {
+		Explosion();
+		return;
+	}
 	Jump();
 	Fall();
 	Move();
@@ -182,13 +189,6 @@ void Player::BehaviorRootUpdate()
 	worldTransform_.UpdateMatrix();
 
 	Landing();
-
-	AttackStart();
-
-	DashStart();
-
-	// 浮遊ギミック
-	//UpdateFloatinggimmick();
 
 	// ぶらぶらギミック
 	if (workSwing_.doing_ && !isRotate_) {
@@ -492,7 +492,7 @@ void Player::Jump()
 
 	}
 
-	ExplosionMove();
+	
 
 }
 
