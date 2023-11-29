@@ -479,6 +479,7 @@ void Player::Jump()
 			velocity_.y = 0.0f;
 			velocity_.y += workRoot_.kJumpSpeed;
 			isRotate_ = true;
+			ExplosionEffectInitialize();
 		}
 		else if (Input::GetInstance()->TriggerJoystick(0) && velocity_.y <= 0.0f && !isExplosion_) {
 			Explosion();
