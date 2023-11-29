@@ -2,6 +2,7 @@
 #include "../../../Engine/Math/DeltaTime.h"
 #include "../SceneManager/SceneManager.h"
 #include "../../base/TextureManager.h"
+#include"../../Math/Ease.h"
 
 void SelectScene::Initialize()
 {
@@ -229,11 +230,16 @@ void SelectScene::SelectionSquareUpdate()
 	// 選択マススプライト
 	for (uint32_t i = 0; i < selectionSquareMax_; i++) {
 		if (i == selectionSquareNum_) {
-			selectionSquare_[i].color_ = { 1.0f, 1.0f, 0.1f, 1.0f};
+			t[i] += 0.1f;
+			selectionSquare_[i].color_ = { 1.0f, 1.0f, 0.1f, 1.0f };
+			selectionSquare_[i].sprite_->SetSize(Ease::Easing(Ease::EaseName::EaseInBack, baseSize_, maxSize_, t[i]));
 		}
 		else {
+			t[i] -= 0.1f;
 			selectionSquare_[i].color_ = { 1.0f, 1.0f, 1.0f,1.0f };
+			selectionSquare_[i].sprite_->SetSize(Ease::Easing(Ease::EaseName::EaseInBack, baseSize_, maxSize_, t[i]));
 		}
+		t[i] = std::clamp(t[i], 0.0f, 1.0f);
 		selectionSquare_[i].Update();
 	}
 
