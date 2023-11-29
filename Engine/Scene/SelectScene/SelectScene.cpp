@@ -209,15 +209,13 @@ void SelectScene::SelectionSquareInitialize()
 
 	selectionSquare_[0].Initialize(TextureManager::Load("Resources/TD2_November/select/select1.png", dxCommon_));
 	selectionSquare_[1].Initialize(TextureManager::Load("Resources/TD2_November/select/select2.png", dxCommon_));
-	selectionSquare_[2].Initialize(TextureManager::Load("Resources/TD2_November/select/select3.png", dxCommon_));
-	selectionSquare_[3].Initialize(TextureManager::Load("Resources/TD2_November/select/select4.png", dxCommon_));
 
 	// 選択マススプライト
 	for (uint32_t i = 0; i < selectionSquareMax_; i++) {
 		size = { selectionSquare_[i].sprite_->GetSize().x * sizeMagnification, selectionSquare_[i].sprite_->GetSize().y * sizeMagnification };
 		selectionSquare_[i].sprite_->SetSize(size);
 		// ポジションをここでかえる
-		selectionSquare_[i].position_.x = 213.3f + 284.4f * i;
+		selectionSquare_[i].position_.x = 320.0f + 640.0f * i;
 		selectionSquare_[i].position_.y = 360.0f;
 		selectionSquare_[i].Update();
 	}

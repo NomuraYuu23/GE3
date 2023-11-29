@@ -64,7 +64,7 @@ private: // メンバ変数
 
 	// 選択してるステージ
 	uint32_t selectionSquareNum_;
-	static const uint32_t selectionSquareMax_ = 4;
+	static const uint32_t selectionSquareMax_ = 2;
 
 	// 背景スプライト
 	UIData background_;
@@ -87,7 +87,7 @@ private: // メンバ変数
 	// 選択クールタイム
 	float selectCooltime_ = 0.3f;
 
-	float t[selectionSquareMax_] = { 0,0,0,0 };
+	float t[selectionSquareMax_] = { 0,0, };
 
 	const float easeSpeed_ = 0.05f;
 
