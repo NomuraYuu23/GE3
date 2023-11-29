@@ -50,6 +50,12 @@ void SceneManager::Update()
 
 	// リクエストシーンが変わったか
 	if (requestSeneNo_ != prevRequestSeneNo_) {
+		if (requestSeneNo_ == kSelect) {
+			// リス位置
+			respawnPosition_ = { 0.0f,0.0f,0.0f };
+			// アイテム
+			respawnItem_ = 0u;
+		}
 		//シーン遷移開始（初期化）
 		sceneTransition_.reset(sceneTransitionFactory_->CreateSceneTransition(currentSceneNo_, requestSeneNo_));
 		sceneTransition_->Initialize();
