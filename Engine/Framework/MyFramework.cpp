@@ -5,7 +5,7 @@ void MyFramework::Initialize()
 
 	//ゲームウィンドウの作成
 	win = WinApp::GetInstance();
-	win->CreateGameWindow();
+	win->CreateGameWindow(L"2208_自爆道ハゼルボンバー");
 
 	//DirectX初期化
 	dxCommon = DirectXCommon::GetInstance();
