@@ -64,6 +64,11 @@ public: // メンバ関数
 	/// </summary>
 	/// <param name="worldTransform"></param>
 	void AddFloor(WorldTransform* worldTransform, Vector3 size);
+	
+	/// <summary>
+	/// リセット
+	/// </summary>
+	void Reset();
 
 private: // メンバ関数
 

@@ -49,6 +49,7 @@ void GameScene::Initialize() {
 	// 影
 	shadowManager_ = ShadowManager::GetInstance();
 	shadowManager_->Initialize(shadowModel_.get());
+	shadowManager_->Reset();
 
 	//フロアマネージャー
 	floorManager_ = std::make_unique<FloorManager>();
