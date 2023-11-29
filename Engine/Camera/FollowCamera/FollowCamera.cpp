@@ -46,7 +46,7 @@ void FollowCamera::Update() {
 		destinationAngle_.x += input->GetRightAnalogstick().y * RotateSpeed;
 		// xに制限
 		float limit = 3.14f / 4.0f;
-		viewProjection_.transform_.rotate.x = std::clamp(viewProjection_.transform_.rotate.x, 0.0f, limit);
+		destinationAngle_.x = std::clamp(destinationAngle_.x, 0.0f, limit);
 	}
 
 	//追従対象がいれば
