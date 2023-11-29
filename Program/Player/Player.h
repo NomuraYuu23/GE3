@@ -10,6 +10,8 @@
 #include "../../Engine/Particle/ParticleManager.h"
 #include "../../Engine/GlobalVariables/GlobalVariables.h"
 
+class FollowCamera;
+
 class Player : public BaseCharacter
 {
 
@@ -335,6 +337,8 @@ public: // アクセッサ
 
 	uint32_t GetNumCollectItem() { return numCollectItem; }
 
+	void SetFollowCamera(FollowCamera* followCamera) { followCamera_ = followCamera; }
+
 private:
 	//全てのオブジェのUpdateMatrixをまとめたもの
 	void allUpdateMatrix();
@@ -417,6 +421,9 @@ private: // メンバ変数
 
 	// アニメーション
 	WorkOpening workOpening_;
+
+	// カメラ
+	FollowCamera* followCamera_;
 
 };
 

@@ -142,6 +142,7 @@ void GameScene::Initialize() {
 	//enemyManager_->SetPlayer(player_.get());
 
 	followCamera_->SetTarget(player_->GetWorldTransformAddress());
+	player_->SetFollowCamera(followCamera_.get());
 
 	collisionManager_ = std::make_unique<CollisionManager>();
 	collisionManager_->Initialize(player_.get(), floorManager_.get(), boxManager_.get(),

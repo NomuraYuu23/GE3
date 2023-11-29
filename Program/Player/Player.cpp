@@ -4,6 +4,8 @@
 #include"../../Engine/2D/ImguiManager.h"
 #include "../../Engine/Math/Ease.h"
 
+#include "../../Engine/Camera/FollowCamera/FollowCamera.h"
+
 void Player::ApplyGlobalVariables(){
 	GlobalVariables* item = GlobalVariables::GetInstance();
 	const char* groupName = "Player";
@@ -749,6 +751,7 @@ void Player::OpeningAnimationUpdate()
 		workOpening_.parameter_ = 1.0f;
 		isRotate_ = false;
 		worldTransform_.transform_.rotate.y = 0.0f;
+		followCamera_->SetDestinationAngle(Vector3{ 0.0f, -3.14f / 2.0f, 0.0f});;
 	}
 
 	worldTransform_.transform_.translate = Ease::Easing(Ease::EaseName::EaseInQuart, workOpening_.startPosition_, workOpening_.endPosition_, workOpening_.parameter_);
