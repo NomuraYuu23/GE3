@@ -163,6 +163,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Program\Particle\PlayerExplosionParticle.cpp" />
     <ClCompile Include="Program\Particle\PlayerJumpParticle.cpp" />
     <ClCompile Include="Program\Particle\PlayerWalkParticle.cpp" />
+    <ClCompile Include="Program\Particle\RecoveryItemParticle.cpp" />
     <ClCompile Include="Program\Particle\SmokeParticle.cpp" />
     <ClCompile Include="Program\Player\Player.cpp" />
     <ClCompile Include="Program\RecoveryItemManager\RecoveryItemManager.cpp" />
@@ -257,6 +258,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Program\Particle\PlayerExplosionParticle.h" />
     <ClInclude Include="Program\Particle\PlayerJumpParticle.h" />
     <ClInclude Include="Program\Particle\PlayerWalkParticle.h" />
+    <ClInclude Include="Program\Particle\RecoveryItemParticle.h" />
     <ClInclude Include="Program\Particle\SmokeParticle.h" />
     <ClInclude Include="Program\Player\Player.h" />
     <ClInclude Include="Program\RecoveryItemManager\RecoveryItemManager.h" />

@@ -6,6 +6,7 @@
 #include "../../Program/Particle/PlayerExplosionParticle.h"
 #include "../../Program/Particle/SmokeParticle.h"
 #include "../../Program/Particle/CollectibleItemsParticle.h"
+#include "../../Program/Particle/RecoveryItemParticle.h"
 
 void Emitter::Initialize(const TransformStructure& transform, uint32_t instanceCount,
 	float frequency, float lifeTime, uint32_t particleModelNum, uint32_t paeticleName)
@@ -87,8 +88,12 @@ Particle* Emitter::MakeParticle()
 		particle = new SmokeParticle();
 		particle->Initialize(transform_.translate, transform_.scale);
 		break;
-	case kCollectibleItemsParticle:
+	case kCollectibleItems:
 		particle = new CollectibleItemsParticle();
+		particle->Initialize(transform_.translate, transform_.scale);
+		break;
+	case kRecoveryItem:
+		particle = new RecoveryItemParticle();
 		particle->Initialize(transform_.translate, transform_.scale);
 		break;
 	case kCountOfPaeticleName:

@@ -93,6 +93,8 @@ void CollisionManager::AllCollision()
 			player_->OnCollisionRecoveryItem(item->GetRecoveryValue());
 			item->OnCollisionPlayer();
 			audio->PlayWave(Audio::AudioHandleIndex::kRecoveryItem, false, 1.0f);
+			transformStructure.translate = { item->GetDrawWorldTransform().worldMatrix_.m[3][0],item->GetDrawWorldTransform().worldMatrix_.m[3][1], item->GetDrawWorldTransform().worldMatrix_.m[3][2] };
+			particleManager->EmitterCreate(transformStructure, 10, 0.01f, 0.02f, 1, 6);
 		}
 	}
 	for (CollectibleItem* item : collectibleItemManager_->GetItems_()) {
