@@ -40,9 +40,18 @@ void GameScene::Initialize() {
 	isDebugCameraActive_ = true;
 
 	// MT4
-	axis_ = Vector3Calc::GetInstance()->Normalize({1.0f,1.0f,1.0f});
-	angle_ = 0.44f;
-	rotateMatrix_ = Matrix4x4Calc::GetInstance()->MakeRotateAxisAngle(axis_,angle_);
+	Vector3Calc* vector3Calc = Vector3Calc::GetInstance();
+	Matrix4x4Calc* matrix4x4Calc = Matrix4x4Calc::GetInstance();
+	
+	from0 = vector3Calc->Normalize(Vector3{1.0f, 0.7f, 0.5f});
+	to0 = vector3Calc->Multiply(-1.0f, from0);
+	from1 = vector3Calc->Normalize(Vector3{ -0.6f, 0.9f, 0.2f });
+	to1 = vector3Calc->Normalize(Vector3{ 0.4f, 0.7f, -0.5f });
+	rotateMatrix0 = matrix4x4Calc->DirectionToDirection(
+		vector3Calc->Normalize(Vector3{ 1.0f, 0.0f, 0.0f }),
+		vector3Calc->Normalize(Vector3{ -1.0f, 0.0f, 0.0f }));
+	rotateMatrix1 = matrix4x4Calc->DirectionToDirection(from0,to0);
+	rotateMatrix2 = matrix4x4Calc->DirectionToDirection(from1, to1);
 
 }
 
@@ -146,10 +155,18 @@ void GameScene::ImguiDraw(){
 #endif // _DEBUG
 
 	//MT4
-	ImGui::Begin("MT01_01確認課題");
-	ImGui::Text("RotateMatrix");
+	ImGui::Begin("MT01_02確認課題");
+	ImGui::Text("RotateMatrix0");
 	for (uint32_t i = 0; i < 4; i++) {
-		ImGui::Text("%.3f,	%.3f,	%.3f,	%.3f", rotateMatrix_.m[i][0], rotateMatrix_.m[i][1], rotateMatrix_.m[i][2], rotateMatrix_.m[i][3]);
+		ImGui::Text("%.3f,	%.3f,	%.3f,	%.3f", rotateMatrix0.m[i][0], rotateMatrix0.m[i][1], rotateMatrix0.m[i][2], rotateMatrix0.m[i][3]);
+	}
+	ImGui::Text("RotateMatrix1");
+	for (uint32_t i = 0; i < 4; i++) {
+		ImGui::Text("%.3f,	%.3f,	%.3f,	%.3f", rotateMatrix1.m[i][0], rotateMatrix1.m[i][1], rotateMatrix1.m[i][2], rotateMatrix1.m[i][3]);
+	}
+	ImGui::Text("RotateMatrix2");
+	for (uint32_t i = 0; i < 4; i++) {
+		ImGui::Text("%.3f,	%.3f,	%.3f,	%.3f", rotateMatrix2.m[i][0], rotateMatrix2.m[i][1], rotateMatrix2.m[i][2], rotateMatrix2.m[i][3]);
 	}
 	ImGui::End();
 

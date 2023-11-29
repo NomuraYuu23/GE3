@@ -577,23 +577,28 @@ Matrix4x4 Matrix4x4Calc::DirectionToDirection(const Vector3& from, const Vector3
 
 	Matrix4x4 result = Matrix4x4Calc::GetInstance()->MakeIdentity4x4();
 
-	if (!(nFrom.x == minusTo.x &&
+	if ((nFrom.x == minusTo.x &&
 		nFrom.y == minusTo.y &&
 		nFrom.z == minusTo.z)) {
-
-		result.m[0][0] = n.x * n.x * (1.0f - cosTheta) + cosTheta;
-		result.m[0][1] = n.x * n.y * (1.0f - cosTheta) + n.z * sinTheta;
-		result.m[0][2] = n.x * n.z * (1.0f - cosTheta) - n.y * sinTheta;
-
-		result.m[1][0] = n.x * n.y * (1.0f - cosTheta) - n.z * sinTheta;
-		result.m[1][1] = n.y * n.y * (1.0f - cosTheta) + cosTheta;
-		result.m[1][2] = n.y * n.z * (1.0f - cosTheta) + n.x * sinTheta;
-
-		result.m[2][0] = n.x * n.z * (1.0f - cosTheta) + n.y * sinTheta;
-		result.m[2][1] = n.y * n.z * (1.0f - cosTheta) - n.x * sinTheta;
-		result.m[2][2] = n.z * n.z * (1.0f - cosTheta) + cosTheta;
-
+		if (nFrom.x != 0.0f || nFrom.y != 0.0f) {
+			n = { nFrom.y, -nFrom.x, 0.0f };
+		}
+		else if (nFrom.x != 0.0f || nFrom.z != 0.0f) {
+			n = { nFrom.z, 0.0f, -nFrom.x };
+		}
 	}
+
+	result.m[0][0] = n.x * n.x * (1.0f - cosTheta) + cosTheta;
+	result.m[0][1] = n.x * n.y * (1.0f - cosTheta) + n.z * sinTheta;
+	result.m[0][2] = n.x * n.z * (1.0f - cosTheta) - n.y * sinTheta;
+
+	result.m[1][0] = n.x * n.y * (1.0f - cosTheta) - n.z * sinTheta;
+	result.m[1][1] = n.y * n.y * (1.0f - cosTheta) + cosTheta;
+	result.m[1][2] = n.y * n.z * (1.0f - cosTheta) + n.x * sinTheta;
+
+	result.m[2][0] = n.x * n.z * (1.0f - cosTheta) + n.y * sinTheta;
+	result.m[2][1] = n.y * n.z * (1.0f - cosTheta) - n.x * sinTheta;
+	result.m[2][2] = n.z * n.z * (1.0f - cosTheta) + cosTheta;
 
 	return result;
 }
