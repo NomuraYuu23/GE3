@@ -76,6 +76,7 @@ void Player::Initialize(const std::vector<Model*>& models,
 	explosionSpeed_ = 0.5f;
 
 	isExplosion_ = false;
+	isNextExplosion_ = true;
 
 	startExprosionNum_ = adjustment_item->GetIntValue(groupName, "startExprosionNum");
 	exprosionNum_ = startExprosionNum_;
@@ -508,7 +509,13 @@ void Player::Jump()
 void Player::Explosion(){	
 	if (exprosionNum_ == exprosionMin_)
 		return;
+	if (!isNextExplosion_)
+		return;
+
+	audio_->PlayWave(Audio::AudioHandleIndex::kExplosion, false, 1.0f);
+	
 	isExplosion_ = true;
+	isNextExplosion_ = false;
 	explosionCollider_.center_ = { worldTransform_.worldMatrix_.m[3][0], worldTransform_.worldMatrix_.m[3][1], worldTransform_.worldMatrix_.m[3][2] };
 	worldTransformExprode_.transform_.translate = explosionCollider_.center_;
 	audio_->PlayWave(Audio::AudioHandleIndex::kExplosion, false, 1.0f);
@@ -524,6 +531,7 @@ void Player::ExplosionMove(){
 	if (explosionTimer_ == baseExplosionTimer_) {
 		explosionTimer_ = 0;
 		isExplosion_ = false;
+		isNextExplosion_ = true;
 		if (exprosionNum_ != exprosionMin_) {
 			isSubtraction_ = true;
 			if (isSubtraction_) {

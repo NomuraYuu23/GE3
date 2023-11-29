@@ -367,6 +367,8 @@ private: // メンバ変数
 
 	//爆破を広げるためのスイッチ
 	bool isExplosion_;
+
+	bool isNextExplosion_;
 	//爆破時間
 	int baseExplosionTimer_ = 30;
 
