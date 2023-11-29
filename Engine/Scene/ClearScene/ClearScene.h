@@ -1,5 +1,7 @@
 #pragma once
 #include "../IScene/IScene.h"
+#include "../../../Program/UI/UIData.h"
+
 class ClearScene : public IScene
 {
 
@@ -36,5 +38,11 @@ private: // メンバ関数
 	/// テクスチャロード
 	/// </summary>
 	void TextureLoad() override;
+
+private:
+
+	UIData backGround_;
+
+	UIData goToSelect_;
 
 };
