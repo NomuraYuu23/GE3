@@ -82,7 +82,7 @@ void CollisionManager::AllCollision()
 	}
 	
 	for (RecoveryItem* item : recoveryItemManager_->GetItems_()) {
-		if (Collision::IsCollision(item->GetCollider(), player_->GetCollider())) {
+		if (Collision::IsCollision(item->GetCollider(), player_->GetCollider()) && !item->GetIsGet()) {
 			player_->OnCollisionRecoveryItem(item->GetRecoveryValue());
 			item->OnCollisionPlayer();
 		}
