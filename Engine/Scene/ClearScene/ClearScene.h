@@ -39,10 +39,20 @@ private: // メンバ関数
 	/// </summary>
 	void TextureLoad() override;
 
+private: 
+
+	void Animation();
+
 private:
 
 	UIData backGround_;
 
 	UIData goToSelect_;
+
+	// アニメーションパラメータ
+	float animationParameter_ = 0.0f;
+
+	// アニメーションピリオド
+	uint32_t animationPeriod_ = 60;
 
 };

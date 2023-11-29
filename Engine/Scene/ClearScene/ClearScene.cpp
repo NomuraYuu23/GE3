@@ -28,6 +28,9 @@ void ClearScene::Update(){
 			requestSeneNo = kSelect;
 		}
 	}
+
+	Animation();
+
 }
 
 void ClearScene::Draw()
@@ -78,4 +81,20 @@ void ClearScene::MaterialCreate()
 
 void ClearScene::TextureLoad()
 {
+}
+
+void ClearScene::Animation()
+{
+
+	// アニメーションパラメータ
+	animationParameter_ += 3.14f * 2.0f / animationPeriod_;
+
+	if (animationParameter_ >= 3.14f * 2.0f) {
+		animationParameter_ = std::fmodf(animationParameter_, 3.14f * 2.0f);
+	}
+
+	float plusY = std::sinf(animationParameter_) * 10.0f;
+
+	goToSelect_.sprite_->SetPosition(Vector2{ goToSelect_.position_.x, goToSelect_.position_.y + plusY });
+
 }
