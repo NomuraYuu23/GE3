@@ -21,7 +21,7 @@ public: // サブクラス
 	// ポーズで使うテクスチャ番号
 	enum PauseTextureNo{
 		kPausingTextureNo,              // ポーズ中
-		kGoToTitleTextureNo,			   // タイトルへ
+		kGoToTitleTextureNo,			 // タイトルへ
 		kReturnToGameTextureNo,         // ゲームに戻る
 		kCountOfPauseTextureNo // 使用不可
 	};
@@ -95,6 +95,12 @@ private: // メンバ変数(スプライト)
 	std::unique_ptr<Sprite> goToTitleSprite_;
 	// ゲームに戻る
 	std::unique_ptr<Sprite> returnToGameSprite_;
+
+	// 選択クールタイム
+	float selectCooltime_ = 0.3f;
+
+	// 選択クールタイム
+	float selectElapsedCooltime_ = 0.0f;
 
 };
 

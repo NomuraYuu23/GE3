@@ -1,4 +1,5 @@
 #include "Pause.h"
+#include "../Math/DeltaTime.h"
 
 void Pause::Initialize(const std::array<uint32_t, PauseTextureNo::kCountOfPauseTextureNo>& textureHandles)
 {
@@ -61,26 +62,49 @@ void Pause::PoseSwitching()
 void Pause::PauseMenuOperation()
 {
 
-	//// メニュー移動(上)
-	//if (input_->TriggerKey(DIK_W) || input_->TriggerKey(DIK_UP) || input_->TriggerJoystick(13)) {
-	//	pauseMenuSelect_--;
-	//	if (pauseMenuSelect_ < 0) {
-	//		pauseMenuSelect_ = PauseMenu::kCountOfPauseMenu - 1;
-	//	}
-	//}
-	//// メニュー移動(下)
-	//else if (input_->TriggerKey(DIK_S) || input_->TriggerKey(DIK_DOWN) || input_->TriggerJoystick(14)) {
-	//	pauseMenuSelect_++;
-	//	if (pauseMenuSelect_ == PauseMenu::kCountOfPauseMenu) {
-	//		pauseMenuSelect_ = 0;
-	//	}
-	//}
+	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
 
-	if (input_->TriggerKey(DIK_W) || input_->TriggerKey(DIK_UP) || input_->TriggerJoystick(1)) {
-		pauseMenuSelect_ = PauseMenu::kGoToTitle;
+	bool isPuls = false;
+	bool isMinus = false;
+
+	//移動
+	if (input_->GetJoystickConnected() && selectElapsedCooltime_ <= 0.0f) {
+
+		const float kThreshold = 0.7f;
+
+		// 移動量
+		Vector3 move = { 0.0f, input_->GetLeftAnalogstick().y, 0.0f };
+		if (v3Calc->Length(move) > kThreshold) {
+
+			// クールタイム経過時間初期化
+			selectElapsedCooltime_ = selectCooltime_;
+
+			if (move.y > 0) {
+				isPuls = true;
+			}
+			else {
+				isMinus = true;
+			}
+
+		}
 	}
-	else if (input_->TriggerKey(DIK_S) || input_->TriggerKey(DIK_DOWN) || input_->TriggerJoystick(0)) {
-			pauseMenuSelect_ = PauseMenu::kReturnToGame;
+	else if (selectElapsedCooltime_ > 0.0f) {
+		selectElapsedCooltime_ -= kDeltaTime_;
+	}
+
+	// メニュー移動(上)
+	if (input_->TriggerKey(DIK_W) || input_->TriggerKey(DIK_UP) || isPuls) {
+		pauseMenuSelect_--;
+		if (pauseMenuSelect_ < 0) {
+			pauseMenuSelect_ = PauseMenu::kCountOfPauseMenu - 1;
+		}
+	}
+	// メニュー移動(下)
+	else if (input_->TriggerKey(DIK_S) || input_->TriggerKey(DIK_DOWN) || isMinus) {
+		pauseMenuSelect_++;
+		if (pauseMenuSelect_ == PauseMenu::kCountOfPauseMenu) {
+			pauseMenuSelect_ = 0;
+		}
 	}
 
 	switch (pauseMenuSelect_)
@@ -100,17 +124,14 @@ void Pause::PauseMenuOperation()
 void Pause::PauseMenuGoToTitle()
 {
 
-	//// 選択している部分を色変更(黒)
-	//Vector4 black = { 0.0f,0.0f,0.0f,1.0f };
-	//Vector4 white = { 1.0f,1.0f,1.0f,1.0f };
-
+	// 選択している部分を色変更
+	Vector4 white = { 1.0f,1.0f,1.0f,1.0f };
 	Vector4 red = { 1.0f,0.0f,0.0f,1.0f };
-	Vector4 green = { 0.0f,1.0f,0.0f,1.0f };
 
-	returnToGameSprite_->SetColor(green);
+	returnToGameSprite_->SetColor(white);
 	goToTitleSprite_->SetColor(red);
 
-	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerJoystick(1)) {
+	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerJoystick(0)) {
 		goToTheTitle_ = true;
 	}
 
@@ -120,16 +141,13 @@ void Pause::PauseMenuGoToTitle()
 void Pause::PauseMenuReturnToGame()
 {
 
-	//// 選択している部分を色変更(黒)
-	//Vector4 black = { 0.0f,0.0f,0.0f,1.0f };
-	//Vector4 white = { 1.0f,1.0f,1.0f,1.0f };
+	// 選択している部分を色変更(黒)
+	Vector4 red = { 1.0f,0.1f,0.1f,1.0f };
+	Vector4 white = { 1.0f,1.0f,1.0f,1.0f };
 
 
-	Vector4 red = { 1.0f,0.0f,0.0f,1.0f };
-	Vector4 green = { 0.0f,1.0f,0.0f,1.0f };
-
-	returnToGameSprite_->SetColor(green);
-	goToTitleSprite_->SetColor(red);
+	returnToGameSprite_->SetColor(red);
+	goToTitleSprite_->SetColor(white);
 
 	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerJoystick(0)) {
 		isPause_ = false;
