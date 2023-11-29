@@ -58,6 +58,7 @@ void Enemy::Initialize(TransformStructure transform,const std::vector<Model*>& m
 
 	isDead_ = false;
 
+	isMove_ = true;
 }
 
 /// <summary>
@@ -66,13 +67,12 @@ void Enemy::Initialize(TransformStructure transform,const std::vector<Model*>& m
 void Enemy::Update() {	
 	// 回転
 	//Rotation();
-	if (isMove_){
+	if (isMove_) {
+		Fall();
 		// 移動
 		Move();
 	}
-	//落下
-	Fall();
-
+	
 	// 腕回転ギミック
 	UpdateArmRotationgimmick();
 
@@ -80,6 +80,9 @@ void Enemy::Update() {
 	worldTransform_.UpdateMatrix();
 
 	Landing();
+	if (worldTransform_.transform_.translate.y < -50.0f) {
+		isDead_ = true;
+	}
 
 	//ワールド変換データ更新
 	worldTransform_.UpdateMatrix();
@@ -111,11 +114,11 @@ void Enemy::Draw(const ViewProjection& viewProjection) {
 /// <summary>
 /// 移動
 /// </summary>
-void Enemy::Move() {
-	Fall();
+void Enemy::Move() {	
 
 	Matrix4x4Calc* m4Calc = Matrix4x4Calc::GetInstance();
-	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
+	Vector3Calc* v3Calc = Vector3Calc::GetInstance();	
+
 	if (!player_) {
 		Rotation();
 		
@@ -124,9 +127,7 @@ void Enemy::Move() {
 
 		//速度ベクトルを向きに合わせて回転させる
 		velocity_ = m4Calc->TransformNormal(velocity, worldTransform_.worldMatrix_);
-		if (isFall_) {
-			velocity_.y += fallSpeed_;
-		}
+		velocity_.y += fallSpeed_;
 
 		//移動
 		worldTransform_.transform_.translate = v3Calc->Add(worldTransform_.transform_.translate, velocity_);
@@ -134,10 +135,12 @@ void Enemy::Move() {
 	else {
 		//移動速度
 		Vector3 velocity = v3Calc->Subtract(worldTransform_.transform_.translate,player_->GetTransform());
-		velocity.y = 0.0f;
+		
 		velocity_ =v3Calc->Multiply(kMoveSpeed, (v3Calc->Normalize(velocity)));
+		velocity_.y += fallSpeed_;
+		
 
-		worldTransform_.transform_.rotate.y = std::atan2(velocity_.x, velocity_.z) + (1.57f * 2.0f);
+		worldTransform_.transform_.rotate.y = std::atan2(velocity_.x, velocity_.z);
 
 		worldTransform_.transform_.translate = v3Calc->Add(worldTransform_.transform_.translate, velocity_);
 	}
@@ -147,6 +150,7 @@ void Enemy::Fall(){
 	if (!isLanding) {
 		fallSpeed_ -= 0.05f;
 	}
+	
 }
 
 void Enemy::Landing(){
@@ -156,9 +160,9 @@ void Enemy::Landing(){
 		}
 	}
 	else {
-		fallSpeed_ = 0.0f;
+		fallSpeed_= 0.0f;
 	}
-	
+	isLanding = false;
 }
 
 void Enemy::OnCollision(WorldTransform* worldTransform){
@@ -182,7 +186,7 @@ void Enemy::OnCollisionBox(WorldTransform* worldTransform, Vector3 boxSize, bool
 				(worldTransform_.parent_ != worldTransform)) {
 				GotParent(worldTransform);
 			}
-			worldTransform_.transform_.translate.y = boxSize.y;
+			worldTransform_.transform_.translate.y = collider_.radius_ + boxSize.y;
 			allUpdateMatrix();
 
 			isLanding = true;
@@ -190,7 +194,7 @@ void Enemy::OnCollisionBox(WorldTransform* worldTransform, Vector3 boxSize, bool
 	}
 	else {
 		if (worldTransform_.transform_.translate.y >= worldTransform->transform_.translate.y + (boxSize.y) - (collider_.radius_ * 1.5f)) {
-			worldTransform_.transform_.translate.y = worldTransform->transform_.translate.y + boxSize.y;
+			worldTransform_.transform_.translate.y = worldTransform->transform_.translate.y + collider_.radius_ + boxSize.y;
 			allUpdateMatrix();
 
 			isLanding = true;
@@ -218,6 +222,33 @@ void Enemy::OnCollisionBox(WorldTransform* worldTransform, Vector3 boxSize, bool
 
 		}
 	}
+}
+
+void Enemy::OnCollisionEnemy(WorldTransform* worldTransform, float size){
+	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
+	Vector3 length = (v3Calc->Subtract(worldTransform->transform_.translate, worldTransform_.transform_.translate));
+	Vector3 myNextPosition = v3Calc->Add(worldTransform_.transform_.translate, velocity_);
+
+	if (sqrtf(length.x * length.x) > size) {
+		float minWidth = worldTransform->transform_.translate.x - size;
+		float maxWidth = worldTransform->transform_.translate.x + size;
+		if (myNextPosition.x >= minWidth && myNextPosition.x <= maxWidth||
+			worldTransform_.transform_.translate.x >= minWidth && worldTransform_.transform_.translate.x <= maxWidth){
+			worldTransform_.transform_.translate.x -= (velocity_.x * 1.1f);
+			allUpdateMatrix();
+		}
+		
+	}
+	if (sqrtf(length.z * length.z) > size) {
+		float minWidth = worldTransform->transform_.translate.z - size;
+		float maxWidth = worldTransform->transform_.translate.z + size;
+		if (myNextPosition.z >= minWidth && myNextPosition.z <= maxWidth ||
+			worldTransform_.transform_.translate.z >= minWidth && worldTransform_.transform_.translate.z <= maxWidth) {
+			worldTransform_.transform_.translate.z -= (velocity_.z * 1.1f);
+			allUpdateMatrix();
+		}
+	}
+
 }
 
 /// <summary>
@@ -308,8 +339,10 @@ void Enemy::DrawImgui(){
 	ImGui::DragFloat3("アイテムの座標", &worldTransform_.transform_.translate.x, 0.1f);
 	ImGui::DragFloat3("アイテムの回転", &worldTransform_.transform_.rotate.x, 0.1f);
 	ImGui::DragFloat3("アイテムの大きさ", &worldTransform_.transform_.scale.x, 0.1f, 0.0f, 300.0f);
-	ImGui::Checkbox("落ちるようにする", &isFall_);
+	ImGui::DragFloat3("移動ベクトル", &velocity_.x, 0.1f, 0.0f, 300.0f);
+	ImGui::DragFloat("落下速度", &fallSpeed_, 0.1f, 0.0f, 300.0f);
 	ImGui::Checkbox("動くようにする", &isMove_);
+	ImGui::Text("kauninn = %d", isLanding);
 	if (ImGui::Button("このオブジェを削除")) {
 		isDead_ = true;
 	}

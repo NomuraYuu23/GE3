@@ -42,16 +42,26 @@ void RecoveryItem::Initialize(Model* model, Material* material, TransformStructu
 
 	collider_.Initialize(colliderMin_, colliderMax_);
 
+	upVelocity_ = 10.0f;
+
 	isDelete_ = false;
+
+	isGet_ = false;
 }
 
 void RecoveryItem::Update(){
 
-	if (worldTransform_.worldMatrix_.m[3][1] <= -50.0f) {
+	if (worldTransform_.worldMatrix_.m[3][1] <= -50.0f || upParameter_ > 1.0f) {
 		isDelete_ = true;
 	}
 
 	Rotation();
+
+	if (isGet_) {
+		upParameter_ += 0.02f;
+		worldTransform_.transform_.translate.y = Ease::Easing(Ease::EaseName::EaseOutBack, position_.y, position_.y + upVelocity_, upParameter_);
+		drawWorldTransform_.transform_.translate.y = Ease::Easing(Ease::EaseName::EaseOutBack, position_.y, position_.y + upVelocity_, upParameter_);
+	}
 
 	Vector3 WorldPosition = { drawWorldTransform_.worldMatrix_.m[3][0] , drawWorldTransform_.worldMatrix_.m[3][1] , drawWorldTransform_.worldMatrix_.m[3][2] };
 	size_ = { drawWorldTransform_.transform_.scale.x + 0.1f,drawWorldTransform_.transform_.scale.y + 0.1f,drawWorldTransform_.transform_.scale.z + 0.1f, };
@@ -173,7 +183,7 @@ void RecoveryItem::OnCollisionBox(WorldTransform* worldTransform, float boxSize)
 }
 
 void RecoveryItem::OnCollisionPlayer(){
-	isDelete_ = true;
+	isGet_ = true;
 }
 
 void RecoveryItem::Rotation()
@@ -181,10 +191,15 @@ void RecoveryItem::Rotation()
 
 	float speed = 0.01f;
 
-	rotateParameter_ += speed;
+	if (isGet_) {
+		speed = 0.4f;
+		drawWorldTransform_.transform_.rotate.y += speed;
+	}
+	else {
+		rotateParameter_ += speed;
 
-	rotateParameter_ = std::fmodf(rotateParameter_, 1.0f);
+		rotateParameter_ = std::fmodf(rotateParameter_, 1.0f);
 
-	drawWorldTransform_.transform_.rotate.y = Ease::Easing(Ease::EaseName::EaseInQuart, 0.0f, 6.28f, rotateParameter_);
-
+		drawWorldTransform_.transform_.rotate.y = Ease::Easing(Ease::EaseName::EaseInQuart, 0.0f, 6.28f, rotateParameter_);
+	}
 }

@@ -54,6 +54,11 @@ public:
 	void OnCollisionBox(WorldTransform* worldTransform, Vector3 boxSize, bool isMove);
 
 	/// <summary>
+	/// 敵同士の衝突
+	/// </summary>
+	void OnCollisionEnemy(WorldTransform* worldTransform, float size);
+
+	/// <summary>
 	/// 回転
 	/// </summary>
 	void Rotation();

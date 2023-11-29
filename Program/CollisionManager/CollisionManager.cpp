@@ -5,7 +5,7 @@ void CollisionManager::Initialize(Player* player, FloorManager* floorManager,
 	BoxManager* boxManager, BreakBoxManager* breakBoxManager, 
 	RecoveryItemManager* recoveryItemManager, EnemyManager* enemyManager,
 	CollectibleItemManager* collectibleItemManager, CheckPointManager* checkPointManager//,
-	/*BurningBoxManager* burningBoxManager*/, Goal* goal)
+	/*BurningBoxManager* burningBoxManager*/, Goal* goal,FenceManager* fenceManager)
 {
 
 	v3Calc = Vector3Calc::GetInstance();
@@ -28,6 +28,8 @@ void CollisionManager::Initialize(Player* player, FloorManager* floorManager,
 	enemyManager_ = enemyManager;
 
 	checkPointManager_ = checkPointManager;
+
+	fenceManager_ = fenceManager;
 
 	goal_ = goal;
 
@@ -80,15 +82,28 @@ void CollisionManager::AllCollision()
 			}
 		}
 	}
+
+	for (Fence* fence : fenceManager_->GetFences_()) {
+
+		// あたり判定確認
+		if (Collision::IsCollision(fence->GetCollider(), player_->GetCollider())) {
+			player_->OnCollisionBox(fence->GetWorldTransformAdress(), { fence->GetSize().x,fence->GetSize().y * 300.0f,fence->GetSize().z }, false);
+		}
+		for (Enemy* enemy : enemyManager_->GetEnemys_()) {
+			if (Collision::IsCollision(fence->GetCollider(), enemy->GetCollider())) {
+				enemy->OnCollisionBox(fence->GetWorldTransformAdress(), fence->GetSize(), false);
+			}
+		}
+	}
 	
 	for (RecoveryItem* item : recoveryItemManager_->GetItems_()) {
-		if (Collision::IsCollision(item->GetCollider(), player_->GetCollider())) {
+		if (Collision::IsCollision(item->GetCollider(), player_->GetCollider()) && !item->GetIsGet()) {
 			player_->OnCollisionRecoveryItem(item->GetRecoveryValue());
 			item->OnCollisionPlayer();
 		}
 	}
 	for (CollectibleItem* item : collectibleItemManager_->GetItems_()) {
-		if (Collision::IsCollision(item->GetCollider(), player_->GetCollider())) {
+		if (Collision::IsCollision(item->GetCollider(), player_->GetCollider())&&!item->GetIsGet()) {
 			player_->OnCollisionCollectibleItem();
 			item->OnCollisionPlayer();
 		}
@@ -112,6 +127,13 @@ void CollisionManager::AllCollision()
 		}
 		if (Collision::IsCollision(enemy->GetCollider(), player_->GetExplosionCollider())) {
 			enemy->SetIsDead(true);
+		}
+		for (Enemy* enemy2 : enemyManager_->GetEnemys_()) {
+			if (enemy == enemy2)
+				continue;
+			if (Collision::IsCollision(enemy->GetCollider(), enemy2->GetCollider())) {
+				enemy->OnCollisionEnemy(enemy2->GetWorldTransformAddress(), enemy2->GetColliderRadius());
+			}
 		}
 	}
 

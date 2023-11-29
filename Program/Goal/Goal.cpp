@@ -274,6 +274,8 @@ void Goal::LoadFile(const std::string& groupName, const std::string& stage){
 
 		worldTransform_.transform_ = newTrans;
 		radius_ = newTrans.scale.x;
+
+
 	}
 }
 

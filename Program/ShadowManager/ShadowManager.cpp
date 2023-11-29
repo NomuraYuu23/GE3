@@ -58,7 +58,7 @@ void ShadowManager::Update()
 
 				// yが m > f && f > a 
 				if (makerPosition.y >= floorPosition.y &&
-					(!answerMakerWorldTransform || floorPosition.y > answerMakerWorldTransform->worldMatrix_.m[3][1])) {
+					(!answerMakerWorldTransform || floorPosition.y > answerFloorWorldTransform->worldMatrix_.m[3][1])) {
 					answerMakerWorldTransform = itr->worldTransform_;
 					answerFloorWorldTransform = floor.worldTransform_;
 					AddPositionY = floorRadius.y;
@@ -133,12 +133,34 @@ void ShadowManager::AddFloor(WorldTransform* worldTransform, Vector3 size)
 
 }
 
+void ShadowManager::Reset()
+{
+
+	// 影
+	shadows_.remove_if([](Shadow* shadow) {
+		delete shadow;
+		return true;
+		});
+
+	// 影をつくるobj
+	makers_.remove_if([](Maker maker) {
+		return true;
+		});
+
+	// 影をうつすobj
+	floors_.remove_if([](Floor floor) {
+		return true;
+		});
+
+}
+
 void ShadowManager::CheckIfItsGone()
 {
 
 	// 影
 	shadows_.remove_if([](Shadow* shadow) {
 		if (!shadow->MakerWorldTransform_) {
+			delete shadow;
 			return true;
 		}
 		return false;

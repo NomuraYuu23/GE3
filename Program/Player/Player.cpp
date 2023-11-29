@@ -2,6 +2,7 @@
 #include "../../Engine/Input/Input.h"
 #include "../../Engine/Math/Math.h"
 #include"../../Engine/2D/ImguiManager.h"
+#include "../../Engine/Math/Ease.h"
 
 void Player::ApplyGlobalVariables(){
 	GlobalVariables* item = GlobalVariables::GetInstance();
@@ -13,7 +14,7 @@ void Player::ApplyGlobalVariables(){
 }
 
 void Player::Initialize(const std::vector<Model*>& models,
-	const std::vector<Material*>& materials)
+	const std::vector<Material*>& materials, const Vector3& initPosition)
 {
 	GlobalVariables* adjustment_item = GlobalVariables::GetInstance();
 	const char* groupName = "Player";
@@ -24,7 +25,7 @@ void Player::Initialize(const std::vector<Model*>& models,
 	adjustment_item->AddItem(groupName, "baseExplosionTimer", baseExplosionTimer_);
 	adjustment_item->AddItem(groupName, "startExprosionNum", startExprosionNum_);
 
-	workRoot_.kInitialPosition = { 0.0f,5.0f,0.0f };
+	workRoot_.kInitialPosition = initPosition;
 	//nullポインタチェック
 	assert(models.front());
 	//基底クラスの初期化
@@ -80,61 +81,72 @@ void Player::Initialize(const std::vector<Model*>& models,
 
 	particleManager_ = ParticleManager::GetInstance();
 
+	OpeningAnimationInitialize();
+
 }
 
 void Player::Update()
 {
 	ApplyGlobalVariables();
-	if (behaviorRequest_) {
-		//振るまいを変更する
-		behavior_ = behaviorRequest_.value();
-		//各振るまいごとの初期化を実行
+	
+
+	if (workOpening_.isRunning_) {
+		OpeningAnimationUpdate();
+	}
+	else {
+
+		if (behaviorRequest_) {
+			//振るまいを変更する
+			behavior_ = behaviorRequest_.value();
+			//各振るまいごとの初期化を実行
+			switch (behavior_) {
+			case Behavior::kRoot:
+			default:
+				BehaviorRootInitialize();
+				break;
+			case Behavior::kAttack:
+				BehaviorAttackInitialize();
+				break;
+			case Behavior::kDash:
+				BehaviorDashInitialize();
+				break;
+			}
+			//振るまいリクエストをリセット
+			behaviorRequest_ = std::nullopt;
+		}
+
+		// 振るまい
 		switch (behavior_) {
 		case Behavior::kRoot:
 		default:
-			BehaviorRootInitialize();
+			BehaviorRootUpdate();
 			break;
 		case Behavior::kAttack:
-			BehaviorAttackInitialize();
+			BehaviorAttackUpdate();
 			break;
 		case Behavior::kDash:
-			BehaviorDashInitialize();
+			BehaviorDashUpdate();
 			break;
 		}
-		//振るまいリクエストをリセット
-		behaviorRequest_ = std::nullopt;
+
+
+		//行列を定数バッファに転送
+		allUpdateMatrix();
+
+		if (worldTransform_.worldMatrix_.m[3][1] <= -30.0f) {
+			Explosion();
+			exprosionNum_ -= 5;
+			velocity_.y = 3.0f;
+			isRotate_ = true;
+		}
+
+		collider_.center_ = { worldTransform_.worldMatrix_.m[3][0], worldTransform_.worldMatrix_.m[3][1] + collider_.radius_, worldTransform_.worldMatrix_.m[3][2] };
+		collider_.worldTransformUpdate();
+		explosionCollider_.worldTransformUpdate();
+		worldTransformExprode_.transform_.translate = explosionCollider_.center_;
+		worldTransformExprode_.UpdateMatrix();
 	}
 
-	// 振るまい
-	switch (behavior_) {
-	case Behavior::kRoot:
-	default:
-		BehaviorRootUpdate();
-		break;
-	case Behavior::kAttack:
-		BehaviorAttackUpdate();
-		break;
-	case Behavior::kDash:
-		BehaviorDashUpdate();
-		break;
-	}
-	
-
-	//行列を定数バッファに転送
-	allUpdateMatrix();
-
-	if (worldTransform_.worldMatrix_.m[3][1] <= -30.0f) {
-		Explosion();
-		exprosionNum_ -= 5;
-		velocity_.y = 3.0f;
-		isRotate_ = true;
-	}
-
-	collider_.center_ = { worldTransform_.worldMatrix_.m[3][0], worldTransform_.worldMatrix_.m[3][1]+collider_.radius_, worldTransform_.worldMatrix_.m[3][2] };
-	collider_.worldTransformUpdate();
-	explosionCollider_.worldTransformUpdate();
-	worldTransformExprode_.transform_.translate = explosionCollider_.center_;
-	worldTransformExprode_.UpdateMatrix();
 
 }
 
@@ -162,8 +174,14 @@ void Player::BehaviorRootInitialize()
 
 void Player::BehaviorRootUpdate()
 {
-
+	
 	Walk();
+	ExplosionMove();
+	
+	if (exprosionNum_ < 0) {
+		Explosion();
+		return;
+	}
 	Jump();
 	Fall();
 	Move();
@@ -172,15 +190,8 @@ void Player::BehaviorRootUpdate()
 
 	Landing();
 
-	AttackStart();
-
-	DashStart();
-
-	// 浮遊ギミック
-	//UpdateFloatinggimmick();
-
 	// ぶらぶらギミック
-	if (workSwing_.doing_) {
+	if (workSwing_.doing_ && !isRotate_) {
 		UpdateSwinggimmick();
 	}
 
@@ -367,10 +378,14 @@ void Player::Move()
 	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
 	worldTransform_.transform_.translate = v3Calc->Add(worldTransform_.transform_.translate, velocity_);
 	if (isRotate_){
-		worldTransform_.transform_.rotate.x += 0.5f;
+		worldTransformBody_.transform_.rotate.x += 0.5f;
+		worldTransformLeftLeg_.transform_.rotate.x += 0.5f;
+		worldTransformRightLeg_.transform_.rotate.x += 0.5f;
 	}
 	else {
-		worldTransform_.transform_.rotate.x = 0.0f;
+		worldTransformBody_.transform_.rotate.x = 0.0f;
+		worldTransformLeftLeg_.transform_.rotate.x = 0.0f;
+		worldTransformRightLeg_.transform_.rotate.x = 0.0f;
 	}
 
 }
@@ -477,7 +492,7 @@ void Player::Jump()
 
 	}
 
-	ExplosionMove();
+	
 
 }
 
@@ -705,6 +720,41 @@ void Player::LostParent()
 	worldTransform_.transform_.translate = position;
 	worldTransform_.parent_ = nullptr;
 	worldTransform_.UpdateMatrix();
+
+}
+
+void Player::OpeningAnimationInitialize()
+{
+
+	workOpening_.isRunning_ = true;
+
+	workOpening_.startPosition_ = { 0.0f, 50.0f,-250.0f };
+
+	workOpening_.endPosition_ = workRoot_.kInitialPosition;
+
+	workOpening_.parameter_ = 0.0f;
+
+	workOpening_.period_ = 60;
+
+	isRotate_ = true;
+
+}
+
+void Player::OpeningAnimationUpdate()
+{
+
+	workOpening_.parameter_ += 1.0f / workOpening_.period_;
+	if (workOpening_.parameter_ >= 1.0f) {
+		workOpening_.isRunning_ = false;
+		workOpening_.parameter_ = 1.0f;
+		isRotate_ = false;
+		worldTransform_.transform_.rotate.y = 0.0f;
+	}
+
+	worldTransform_.transform_.translate = Ease::Easing(Ease::EaseName::EaseInQuart, workOpening_.startPosition_, workOpening_.endPosition_, workOpening_.parameter_);
+	Move();
+
+	allUpdateMatrix();
 
 }
 

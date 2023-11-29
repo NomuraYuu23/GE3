@@ -44,7 +44,7 @@ void TitleScene::Update()
 
 	if ((input_->TriggerKey(DIK_SPACE) || input_->TriggerJoystick(0)) && !startAnimationVariables_.isAnimation_) {
 		// 行きたいシーンへ
-		requestSeneNo = kGame;
+		requestSeneNo = kSelect;
 		startAnimationVariables_.isAnimation_ = true;
 	}
 

@@ -14,6 +14,8 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg
 #include "../../base/D3DResourceLeakChecker.h"
 #include <vector>
 
+#include "../SceneManager/SceneManager.h"
+
 /// <summary>
 /// コンストラクタ
 /// </summary>
@@ -46,6 +48,11 @@ void GameScene::Initialize() {
 	std::vector<Model*> colliderModels = { colliderSphereModel_.get(),colliderBoxModel_.get(),colliderBoxModel_.get() };
 	colliderDebugDraw_->Initialize(colliderModels, colliderMaterial_.get());
 
+	// 影
+	shadowManager_ = ShadowManager::GetInstance();
+	shadowManager_->Initialize(shadowModel_.get());
+	shadowManager_->Reset();
+
 	//フロアマネージャー
 	floorManager_ = std::make_unique<FloorManager>();
 	floorManager_->Initialize(floorModel_.get(), floorMaterial_.get());
@@ -68,6 +75,13 @@ void GameScene::Initialize() {
 	breakBoxManager_->Initialize(breakBoxModel_.get(), breakBoxMaterial_.get());
 
 	breakBoxManager_->SetColliderDebugDraw(colliderDebugDraw_.get());
+
+	//壊れるボックス生成
+	fenceManager_ = std::make_unique<FenceManager>();
+
+	fenceManager_->Initialize(fenceModel_.get(), fenceMaterial_.get());
+
+	fenceManager_->SetColliderDebugDraw(colliderDebugDraw_.get());
 
 	//回復アイテム生成
 	recoveryItemManager_ = std::make_unique<RecoveryItemManager>();
@@ -124,9 +138,14 @@ void GameScene::Initialize() {
 	//プレイヤー関連
 
 	player_ = std::make_unique<Player>();
-	player_->Initialize(playerModels_, playerMaterials_);
+	player_->Initialize(playerModels_, playerMaterials_, sceneManager_->GetRespawnPosition());
 	player_->SetViewProjection(followCamera_->GetViewProjectionAddress());
-
+	Vector3 playerSize = {
+		player_->GetColliderRadius() * 2.0f,
+		player_->GetColliderRadius() * 2.0f,
+		player_->GetColliderRadius() * 2.0f
+	};
+	shadowManager_->AddMeker(player_->GetWorldTransformAddress(), playerSize);
 	//enemyManager_->SetPlayer(player_.get());
 
 	followCamera_->SetTarget(player_->GetWorldTransformAddress());
@@ -134,7 +153,7 @@ void GameScene::Initialize() {
 	collisionManager_ = std::make_unique<CollisionManager>();
 	collisionManager_->Initialize(player_.get(), floorManager_.get(), boxManager_.get(),
 		breakBoxManager_.get(), recoveryItemManager_.get(), enemyManager_.get(),
-		collectibleItemManager_.get(), checkPointManager_.get(), goal_.get());
+		collectibleItemManager_.get(), checkPointManager_.get(), goal_.get(),fenceManager_.get());
 
 	colliderDebugDraw_->AddCollider(&player_->GetCollider());
 	colliderDebugDraw_->AddCollider(&player_->GetExplosionCollider());
@@ -157,19 +176,15 @@ void GameScene::Initialize() {
 
 	isDebugCameraActive_ = false;
 
-	shadowManager_ = ShadowManager::GetInstance();
-	shadowManager_->Initialize(shadowModel_.get());
-	Vector3 playerSize = {
-		player_->GetColliderRadius() * 2.0f,
-		player_->GetColliderRadius() * 2.0f,
-		player_->GetColliderRadius() * 2.0f
-	};
-	shadowManager_->AddMeker(player_->GetWorldTransformAddress(), playerSize);
-
 	// ui
 	ui = std::make_unique<UI>();
 	ui->Initialize(uiTextureHandles_);
 	ui->SetPlayer(player_.get());
+	//FilesLoad(stageName_);
+
+	// スカイドーム
+	skydome_ = std::make_unique<Skydome>();
+	skydome_->Initialize(skydomeModel_.get(), skydomeMaterial_.get());
 
 }
 
@@ -189,6 +204,8 @@ void GameScene::Update() {
 	floorManager_->Update();
 	boxManager_->Update();
 	breakBoxManager_->Update();
+
+	fenceManager_->Update();
 	
 	checkPointManager_->Update();
 
@@ -200,8 +217,6 @@ void GameScene::Update() {
 
 	// デバッグ描画
 	colliderDebugDraw_->Update();
-
-	
 
 	enemyManager_->Update();
 
@@ -237,9 +252,10 @@ void GameScene::Update() {
 		requestSeneNo = kClear;
 	}
 
-	/*if (player_->GetExprosionNumInt() < 0) {
+	if (player_->GetExprosionNumInt() < 0) {
 		requestSeneNo = kGameOver;
-	}*/
+		sceneManager_->SetRespawnPosition(player_->GetInitialPosition());
+	}
 
 	// タイトルへ行く
 	GoToTheTitle();
@@ -271,6 +287,7 @@ void GameScene::Draw() {
 	/*3Dオブジェクトはここ*/
 	boxManager_->Draw(viewProjection_);
 	breakBoxManager_->Draw(viewProjection_);
+	fenceManager_->Draw(viewProjection_);
 	floorManager_->Draw(viewProjection_);
 	checkPointManager_->Draw(viewProjection_);
 
@@ -280,8 +297,9 @@ void GameScene::Draw() {
 	collectibleItemManager_->Draw(viewProjection_);
 	player_->Draw(viewProjection_);
 	enemyManager_->Draw(viewProjection_);
-
 	shadowManager_->Draw(viewProjection_);
+
+	skydome_->Draw(viewProjection_);
 
 #ifdef _DEBUG
 
@@ -395,6 +413,16 @@ void GameScene::ImguiDraw() {
 				ImGui::TreePop();
 			}
 
+			if (ImGui::TreeNode("柵生成")) {
+				ImGui::DragFloat3("柵の座標", &fenceTrnasform_.translate.x, 0.1f);
+				ImGui::DragFloat3("柵の回転", &fenceTrnasform_.rotate.x, 0.01f);
+				ImGui::DragFloat3("柵の大きさ", &fenceTrnasform_.scale.x, 0.1f, 0.1f, 999.0f, "%.1f");
+				if (ImGui::Button("壊れるボックスの追加")) {
+					fenceManager_->AddFence(fenceTrnasform_);
+				}
+				ImGui::TreePop();
+			}
+
 			if (ImGui::TreeNode("回復アイテム生成")) {
 				ImGui::DragFloat3("アイテムの座標", &recoveryItemTransform_.translate.x, 0.1f);
 				ImGui::DragFloat3("アイテムの回転", &recoveryItemTransform_.rotate.x, 0.01f);
@@ -454,6 +482,10 @@ void GameScene::ImguiDraw() {
 				breakBoxManager_->DrawImgui();
 				ImGui::EndMenu();
 			}
+			if (ImGui::BeginMenu("柵一覧")) {
+				fenceManager_->DrawImgui();
+				ImGui::EndMenu();
+			}
 			if (ImGui::BeginMenu("回復アイテム一覧")) {
 				recoveryItemManager_->DrawImgui();
 				ImGui::EndMenu();
@@ -481,14 +513,20 @@ void GameScene::ImguiDraw() {
 				
 			}
 			if (ImGui::Button("jsonファイルを作る")) {
+				std::string message = std::format("{}.json created.", "all");
+				MessageBoxA(nullptr, message.c_str(), "StagesObject", 0);
 				FilesSave(stages_);
 			}
 			if (ImGui::Button("上書きセーブ")) {
+				std::string message = std::format("{}.json OverWrite.", "all");
+				MessageBoxA(nullptr, message.c_str(), "StagesObject", 0);
 				FilesOverWrite(stageName_);
 			}
 
 			if (ImGui::Button("全ロード(手動)")) {
-				FilesLoad(stages_,stageName_);
+				std::string message = std::format("{}.json loaded.", "all");
+				MessageBoxA(nullptr, message.c_str(), "StagesObject", 0);
+				FilesLoad(stageName_);
 			}
 			ImGui::EndMenu();
 		}
@@ -501,6 +539,15 @@ void GameScene::ImguiDraw() {
 
 	
 #endif // _DEBUG
+
+}
+
+void GameScene::LoadStage(uint32_t stageIndex)
+{
+
+	stageName_ = stages_[stageIndex].c_str();
+
+	FilesLoad(stageName_);
 
 }
 
@@ -531,16 +578,15 @@ void GameScene::DebugCameraUpdate()
 }
 
 void GameScene::FilesSave(const std::vector<std::string>& stages){
-	goal_->SaveFile(stages);
-	enemyManager_->SaveFile(stages);
+	//goal_->SaveFile(stages);
+	fenceManager_->SaveFile(stages);
 	/*floorManager_->SaveFile(stages);
 	boxManager_->SaveFile(stages);
 	breakBoxManager_->SaveFile(stages);
 	checkPointManager_->SaveFile(stages);
 	collectibleItemManager_->SaveFile(stages);
 	recoveryItemManager_->SaveFile(stages);*/
-	std::string message = std::format("{}.json created.", "all");
-	MessageBoxA(nullptr, message.c_str(), "StagesObject", 0);
+	
 }
 
 void GameScene::FilesOverWrite(const std::string& stage){
@@ -548,25 +594,25 @@ void GameScene::FilesOverWrite(const std::string& stage){
 	floorManager_->FileOverWrite(stage);
 	boxManager_->FileOverWrite(stage);
 	breakBoxManager_->FileOverWrite(stage);
+	fenceManager_->FileOverWrite(stage);
 	checkPointManager_->FileOverWrite(stage);
 	collectibleItemManager_->FileOverWrite(stage);
 	recoveryItemManager_->FileOverWrite(stage);
 	goal_->FileOverWrite(stage);
-	std::string message = std::format("{}.json OverWrite.", "all");
-	MessageBoxA(nullptr, message.c_str(), "StagesObject", 0);
+	
 }
 
-void GameScene::FilesLoad(const std::vector<std::string>& stages, const std::string& stage){
+void GameScene::FilesLoad(const std::string& stage){
 	enemyManager_->LoadFiles(stage);
 	floorManager_->LoadFiles(stage);
 	boxManager_->LoadFiles(stage);
 	breakBoxManager_->LoadFiles(stage);
+	fenceManager_->LoadFiles(stage);
 	checkPointManager_->LoadFiles(stage);
 	collectibleItemManager_->LoadFiles(stage);
 	recoveryItemManager_->LoadFiles(stage);
 	goal_->LoadFiles(stage);
-	std::string message = std::format("{}.json loaded.", "all");
-	MessageBoxA(nullptr, message.c_str(), "StagesObject", 0);
+	
 }
 
 void GameScene::GoToTheTitle()
@@ -591,9 +637,11 @@ void GameScene::ModelCreate()
 	playerModels_.push_back(Model::Create("Resources/TD2_November/Player/playerRightLeg", "playerRightLeg.obj", dxCommon_));
 	playerModels_.push_back(Model::Create("Resources/TD2_November/exprode/", "sphere.obj", dxCommon_));
 	//ボックスマネージャー
-	boxModel_.reset(Model::Create("Resources/TD2_November/floorBox/", "box.obj", dxCommon_));
+	boxModel_.reset(Model::Create("Resources/TD2_November/block/", "block.obj", dxCommon_));
 	//壊れるボックス生成
 	breakBoxModel_.reset(Model::Create("Resources/TD2_November/breakBox/", "box.obj", dxCommon_));
+	//壊れるボックス生成
+	fenceModel_.reset(Model::Create("Resources/TD2_November/fence/", "box.obj", dxCommon_));
 	//回復アイテム生成
 	recoveryItemModel_.reset(Model::Create("Resources/TD2_November/bombCherry/", "bombCherry.obj", dxCommon_));
 	//収集アイテム生成
@@ -615,6 +663,9 @@ void GameScene::ModelCreate()
 	// 影モデル
 	shadowModel_.reset(Model::Create("Resources/TD2_November/shadow/", "shadow.obj", dxCommon_));
 
+	// スカイドーム
+	skydomeModel_.reset(Model::Create("Resources/TD2_November/skydome/", "skydome.obj", dxCommon_));
+
 }
 
 void GameScene::MaterialCreate()
@@ -631,6 +682,8 @@ void GameScene::MaterialCreate()
 	boxMaterial_.reset(Material::Create());
 	//壊れるボックス生成
 	breakBoxMaterial_.reset(Material::Create());
+	//壊れるボックス生成
+	fenceMaterial_.reset(Material::Create());
 	//回復アイテム生成
 	recoveryItemMaterial_.reset(Material::Create());
 	//収集アイテム生成
@@ -642,6 +695,9 @@ void GameScene::MaterialCreate()
 		enemyMaterials_.push_back(Material::Create());
 	}
 	goalMaterial_.reset(Material::Create());
+
+	// スカイドーム
+	skydomeMaterial_.reset(Material::Create());
 
 }
 

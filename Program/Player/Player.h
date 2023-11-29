@@ -99,6 +99,20 @@ public: // サブクラス
 		bool doing_ = false;
 	};
 
+	// オープニングアニメーション
+	struct WorkOpening
+	{
+		// 実行中か
+		bool isRunning_;
+		// 移動位置
+		Vector3 startPosition_;
+		Vector3 endPosition_;
+		//媒介変数
+		float parameter_ = 0.0f;
+		// 秒数<frame>
+		int32_t period_ = 60;
+	};
+
 public: // メンバ関数
 	//調整項目
 	void ApplyGlobalVariables();
@@ -108,7 +122,7 @@ public: // メンバ関数
 	/// <param name="model">モデル</param>
 	/// <param name="textureHandle">テクスチャハンドル</param>
 	void Initialize(const std::vector<Model*>& models,
-		const std::vector<Material*>& materials);
+		const std::vector<Material*>& materials, const Vector3& initPosition);
 
 	/// <summary>
 	/// 更新
@@ -268,11 +282,20 @@ public: // メンバ関数
 	/// </summary>
 	void GotParent(WorldTransform* parent);
 
-
 	/// <summary>
 	/// 親を失った
 	/// </summary>
 	void LostParent();
+
+	/// <summary>
+	/// オープニングアニメーション
+	/// </summary>
+	void OpeningAnimationInitialize();
+
+	/// <summary>
+	/// オープニングアニメーション
+	/// </summary>
+	void OpeningAnimationUpdate();
 
 private: // エフェクト
 
@@ -305,6 +328,10 @@ public: // アクセッサ
 	uint32_t GetExprosionNum() { return	exprosionNum_; }
 
 	int GetExprosionNumInt() { return	exprosionNum_; }
+
+	Vector3 GetInitialPosition() { return workRoot_.kInitialPosition; }
+
+	void SetInitialPosition(const Vector3& kInitialPosition) { workRoot_.kInitialPosition = kInitialPosition; }
 
 private:
 	//全てのオブジェのUpdateMatrixをまとめたもの
@@ -385,6 +412,9 @@ private: // メンバ変数
 
 	// パーティクルマネージャー
 	ParticleManager* particleManager_;
+
+	// アニメーション
+	WorkOpening workOpening_;
 
 };
 

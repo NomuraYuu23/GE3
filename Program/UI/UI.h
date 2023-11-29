@@ -3,6 +3,7 @@
 #include "../../Engine/Input/Input.h"
 #include <memory>
 #include <array>
+#include "UIData.h"
 
 class Player;
 
@@ -26,24 +27,6 @@ public: // サブクラス
 		kNumTen,
 		kNumOne,
 		kCountOfTextureHandleIndex
-	};
-
-	// UI情報
-	struct UIData
-	{
-		// スプライト
-		std::unique_ptr<Sprite> sprite_;
-		// テクスチャハンドル
-		uint32_t textureHandle_;
-		// 位置
-		Vector2 position_;
-		// 色
-		Vector4 color_;
-
-		void Initialize(uint32_t textureHandle);
-
-		void Update();
-
 	};
 
 public: // メンバ関数

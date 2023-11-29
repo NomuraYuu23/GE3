@@ -14,8 +14,10 @@
 #include "../../Pause/Pause.h"
 #include"../../../Program/CheckPointManager/CheckPointManager.h"
 #include"../../../Program/Goal/Goal.h"
+#include"../../../Program/FenceManager/FenceManager.h"
 #include "../../../Program/ShadowManager/ShadowManager.h"
 #include "../../../Program/UI/UI.h"
+#include "../../../Program/Skydome/Skydome.h"
 
 class GameScene : public IScene
 {
@@ -52,6 +54,12 @@ public:
 	/// </summary>
 	void ImguiDraw();
 
+	/// <summary>
+	/// ステージロード
+	/// </summary>
+	/// <param name="stageIndex"></param>
+	void LoadStage(uint32_t stageIndex);
+
 public: //メンバ関数
 
 	/// <summary>
@@ -85,7 +93,7 @@ private: // メンバ関数
 
 	void FilesOverWrite(const std::string& stage);
 
-	void FilesLoad(const std::vector<std::string>& stages, const std::string& stage);
+	void FilesLoad(const std::string& stage);
 
 private:
 	std::vector<std::string> stages_;
@@ -127,6 +135,11 @@ private:
 	std::unique_ptr<Material> breakBoxMaterial_;
 	bool isBreakBoxMove_ = false;
 	bool isBreakBoxVertical_ = false;
+	//柵
+	std::unique_ptr<FenceManager> fenceManager_;
+	std::unique_ptr<Model> fenceModel_;
+	std::unique_ptr<Material> fenceMaterial_;
+
 	//爆発回数回復アイテム
 	std::unique_ptr<RecoveryItemManager> recoveryItemManager_;
 	std::unique_ptr<Model> recoveryItemModel_;
@@ -155,6 +168,8 @@ private:
 
 	//壊れるボックスの生成のトランスフォーム
 	TransformStructure breakBoxTransform_{ {1.0f,1.0f,1.0f} };
+
+	TransformStructure fenceTrnasform_{ {1.0f,1.0f,1.0f} };
 
 	//回復アイテムの生成トランスフォーム
 	TransformStructure recoveryItemTransform_{ {1.0f,1.0f,1.0f} };
@@ -218,7 +233,12 @@ private:
 	std::unique_ptr<Model> shadowModel_ = nullptr;
 
 	// UI
-	std::unique_ptr <UI> ui;
+	std::unique_ptr<UI> ui;
 	std::array<uint32_t, UI::kTextureHandleIndex::kCountOfTextureHandleIndex> uiTextureHandles_;
+
+	// スカイドーム
+	std::unique_ptr<Skydome> skydome_;
+	std::unique_ptr<Model> skydomeModel_;
+	std::unique_ptr<Material> skydomeMaterial_;
 
 };

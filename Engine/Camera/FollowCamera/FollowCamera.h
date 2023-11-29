@@ -23,10 +23,28 @@ public:
 	/// <param name="target"></param>
 	void SetTarget(const WorldTransform* target) { target_ = target; }
 
+private: // メンバ関数
+
+	// 追従対象からのオフセットを計算する
+	Vector3 OffsetCalc() const;
+
+	/// <summary>
+	/// 調整項目の適用
+	/// </summary>
+	void ApplyGlobalVariables();
+
 private:
 
 	//追従対象
 	const WorldTransform* target_ = nullptr;
+
+	// 追従対象の残像座標
+	Vector3 interTarget_ = {};
+
+	Vector3 destinationAngle_ = { 0.0f,0.0f,0.0f };
+
+	float moveRate_ = 0.1f;
+	float rotateRate_ = 0.1f;
 
 };
 
