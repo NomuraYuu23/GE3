@@ -261,7 +261,7 @@ void SelectScene::OperationInitialize()
 	returnOperation_.Initialize(TextureManager::Load("Resources/TD2_November/UI/returnOperation.png", dxCommon_));
 	size = { returnOperation_.sprite_->GetSize().x * sizeMagnification, returnOperation_.sprite_->GetSize().y * sizeMagnification };
 	returnOperation_.sprite_->SetSize(size);
-	returnOperation_.position_ = { 1030.0f, 600.0f };
+	returnOperation_.position_ = { 1060.0f, 600.0f };
 	returnOperation_.Update();
 
 	decisionButton_.Initialize(TextureManager::Load("Resources/TD2_November/UI/buttonA.png", dxCommon_));
