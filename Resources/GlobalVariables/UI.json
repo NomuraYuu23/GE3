@@ -14,7 +14,7 @@
         "kEmeraldXPositionY": 60.0,
         "kJumpButtonPositionX": 50.0,
         "kJumpButtonPositionY": 620.0,
-        "kJumpOperationPositionX": 150.0,
+        "kJumpOperationPositionX": 210.0,
         "kJumpOperationPositionY": 620.0,
         "kMoveButtonPositionX": 50.0,
         "kMoveButtonPositionY": 520.0,
@@ -31,6 +31,6 @@
         "kPauseOperationPositionX": 150.0,
         "kPauseOperationPositionY": 670.0,
         "kRemainingExplosionPositionX": 1100.0,
-        "kRemainingExplosionPositionY": 630.0
+        "kRemainingExplosionPositionY": 650.0
     }
 }
