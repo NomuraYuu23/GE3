@@ -149,6 +149,7 @@ void GameOverScene::Update()
 
 	if (input_->TriggerJoystick(0)) {
 		Decision();
+		Audio::GetInstance()->PlayWave(Audio::AudioHandleIndex::kTitleButton, false, 0.2f);
 	}
 
 }

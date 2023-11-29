@@ -30,11 +30,13 @@ void SelectScene::Update()
 
 	// タイトルへ
 	if (input_->TriggerJoystick(1)) {
+		Audio::GetInstance()->PlayWave(Audio::AudioHandleIndex::kTitleButton, false, 0.2f);
 		SelectReturn();
 	}
 
 	// ゲームへ
 	if (input_->TriggerJoystick(0)) {
+		Audio::GetInstance()->PlayWave(Audio::AudioHandleIndex::kTitleButton, false, 0.2f);
 		SelectDecision();
 	}
 	

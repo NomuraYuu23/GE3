@@ -26,6 +26,7 @@ void ClearScene::Update(){
 		if (input_->TriggerKey(DIK_SPACE) || input_->TriggerJoystick(0)) {
 			// 行きたいシーンへ
 			requestSeneNo = kSelect;
+			Audio::GetInstance()->PlayWave(Audio::AudioHandleIndex::kTitleButton, false, 0.2f);
 		}
 	}
 
