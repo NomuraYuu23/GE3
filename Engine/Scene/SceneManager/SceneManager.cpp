@@ -76,7 +76,7 @@ void SceneManager::Update()
 			if (currentSceneNo_ == kGame) {
 				static_cast<GameScene*>(scene_->GetInstance())->LoadStage(stageNum_);
 			}
-				
+			ParticleManager::GetInstance()->Delete();	
 		}
 		else if (!sceneTransition_->GetTransitioning()) {
 			sceneTransition_.release();

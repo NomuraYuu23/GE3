@@ -202,3 +202,21 @@ void ParticleManager::DeadDelete()
 	});
 
 }
+
+void ParticleManager::Delete()
+{
+
+	for (uint32_t i = 0; i < kCountofParticleModel; i++) {
+		particleDatas_[i].particles_.remove_if([=](Particle* particle) {
+			delete particle;
+			particleDatas_[i].instanceIndex_--;
+			return true;
+			});
+	}
+
+	emitters_.remove_if([](Emitter* emitter) {
+			delete emitter;
+			return true;
+		});
+
+}

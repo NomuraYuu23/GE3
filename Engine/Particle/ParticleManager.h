@@ -125,6 +125,11 @@ public: // メンバ関数
 	/// </summary>
 	void DeadDelete();
 
+	/// <summary>
+	/// 
+	/// </summary>
+	void Delete();
+
 public: // アクセッサ
 
 	D3D12_CPU_DESCRIPTOR_HANDLE GetInstancingSrvHandleCPU() { return instancingSrvHandleCPU_; }
