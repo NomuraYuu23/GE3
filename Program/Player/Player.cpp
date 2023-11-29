@@ -75,6 +75,7 @@ void Player::Initialize(const std::vector<Model*>& models,
 
 	isExplosion_ = false;
 
+	startExprosionNum_ = adjustment_item->GetIntValue(groupName, "startExprosionNum");
 	exprosionNum_ = startExprosionNum_;
 
 	isGoal_ = false;

@@ -87,9 +87,15 @@ private: // メンバ変数
 	// 選択クールタイム
 	float selectCooltime_ = 0.3f;
 
-	float t[selectionSquareMax_] = {};
+	float t[selectionSquareMax_] = { 0,0,0,0 };
+
+	const float easeSpeed_ = 0.05f;
+
+	float magnification = 1.0f;
 
 	const Vector2 baseSize_ = { 128.0f,128.0f };
+
+	Vector2 nowSize_[selectionSquareMax_] = {};
 
 	const Vector2 maxSize_ = { 192.0f,192.0f };
 	

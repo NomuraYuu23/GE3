@@ -23,6 +23,7 @@ void FollowCamera::Initialize() {
 	GlobalVariables::GetInstance()->CreateGroup(groupName);
 	globalVariables->AddItem(groupName, "moveRate", moveRate_);
 	globalVariables->AddItem(groupName, "rotateRate", rotateRate_);
+	globalVariables->AddItem(groupName, "offsetLength", offsetLength_);
 
 }
 
@@ -85,7 +86,7 @@ Vector3 FollowCamera::OffsetCalc() const
 	Matrix4x4Calc* m4Calc = Matrix4x4Calc::GetInstance();
 
 	//追従対象からカメラまでのオフセット
-	Vector3 offset = { 0.0f, 5.0f, -50.0f };
+	Vector3 offset = { 0.0f, 5.0f, offsetLength_ };
 
 	Matrix4x4 rotateMatrix;
 
@@ -113,5 +114,5 @@ void FollowCamera::ApplyGlobalVariables()
 
 	moveRate_ = globalVariables->GetFloatValue(groupName, "moveRate");
 	rotateRate_ = globalVariables->GetFloatValue(groupName, "rotateRate");
-
+	offsetLength_ = globalVariables->GetFloatValue(groupName, "offsetLength");
 }

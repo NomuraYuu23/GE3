@@ -3,7 +3,7 @@
 #include "../SceneManager/SceneManager.h"
 #include "../../base/TextureManager.h"
 #include"../../Math/Ease.h"
-
+#include"../../../externals/imgui/imgui.h"
 void SelectScene::Initialize()
 {
 
@@ -26,6 +26,8 @@ void SelectScene::Update()
 
 	SelectChange();
 
+	SelectionSquareUpdate();
+
 	// タイトルへ
 	if (input_->TriggerJoystick(1)) {
 		SelectReturn();
@@ -35,7 +37,12 @@ void SelectScene::Update()
 	if (input_->TriggerJoystick(0)) {
 		SelectDecision();
 	}
+	ImGui::Begin("今のサイズ");
+	for (int i = 0; i < selectionSquareMax_; i++) {
+		ImGui::DragFloat2((std::to_string(i + 1) + "個目の大きさ").c_str(), &nowSize_[i].x, 0.1f);
+	}
 
+	ImGui::End();
 }
 
 void SelectScene::Draw()
@@ -139,7 +146,7 @@ void SelectScene::SelectChange()
 				}
 			}
 
-			SelectionSquareUpdate();
+			
 
 		}
 	}
@@ -230,19 +237,25 @@ void SelectScene::SelectionSquareUpdate()
 	// 選択マススプライト
 	for (uint32_t i = 0; i < selectionSquareMax_; i++) {
 		if (i == selectionSquareNum_) {
-			t[i] += 0.1f;
+			if (t[i]==1.0f){
+				magnification *= -1.0f;
+			}
+			else if (t[i] == 0.0f) {
+				magnification *= -1.0f;
+			}
+			t[i] += easeSpeed_ * magnification;
 			selectionSquare_[i].color_ = { 1.0f, 1.0f, 0.1f, 1.0f };
-			selectionSquare_[i].sprite_->SetSize(Ease::Easing(Ease::EaseName::EaseInBack, baseSize_, maxSize_, t[i]));
 		}
 		else {
-			t[i] -= 0.1f;
+			t[i] -= easeSpeed_;
 			selectionSquare_[i].color_ = { 1.0f, 1.0f, 1.0f,1.0f };
-			selectionSquare_[i].sprite_->SetSize(Ease::Easing(Ease::EaseName::EaseInBack, baseSize_, maxSize_, t[i]));
 		}
 		t[i] = std::clamp(t[i], 0.0f, 1.0f);
+		nowSize_[i] = Ease::Easing(Ease::EaseName::EaseInSine, baseSize_, maxSize_, t[i]);
+		selectionSquare_[i].sprite_->SetSize(nowSize_[i]);
+		
 		selectionSquare_[i].Update();
 	}
-
 }
 
 void SelectScene::OperationInitialize()
