@@ -11,6 +11,7 @@
 #include"../CollectibleItemManager/CollectibleItemManager.h"
 #include"../CheckPointManager/CheckPointManager.h"
 #include"../BurningBoxManager/BurningBoxManager.h"
+#include"../FenceManager/FenceManager.h"
 
 class CollisionManager
 {
@@ -24,7 +25,7 @@ public: // メンバ関数
 		BoxManager* boxManager, BreakBoxManager* breakBoxManager,
 		RecoveryItemManager* recoveryItemManager, EnemyManager* enemyManager,
 		CollectibleItemManager* collectibleItemManager, CheckPointManager* checkPointManager//,
-		/*BurningBoxManager* burningBoxManager*/, Goal* goal);
+		/*BurningBoxManager* burningBoxManager*/, Goal* goal, FenceManager* fenceManager);
 
 	/// <summary>
 	/// 衝突
@@ -49,6 +50,7 @@ private: // メンバ変数
 	EnemyManager* enemyManager_ = nullptr;
 	CollectibleItemManager* collectibleItemManager_ = nullptr;
 	CheckPointManager* checkPointManager_ = nullptr;
+	FenceManager* fenceManager_ = nullptr;
 	Goal* goal_ = nullptr;
 
 };

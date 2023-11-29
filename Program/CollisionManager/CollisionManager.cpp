@@ -5,7 +5,7 @@ void CollisionManager::Initialize(Player* player, FloorManager* floorManager,
 	BoxManager* boxManager, BreakBoxManager* breakBoxManager, 
 	RecoveryItemManager* recoveryItemManager, EnemyManager* enemyManager,
 	CollectibleItemManager* collectibleItemManager, CheckPointManager* checkPointManager//,
-	/*BurningBoxManager* burningBoxManager*/, Goal* goal)
+	/*BurningBoxManager* burningBoxManager*/, Goal* goal,FenceManager* fenceManager)
 {
 
 	v3Calc = Vector3Calc::GetInstance();
@@ -28,6 +28,8 @@ void CollisionManager::Initialize(Player* player, FloorManager* floorManager,
 	enemyManager_ = enemyManager;
 
 	checkPointManager_ = checkPointManager;
+
+	fenceManager_ = fenceManager;
 
 	goal_ = goal;
 
@@ -77,6 +79,19 @@ void CollisionManager::AllCollision()
 		for (Enemy* enemy : enemyManager_->GetEnemys_()) {
 			if (Collision::IsCollision(breakBox_->GetCollider(), enemy->GetCollider())) {
 				enemy->OnCollisionBox(breakBox_->GetWorldTransformAdress(), breakBox_->GetSize(), breakBox_->GetMoveFlag());
+			}
+		}
+	}
+
+	for (Fence* fence : fenceManager_->GetFences_()) {
+
+		// あたり判定確認
+		if (Collision::IsCollision(fence->GetCollider(), player_->GetCollider())) {
+			player_->OnCollisionBox(fence->GetWorldTransformAdress(), { fence->GetSize().x,fence->GetSize().y * 300.0f,fence->GetSize().z }, false);
+		}
+		for (Enemy* enemy : enemyManager_->GetEnemys_()) {
+			if (Collision::IsCollision(fence->GetCollider(), enemy->GetCollider())) {
+				enemy->OnCollisionBox(fence->GetWorldTransformAdress(), fence->GetSize(), false);
 			}
 		}
 	}

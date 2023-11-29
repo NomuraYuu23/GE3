@@ -69,6 +69,13 @@ void GameScene::Initialize() {
 
 	breakBoxManager_->SetColliderDebugDraw(colliderDebugDraw_.get());
 
+	//壊れるボックス生成
+	fenceManager_ = std::make_unique<FenceManager>();
+
+	fenceManager_->Initialize(fenceModel_.get(), fenceMaterial_.get());
+
+	fenceManager_->SetColliderDebugDraw(colliderDebugDraw_.get());
+
 	//回復アイテム生成
 	recoveryItemManager_ = std::make_unique<RecoveryItemManager>();
 
@@ -134,7 +141,7 @@ void GameScene::Initialize() {
 	collisionManager_ = std::make_unique<CollisionManager>();
 	collisionManager_->Initialize(player_.get(), floorManager_.get(), boxManager_.get(),
 		breakBoxManager_.get(), recoveryItemManager_.get(), enemyManager_.get(),
-		collectibleItemManager_.get(), checkPointManager_.get(), goal_.get());
+		collectibleItemManager_.get(), checkPointManager_.get(), goal_.get(),fenceManager_.get());
 
 	colliderDebugDraw_->AddCollider(&player_->GetCollider());
 	colliderDebugDraw_->AddCollider(&player_->GetExplosionCollider());
@@ -190,6 +197,8 @@ void GameScene::Update() {
 	floorManager_->Update();
 	boxManager_->Update();
 	breakBoxManager_->Update();
+
+	fenceManager_->Update();
 	
 	checkPointManager_->Update();
 
@@ -272,6 +281,7 @@ void GameScene::Draw() {
 	/*3Dオブジェクトはここ*/
 	boxManager_->Draw(viewProjection_);
 	breakBoxManager_->Draw(viewProjection_);
+	fenceManager_->Draw(viewProjection_);
 	floorManager_->Draw(viewProjection_);
 	checkPointManager_->Draw(viewProjection_);
 
@@ -396,6 +406,16 @@ void GameScene::ImguiDraw() {
 				ImGui::TreePop();
 			}
 
+			if (ImGui::TreeNode("柵生成")) {
+				ImGui::DragFloat3("柵の座標", &fenceTrnasform_.translate.x, 0.1f);
+				ImGui::DragFloat3("柵の回転", &fenceTrnasform_.rotate.x, 0.01f);
+				ImGui::DragFloat3("柵の大きさ", &fenceTrnasform_.scale.x, 0.1f, 0.1f, 999.0f, "%.1f");
+				if (ImGui::Button("壊れるボックスの追加")) {
+					fenceManager_->AddFence(fenceTrnasform_);
+				}
+				ImGui::TreePop();
+			}
+
 			if (ImGui::TreeNode("回復アイテム生成")) {
 				ImGui::DragFloat3("アイテムの座標", &recoveryItemTransform_.translate.x, 0.1f);
 				ImGui::DragFloat3("アイテムの回転", &recoveryItemTransform_.rotate.x, 0.01f);
@@ -453,6 +473,10 @@ void GameScene::ImguiDraw() {
 			}
 			if (ImGui::BeginMenu("壊れる箱一覧")) {
 				breakBoxManager_->DrawImgui();
+				ImGui::EndMenu();
+			}
+			if (ImGui::BeginMenu("柵一覧")) {
+				fenceManager_->DrawImgui();
 				ImGui::EndMenu();
 			}
 			if (ImGui::BeginMenu("回復アイテム一覧")) {
@@ -538,8 +562,8 @@ void GameScene::DebugCameraUpdate()
 }
 
 void GameScene::FilesSave(const std::vector<std::string>& stages){
-	goal_->SaveFile(stages);
-	enemyManager_->SaveFile(stages);
+	//goal_->SaveFile(stages);
+	fenceManager_->SaveFile(stages);
 	/*floorManager_->SaveFile(stages);
 	boxManager_->SaveFile(stages);
 	breakBoxManager_->SaveFile(stages);
@@ -554,6 +578,7 @@ void GameScene::FilesOverWrite(const std::string& stage){
 	floorManager_->FileOverWrite(stage);
 	boxManager_->FileOverWrite(stage);
 	breakBoxManager_->FileOverWrite(stage);
+	fenceManager_->FileOverWrite(stage);
 	checkPointManager_->FileOverWrite(stage);
 	collectibleItemManager_->FileOverWrite(stage);
 	recoveryItemManager_->FileOverWrite(stage);
@@ -566,6 +591,7 @@ void GameScene::FilesLoad(const std::string& stage){
 	floorManager_->LoadFiles(stage);
 	boxManager_->LoadFiles(stage);
 	breakBoxManager_->LoadFiles(stage);
+	fenceManager_->LoadFiles(stage);
 	checkPointManager_->LoadFiles(stage);
 	collectibleItemManager_->LoadFiles(stage);
 	recoveryItemManager_->LoadFiles(stage);
@@ -598,6 +624,8 @@ void GameScene::ModelCreate()
 	boxModel_.reset(Model::Create("Resources/TD2_November/floorBox/", "box.obj", dxCommon_));
 	//壊れるボックス生成
 	breakBoxModel_.reset(Model::Create("Resources/TD2_November/breakBox/", "box.obj", dxCommon_));
+	//壊れるボックス生成
+	fenceModel_.reset(Model::Create("Resources/TD2_November/fence/", "box.obj", dxCommon_));
 	//回復アイテム生成
 	recoveryItemModel_.reset(Model::Create("Resources/TD2_November/bombCherry/", "bombCherry.obj", dxCommon_));
 	//収集アイテム生成
@@ -635,6 +663,8 @@ void GameScene::MaterialCreate()
 	boxMaterial_.reset(Material::Create());
 	//壊れるボックス生成
 	breakBoxMaterial_.reset(Material::Create());
+	//壊れるボックス生成
+	fenceMaterial_.reset(Material::Create());
 	//回復アイテム生成
 	recoveryItemMaterial_.reset(Material::Create());
 	//収集アイテム生成
