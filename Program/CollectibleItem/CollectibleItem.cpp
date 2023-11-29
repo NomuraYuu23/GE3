@@ -42,23 +42,37 @@ void CollectibleItem::Initialize(Model* model, Material* material, TransformStru
 
 	collider_.Initialize(colliderMin_, colliderMax_);
 
+	upVelocity_ = 10.0f;
+
 	isDelete_ = false;
+
+	isGet_ = false;
 }
 
 void CollectibleItem::Update(){
 
-	if (worldTransform_.worldMatrix_.m[3][1] <= -50.0f) {
+	if (worldTransform_.worldMatrix_.m[3][1] <= -50.0f||upParameter_>1.0f) {
 		isDelete_ = true;
 	}
+
 	if (isFalling_){
 		Fall();
 		Landing();
 	}
 
 	Rotation();
-	
+	if (isGet_) {
+		upParameter_ += 0.02f;
+		worldTransform_.transform_.translate.y = Ease::Easing(Ease::EaseName::EaseOutBack, position_.y, position_.y + upVelocity_, upParameter_);
+		drawWorldTransform_.transform_.translate.y = Ease::Easing(Ease::EaseName::EaseOutBack, position_.y, position_.y + upVelocity_, upParameter_);
+	}
+
+
 	worldTransform_.transform_.translate.y += velocity_.y;
 	drawWorldTransform_.transform_.translate.y += velocity_.y;
+
+	worldTransform_.UpdateMatrix();
+	drawWorldTransform_.UpdateMatrix();
 
 	Vector3 WorldPosition = { drawWorldTransform_.worldMatrix_.m[3][0] , drawWorldTransform_.worldMatrix_.m[3][1] , drawWorldTransform_.worldMatrix_.m[3][2] };
 	size_ = { drawWorldTransform_.transform_.scale.x + 0.1f,drawWorldTransform_.transform_.scale.y + 0.1f,drawWorldTransform_.transform_.scale.z + 0.1f, };
@@ -80,6 +94,7 @@ void CollectibleItem::DrawImgui(){
 	ImGui::DragFloat3("アイテムの回転", &drawWorldTransform_.transform_.rotate.x, 0.1f);
 	ImGui::DragFloat3("アイテムの大きさ", &drawWorldTransform_.transform_.scale.x, 0.1f, 0.0f, 300.0f);
 	ImGui::Checkbox("動くかどうか", &isFalling_);
+	ImGui::DragFloat("イージングの量", &upVelocity_, 0.1f, 0.0f, 300.0f);
 	if (ImGui::Button("このオブジェを削除")) {
 		isDelete_ = true;
 	}
@@ -180,7 +195,7 @@ void CollectibleItem::OnCollisionBox(WorldTransform* worldTransform, float boxSi
 }
 
 void CollectibleItem::OnCollisionPlayer(){
-	isDelete_ = true;
+	isGet_ = true;
 }
 
 void CollectibleItem::Rotation()
@@ -188,10 +203,16 @@ void CollectibleItem::Rotation()
 
 	float speed = 0.01f;
 
-	rotateParameter_ += speed;
+	if (isGet_){
+		speed = 0.4f;
+		drawWorldTransform_.transform_.rotate.y += speed;
+	}
+	else {
 
-	rotateParameter_ = std::fmodf(rotateParameter_, 1.0f);
+		rotateParameter_ += speed;
 
-	drawWorldTransform_.transform_.rotate.y = Ease::Easing(Ease::EaseName::EaseInOutBack, 0.0f,6.28f, rotateParameter_);
+		rotateParameter_ = std::fmodf(rotateParameter_, 1.0f);
 
+		drawWorldTransform_.transform_.rotate.y = Ease::Easing(Ease::EaseName::EaseInOutBack, 0.0f, 6.28f, rotateParameter_);
+	}
 }

@@ -86,6 +86,8 @@ public: // アクセッサ
 
 	bool GetIsDelete() { return isDelete_; }
 
+	bool GetIsGet() { return isGet_; }
+
 	bool GetisFalling() { return isFalling_; }
 
 private:
@@ -117,6 +119,9 @@ private:
 	// 落ちるか
 	bool isFalling_;
 
+	//取得されたか
+	bool isGet_;
+
 	//アイテムを削除するか
 	bool isDelete_;
 
@@ -129,9 +134,16 @@ private:
 	// position
 	Vector3 position_;
 
+	Vector3 basePos_;
+
 	AABB collider_;
 
 	// アニメーション
 	float rotateParameter_ = 0.0f;
+
+	//上昇量
+	float upVelocity_;
+
+	float upParameter_ = 0.0f;;
 
 };

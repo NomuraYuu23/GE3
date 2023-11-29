@@ -88,7 +88,7 @@ void CollisionManager::AllCollision()
 		}
 	}
 	for (CollectibleItem* item : collectibleItemManager_->GetItems_()) {
-		if (Collision::IsCollision(item->GetCollider(), player_->GetCollider())) {
+		if (Collision::IsCollision(item->GetCollider(), player_->GetCollider())&&!item->GetIsGet()) {
 			player_->OnCollisionCollectibleItem();
 			item->OnCollisionPlayer();
 		}
