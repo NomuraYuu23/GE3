@@ -180,7 +180,7 @@ void Player::BehaviorRootUpdate()
 	//UpdateFloatinggimmick();
 
 	// ぶらぶらギミック
-	if (workSwing_.doing_) {
+	if (workSwing_.doing_ && !isRotate_) {
 		UpdateSwinggimmick();
 	}
 
@@ -367,10 +367,14 @@ void Player::Move()
 	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
 	worldTransform_.transform_.translate = v3Calc->Add(worldTransform_.transform_.translate, velocity_);
 	if (isRotate_){
-		worldTransform_.transform_.rotate.x += 0.5f;
+		worldTransformBody_.transform_.rotate.x += 0.5f;
+		worldTransformLeftLeg_.transform_.rotate.x += 0.5f;
+		worldTransformRightLeg_.transform_.rotate.x += 0.5f;
 	}
 	else {
-		worldTransform_.transform_.rotate.x = 0.0f;
+		worldTransformBody_.transform_.rotate.x = 0.0f;
+		worldTransformLeftLeg_.transform_.rotate.x = 0.0f;
+		worldTransformRightLeg_.transform_.rotate.x = 0.0f;
 	}
 
 }
