@@ -75,5 +75,9 @@ public: //
 
 	void SetRespawnItem(uint32_t respawnItem) { respawnItem_ = respawnItem; }
 
+private: 
+
+	void AudioInitialize();
+
 };
 

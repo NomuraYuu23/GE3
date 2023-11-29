@@ -55,6 +55,18 @@ public:
 		IXAudio2SourceVoice* pSourceVoice;
 	};
 
+	// ハンドル
+	enum AudioHandleIndex {
+		kBGM,
+		kTitleButton,
+		kRecoveryItem,
+		kCollectibleItem,
+		kBreakBox,
+		kGoal,
+		kExplosion,
+		kCountOfAudioHandleIndex
+	};
+
 	//インスタンス
 	static Audio* GetInstance();
 	/// <summary>
