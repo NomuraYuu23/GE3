@@ -38,16 +38,22 @@ void FollowCamera::Update() {
 #endif // _DEBUG
 
 	// スティック入力で角度を変更処理
-	if (input->GetJoystickConnected()) {
 
-		const float RotateSpeed = 0.000001f;
+	const float RotateSpeed = 0.000001f;
 
-		destinationAngle_.y += input->GetRightAnalogstick().x * RotateSpeed;
-		destinationAngle_.x += input->GetRightAnalogstick().y * RotateSpeed;
-		// xに制限
-		float limit = 3.14f / 4.0f;
-		destinationAngle_.x = std::clamp(destinationAngle_.x, 0.0f, limit);
+	destinationAngle_.y += input->GetRightAnalogstick().x * RotateSpeed;
+	destinationAngle_.x += input->GetRightAnalogstick().y * RotateSpeed;
+	if (input->TriggerJoystick(9)) {
+		destinationAngle_.y = target_->transform_.rotate.y;
+		destinationAngle_.x = 0.2f;
 	}
+
+
+	// xに制限
+	float limit = 3.14f / 4.0f;
+	destinationAngle_.x = std::clamp(destinationAngle_.x, 0.0f, limit);
+
+
 
 	//追従対象がいれば
 	if (target_) {
