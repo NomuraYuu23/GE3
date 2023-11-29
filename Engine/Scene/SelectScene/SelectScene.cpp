@@ -230,14 +230,16 @@ void SelectScene::SelectionSquareUpdate()
 	// 選択マススプライト
 	for (uint32_t i = 0; i < selectionSquareMax_; i++) {
 		if (i == selectionSquareNum_) {
-			t[i] += 0.1f;
+			t[i] += 0.01f;
+			nowSize_[i] = Ease::Easing(Ease::EaseName::EaseInBack, baseSize_, maxSize_, t[i]);
 			selectionSquare_[i].color_ = { 1.0f, 1.0f, 0.1f, 1.0f };
-			selectionSquare_[i].sprite_->SetSize(Ease::Easing(Ease::EaseName::EaseInBack, baseSize_, maxSize_, t[i]));
+			selectionSquare_[i].sprite_->SetSize(nowSize_[i]);
 		}
 		else {
-			t[i] -= 0.1f;
+			t[i] -= 0.01f;
+			nowSize_[i] = Ease::Easing(Ease::EaseName::EaseInBack, baseSize_, maxSize_, t[i]);
 			selectionSquare_[i].color_ = { 1.0f, 1.0f, 1.0f,1.0f };
-			selectionSquare_[i].sprite_->SetSize(Ease::Easing(Ease::EaseName::EaseInBack, baseSize_, maxSize_, t[i]));
+			selectionSquare_[i].sprite_->SetSize(nowSize_[i]);
 		}
 		t[i] = std::clamp(t[i], 0.0f, 1.0f);
 		selectionSquare_[i].Update();

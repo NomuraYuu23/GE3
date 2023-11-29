@@ -91,6 +91,8 @@ private: // メンバ変数
 
 	const Vector2 baseSize_ = { 128.0f,128.0f };
 
+	Vector2 nowSize_[selectionSquareMax_] = {};
+
 	const Vector2 maxSize_ = { 192.0f,192.0f };
 	
 	// 選択クールタイム
