@@ -4,6 +4,8 @@
 #include"../../Engine/2D/ImguiManager.h"
 #include "../../Engine/Math/Ease.h"
 
+#include "../../Engine/Camera/FollowCamera/FollowCamera.h"
+
 void Player::ApplyGlobalVariables(){
 	GlobalVariables* item = GlobalVariables::GetInstance();
 	const char* groupName = "Player";
@@ -81,6 +83,8 @@ void Player::Initialize(const std::vector<Model*>& models,
 	isGoal_ = false;
 
 	particleManager_ = ParticleManager::GetInstance();
+
+	audio_ = Audio::GetInstance();
 
 	OpeningAnimationInitialize();
 
@@ -377,6 +381,9 @@ void Player::Move()
 {
 
 	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
+	if (velocity_.y <= -3.0f) {
+		velocity_.y = -3.0f;
+	}
 	worldTransform_.transform_.translate = v3Calc->Add(worldTransform_.transform_.translate, velocity_);
 	if (isRotate_){
 		worldTransformBody_.transform_.rotate.x += 0.5f;
@@ -504,6 +511,7 @@ void Player::Explosion(){
 	isExplosion_ = true;
 	explosionCollider_.center_ = { worldTransform_.worldMatrix_.m[3][0], worldTransform_.worldMatrix_.m[3][1], worldTransform_.worldMatrix_.m[3][2] };
 	worldTransformExprode_.transform_.translate = explosionCollider_.center_;
+	audio_->PlayWave(Audio::AudioHandleIndex::kExplosion, false, 1.0f);
 }
 
 void Player::ExplosionMove(){
@@ -646,10 +654,10 @@ void Player::OnCollisionBox(WorldTransform* worldTransform, Vector3 boxSize, boo
 				worldTransform_.transform_.translate.z -= velocity_.z;
 				allUpdateMatrix();
 			}
-			/*if (isSideHit_ && isVerticalHit_) {
-				worldTransform_.transform_.translate.z += (velocity_.z / 2.0f);
+			if (!isSideHit_ && !isVerticalHit_) {
+				worldTransform_.transform_.translate.y = worldTransform->transform_.translate.y + boxSize.y + 0.1f;
 				allUpdateMatrix();
-			}*/
+			}
 			
 		}
 	}
@@ -751,6 +759,7 @@ void Player::OpeningAnimationUpdate()
 		workOpening_.parameter_ = 1.0f;
 		isRotate_ = false;
 		worldTransform_.transform_.rotate.y = 0.0f;
+		followCamera_->SetDestinationAngle(Vector3{ 0.0f, -3.14f / 2.0f, 0.0f});;
 	}
 
 	worldTransform_.transform_.translate = Ease::Easing(Ease::EaseName::EaseInQuart, workOpening_.startPosition_, workOpening_.endPosition_, workOpening_.parameter_);

@@ -58,7 +58,10 @@ private: //
 	uint32_t stageNum_ = 0;
 
 	// リス位置
-	Vector3 respawnPosition_;
+	Vector3 respawnPosition_ = {0.0f,0.0f,0.0f};
+
+	// アイテム
+	uint32_t respawnItem_ = 0u;
 
 public: // 
 
@@ -67,6 +70,14 @@ public: //
 	Vector3 GetRespawnPosition() { return respawnPosition_; }
 
 	void SetRespawnPosition(const Vector3& respawnPosition) { respawnPosition_ = respawnPosition; }
+
+	uint32_t GetRespawnItem() { return respawnItem_; }
+
+	void SetRespawnItem(uint32_t respawnItem) { respawnItem_ = respawnItem; }
+
+private: 
+
+	void AudioInitialize();
 
 };
 

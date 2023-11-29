@@ -9,6 +9,9 @@
 #include "../../Engine/Collider/Sphere/Sphere.h"
 #include "../../Engine/Particle/ParticleManager.h"
 #include "../../Engine/GlobalVariables/GlobalVariables.h"
+#include "../../Engine/Audio/Audio.h"
+
+class FollowCamera;
 
 class Player : public BaseCharacter
 {
@@ -333,6 +336,10 @@ public: // アクセッサ
 
 	void SetInitialPosition(const Vector3& kInitialPosition) { workRoot_.kInitialPosition = kInitialPosition; }
 
+	uint32_t GetNumCollectItem() { return numCollectItem; }
+
+	void SetFollowCamera(FollowCamera* followCamera) { followCamera_ = followCamera; }
+
 private:
 	//全てのオブジェのUpdateMatrixをまとめたもの
 	void allUpdateMatrix();
@@ -415,6 +422,12 @@ private: // メンバ変数
 
 	// アニメーション
 	WorkOpening workOpening_;
+
+	// カメラ
+	FollowCamera* followCamera_;
+
+	// オーディオ
+	Audio* audio_ = nullptr;
 
 };
 

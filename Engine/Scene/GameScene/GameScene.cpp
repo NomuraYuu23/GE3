@@ -149,6 +149,7 @@ void GameScene::Initialize() {
 	//enemyManager_->SetPlayer(player_.get());
 
 	followCamera_->SetTarget(player_->GetWorldTransformAddress());
+	player_->SetFollowCamera(followCamera_.get());
 
 	collisionManager_ = std::make_unique<CollisionManager>();
 	collisionManager_->Initialize(player_.get(), floorManager_.get(), boxManager_.get(),
@@ -194,12 +195,13 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 	ImguiDraw();
 
-	//光源
-	DirectionalLightData directionalLightData{};
-	directionalLightData.color = { 1.0f,1.0f,1.0f,1.0f };
-	directionalLightData.direction = { 0.0f, -1.0f, 0.0f };
-	directionalLightData.intencity = 1.0f;
-	directionalLight_->Update(directionalLightData);
+	if (!pause_->IsPause()) {
+		//光源
+		DirectionalLightData directionalLightData{};
+		directionalLightData.color = { 1.0f,1.0f,1.0f,1.0f };
+		directionalLightData.direction = { 0.0f, -1.0f, 0.0f };
+		directionalLightData.intencity = 1.0f;
+		directionalLight_->Update(directionalLightData);
 
 	floorManager_->Update();
 	boxManager_->Update();
@@ -209,52 +211,56 @@ void GameScene::Update() {
 	
 	checkPointManager_->Update();
 
-	goal_->Update();
+		goal_->Update();
 
-	player_->Update();
+		player_->Update();
 
-	collisionManager_->AllCollision();
+		collisionManager_->AllCollision();
 
-	// デバッグ描画
-	colliderDebugDraw_->Update();
+		// デバッグ描画
+		colliderDebugDraw_->Update();
 
-	enemyManager_->Update();
+		enemyManager_->Update();
 
-	recoveryItemManager_->Update();
+		recoveryItemManager_->Update();
 
-	collectibleItemManager_->Update();
+		collectibleItemManager_->Update();
 
-	followCamera_->Update();
+		followCamera_->Update();
 
-	viewProjection_ = followCamera_->GetViewProjection();
+		viewProjection_ = followCamera_->GetViewProjection();
 
-	viewProjection_.UpdateMatrix();
+		viewProjection_.UpdateMatrix();
 
-	// デバッグカメラ
-	DebugCameraUpdate();
+		// デバッグカメラ
+		DebugCameraUpdate();
 
-	// デバッグ描画
-	colliderDebugDraw_->Update();
-	
-	//パーティクル
-	particleManager_->Update(followCamera_->GetMatrix());
+		// デバッグ描画
+		colliderDebugDraw_->Update();
 
-	// 影
-	shadowManager_->Update();
+		//パーティクル
+		particleManager_->Update(followCamera_->GetMatrix());
 
-	//ui
-	ui->Update();
+		// 影
+		shadowManager_->Update();
+
+		//ui
+		ui->Update();
+	}
+
 
 	// ポーズ機能
 	pause_->Update();
 
-	if (player_->GetIsGoal()){
+	if (player_->GetIsGoal() && requestSeneNo != kClear){
 		requestSeneNo = kClear;
+		Audio::GetInstance()->PlayWave(Audio::AudioHandleIndex::kGoal, false, 1.0f);
 	}
 
 	if (player_->GetExprosionNumInt() < 0) {
 		requestSeneNo = kGameOver;
 		sceneManager_->SetRespawnPosition(player_->GetInitialPosition());
+		sceneManager_->SetRespawnItem(player_->GetNumCollectItem());
 	}
 
 	// タイトルへ行く
@@ -618,8 +624,8 @@ void GameScene::FilesLoad(const std::string& stage){
 void GameScene::GoToTheTitle()
 {
 
-	if (pause_->GoToTheTitle()) {
-		requestSeneNo = kTitle;
+	if (pause_->GoToTheSelect()) {
+		requestSeneNo = kSelect;
 	}
 
 }
@@ -707,7 +713,7 @@ void GameScene::TextureLoad()
 	// ポーズ
 	pauseTextureHandles_ = {
 		TextureManager::Load("Resources/TD2_November/pause/pausing.png", dxCommon_),
-		TextureManager::Load("Resources/TD2_November/pause/goToTitle.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/pause/goToSelect.png", dxCommon_),
 		TextureManager::Load("Resources/TD2_November/pause/returnToGame.png", dxCommon_),
 	};
 
@@ -727,6 +733,12 @@ void GameScene::TextureLoad()
 		TextureManager::Load("Resources/TD2_November/UI/num.png", dxCommon_),
 		TextureManager::Load("Resources/TD2_November/UI/num.png", dxCommon_),
 		TextureManager::Load("Resources/TD2_November/UI/num.png", dxCommon_),
+
+		TextureManager::Load("Resources/TD2_November/UI/emerald.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/UI/x.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/UI/num.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/UI/num.png", dxCommon_),
+
 	};
 
 }

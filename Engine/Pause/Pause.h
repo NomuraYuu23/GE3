@@ -13,7 +13,7 @@ public: // サブクラス
 
 	// ポーズメニュー
 	enum PauseMenu{
-		kGoToTitle,       // タイトルへ
+		kGoToSelect,       // Select
 		kReturnToGame,    // ゲームに戻る
 		kCountOfPauseMenu // 使用不可
 	};
@@ -21,7 +21,7 @@ public: // サブクラス
 	// ポーズで使うテクスチャ番号
 	enum PauseTextureNo{
 		kPausingTextureNo,              // ポーズ中
-		kGoToTitleTextureNo,			   // タイトルへ
+		kGoToSelectTextureNo,			 // Select
 		kReturnToGameTextureNo,         // ゲームに戻る
 		kCountOfPauseTextureNo // 使用不可
 	};
@@ -58,7 +58,7 @@ private: // メンバ関数
 	/// <summary>
 	/// タイトルへ行く
 	/// </summary>
-	void PauseMenuGoToTitle();
+	void PauseMenuGoToSelect();
 
 	/// <summary>
 	/// ゲームに戻る
@@ -69,7 +69,7 @@ public: // アクセッサ
 
 	bool IsPause() { return isPause_; }
 
-	bool GoToTheTitle() { return goToTheTitle_; }
+	bool GoToTheSelect() { return goToTheSelect_; }
 
 private: // メンバ変数
 
@@ -82,7 +82,7 @@ private: // メンバ変数
 	int pauseMenuSelect_;
 
 	// タイトルへ戻るか
-	bool goToTheTitle_;
+	bool goToTheSelect_;
 
 	// テクスチャハンドル
 	std::array<uint32_t, PauseTextureNo::kCountOfPauseTextureNo> textureHandles_;
@@ -92,9 +92,21 @@ private: // メンバ変数(スプライト)
 	// ポーズ中
 	std::unique_ptr<Sprite> pausingSprite_;
 	// タイトルへ
-	std::unique_ptr<Sprite> goToTitleSprite_;
+	std::unique_ptr<Sprite> goToSelectSprite_;
 	// ゲームに戻る
 	std::unique_ptr<Sprite> returnToGameSprite_;
+
+	// 選択クールタイム
+	float selectCooltime_ = 0.3f;
+
+	// 選択クールタイム
+	float selectElapsedCooltime_ = 0.0f;
+
+	// アニメーションパラメータ
+	float animationParameter_ = 0.0f;
+
+	// アニメーションピリオド
+	uint32_t animationPeriod_ = 60;
 
 };
 

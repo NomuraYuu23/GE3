@@ -14,6 +14,8 @@ void FollowCamera::Initialize() {
 	//y固定
 	viewProjection_.transform_.translate.y = 10.0f;
 	viewProjection_.transform_.rotate.x = 0.1f;
+	//viewProjection_.transform_.rotate.y = 3.14f / 2.0f;
+	//destinationAngle_.y = 3.14f / 2.0f;
 
 	BaseCamera::Update();
 

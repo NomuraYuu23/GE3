@@ -46,6 +46,7 @@ void TitleScene::Update()
 		// 行きたいシーンへ
 		requestSeneNo = kSelect;
 		startAnimationVariables_.isAnimation_ = true;
+		Audio::GetInstance()->PlayWave(Audio::AudioHandleIndex::kTitleButton, false, 1.0f);
 	}
 
 	if (startAnimationVariables_.isAnimation_) {

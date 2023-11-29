@@ -13,6 +13,7 @@ void UI::Initialize(const std::array<uint32_t, kCountOfTextureHandleIndex>& text
 
 	OperationInitialize();
 	RemainingExplosionInitialize();
+	EmeraldInitialize();
 
 	// グローバル
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
@@ -56,6 +57,19 @@ void UI::Initialize(const std::array<uint32_t, kCountOfTextureHandleIndex>& text
 	globalVariables->AddItem(groupName, "kNumOnePositionX", static_cast<float>(uiDatas_[kNumOne].position_.x));
 	globalVariables->AddItem(groupName, "kNumOnePositionY", static_cast<float>(uiDatas_[kNumOne].position_.y));
 
+	//kEmerald,
+	globalVariables->AddItem(groupName, "kEmeraldPositionX", static_cast<float>(uiDatas_[kEmerald].position_.x));
+	globalVariables->AddItem(groupName, "kEmeraldPositionY", static_cast<float>(uiDatas_[kEmerald].position_.y));
+	//	kEmeraldX,
+	globalVariables->AddItem(groupName, "kEmeraldXPositionX", static_cast<float>(uiDatas_[kEmeraldX].position_.x));
+	globalVariables->AddItem(groupName, "kEmeraldXPositionY", static_cast<float>(uiDatas_[kEmeraldX].position_.y));
+	//	kEmeraldNumTen,
+	globalVariables->AddItem(groupName, "kEmeraldNumTenPositionX", static_cast<float>(uiDatas_[kEmeraldNumTen].position_.x));
+	globalVariables->AddItem(groupName, "kEmeraldNumTenPositionY", static_cast<float>(uiDatas_[kEmeraldNumTen].position_.y));
+	//	kEmeraldNumOne,
+	globalVariables->AddItem(groupName, "kEmeraldNumOnePositionX", static_cast<float>(uiDatas_[kEmeraldNumOne].position_.x));
+	globalVariables->AddItem(groupName, "kEmeraldNumOnePositionY", static_cast<float>(uiDatas_[kEmeraldNumOne].position_.y));
+
 	ApplyGlobalVariables();
 
 }
@@ -66,6 +80,8 @@ void UI::Update()
 	ApplyGlobalVariables();
 
 	RemainingExplosionUpdate();
+
+	EmeraldUpdate();
 
 	for (uint32_t i = 0; i < kCountOfTextureHandleIndex; i++) {
 		uiDatas_[i].Update();
@@ -124,6 +140,19 @@ void UI::ApplyGlobalVariables()
 	uiDatas_[kNumOne].position_.x = globalVariables->GetFloatValue(groupName, "kNumOnePositionX");
 	uiDatas_[kNumOne].position_.y = globalVariables->GetFloatValue(groupName, "kNumOnePositionY");
 
+	//kEmerald,
+	uiDatas_[kEmerald].position_.x = globalVariables->GetFloatValue(groupName, "kEmeraldPositionX");
+	uiDatas_[kEmerald].position_.y = globalVariables->GetFloatValue(groupName, "kEmeraldPositionY");
+	//	kEmeraldX,
+	uiDatas_[kEmeraldX].position_.x = globalVariables->GetFloatValue(groupName, "kEmeraldXPositionX");
+	uiDatas_[kEmeraldX].position_.y = globalVariables->GetFloatValue(groupName, "kEmeraldXPositionY");
+	//	kEmeraldNumTen,
+	uiDatas_[kEmeraldNumTen].position_.x = globalVariables->GetFloatValue(groupName, "kEmeraldNumTenPositionX");
+	uiDatas_[kEmeraldNumTen].position_.y = globalVariables->GetFloatValue(groupName, "kEmeraldNumTenPositionY");
+	//	kEmeraldNumOne,
+	uiDatas_[kEmeraldNumOne].position_.x = globalVariables->GetFloatValue(groupName, "kEmeraldNumOnePositionX");
+	uiDatas_[kEmeraldNumOne].position_.y = globalVariables->GetFloatValue(groupName, "kEmeraldNumOnePositionY");
+
 }
 
 void UI::OperationInitialize() {
@@ -152,7 +181,7 @@ void UI::RemainingExplosionInitialize() {
 
 	sizeMagnification = 2.0f;
 
-	for (uint32_t i = kTextureHandleIndex::kNumHundred; i < kTextureHandleIndex::kCountOfTextureHandleIndex; i++) {
+	for (uint32_t i = kTextureHandleIndex::kNumHundred; i < kTextureHandleIndex::kEmerald; i++) {
 
 		uiDatas_[i].sprite_->SetTextureSize(Vector2{ 64.0f, 64.0f});
 		uiDatas_[i].sprite_->SetTextureLeftTop(Vector2{ 0.0f,0.0f});
@@ -165,10 +194,10 @@ void UI::RemainingExplosionInitialize() {
 
 void UI::RemainingExplosionUpdate() {
 
-	for (uint32_t i = kTextureHandleIndex::kNumHundred; i < kTextureHandleIndex::kCountOfTextureHandleIndex; i++) {
-		float left = player_->GetExprosionNum() * 64.0f;
-		uiDatas_[i].sprite_->SetTextureLeftTop(Vector2{ left, 0.0f });
-	}
+	//for (uint32_t i = kTextureHandleIndex::kNumHundred; i < kTextureHandleIndex::kEmerald; i++) {
+	//	float left = player_->GetExprosionNum() * 64.0f;
+	//	uiDatas_[i].sprite_->SetTextureLeftTop(Vector2{ left, 0.0f });
+	//}
 
 	float left = (player_->GetExprosionNum() / 100) * 64.0f;
 	uiDatas_[kTextureHandleIndex::kNumHundred].sprite_->SetTextureLeftTop(Vector2{ left, 0.0f });
@@ -178,5 +207,47 @@ void UI::RemainingExplosionUpdate() {
 
 	left = (player_->GetExprosionNum() % 10) * 64.0f;
 	uiDatas_[kTextureHandleIndex::kNumOne].sprite_->SetTextureLeftTop(Vector2{ left, 0.0f });
+
+}
+
+void UI::EmeraldInitialize() {
+
+	float sizeMagnification = 0.5f;
+
+	Vector2 size = { uiDatas_[kTextureHandleIndex::kEmerald].sprite_->GetSize().x * sizeMagnification, uiDatas_[kTextureHandleIndex::kEmerald].sprite_->GetSize().y * sizeMagnification };
+	uiDatas_[kEmerald].sprite_->SetSize(size);
+
+	sizeMagnification = 1.0f;
+
+	size = { uiDatas_[kTextureHandleIndex::kEmeraldX].sprite_->GetSize().x * sizeMagnification, uiDatas_[kTextureHandleIndex::kEmeraldX].sprite_->GetSize().y * sizeMagnification };
+	uiDatas_[kEmerald].sprite_->SetSize(size);
+
+	sizeMagnification = 1.0f;
+
+	for (uint32_t i = kTextureHandleIndex::kEmeraldNumTen; i < kTextureHandleIndex::kCountOfTextureHandleIndex; i++) {
+
+		uiDatas_[i].sprite_->SetTextureSize(Vector2{ 64.0f, 64.0f });
+		uiDatas_[i].sprite_->SetTextureLeftTop(Vector2{ 0.0f,0.0f });
+		Vector2 size = { uiDatas_[i].sprite_->GetSize().x * sizeMagnification * 0.1f, uiDatas_[i].sprite_->GetSize().y * sizeMagnification };
+		uiDatas_[i].sprite_->SetSize(size);
+
+	}
+
+}
+
+void UI::EmeraldUpdate() {
+
+	//for (uint32_t i = kTextureHandleIndex::kEmeraldNumTen; i < kTextureHandleIndex::kCountOfTextureHandleIndex; i++) {
+	//	float left = player_->GetExprosionNum() * 64.0f;
+	//	uiDatas_[i].sprite_->SetTextureLeftTop(Vector2{ left, 0.0f });
+	//}
+
+	float left = 0.0f;
+
+	left = (player_->GetNumCollectItem() / 10) * 64.0f;
+	uiDatas_[kTextureHandleIndex::kEmeraldNumTen].sprite_->SetTextureLeftTop(Vector2{ left, 0.0f });
+
+	left = (player_->GetNumCollectItem() % 10) * 64.0f;
+	uiDatas_[kTextureHandleIndex::kEmeraldNumOne].sprite_->SetTextureLeftTop(Vector2{ left, 0.0f });
 
 }

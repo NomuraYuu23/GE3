@@ -1,5 +1,7 @@
 #include "CollisionManager.h"
 #include "Collision.h"
+#include "../../Engine/Audio/Audio.h"
+#include "../../Engine/Particle/ParticleManager.h"
 
 void CollisionManager::Initialize(Player* player, FloorManager* floorManager, 
 	BoxManager* boxManager, BreakBoxManager* breakBoxManager, 
@@ -38,6 +40,10 @@ void CollisionManager::Initialize(Player* player, FloorManager* floorManager,
 void CollisionManager::AllCollision()
 {
 
+	Audio* audio = Audio::GetInstance();
+	ParticleManager* particleManager = ParticleManager::GetInstance();
+	TransformStructure transformStructure = { { 1.0f, 1.0f, 1.0f}, { 0.0f, 0.0f, 0.0f}, {0.0f,0.0f,0.0f} };
+
 	// プレイヤーと床
 	for (Floor* floor : floorManager_->GetFloors()) {
 
@@ -74,6 +80,7 @@ void CollisionManager::AllCollision()
 
 		if (Collision::IsCollision(breakBox_->GetCollider(), player_->GetExplosionCollider())) {
 			breakBox_->SetIsBreak(true);
+			audio->PlayWave(Audio::AudioHandleIndex::kBreakBox, false, 1.0f);
 		}
 
 		for (Enemy* enemy : enemyManager_->GetEnemys_()) {
@@ -100,12 +107,18 @@ void CollisionManager::AllCollision()
 		if (Collision::IsCollision(item->GetCollider(), player_->GetCollider()) && !item->GetIsGet()) {
 			player_->OnCollisionRecoveryItem(item->GetRecoveryValue());
 			item->OnCollisionPlayer();
+			audio->PlayWave(Audio::AudioHandleIndex::kRecoveryItem, false, 1.0f);
+			transformStructure.translate = { item->GetDrawWorldTransform().worldMatrix_.m[3][0],item->GetDrawWorldTransform().worldMatrix_.m[3][1], item->GetDrawWorldTransform().worldMatrix_.m[3][2] };
+			particleManager->EmitterCreate(transformStructure, 10, 0.01f, 0.02f, 1, 6);
 		}
 	}
 	for (CollectibleItem* item : collectibleItemManager_->GetItems_()) {
 		if (Collision::IsCollision(item->GetCollider(), player_->GetCollider())&&!item->GetIsGet()) {
 			player_->OnCollisionCollectibleItem();
 			item->OnCollisionPlayer();
+			audio->PlayWave(Audio::AudioHandleIndex::kCollectibleItem, false, 1.0f);
+			transformStructure.translate = { item->GetDrawWorldTransform().worldMatrix_.m[3][0],item->GetDrawWorldTransform().worldMatrix_.m[3][1], item->GetDrawWorldTransform().worldMatrix_.m[3][2]};
+			particleManager->EmitterCreate(transformStructure, 10, 0.01f, 0.02f, 1, 5);
 		}
 	}
 

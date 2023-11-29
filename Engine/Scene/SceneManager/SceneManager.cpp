@@ -26,6 +26,10 @@ void SceneManager::Initialize()
 	// シーン遷移を保持するメンバ変数
 	sceneTransition_ = nullptr;
 
+	AudioInitialize();
+
+	Audio::GetInstance()->PlayWave(Audio::AudioHandleIndex::kBGM, true, 1.0f);
+
 }
 
 void SceneManager::Update()
@@ -63,10 +67,6 @@ void SceneManager::Update()
 			scene_.reset(sceneFacyory_->CreateScene(currentSceneNo_));
 			scene_->Initialize();
 			sceneTransition_->SetSwitchScene(false);
-			
-			if (currentSceneNo_ == kSelect) {
-				
-			}
 			if (currentSceneNo_ == kGame) {
 				static_cast<GameScene*>(scene_->GetInstance())->LoadStage(stageNum_);
 			}
@@ -90,5 +90,27 @@ void SceneManager::Draw()
 	if (sceneTransition_) {
 		sceneTransition_->Draw();
 	}
+
+}
+
+void SceneManager::AudioInitialize()
+{
+
+	Audio* audio = Audio::GetInstance();
+
+	//	kBGM,
+	audio->Audio::LoadWave("TD2_November/audio/BGM.wav");
+	//	kTitleButton,
+	audio->Audio::LoadWave("TD2_November/audio/title.wav");
+	//	kRecoveryItem,
+	audio->Audio::LoadWave("TD2_November/audio/recoveryItem.wav");
+	//	kCollectibleItem,
+	audio->Audio::LoadWave("TD2_November/audio/collectibleItem.wav");
+	//	kBreakBox,
+	audio->Audio::LoadWave("TD2_November/audio/breakBox.wav");
+	//	kGoal,
+	audio->Audio::LoadWave("TD2_November/audio/goal.wav");
+	// kExplosion
+	audio->Audio::LoadWave("TD2_November/audio/explosion.wav");
 
 }

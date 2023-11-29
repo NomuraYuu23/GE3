@@ -23,6 +23,8 @@ public:
 	/// <param name="target"></param>
 	void SetTarget(const WorldTransform* target) { target_ = target; }
 
+	void SetDestinationAngle(const Vector3& destinationAngle) { destinationAngle_ = destinationAngle; }
+
 private: // メンバ関数
 
 	// 追従対象からのオフセットを計算する
