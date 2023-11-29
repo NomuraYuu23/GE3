@@ -26,6 +26,10 @@ public: // サブクラス
 		kNumHundred,
 		kNumTen,
 		kNumOne,
+		kEmerald,
+		kEmeraldX,
+		kEmeraldNumTen,
+		kEmeraldNumOne,
 		kCountOfTextureHandleIndex
 	};
 
@@ -77,6 +81,16 @@ private: // メンバ関数
 	/// 自爆回数更新
 	/// </summary>
 	void RemainingExplosionUpdate();
+
+	/// <summary>
+	/// 自爆回数初期化
+	/// </summary>
+	void EmeraldInitialize();
+
+	/// <summary>
+	/// 自爆回数更新
+	/// </summary>
+	void EmeraldUpdate();
 
 private: // メンバ変数
 

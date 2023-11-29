@@ -696,6 +696,12 @@ void GameScene::TextureLoad()
 		TextureManager::Load("Resources/TD2_November/UI/num.png", dxCommon_),
 		TextureManager::Load("Resources/TD2_November/UI/num.png", dxCommon_),
 		TextureManager::Load("Resources/TD2_November/UI/num.png", dxCommon_),
+
+		TextureManager::Load("Resources/TD2_November/UI/emerald.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/UI/x.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/UI/num.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/UI/num.png", dxCommon_),
+
 	};
 
 }
