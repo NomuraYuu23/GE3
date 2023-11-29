@@ -187,54 +187,57 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 	ImguiDraw();
 
-	//光源
-	DirectionalLightData directionalLightData{};
-	directionalLightData.color = { 1.0f,1.0f,1.0f,1.0f };
-	directionalLightData.direction = { 0.0f, -1.0f, 0.0f };
-	directionalLightData.intencity = 1.0f;
-	directionalLight_->Update(directionalLightData);
+	if (!pause_->IsPause()) {
+		//光源
+		DirectionalLightData directionalLightData{};
+		directionalLightData.color = { 1.0f,1.0f,1.0f,1.0f };
+		directionalLightData.direction = { 0.0f, -1.0f, 0.0f };
+		directionalLightData.intencity = 1.0f;
+		directionalLight_->Update(directionalLightData);
 
-	floorManager_->Update();
-	boxManager_->Update();
-	breakBoxManager_->Update();
-	
-	checkPointManager_->Update();
+		floorManager_->Update();
+		boxManager_->Update();
+		breakBoxManager_->Update();
 
-	goal_->Update();
+		checkPointManager_->Update();
 
-	player_->Update();
+		goal_->Update();
 
-	collisionManager_->AllCollision();
+		player_->Update();
 
-	// デバッグ描画
-	colliderDebugDraw_->Update();
+		collisionManager_->AllCollision();
 
-	enemyManager_->Update();
+		// デバッグ描画
+		colliderDebugDraw_->Update();
 
-	recoveryItemManager_->Update();
+		enemyManager_->Update();
 
-	collectibleItemManager_->Update();
+		recoveryItemManager_->Update();
 
-	followCamera_->Update();
+		collectibleItemManager_->Update();
 
-	viewProjection_ = followCamera_->GetViewProjection();
+		followCamera_->Update();
 
-	viewProjection_.UpdateMatrix();
+		viewProjection_ = followCamera_->GetViewProjection();
 
-	// デバッグカメラ
-	DebugCameraUpdate();
+		viewProjection_.UpdateMatrix();
 
-	// デバッグ描画
-	colliderDebugDraw_->Update();
-	
-	//パーティクル
-	particleManager_->Update(followCamera_->GetMatrix());
+		// デバッグカメラ
+		DebugCameraUpdate();
 
-	// 影
-	shadowManager_->Update();
+		// デバッグ描画
+		colliderDebugDraw_->Update();
 
-	//ui
-	ui->Update();
+		//パーティクル
+		particleManager_->Update(followCamera_->GetMatrix());
+
+		// 影
+		shadowManager_->Update();
+
+		//ui
+		ui->Update();
+	}
+
 
 	// ポーズ機能
 	pause_->Update();
