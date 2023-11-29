@@ -9,6 +9,7 @@
 #include "../../Engine/Collider/Sphere/Sphere.h"
 #include "../../Engine/Particle/ParticleManager.h"
 #include "../../Engine/GlobalVariables/GlobalVariables.h"
+#include "../../Engine/Audio/Audio.h"
 
 class FollowCamera;
 
@@ -424,6 +425,9 @@ private: // メンバ変数
 
 	// カメラ
 	FollowCamera* followCamera_;
+
+	// オーディオ
+	Audio* audio_ = nullptr;
 
 };
 

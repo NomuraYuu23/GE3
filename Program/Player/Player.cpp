@@ -83,6 +83,8 @@ void Player::Initialize(const std::vector<Model*>& models,
 
 	particleManager_ = ParticleManager::GetInstance();
 
+	audio_ = Audio::GetInstance();
+
 	OpeningAnimationInitialize();
 
 }
@@ -504,6 +506,7 @@ void Player::Explosion(){
 	isExplosion_ = true;
 	explosionCollider_.center_ = { worldTransform_.worldMatrix_.m[3][0], worldTransform_.worldMatrix_.m[3][1], worldTransform_.worldMatrix_.m[3][2] };
 	worldTransformExprode_.transform_.translate = explosionCollider_.center_;
+	audio_->PlayWave(Audio::AudioHandleIndex::kExplosion, false, 1.0f);
 }
 
 void Player::ExplosionMove(){
