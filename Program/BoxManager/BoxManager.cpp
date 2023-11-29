@@ -346,11 +346,11 @@ void BoxManager::LoadFile(const std::string& groupName, const std::string& stage
 		boxes_.push_back(box_);
 
 		colliderDebugDraw_->AddCollider(&box_->GetCollider());
-		Vector3 size = box_->GetDrawWorldTransform().transform_.scale;
-		size.x *= 2.0f;
-		size.y *= 2.0f;
-		size.z *= 2.0f;
-		ShadowManager::GetInstance()->AddFloor(box_->GetDrawWorldTransformAdress(), size);
+		//Vector3 size = box_->GetDrawWorldTransform().transform_.scale;
+		//size.x *= 2.0f;
+		//size.y *= 2.0f;
+		//size.z *= 2.0f;
+		//ShadowManager::GetInstance()->AddFloor(box_->GetDrawWorldTransformAdress(), size);
 
 	}
 

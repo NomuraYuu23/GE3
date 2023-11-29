@@ -68,12 +68,12 @@ void FloorManager::AddFloor(Vector3 position, Vector3 rotate, bool isMoving, boo
 	colliderDebugDraw_->AddCollider(&floor->GetCollider());
 
 	// 影
-	ShadowManager* sahadpwManager = ShadowManager::GetInstance();
-	Vector3 size = floor->GetSize();
-	size.x *= 2.0f;
-	size.y *= 2.0f;
-	size.z *= 2.0f;
-	sahadpwManager->AddFloor(floor->GetWorldTransformAdress(), size);
+	//ShadowManager* sahadpwManager = ShadowManager::GetInstance();
+	//Vector3 size = floor->GetSize();
+	//size.x *= 2.0f;
+	//size.y *= 2.0f;
+	//size.z *= 2.0f;
+	//sahadpwManager->AddFloor(floor->GetWorldTransformAdress(), size);
 
 }
 

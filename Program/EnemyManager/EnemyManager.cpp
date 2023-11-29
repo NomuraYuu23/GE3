@@ -315,12 +315,12 @@ void EnemyManager::LoadFile(const std::string& groupName, const std::string& sta
 
 		enemys_.push_back(enemy_);
 
-		colliderDebugDraw_->AddCollider(&enemy_->GetCollider());
+		colliderDebugDraw_->AddCollider(&enemy_->GetCollider());/*
 		Vector3 size = enemy_->GetWorldTransform().transform_.scale;
 		size.x *= 2.0f;
 		size.y *= 2.0f;
 		size.z *= 2.0f;
-		ShadowManager::GetInstance()->AddMeker(enemy_->GetWorldTransformAddress(), size);
+		ShadowManager::GetInstance()->AddMeker(enemy_->GetWorldTransformAddress(), size);*/
 	}
 }
 

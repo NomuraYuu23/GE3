@@ -241,6 +241,69 @@ void GameScene::Update() {
 		//パーティクル
 		particleManager_->Update(followCamera_->GetMatrix());
 
+		shadowManager_->Reset();
+
+		for (Floor* floor : floorManager_->GetFloors()) {
+			Vector3 size = floor->GetSize();
+			size.x *= 2.0f;
+			size.y *= 2.0f;
+			size.z *= 2.0f;
+			shadowManager_->AddFloor(floor->GetWorldTransformAdress(), size);
+		}
+		for (Box* box : boxManager_->GetBoxes_()) {
+			Vector3 size = box->GetSize();
+			size.x *= 2.0f;
+			size.y *= 2.0f;
+			size.z *= 2.0f;
+			shadowManager_->AddFloor(box->GetWorldTransformAdress(), size);
+		}
+		for (BreakBox* box : breakBoxManager_->GetBoxes_()) {
+			Vector3 size = box->GetSize();
+			size.x *= 2.0f;
+			size.y *= 2.0f;
+			size.z *= 2.0f;
+			shadowManager_->AddFloor(box->GetWorldTransformAdress(), size);
+		}
+
+		Vector3 playerSize = {
+			player_->GetColliderRadius() * 2.0f,
+			player_->GetColliderRadius() * 2.0f,
+			player_->GetColliderRadius() * 2.0f
+		};
+		shadowManager_->AddMeker(player_->GetWorldTransformAddress(), playerSize);
+
+		for (CheckPoint* box : checkPointManager_->GetCheckPoints_()) {
+			Vector3 size = box->GetWorldTransform().transform_.scale;
+			size.x *= 2.0f;
+			size.y *= 2.0f;
+			size.z *= 2.0f;
+			shadowManager_->AddMeker(box->GetWorldTransformAdress(), size);
+		}
+
+		for (Enemy* enemy_ : enemyManager_->GetEnemys_()) {
+			Vector3 size = enemy_->GetWorldTransform().transform_.scale;
+			size.x *= 2.0f;
+			size.y *= 2.0f;
+			size.z *= 2.0f;
+			ShadowManager::GetInstance()->AddMeker(enemy_->GetWorldTransformAddress(), size);
+		}
+
+		for(RecoveryItem* box_ : recoveryItemManager_->GetItems_()) {
+			Vector3 size = box_->GetWorldTransform().transform_.scale;
+			size.x *= 2.0f;
+			size.y *= 2.0f;
+			size.z *= 2.0f;
+			ShadowManager::GetInstance()->AddMeker(box_->GetDrawWorldTransformAdress(), size);
+		}
+
+		for (CollectibleItem* box_ : collectibleItemManager_->GetItems_()) {
+			Vector3 size = box_->GetWorldTransform().transform_.scale;
+			size.x *= 2.0f;
+			size.y *= 2.0f;
+			size.z *= 2.0f;
+			ShadowManager::GetInstance()->AddMeker(box_->GetDrawWorldTransformAdress(), size);
+		}
+
 		// 影
 		shadowManager_->Update();
 
