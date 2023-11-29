@@ -170,6 +170,7 @@ void GameScene::Initialize() {
 	ui = std::make_unique<UI>();
 	ui->Initialize(uiTextureHandles_);
 	ui->SetPlayer(player_.get());
+	FilesLoad(stageName_);
 
 }
 
@@ -481,14 +482,20 @@ void GameScene::ImguiDraw() {
 				
 			}
 			if (ImGui::Button("jsonファイルを作る")) {
+				std::string message = std::format("{}.json created.", "all");
+				MessageBoxA(nullptr, message.c_str(), "StagesObject", 0);
 				FilesSave(stages_);
 			}
 			if (ImGui::Button("上書きセーブ")) {
+				std::string message = std::format("{}.json OverWrite.", "all");
+				MessageBoxA(nullptr, message.c_str(), "StagesObject", 0);
 				FilesOverWrite(stageName_);
 			}
 
 			if (ImGui::Button("全ロード(手動)")) {
-				FilesLoad(stages_,stageName_);
+				std::string message = std::format("{}.json loaded.", "all");
+				MessageBoxA(nullptr, message.c_str(), "StagesObject", 0);
+				FilesLoad(stageName_);
 			}
 			ImGui::EndMenu();
 		}
@@ -539,8 +546,7 @@ void GameScene::FilesSave(const std::vector<std::string>& stages){
 	checkPointManager_->SaveFile(stages);
 	collectibleItemManager_->SaveFile(stages);
 	recoveryItemManager_->SaveFile(stages);*/
-	std::string message = std::format("{}.json created.", "all");
-	MessageBoxA(nullptr, message.c_str(), "StagesObject", 0);
+	
 }
 
 void GameScene::FilesOverWrite(const std::string& stage){
@@ -552,11 +558,10 @@ void GameScene::FilesOverWrite(const std::string& stage){
 	collectibleItemManager_->FileOverWrite(stage);
 	recoveryItemManager_->FileOverWrite(stage);
 	goal_->FileOverWrite(stage);
-	std::string message = std::format("{}.json OverWrite.", "all");
-	MessageBoxA(nullptr, message.c_str(), "StagesObject", 0);
+	
 }
 
-void GameScene::FilesLoad(const std::vector<std::string>& stages, const std::string& stage){
+void GameScene::FilesLoad(const std::string& stage){
 	enemyManager_->LoadFiles(stage);
 	floorManager_->LoadFiles(stage);
 	boxManager_->LoadFiles(stage);
@@ -565,8 +570,7 @@ void GameScene::FilesLoad(const std::vector<std::string>& stages, const std::str
 	collectibleItemManager_->LoadFiles(stage);
 	recoveryItemManager_->LoadFiles(stage);
 	goal_->LoadFiles(stage);
-	std::string message = std::format("{}.json loaded.", "all");
-	MessageBoxA(nullptr, message.c_str(), "StagesObject", 0);
+	
 }
 
 void GameScene::GoToTheTitle()

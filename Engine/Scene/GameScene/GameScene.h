@@ -85,7 +85,7 @@ private: // メンバ関数
 
 	void FilesOverWrite(const std::string& stage);
 
-	void FilesLoad(const std::vector<std::string>& stages, const std::string& stage);
+	void FilesLoad(const std::string& stage);
 
 private:
 	std::vector<std::string> stages_;
