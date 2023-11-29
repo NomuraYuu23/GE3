@@ -2,27 +2,6 @@
 #include "../../Engine/GlobalVariables/GlobalVariables.h"
 #include "../../Program/Player/Player.h"
 
-void UI::UIData::Initialize(uint32_t textureHandle)
-{
-
-	textureHandle_ = textureHandle;
-
-	position_ = { 0.0f,0.0f };
-
-	color_ = { 1.0f,1.0f,1.0f, 1.0f };
-
-	sprite_.reset(Sprite::Create(textureHandle_, position_, color_));
-
-}
-
-void UI::UIData::Update()
-{
-
-	sprite_->SetPosition(position_);
-	sprite_->SetColor(color_);
-
-}
-
 void UI::Initialize(const std::array<uint32_t, kCountOfTextureHandleIndex>& textureHandles)
 {
 

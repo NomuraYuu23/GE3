@@ -1,5 +1,7 @@
 #pragma once
 #include "../IScene/IScene.h"
+#include "../../../Program/UI/UIData.h"
+
 class GameOverScene : public IScene
 {
 
@@ -36,6 +38,28 @@ private: // メンバ関数
 	/// テクスチャロード
 	/// </summary>
 	void TextureLoad() override;
+
+private:
+
+	void SelectChange();
+
+	void Decision();
+
+private: // メンバ変数
+
+	UIData backGround_;
+
+	UIData goToSelect_;
+
+	UIData respawn_;
+
+	bool isRespawn_ = true;
+	
+	// 選択クールタイム
+	float selectCooltime_ = 0.3f;
+
+	// 選択クールタイム
+	float selectElapsedCooltime_ = 0.0f;
 
 };
 

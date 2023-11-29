@@ -1,29 +1,10 @@
 #pragma once
 #include "../IScene/IScene.h"
+#include "../../../Program/UI/UIData.h"
 
 class SceneManager;
 
 class SelectScene : public IScene{
-
-public:
-
-	// UI情報
-	struct SelectUIData
-	{
-		// スプライト
-		std::unique_ptr<Sprite> sprite_;
-		// テクスチャハンドル
-		uint32_t textureHandle_;
-		// 位置
-		Vector2 position_;
-		// 色
-		Vector4 color_;
-
-		void Initialize(uint32_t textureHandle);
-
-		void Update();
-
-	};
 
 public: // メンバ関数
 
@@ -90,22 +71,22 @@ private: // メンバ変数
 	static const uint32_t selectionSquareMax_ = 4;
 
 	// 背景スプライト
-	SelectUIData background_;
+	UIData background_;
 	
 	// 選択マススプライト
-	SelectUIData selectionSquare_[selectionSquareMax_];
+	UIData selectionSquare_[selectionSquareMax_];
 
 	// 操作説明スプライト
-	SelectUIData decisionOperation_;
-	SelectUIData moveOperation_;
-	SelectUIData returnOperation_;
+	UIData decisionOperation_;
+	UIData moveOperation_;
+	UIData returnOperation_;
 
-	SelectUIData decisionButton_;
-	SelectUIData moveButton_;
-	SelectUIData returnButton_;
+	UIData decisionButton_;
+	UIData moveButton_;
+	UIData returnButton_;
 
 	// 名前スプライト
-	SelectUIData name_;
+	UIData name_;
 
 	// 選択クールタイム
 	float selectCooltime_ = 0.3f;
