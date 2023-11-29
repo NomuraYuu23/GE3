@@ -80,10 +80,7 @@ private: // メンバ変数
 	float animationParameter_ = 0.0f;
 
 	// アニメーションピリオド
-	uint32_t period_ = 60;
-
-	float goToSelectPositionY_ = 0.0f;
-	float respawnPositionY_ = 0.0f;
+	uint32_t animationPeriod_ = 60;
 
 	bool isDecided_ = false;
 

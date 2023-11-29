@@ -236,7 +236,7 @@ void GameOverScene::Animation()
 {
 
 	// アニメーションパラメータ
-	animationParameter_ += 3.14f * 2.0f / period_;
+	animationParameter_ += 3.14f * 2.0f / animationPeriod_;
 
 	if (animationParameter_ >= 3.14f * 2.0f) {
 		animationParameter_ = std::fmodf(animationParameter_, 3.14f * 2.0f);

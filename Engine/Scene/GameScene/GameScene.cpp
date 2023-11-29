@@ -591,8 +591,8 @@ void GameScene::FilesLoad(const std::vector<std::string>& stages, const std::str
 void GameScene::GoToTheTitle()
 {
 
-	if (pause_->GoToTheTitle()) {
-		requestSeneNo = kTitle;
+	if (pause_->GoToTheSelect()) {
+		requestSeneNo = kSelect;
 	}
 
 }
@@ -676,7 +676,7 @@ void GameScene::TextureLoad()
 	// ポーズ
 	pauseTextureHandles_ = {
 		TextureManager::Load("Resources/TD2_November/pause/pausing.png", dxCommon_),
-		TextureManager::Load("Resources/TD2_November/pause/goToTitle.png", dxCommon_),
+		TextureManager::Load("Resources/TD2_November/pause/goToSelect.png", dxCommon_),
 		TextureManager::Load("Resources/TD2_November/pause/returnToGame.png", dxCommon_),
 	};
 
