@@ -736,6 +736,8 @@ void Player::OpeningAnimationInitialize()
 
 	workOpening_.period_ = 60;
 
+	isRotate_ = true;
+
 }
 
 void Player::OpeningAnimationUpdate()
@@ -745,9 +747,12 @@ void Player::OpeningAnimationUpdate()
 	if (workOpening_.parameter_ >= 1.0f) {
 		workOpening_.isRunning_ = false;
 		workOpening_.parameter_ = 1.0f;
+		isRotate_ = false;
+		worldTransform_.transform_.rotate.y = 0.0f;
 	}
 
 	worldTransform_.transform_.translate = Ease::Easing(Ease::EaseName::EaseInQuart, workOpening_.startPosition_, workOpening_.endPosition_, workOpening_.parameter_);
+	Move();
 
 	allUpdateMatrix();
 
