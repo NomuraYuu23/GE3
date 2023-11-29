@@ -380,6 +380,9 @@ void Player::Move()
 {
 
 	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
+	if (velocity_.y <= -3.0f) {
+		velocity_.y = -3.0f;
+	}
 	worldTransform_.transform_.translate = v3Calc->Add(worldTransform_.transform_.translate, velocity_);
 	if (isRotate_){
 		worldTransformBody_.transform_.rotate.x += 0.5f;
@@ -649,10 +652,10 @@ void Player::OnCollisionBox(WorldTransform* worldTransform, Vector3 boxSize, boo
 				worldTransform_.transform_.translate.z -= velocity_.z;
 				allUpdateMatrix();
 			}
-			/*if (isSideHit_ && isVerticalHit_) {
-				worldTransform_.transform_.translate.z += (velocity_.z / 2.0f);
+			if (!isSideHit_ && !isVerticalHit_) {
+				worldTransform_.transform_.translate.y = worldTransform->transform_.translate.y + boxSize.y + 0.1f;
 				allUpdateMatrix();
-			}*/
+			}
 			
 		}
 	}
