@@ -3,6 +3,7 @@
 #include "../IScene/IScene.h"
 #include "../TitleScene/TitleScene.h"
 #include "../GameScene/GameScene.h"
+#include "../SelectScene/SelectScene.h"
 #include "../SceneFactory/SceneFactory.h"
 #include "../../SceneTransition/ISceneTransition/ISceneTransition.h"
 #include "../../SceneTransition/SceneTransitionFactory/SceneTransitionFactory.h"
@@ -49,6 +50,23 @@ private: // メンバ変数
 
 	// シーン遷移を保持するメンバ変数
 	std::unique_ptr<ISceneTransition> sceneTransition_;
+
+
+private: // 
+
+	// ステージ番号保存
+	uint32_t stageNum_ = 0;
+
+	// リス位置
+	Vector3 respawnPosition_;
+
+public: // 
+
+	void SetStageNum(uint32_t stageNum) { stageNum_ = stageNum; }
+
+	Vector3 GetRespawnPosition() { return respawnPosition_; }
+
+	void SetRespawnPosition(const Vector3& respawnPosition) { respawnPosition_ = respawnPosition; }
 
 };
 

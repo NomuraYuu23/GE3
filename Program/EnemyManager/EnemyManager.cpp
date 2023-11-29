@@ -1,5 +1,6 @@
 #include "EnemyManager.h"
 #include"../../Engine/2D/ImguiManager.h"
+#include "../ShadowManager/ShadowManager.h"
 EnemyManager::~EnemyManager(){
 	//解放
 	for (Enemy* enemy_:enemys_){
@@ -315,6 +316,11 @@ void EnemyManager::LoadFile(const std::string& groupName, const std::string& sta
 		enemys_.push_back(enemy_);
 
 		colliderDebugDraw_->AddCollider(&enemy_->GetCollider());
+		Vector3 size = enemy_->GetWorldTransform().transform_.scale;
+		size.x *= 2.0f;
+		size.y *= 2.0f;
+		size.z *= 2.0f;
+		ShadowManager::GetInstance()->AddMeker(enemy_->GetWorldTransformAddress(), size);
 	}
 }
 

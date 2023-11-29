@@ -8,7 +8,7 @@ void SceneManager::Initialize()
 	sceneFacyory_ = SceneFactory::GetInstance();
 
 	// シーンの静的初期化
-	scene_->StaticInitialize();
+	scene_->StaticInitialize(this);
 
 	// シーン(タイトル)
 	scene_.reset(sceneFacyory_->CreateScene(kTitle));
@@ -58,10 +58,19 @@ void SceneManager::Update()
 		if (sceneTransition_->GetSwitchScene()) {
 			// シーン切り替え
 			TextureManager::GetInstance()->ResetTexture();
+			TextureManager::Load("Resources/default/white2x2.png", DirectXCommon::GetInstance());
 			currentSceneNo_ = requestSeneNo_;
 			scene_.reset(sceneFacyory_->CreateScene(currentSceneNo_));
 			scene_->Initialize();
 			sceneTransition_->SetSwitchScene(false);
+			
+			if (currentSceneNo_ == kSelect) {
+				
+			}
+			if (currentSceneNo_ == kGame) {
+				static_cast<GameScene*>(scene_->GetInstance())->LoadStage(stageNum_);
+			}
+				
 		}
 		else if (!sceneTransition_->GetTransitioning()) {
 			sceneTransition_.release();

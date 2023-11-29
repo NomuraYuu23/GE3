@@ -14,6 +14,8 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg
 #include "../../base/D3DResourceLeakChecker.h"
 #include <vector>
 
+#include "../SceneManager/SceneManager.h"
+
 /// <summary>
 /// コンストラクタ
 /// </summary>
@@ -45,6 +47,11 @@ void GameScene::Initialize() {
 	colliderDebugDraw_ = std::make_unique<ColliderDebugDraw>();
 	std::vector<Model*> colliderModels = { colliderSphereModel_.get(),colliderBoxModel_.get(),colliderBoxModel_.get() };
 	colliderDebugDraw_->Initialize(colliderModels, colliderMaterial_.get());
+
+	// 影
+	shadowManager_ = ShadowManager::GetInstance();
+	shadowManager_->Initialize(shadowModel_.get());
+	shadowManager_->Reset();
 
 	//フロアマネージャー
 	floorManager_ = std::make_unique<FloorManager>();
@@ -131,9 +138,14 @@ void GameScene::Initialize() {
 	//プレイヤー関連
 
 	player_ = std::make_unique<Player>();
-	player_->Initialize(playerModels_, playerMaterials_);
+	player_->Initialize(playerModels_, playerMaterials_, sceneManager_->GetRespawnPosition());
 	player_->SetViewProjection(followCamera_->GetViewProjectionAddress());
-
+	Vector3 playerSize = {
+		player_->GetColliderRadius() * 2.0f,
+		player_->GetColliderRadius() * 2.0f,
+		player_->GetColliderRadius() * 2.0f
+	};
+	shadowManager_->AddMeker(player_->GetWorldTransformAddress(), playerSize);
 	//enemyManager_->SetPlayer(player_.get());
 
 	followCamera_->SetTarget(player_->GetWorldTransformAddress());
@@ -164,20 +176,15 @@ void GameScene::Initialize() {
 
 	isDebugCameraActive_ = false;
 
-	shadowManager_ = ShadowManager::GetInstance();
-	shadowManager_->Initialize(shadowModel_.get());
-	Vector3 playerSize = {
-		player_->GetColliderRadius() * 2.0f,
-		player_->GetColliderRadius() * 2.0f,
-		player_->GetColliderRadius() * 2.0f
-	};
-	shadowManager_->AddMeker(player_->GetWorldTransformAddress(), playerSize);
-
 	// ui
 	ui = std::make_unique<UI>();
 	ui->Initialize(uiTextureHandles_);
 	ui->SetPlayer(player_.get());
 	FilesLoad(stageName_);
+
+	// スカイドーム
+	skydome_ = std::make_unique<Skydome>();
+	skydome_->Initialize(skydomeModel_.get(), skydomeMaterial_.get());
 
 }
 
@@ -210,8 +217,6 @@ void GameScene::Update() {
 
 	// デバッグ描画
 	colliderDebugDraw_->Update();
-
-	
 
 	enemyManager_->Update();
 
@@ -247,9 +252,10 @@ void GameScene::Update() {
 		requestSeneNo = kClear;
 	}
 
-	/*if (player_->GetExprosionNumInt() < 0) {
+	if (player_->GetExprosionNumInt() < 0) {
 		requestSeneNo = kGameOver;
-	}*/
+		sceneManager_->SetRespawnPosition(player_->GetInitialPosition());
+	}
 
 	// タイトルへ行く
 	GoToTheTitle();
@@ -291,8 +297,9 @@ void GameScene::Draw() {
 	collectibleItemManager_->Draw(viewProjection_);
 	player_->Draw(viewProjection_);
 	enemyManager_->Draw(viewProjection_);
-
 	shadowManager_->Draw(viewProjection_);
+
+	skydome_->Draw(viewProjection_);
 
 #ifdef _DEBUG
 
@@ -535,6 +542,15 @@ void GameScene::ImguiDraw() {
 
 }
 
+void GameScene::LoadStage(uint32_t stageIndex)
+{
+
+	stageName_ = stages_[stageIndex].c_str();
+
+	FilesLoad(stages_, stageName_);
+
+}
+
 void GameScene::DebugCameraUpdate()
 {
 
@@ -621,7 +637,7 @@ void GameScene::ModelCreate()
 	playerModels_.push_back(Model::Create("Resources/TD2_November/Player/playerRightLeg", "playerRightLeg.obj", dxCommon_));
 	playerModels_.push_back(Model::Create("Resources/TD2_November/exprode/", "sphere.obj", dxCommon_));
 	//ボックスマネージャー
-	boxModel_.reset(Model::Create("Resources/TD2_November/floorBox/", "box.obj", dxCommon_));
+	boxModel_.reset(Model::Create("Resources/TD2_November/block/", "block.obj", dxCommon_));
 	//壊れるボックス生成
 	breakBoxModel_.reset(Model::Create("Resources/TD2_November/breakBox/", "box.obj", dxCommon_));
 	//壊れるボックス生成
@@ -646,6 +662,9 @@ void GameScene::ModelCreate()
 
 	// 影モデル
 	shadowModel_.reset(Model::Create("Resources/TD2_November/shadow/", "shadow.obj", dxCommon_));
+
+	// スカイドーム
+	skydomeModel_.reset(Model::Create("Resources/TD2_November/skydome/", "skydome.obj", dxCommon_));
 
 }
 
@@ -676,6 +695,9 @@ void GameScene::MaterialCreate()
 		enemyMaterials_.push_back(Material::Create());
 	}
 	goalMaterial_.reset(Material::Create());
+
+	// スカイドーム
+	skydomeMaterial_.reset(Material::Create());
 
 }
 

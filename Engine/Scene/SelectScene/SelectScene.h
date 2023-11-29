@@ -1,5 +1,9 @@
 #pragma once
 #include "../IScene/IScene.h"
+#include "../../../Program/UI/UIData.h"
+
+class SceneManager;
+
 class SelectScene : public IScene{
 
 public: // メンバ関数
@@ -35,6 +39,56 @@ private: // メンバ関数
 	/// テクスチャロード
 	/// </summary>
 	void TextureLoad() override;
+
+private: // メンバ関数
+
+	void SelectChange();
+
+	void SelectDecision();
+
+	void SelectReturn();
+
+	void BackGroundInitialize();
+
+	void BackGroundUpdate();
+
+	void SelectionSquareInitialize();
+
+	void SelectionSquareUpdate();
+
+	void OperationInitialize();
+
+private: // メンバ変数
+
+	Input* input_ = Input::GetInstance();
+
+	// 選択してるステージ
+	uint32_t selectionSquareNum_;
+	static const uint32_t selectionSquareMax_ = 4;
+
+	// 背景スプライト
+	UIData background_;
+	
+	// 選択マススプライト
+	UIData selectionSquare_[selectionSquareMax_];
+
+	// 操作説明スプライト
+	UIData decisionOperation_;
+	UIData moveOperation_;
+	UIData returnOperation_;
+
+	UIData decisionButton_;
+	UIData moveButton_;
+	UIData returnButton_;
+
+	// 名前スプライト
+	UIData name_;
+
+	// 選択クールタイム
+	float selectCooltime_ = 0.3f;
+	
+	// 選択クールタイム
+	float selectElapsedCooltime_ = 0.0f;
 
 };
 
