@@ -80,7 +80,7 @@ void CollisionManager::AllCollision()
 
 		if (Collision::IsCollision(breakBox_->GetCollider(), player_->GetExplosionCollider())) {
 			breakBox_->SetIsBreak(true);
-			audio->PlayWave(Audio::AudioHandleIndex::kBreakBox, false, 1.0f);
+			audio->PlayWave(Audio::AudioHandleIndex::kBreakBox, false, 0.2f);
 		}
 
 		for (Enemy* enemy : enemyManager_->GetEnemys_()) {
@@ -107,7 +107,7 @@ void CollisionManager::AllCollision()
 		if (Collision::IsCollision(item->GetCollider(), player_->GetCollider()) && !item->GetIsGet()) {
 			player_->OnCollisionRecoveryItem(item->GetRecoveryValue());
 			item->OnCollisionPlayer();
-			audio->PlayWave(Audio::AudioHandleIndex::kRecoveryItem, false, 1.0f);
+			audio->PlayWave(Audio::AudioHandleIndex::kRecoveryItem, false, 0.2f);
 			transformStructure.translate = { item->GetDrawWorldTransform().worldMatrix_.m[3][0],item->GetDrawWorldTransform().worldMatrix_.m[3][1], item->GetDrawWorldTransform().worldMatrix_.m[3][2] };
 			particleManager->EmitterCreate(transformStructure, 10, 0.01f, 0.02f, 1, 6);
 		}
@@ -116,7 +116,7 @@ void CollisionManager::AllCollision()
 		if (Collision::IsCollision(item->GetCollider(), player_->GetCollider())&&!item->GetIsGet()) {
 			player_->OnCollisionCollectibleItem();
 			item->OnCollisionPlayer();
-			audio->PlayWave(Audio::AudioHandleIndex::kCollectibleItem, false, 1.0f);
+			audio->PlayWave(Audio::AudioHandleIndex::kCollectibleItem, false, 0.2f);
 			transformStructure.translate = { item->GetDrawWorldTransform().worldMatrix_.m[3][0],item->GetDrawWorldTransform().worldMatrix_.m[3][1], item->GetDrawWorldTransform().worldMatrix_.m[3][2]};
 			particleManager->EmitterCreate(transformStructure, 10, 0.01f, 0.02f, 1, 5);
 		}

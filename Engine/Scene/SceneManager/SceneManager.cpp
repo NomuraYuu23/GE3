@@ -28,7 +28,7 @@ void SceneManager::Initialize()
 
 	AudioInitialize();
 
-	Audio::GetInstance()->PlayWave(Audio::AudioHandleIndex::kBGM, true, 1.0f);
+	Audio::GetInstance()->PlayWave(Audio::AudioHandleIndex::kBGM, true, 0.2f);
 
 }
 

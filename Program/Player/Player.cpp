@@ -513,13 +513,13 @@ void Player::Explosion(){
 	if (!isNextExplosion_)
 		return;
 
-	audio_->PlayWave(Audio::AudioHandleIndex::kExplosion, false, 1.0f);
+	//audio_->PlayWave(Audio::AudioHandleIndex::kExplosion, false, 0.5f);
 	
 	isExplosion_ = true;
 	isNextExplosion_ = false;
 	explosionCollider_.center_ = { worldTransform_.worldMatrix_.m[3][0], worldTransform_.worldMatrix_.m[3][1], worldTransform_.worldMatrix_.m[3][2] };
 	worldTransformExprode_.transform_.translate = explosionCollider_.center_;
-	audio_->PlayWave(Audio::AudioHandleIndex::kExplosion, false, 1.0f);
+	audio_->PlayWave(Audio::AudioHandleIndex::kExplosion, false, 0.2f);
 }
 
 void Player::ExplosionMove(){

@@ -254,7 +254,7 @@ void GameScene::Update() {
 
 	if (player_->GetIsGoal() && requestSeneNo != kClear){
 		requestSeneNo = kClear;
-		Audio::GetInstance()->PlayWave(Audio::AudioHandleIndex::kGoal, false, 1.0f);
+		Audio::GetInstance()->PlayWave(Audio::AudioHandleIndex::kGoal, false, 0.2f);
 	}
 
 	if (player_->GetExprosionNumInt() < 0) {
