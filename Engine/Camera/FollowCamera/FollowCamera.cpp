@@ -2,6 +2,7 @@
 #include "../../Math/Vector3.h"
 #include "../../Math/Matrix4x4.h"
 #include "../../Input/input.h"
+#include <algorithm>
 
 void FollowCamera::Initialize() {
 
@@ -28,6 +29,10 @@ void FollowCamera::Update() {
 
 		viewProjection_.transform_.rotate.y += input->GetRightAnalogstick().x * RotateSpeed;
 		viewProjection_.transform_.rotate.x += input->GetRightAnalogstick().y * RotateSpeed;
+		// xに制限
+		float limit = 3.14f / 4.0f;
+		viewProjection_.transform_.rotate.x = std::clamp(viewProjection_.transform_.rotate.x, 0.0f, limit);
+
 	}
 
 	//追従対象がいれば
