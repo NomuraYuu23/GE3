@@ -11,7 +11,8 @@ public: //メンバ関数
 	/// 初期化
 	/// </summary>
 	/// <param name="model">モデル</param>
-	void Initialize(Model* model, Material* material, TransformStructure transform_,Vector3 pos,bool isMoving, bool isVertical);
+	void Initialize(Model* model, Material* material, TransformStructure transform_,
+		Vector3 pos,bool isMoving, bool isVertical, Vector3 moveLength);
 
 	/// <summary>
 	/// 更新
@@ -51,6 +52,8 @@ public: // アクセッサ
 
 	Vector3 GetPosition() { return position_; }
 
+	Vector3 GetBaseMoveLength_() { return baseMoveLength_; }
+
 	bool GetMoveFlag() { return isMoving_; }	
 
 	bool GetVerticalFlag() { return isVertical_; }
@@ -89,7 +92,8 @@ private:
 
 	// サイズ
 	Vector3 size_ = { 10.0f,0.1f, 10.0f };
-
+	//床をどのくらい移動させるか
+	Vector3 baseMoveLength_ = { 20.0f,0.0f,0.0f };
 	// position
 	Vector3 position_;
 
