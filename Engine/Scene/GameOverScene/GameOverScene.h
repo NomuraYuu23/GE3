@@ -55,6 +55,16 @@ private: // メンバ変数
 
 	UIData respawn_;
 
+	UIData respawnItem_;
+	UIData respawnTen_;
+	UIData respawnOne_;
+
+	UIData haveRespawnItem_;
+	UIData haveRespawnTen_;
+	UIData haveRespawnOne_;
+
+	UIData getItem_;
+
 	// 操作説明スプライト
 	UIData decisionOperation_;
 	UIData moveOperation_;

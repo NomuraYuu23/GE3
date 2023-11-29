@@ -10,86 +10,127 @@ void GameOverScene::Initialize()
 	//MaterialCreate();
 	//TextureLoad();
 
+	goToSelect_.Initialize(TextureManager::Load("Resources/TD2_November/gameOver/goToSelect.png", dxCommon_));
+	goToSelect_.position_ = { 320.0f, 550.0f };
+	goToSelect_.color_ = { 1.0f, 1.0f, 1.0f, 1.0f };
+	goToSelect_.Update();
+	goToSelect_.sprite_->SetSize(Vector2{ goToSelect_.sprite_->GetTextureInitSize().x * 0.7f, goToSelect_.sprite_->GetTextureInitSize().y * 0.7f });
+
+	respawn_.Initialize(TextureManager::Load("Resources/TD2_November/gameOver/respawn.png", dxCommon_));
+	respawn_.position_ = { 960.0f, 550.0f };
+	respawn_.color_ = { 1.0f, 0.1f, 0.1f, 1.0f };
+	respawn_.Update();
+	respawn_.sprite_->SetSize(Vector2{ respawn_.sprite_->GetTextureInitSize().x * 0.7f, respawn_.sprite_->GetTextureInitSize().y * 0.7f });
+
+	Vector2 size = { 0.0f,0.0f };
+	float sizeMagnification = 0.5f;
+
+	// 操作説明スプライト
+	decisionOperation_.Initialize(TextureManager::Load("Resources/TD2_November/UI/decisionOperation.png", dxCommon_));
+	size = { decisionOperation_.sprite_->GetSize().x * sizeMagnification, decisionOperation_.sprite_->GetSize().y * sizeMagnification };
+	decisionOperation_.sprite_->SetSize(size);
+	decisionOperation_.position_ = { 240.0f + 60.0f + 100.0f, 650.0f };
+	decisionOperation_.Update();
+
+	moveOperation_.Initialize(TextureManager::Load("Resources/TD2_November/UI/moveOperation.png", dxCommon_));
+	size = { moveOperation_.sprite_->GetSize().x * sizeMagnification, moveOperation_.sprite_->GetSize().y * sizeMagnification };
+	moveOperation_.sprite_->SetSize(size);
+	moveOperation_.position_ = { 240.0f * 3.0f + 60.0f + 100.0f, 650.0f };
+	moveOperation_.Update();
+
+	decisionButton_.Initialize(TextureManager::Load("Resources/TD2_November/UI/buttonA.png", dxCommon_));
+	size = { decisionButton_.sprite_->GetSize().x * sizeMagnification, decisionButton_.sprite_->GetSize().y * sizeMagnification };
+	decisionButton_.sprite_->SetSize(size);
+	decisionButton_.position_ = { 240.0f + 60.0f, 650.0f };
+	decisionButton_.Update();
+
+	moveButton_.Initialize(TextureManager::Load("Resources/TD2_November/UI/stickL.png", dxCommon_));
+	size = { moveButton_.sprite_->GetSize().x * sizeMagnification, moveButton_.sprite_->GetSize().y * sizeMagnification };
+	moveButton_.sprite_->SetSize(size);
+	moveButton_.position_ = { 240.0f * 3.0f + 60.0f, 650.0f };
+	moveButton_.Update();
+
+
+
+	sizeMagnification = 0.1f;
+
+	respawnItem_.Initialize(TextureManager::Load("Resources/TD2_November/UI/emerald.png", dxCommon_));
+	size = { respawnItem_.sprite_->GetSize().x * sizeMagnification, respawnItem_.sprite_->GetSize().y * sizeMagnification };
+	respawnItem_.sprite_->SetSize(size);
+	respawnItem_.position_ = { 700.0f, 550.0f };
+	respawnItem_.Update();
+
+	sizeMagnification = 1.0f;
+
+	respawnTen_.Initialize(TextureManager::Load("Resources/TD2_November/UI/num.png", dxCommon_));
+	respawnTen_.sprite_->SetTextureSize(Vector2{ 64.0f, 64.0f });
+	respawnTen_.sprite_->SetTextureLeftTop(Vector2{ 64.0f * 2.0f,0.0f });
+	size = { respawnTen_.sprite_->GetSize().x * sizeMagnification * 0.1f, respawnTen_.sprite_->GetSize().y * sizeMagnification };
+	respawnTen_.sprite_->SetSize(size);
+	respawnTen_.position_ = { 700.0f - 20.0f, 550.0f };
+	respawnTen_.Update();
+
+	respawnOne_.Initialize(TextureManager::Load("Resources/TD2_November/UI/num.png", dxCommon_));
+	respawnOne_.sprite_->SetTextureSize(Vector2{ 64.0f, 64.0f });
+	respawnOne_.sprite_->SetTextureLeftTop(Vector2{ 0.0f,0.0f });
+	size = { respawnOne_.sprite_->GetSize().x * sizeMagnification * 0.1f, respawnOne_.sprite_->GetSize().y * sizeMagnification };
+	respawnOne_.sprite_->SetSize(size);
+	respawnOne_.position_ = { 700.0f + 20.0f, 550.0f };
+	respawnOne_.Update();
+
+	backGround_.Initialize(TextureManager::Load("Resources/TD2_November/gameOver/backGround.png", dxCommon_));
+	backGround_.position_ = { 640.0f, 360.0f };
+	backGround_.Update();
+	backGround_.sprite_->SetSize(Vector2{ 1280.0f,720.0f });
+
+	sizeMagnification = 0.2f;
+	haveRespawnItem_.Initialize(TextureManager::Load("Resources/TD2_November/UI/emerald.png", dxCommon_));
+	size = { haveRespawnItem_.sprite_->GetSize().x * sizeMagnification, haveRespawnItem_.sprite_->GetSize().y * sizeMagnification };
+	haveRespawnItem_.sprite_->SetSize(size);
+	haveRespawnItem_.position_ = { 640.0f, 360.0f };
+	haveRespawnItem_.Update();
+
+	sizeMagnification = 2.0f;
+	haveRespawnTen_.Initialize(TextureManager::Load("Resources/TD2_November/UI/num.png", dxCommon_));
+	haveRespawnTen_.sprite_->SetTextureSize(Vector2{ 64.0f, 64.0f });
+	haveRespawnTen_.sprite_->SetTextureLeftTop(Vector2{ sceneManager_->GetRespawnItem() / 10 * 64.0f,0.0f });
+	size = { haveRespawnTen_.sprite_->GetSize().x * sizeMagnification * 0.1f, haveRespawnTen_.sprite_->GetSize().y * sizeMagnification };
+	haveRespawnTen_.sprite_->SetSize(size);
+	haveRespawnTen_.position_ = { 640.0f - 40.0f, 360.0f };
+	haveRespawnTen_.Update();
+
+	haveRespawnOne_.Initialize(TextureManager::Load("Resources/TD2_November/UI/num.png", dxCommon_));
+	haveRespawnOne_.sprite_->SetTextureSize(Vector2{ 64.0f, 64.0f });
+	haveRespawnOne_.sprite_->SetTextureLeftTop(Vector2{ sceneManager_->GetRespawnItem() % 10 * 64.0f,0.0f });
+	size = { haveRespawnOne_.sprite_->GetSize().x * sizeMagnification * 0.1f, haveRespawnOne_.sprite_->GetSize().y * sizeMagnification };
+	haveRespawnOne_.sprite_->SetSize(size);
+	haveRespawnOne_.position_ = { 640.0f + 40.0f, 360.0f };
+	haveRespawnOne_.Update();
+
+
+	sizeMagnification = 0.7f;
+	getItem_.Initialize(TextureManager::Load("Resources/TD2_November/gameOver/getItem.png", dxCommon_));
+	size = { getItem_.sprite_->GetSize().x * sizeMagnification, getItem_.sprite_->GetSize().y * sizeMagnification };
+	getItem_.sprite_->SetSize(size);
+	getItem_.position_ = { 320.0f, 360.0f };
+	getItem_.Update();
+
+
 	if (respawnConditions <= sceneManager_->GetRespawnItem()) {
 		canRespawn = true;
-
-		goToSelect_.Initialize(TextureManager::Load("Resources/TD2_November/gameOver/goToSelect.png", dxCommon_));
-		goToSelect_.position_ = { 320.0f, 550.0f };
-		goToSelect_.color_ = { 1.0f, 1.0f, 1.0f, 1.0f };
-		goToSelect_.Update();
-		goToSelect_.sprite_->SetSize(Vector2{ goToSelect_.sprite_->GetTextureInitSize().x * 0.7f, goToSelect_.sprite_->GetTextureInitSize().y * 0.7f });
-
-		respawn_.Initialize(TextureManager::Load("Resources/TD2_November/gameOver/respawn.png", dxCommon_));
-		respawn_.position_ = { 960.0f, 550.0f };
-		respawn_.color_ = { 1.0f, 0.1f, 0.1f, 1.0f };
-		respawn_.Update();
-		respawn_.sprite_->SetSize(Vector2{ respawn_.sprite_->GetTextureInitSize().x * 0.7f, respawn_.sprite_->GetTextureInitSize().y * 0.7f });
-
-		Vector2 size = { 0.0f,0.0f };
-		float sizeMagnification = 0.5f;
-
-		// 操作説明スプライト
-		decisionOperation_.Initialize(TextureManager::Load("Resources/TD2_November/UI/decisionOperation.png", dxCommon_));
-		size = { decisionOperation_.sprite_->GetSize().x * sizeMagnification, decisionOperation_.sprite_->GetSize().y * sizeMagnification };
-		decisionOperation_.sprite_->SetSize(size);
-		decisionOperation_.position_ = { 240.0f + 60.0f + 100.0f, 650.0f };
-		decisionOperation_.Update();
-
-		moveOperation_.Initialize(TextureManager::Load("Resources/TD2_November/UI/moveOperation.png", dxCommon_));
-		size = { moveOperation_.sprite_->GetSize().x * sizeMagnification, moveOperation_.sprite_->GetSize().y * sizeMagnification };
-		moveOperation_.sprite_->SetSize(size);
-		moveOperation_.position_ = { 240.0f * 3.0f + 60.0f + 100.0f, 650.0f };
-		moveOperation_.Update();
-
-		decisionButton_.Initialize(TextureManager::Load("Resources/TD2_November/UI/buttonA.png", dxCommon_));
-		size = { decisionButton_.sprite_->GetSize().x * sizeMagnification, decisionButton_.sprite_->GetSize().y * sizeMagnification };
-		decisionButton_.sprite_->SetSize(size);
-		decisionButton_.position_ = { 240.0f + 60.0f, 650.0f };
-		decisionButton_.Update();
-
-		moveButton_.Initialize(TextureManager::Load("Resources/TD2_November/UI/stickL.png", dxCommon_));
-		size = { moveButton_.sprite_->GetSize().x * sizeMagnification, moveButton_.sprite_->GetSize().y * sizeMagnification };
-		moveButton_.sprite_->SetSize(size);
-		moveButton_.position_ = { 240.0f * 3.0f + 60.0f, 650.0f };
-		moveButton_.Update();
-
 		isRespawn_ = true;
-
 	}
 	else {
 		canRespawn = false;
-
-		goToSelect_.Initialize(TextureManager::Load("Resources/TD2_November/gameOver/goToSelect.png", dxCommon_));
-		goToSelect_.position_ = { 640.0f, 550.0f };
-		goToSelect_.color_ = { 1.0f, 0.1f, 0.1f, 1.0f };
-		goToSelect_.Update();
-		goToSelect_.sprite_->SetSize(Vector2{ goToSelect_.sprite_->GetTextureInitSize().x * 0.7f, goToSelect_.sprite_->GetTextureInitSize().y * 0.7f });
-
-
-		Vector2 size = { 0.0f,0.0f };
-		float sizeMagnification = 0.5f;
-
-		// 操作説明スプライト
-		decisionOperation_.Initialize(TextureManager::Load("Resources/TD2_November/UI/decisionOperation.png", dxCommon_));
-		size = { decisionOperation_.sprite_->GetSize().x * sizeMagnification, decisionOperation_.sprite_->GetSize().y * sizeMagnification };
-		decisionOperation_.sprite_->SetSize(size);
-		decisionOperation_.position_ = { 640.0f + 60.0f, 650.0f };
-		decisionOperation_.Update();
-
-		decisionButton_.Initialize(TextureManager::Load("Resources/TD2_November/UI/buttonA.png", dxCommon_));
-		size = { decisionButton_.sprite_->GetSize().x * sizeMagnification, decisionButton_.sprite_->GetSize().y * sizeMagnification };
-		decisionButton_.sprite_->SetSize(size);
-		decisionButton_.position_ = { 640.0f - 60.0f, 650.0f };
-		decisionButton_.Update();
-
 		isRespawn_ = false;
 
-	}
+		respawn_.color_ = { 0.1f, 0.1f, 0.1f, 1.0f };
+		respawn_.Update();
 
-	backGround_.Initialize(TextureManager::Load("Resources/TD2_November/gameOver/backGround.png", dxCommon_));
-	backGround_.position_ = { 640.0f, 360.0f};
-	backGround_.Update();
-	backGround_.sprite_->SetSize(Vector2{ 1280.0f,720.0f });
+		goToSelect_.color_ = { 1.0f, 0.1f, 0.1f, 1.0f };
+		goToSelect_.Update();
+
+	}
 
 }
 
@@ -142,17 +183,24 @@ void GameOverScene::Draw()
 
 	//背景
 	//前景スプライト描画
-	if (canRespawn) {
-		respawn_.sprite_->Draw();
+	respawnItem_.sprite_->Draw();
+	respawnTen_.sprite_->Draw();
+	respawnOne_.sprite_->Draw();
+	respawn_.sprite_->Draw();
 
-		// 操作説明スプライト
-		moveOperation_.sprite_->Draw();
-		moveButton_.sprite_->Draw();
-	}
+	// 操作説明スプライト
+	moveOperation_.sprite_->Draw();
+	moveButton_.sprite_->Draw();
 
 	goToSelect_.sprite_->Draw();
 	decisionOperation_.sprite_->Draw();
 	decisionButton_.sprite_->Draw();
+
+	haveRespawnItem_.sprite_->Draw();
+	haveRespawnTen_.sprite_->Draw();
+	haveRespawnOne_.sprite_->Draw();
+
+	getItem_.sprite_->Draw();
 
 	// 前景スプライト描画後処理
 	Sprite::PostDraw();
