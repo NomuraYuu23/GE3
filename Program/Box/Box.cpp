@@ -2,7 +2,8 @@
 #include <cmath>
 #include"../../externals/imgui/imgui.h"
 
-void Box::Initialize(Model* model, Material* material, TransformStructure transform_, Vector3 pos, bool isMoving, bool isVertical){
+void Box::Initialize(Model* model, Material* material, TransformStructure transform_,
+	Vector3 pos, bool isMoving, bool isVertical, Vector3 moveLength){
 	// nullポインタチェック
 	assert(model);
 
@@ -30,6 +31,8 @@ void Box::Initialize(Model* model, Material* material, TransformStructure transf
 
 	isVertical_ = isVertical;
 
+	baseMoveLength_ = moveLength;
+
 	moveTimer_ = 0.0f;
 
 	Vector3 colliderMax_ = { position_.x + size_.x, position_.y + size_.y, position_.z + size_.z };
@@ -39,14 +42,8 @@ void Box::Initialize(Model* model, Material* material, TransformStructure transf
 }
 
 void Box::Update(){
-	if (isMoving_) {
-		if (isVertical_) {
-			verticalMove();
-		}
-		else {
-			Move();
-		}
-		
+	if (isMoving_) {		
+		Move();		
 	}
 	Vector3 WorldPosition = { drawWorldTransform_.worldMatrix_.m[3][0] , drawWorldTransform_.worldMatrix_.m[3][1] , drawWorldTransform_.worldMatrix_.m[3][2] };
 	size_ = { drawWorldTransform_.transform_.scale.x + 0.1f,drawWorldTransform_.transform_.scale.y + 0.1f,drawWorldTransform_.transform_.scale.z + 0.1f, };
@@ -67,7 +64,7 @@ void Box::Move(){
 	Matrix4x4Calc* m4Calc = Matrix4x4Calc::GetInstance();
 	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
 
-	Vector3 position = { 20.0f, 0.0f,0.0f };
+	Vector3 position = baseMoveLength_;
 	moveTimer_ += 0.02f;
 	if (moveTimer_ >= 6.28f) {
 		moveTimer_ = 0.0f;
@@ -123,8 +120,10 @@ void Box::DrawImgui(){
 	
 	ImGui::DragFloat3("箱の回転", &drawWorldTransform_.transform_.rotate.x, 0.1f);
 	ImGui::DragFloat3("箱の大きさ", &drawWorldTransform_.transform_.scale.x, 0.1f, 0.0f, 300.0f);
+	if (isMoving_){
+		ImGui::DragFloat3("どのくらい移動させるか", &baseMoveLength_.x, 0.1f, 0.0f, 50.0f);
+	}
 	ImGui::Checkbox("動くかどうか", &isMoving_);
-	ImGui::Checkbox("縦移動させるか", &isVertical_);
 	if (ImGui::Button("このオブジェを削除")) {
 		isDelete_ = true;
 	}

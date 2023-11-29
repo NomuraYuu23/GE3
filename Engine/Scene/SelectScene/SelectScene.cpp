@@ -37,12 +37,7 @@ void SelectScene::Update()
 	if (input_->TriggerJoystick(0)) {
 		SelectDecision();
 	}
-	ImGui::Begin("今のサイズ");
-	for (int i = 0; i < selectionSquareMax_; i++) {
-		ImGui::DragFloat2((std::to_string(i + 1) + "個目の大きさ").c_str(), &nowSize_[i].x, 0.1f);
-	}
-
-	ImGui::End();
+	
 }
 
 void SelectScene::Draw()
