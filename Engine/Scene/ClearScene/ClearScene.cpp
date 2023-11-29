@@ -21,12 +21,17 @@ void ClearScene::Initialize()
 }
 
 void ClearScene::Update(){
+	if (end_) {
+		return;
+	}
+
 	if (input_->GetJoystickConnected()) {
 
 		if (input_->TriggerKey(DIK_SPACE) || input_->TriggerJoystick(0)) {
 			// 行きたいシーンへ
 			requestSeneNo = kSelect;
 			Audio::GetInstance()->PlayWave(Audio::AudioHandleIndex::kTitleButton, false, 0.2f);
+			end_ = true;
 		}
 	}
 

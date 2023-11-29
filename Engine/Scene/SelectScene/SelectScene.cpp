@@ -21,6 +21,9 @@ void SelectScene::Initialize()
 
 void SelectScene::Update()
 {
+	if (end_) {
+		return;
+	}
 
 	BackGroundUpdate();
 
@@ -32,12 +35,14 @@ void SelectScene::Update()
 	if (input_->TriggerJoystick(1)) {
 		Audio::GetInstance()->PlayWave(Audio::AudioHandleIndex::kTitleButton, false, 0.2f);
 		SelectReturn();
+		end_ = true;
 	}
 
 	// ゲームへ
 	if (input_->TriggerJoystick(0)) {
 		Audio::GetInstance()->PlayWave(Audio::AudioHandleIndex::kTitleButton, false, 0.2f);
 		SelectDecision();
+		end_ = true;
 	}
 	
 }

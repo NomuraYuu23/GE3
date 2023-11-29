@@ -42,15 +42,20 @@ void TitleScene::Initialize()
 void TitleScene::Update()
 {
 
+	if (startAnimationVariables_.isAnimation_) {
+		StartAnimation();
+	}
+
+	if (end_) {
+		return;
+	}
+
 	if ((input_->TriggerKey(DIK_SPACE) || input_->TriggerJoystick(0)) && !startAnimationVariables_.isAnimation_) {
 		// 行きたいシーンへ
 		requestSeneNo = kSelect;
 		startAnimationVariables_.isAnimation_ = true;
 		Audio::GetInstance()->PlayWave(Audio::AudioHandleIndex::kTitleButton, false, 0.2f);
-	}
-
-	if (startAnimationVariables_.isAnimation_) {
-		StartAnimation();
+		end_ = true;
 	}
 
 	playerWorldTransform_.transform_.rotate.y += 0.01f;

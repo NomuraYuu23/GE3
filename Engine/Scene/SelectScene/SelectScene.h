@@ -102,5 +102,7 @@ private: // メンバ変数
 	// 選択クールタイム
 	float selectElapsedCooltime_ = 0.0f;
 
+	bool end_ = false;
+
 };
 

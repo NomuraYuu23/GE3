@@ -55,4 +55,6 @@ private:
 	// アニメーションピリオド
 	uint32_t animationPeriod_ = 60;
 
+	bool end_ = false;
+
 };

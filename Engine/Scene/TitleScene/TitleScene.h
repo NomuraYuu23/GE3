@@ -88,5 +88,8 @@ private: // メンバ変数
 	std::unique_ptr<Model> playerModel_ = nullptr;
 	std::unique_ptr<Material> playerMaterial_ = nullptr;
 
+
+	bool end_ = false;
+
 };
 
