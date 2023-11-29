@@ -245,6 +245,7 @@ void GameScene::Update() {
 	if (player_->GetExprosionNumInt() < 0) {
 		requestSeneNo = kGameOver;
 		sceneManager_->SetRespawnPosition(player_->GetInitialPosition());
+		sceneManager_->SetRespawnItem(player_->GetNumCollectItem());
 	}
 
 	// タイトルへ行く

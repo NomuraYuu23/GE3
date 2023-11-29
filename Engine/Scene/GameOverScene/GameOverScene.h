@@ -45,6 +45,8 @@ private:
 
 	void Decision();
 
+	void Animation();
+
 private: // メンバ変数
 
 	UIData backGround_;
@@ -53,13 +55,37 @@ private: // メンバ変数
 
 	UIData respawn_;
 
-	bool isRespawn_ = true;
+	// 操作説明スプライト
+	UIData decisionOperation_;
+	UIData moveOperation_;
+
+	UIData decisionButton_;
+	UIData moveButton_;
+
+	bool isRespawn_ = false;
 	
 	// 選択クールタイム
 	float selectCooltime_ = 0.3f;
 
 	// 選択クールタイム
 	float selectElapsedCooltime_ = 0.0f;
+
+	// リスポーンの必要数
+	uint32_t respawnConditions = 20;
+
+	// リスポーンできるか
+	bool canRespawn = false;
+
+	// アニメーションパラメータ
+	float animationParameter_ = 0.0f;
+
+	// アニメーションピリオド
+	uint32_t period_ = 60;
+
+	float goToSelectPositionY_ = 0.0f;
+	float respawnPositionY_ = 0.0f;
+
+	bool isDecided_ = false;
 
 };
 

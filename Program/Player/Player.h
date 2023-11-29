@@ -333,6 +333,8 @@ public: // アクセッサ
 
 	void SetInitialPosition(const Vector3& kInitialPosition) { workRoot_.kInitialPosition = kInitialPosition; }
 
+	uint32_t GetNumCollectItem() { return numCollectItem; }
+
 private:
 	//全てのオブジェのUpdateMatrixをまとめたもの
 	void allUpdateMatrix();

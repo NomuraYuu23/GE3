@@ -63,10 +63,6 @@ void SceneManager::Update()
 			scene_.reset(sceneFacyory_->CreateScene(currentSceneNo_));
 			scene_->Initialize();
 			sceneTransition_->SetSwitchScene(false);
-			
-			if (currentSceneNo_ == kSelect) {
-				
-			}
 			if (currentSceneNo_ == kGame) {
 				static_cast<GameScene*>(scene_->GetInstance())->LoadStage(stageNum_);
 			}
