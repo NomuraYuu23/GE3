@@ -180,7 +180,7 @@ void GameScene::Initialize() {
 	ui = std::make_unique<UI>();
 	ui->Initialize(uiTextureHandles_);
 	ui->SetPlayer(player_.get());
-	FilesLoad(stageName_);
+	//FilesLoad(stageName_);
 
 	// スカイドーム
 	skydome_ = std::make_unique<Skydome>();
@@ -547,7 +547,7 @@ void GameScene::LoadStage(uint32_t stageIndex)
 
 	stageName_ = stages_[stageIndex].c_str();
 
-	FilesLoad(stages_, stageName_);
+	FilesLoad(stageName_);
 
 }
 
