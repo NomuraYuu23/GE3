@@ -1,11 +1,7 @@
 #pragma once
 #include "../IScene/IScene.h"
 #include "../../Collider/ColliderDebugDraw/ColliderDebugDraw.h"// コライダーデバッグ描画
-
-#include"../../../Program/FloorManager/FloorManager.h"
-#include"../../../Program/Player/Player.h"
 #include"../../../Program/CollisionManager/CollisionManager.h"
-#include"../../../Engine/Camera/FollowCamera/FollowCamera.h"
 #include "../../Pause/Pause.h"
 
 class GameScene : public IScene

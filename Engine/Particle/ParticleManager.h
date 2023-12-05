@@ -8,6 +8,7 @@
 #include <memory>
 #include <array>
 #include "ParticleForGPU.h"
+#include "../../Program/Particle/ParticleModelIndex.h"
 
 class Model;
 
@@ -15,12 +16,6 @@ class ParticleManager
 {
 
 public: // サブクラス
-
-	enum ParticleModel {
-		kUvChecker,
-		kCircle,
-		kCountofParticleModel
-	};
 
 	struct StartInstanceId {
 		uint32_t num;
@@ -89,7 +84,7 @@ public: // メンバ関数
 	/// <summary>
 	/// モデル作成
 	/// </summary>
-	void ModelCreate(std::array<Model*, kCountofParticleModel> model);
+	void ModelCreate(std::array<Model*, kCountofParticleModelIndex> model);
 
 	/// <summary>
 	/// ビルボード更新
@@ -158,7 +153,7 @@ private: // メンバ変数
 	D3D12_GPU_DESCRIPTOR_HANDLE instancingSrvHandleGPU_;
 
 	// パーティクル
-	std::array<ParticleData, kCountofParticleModel> particleDatas_;
+	std::array<ParticleData, kCountofParticleModelIndex> particleDatas_;
 
 	// ビルボード
 	Matrix4x4 billBoardMatrix_;

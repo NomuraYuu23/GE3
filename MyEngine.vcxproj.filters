@@ -117,28 +117,10 @@
     <ClCompile Include="Program\BaseCharacter\BaseCharacter.cpp">
       <Filter>AL\ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\Floor\Floor.cpp">
-      <Filter>AL\ソースファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Camera\FollowCamera\FollowCamera.cpp">
-      <Filter>AL\ソースファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Program\Player\Player.cpp">
-      <Filter>AL\ソースファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Program\Skydome\Skydome.cpp">
       <Filter>AL\ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\FloorManager\FloorManager.cpp">
-      <Filter>AL\ソースファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Program\CollisionManager\CollisionManager.cpp">
-      <Filter>AL\ソースファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Program\Goal\Goal.cpp">
-      <Filter>AL\ソースファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Program\Enemy\Enemy.cpp">
       <Filter>AL\ソースファイル</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Collider\Collider.cpp">
@@ -329,28 +311,10 @@
     <ClInclude Include="Program\BaseCharacter\BaseCharacter.h">
       <Filter>AL\ヘッダーファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Program\Floor\Floor.h">
-      <Filter>AL\ヘッダーファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Camera\FollowCamera\FollowCamera.h">
-      <Filter>AL\ヘッダーファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Program\Player\Player.h">
-      <Filter>AL\ヘッダーファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Program\Skydome\Skydome.h">
       <Filter>AL\ヘッダーファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Program\FloorManager\FloorManager.h">
-      <Filter>AL\ヘッダーファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Program\CollisionManager\CollisionManager.h">
-      <Filter>AL\ヘッダーファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Program\Goal\Goal.h">
-      <Filter>AL\ヘッダーファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Program\Enemy\Enemy.h">
       <Filter>AL\ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Collider\Collider.h">
@@ -447,6 +411,12 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Engine\SceneTransition\SceneTransitionBlackOut\SceneTransitionBlackOut.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\Particle\ParticleModelIndex.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\Particle\ParticleName.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

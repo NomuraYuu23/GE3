@@ -4,7 +4,7 @@
 #include "../3D/Model.h"
 #include "../Math/DeltaTime.h"
 
-uint32_t ParticleManager::kNumInstanceMax_ = 4096;
+uint32_t ParticleManager::kNumInstanceMax_ = 32768;
 
 ParticleManager* ParticleManager::GetInstance()
 {
@@ -77,7 +77,7 @@ void ParticleManager::Update(const Matrix4x4& cameraMatrix4x4)
 void ParticleManager::Draw()
 {
 
-	for (uint32_t i = 0; i < kCountofParticleModel; i++) {
+	for (uint32_t i = 0; i < kCountofParticleModelIndex; i++) {
 		currentModel_ = i;
 		particleDatas_[i].model_->ParticleDraw();
 	}
@@ -89,7 +89,7 @@ void ParticleManager::Map(const ViewProjection& viewProjection)
 
 	uint32_t instanceIndex = 0u;
 
-	for (uint32_t i = 0; i < kCountofParticleModel; i++) {
+	for (uint32_t i = 0; i < kCountofParticleModelIndex; i++) {
 		particleDatas_[i].startInstanceIdMap_->num = instanceIndex;
 		std::list<Particle*>::iterator itr = particleDatas_[i].particles_.begin();
 		for (; itr != particleDatas_[i].particles_.end(); ++itr) {
@@ -103,7 +103,7 @@ void ParticleManager::Map(const ViewProjection& viewProjection)
 
 void ParticleManager::Finalize()
 {
-	for (uint32_t i = 0; i < kCountofParticleModel; i++) {
+	for (uint32_t i = 0; i < kCountofParticleModelIndex; i++) {
 		particleDatas_[i].particles_.remove_if([](Particle* particle) {
 			delete particle;
 			return true;
@@ -116,10 +116,10 @@ void ParticleManager::Finalize()
 
 }
 
-void ParticleManager::ModelCreate(std::array<Model*, kCountofParticleModel> model)
+void ParticleManager::ModelCreate(std::array<Model*, kCountofParticleModelIndex> model)
 {
 
-	for (uint32_t i = 0; i < kCountofParticleModel; i++) {
+	for (uint32_t i = 0; i < kCountofParticleModelIndex; i++) {
 		particleDatas_[i].model_ = model[i];
 	}
 
@@ -172,7 +172,7 @@ void ParticleManager::AddParticles(std::list<Particle*> particles, uint32_t part
 void ParticleManager::ParticlesUpdate()
 {
 
-	for (uint32_t i = 0; i < kCountofParticleModel; i++) {
+	for (uint32_t i = 0; i < kCountofParticleModelIndex; i++) {
 		for (Particle* particle : particleDatas_[i].particles_) {
 			particle->Update(billBoardMatrix_);
 		}
@@ -182,7 +182,7 @@ void ParticleManager::ParticlesUpdate()
 void ParticleManager::DeadDelete()
 {
 	
-	for (uint32_t i = 0; i < kCountofParticleModel; i++) {
+	for (uint32_t i = 0; i < kCountofParticleModelIndex; i++) {
 		particleDatas_[i].particles_.remove_if([=](Particle* particle) {
 			if (particle->IsDead()) {
 				delete particle;

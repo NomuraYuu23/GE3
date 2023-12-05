@@ -60,8 +60,8 @@ protected:
 	// モデルネーム
 	uint32_t particleModelNum_;
 
-	//
-	PaeticleName paeticleName_;
+	// パーティクルネーム
+	uint32_t paeticleName_;
 
 };
 

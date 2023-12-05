@@ -25,7 +25,7 @@ void Emitter::Initialize(const TransformStructure& transform, uint32_t instanceC
 
 	particleModelNum_ = particleModelNum;
 	
-	paeticleName_ = static_cast<PaeticleName>(paeticleName);
+	paeticleName_ = paeticleName;
 
 }
 

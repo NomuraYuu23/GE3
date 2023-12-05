@@ -8,15 +8,7 @@
 #include "../3D/ViewProjection.h"
 #include "../Math/Vector4.h"
 #include "ParticleForGPU.h"
-
-enum PaeticleName {
-	kDefault,
-	kPlayerWalk, // プレイヤーが歩くとき
-	kPlayerJump, // プレイヤー飛ぶとき
-	kPlayerExplosion, // プレイヤーが爆発するとき
-	kSmoke, // 狼煙
-	kCountOfPaeticleName,
-};
+#include "../../Program/Particle/ParticleName.h"
 
 class Particle
 {
