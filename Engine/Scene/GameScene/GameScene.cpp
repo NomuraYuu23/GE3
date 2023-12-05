@@ -33,9 +33,9 @@ void GameScene::Initialize() {
 	particleModel[ParticleModelIndex::kCircle] = particleCircleModel_.get();
 	particleManager_->ModelCreate(particleModel);
 	TransformStructure emitter = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{-3.0f,0.0f,0.0f} };
-	particleManager_->EmitterCreate(emitter, 3, 0.5f, 300.0f, ParticleModelIndex::kUvChecker, 0);
+	particleManager_->MakeEmitter(emitter, 3, 0.5f, 300.0f, ParticleModelIndex::kUvChecker, 0, 0);
 	emitter.translate.x = 3.0f;
-	particleManager_->EmitterCreate(emitter, 3, 0.5f, 300.0f, ParticleModelIndex::kCircle, 0);
+	particleManager_->MakeEmitter(emitter, 3, 0.5f, 300.0f, ParticleModelIndex::kCircle, 0, 0);
 
 	isDebugCameraActive_ = true;
 

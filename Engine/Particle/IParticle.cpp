@@ -1,4 +1,4 @@
-#include "Particle.h"
+#include "IParticle.h"
 #include "../base/BufferResource.h"
 #include "../base/WinApp.h"
 #include "../base/DirectXCommon.h"
@@ -8,9 +8,9 @@
 #include <random>
 #include "../Math/DeltaTime.h"
 
-Particle::~Particle(){}
+IParticle::~IParticle(){}
 
-void Particle::Initialize(const Vector3& position, const Vector3& size)
+void IParticle::Initialize(const Vector3& position, const Vector3& size)
 {
 
 	Vector3Calc* vector3Calc = Vector3Calc::GetInstance();
@@ -50,7 +50,7 @@ void Particle::Initialize(const Vector3& position, const Vector3& size)
 
 }
 
-void Particle::Update(const Matrix4x4& billBoardMatrix)
+void IParticle::Update(const Matrix4x4& billBoardMatrix)
 {
 	if (lifeTime_ <= currentTime_) {
 		isDead_ = true;
@@ -61,7 +61,7 @@ void Particle::Update(const Matrix4x4& billBoardMatrix)
 
 }
 
-void Particle::UpdateMatrix(const Matrix4x4& billBoardMatrix)
+void IParticle::UpdateMatrix(const Matrix4x4& billBoardMatrix)
 {
 
 	Matrix4x4Calc* matrix4x4Calc = Matrix4x4Calc::GetInstance();
@@ -76,7 +76,7 @@ void Particle::UpdateMatrix(const Matrix4x4& billBoardMatrix)
 	}
 }
 
-ParticleForGPU Particle::Map(const ViewProjection& viewProjection)
+ParticleForGPU IParticle::Map(const ViewProjection& viewProjection)
 {
 
 	Matrix4x4Calc* matrix4x4Calc = Matrix4x4Calc::GetInstance();
@@ -91,7 +91,7 @@ ParticleForGPU Particle::Map(const ViewProjection& viewProjection)
 
 }
 
-void Particle::TimeElapsed()
+void IParticle::TimeElapsed()
 {
 
 	currentTime_ += kDeltaTime_;
@@ -101,7 +101,7 @@ void Particle::TimeElapsed()
 
 }
 
-void Particle::GraduallyDisappear()
+void IParticle::GraduallyDisappear()
 {
 
 	color_.w = 1.0f - (currentTime_ / lifeTime_);

@@ -93,8 +93,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2D\ImGuiManager.cpp" />
-    <ClCompile Include="Engine\Particle\Emitter.cpp" />
-    <ClCompile Include="Engine\Particle\Particle.cpp" />
+    <ClCompile Include="Engine\Particle\IEmitter.cpp" />
+    <ClCompile Include="Engine\Particle\IParticle.cpp" />
     <ClCompile Include="Engine\Particle\ParticleManager.cpp" />
     <ClCompile Include="Engine\Audio\Audio.cpp" />
     <ClCompile Include="Engine\base\BufferResource.cpp" />
@@ -132,6 +132,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Math\Matrix4x4.cpp" />
     <ClCompile Include="Engine\3D\Model.cpp" />
     <ClCompile Include="Engine\base\GraphicsPipelineState.cpp" />
+    <ClCompile Include="Program\Particle\MakeEmitter.cpp" />
     <ClCompile Include="Program\Particle\MakeParticle.cpp" />
     <ClCompile Include="Program\BaseCharacter\BaseCharacter.cpp" />
     <ClCompile Include="Engine\Collider\AABB\AABB.cpp" />
@@ -152,8 +153,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2D\ImGuiManager.h" />
-    <ClInclude Include="Engine\Particle\Emitter.h" />
-    <ClInclude Include="Engine\Particle\Particle.h" />
+    <ClInclude Include="Engine\Particle\IEmitter.h" />
+    <ClInclude Include="Engine\Particle\IParticle.h" />
     <ClInclude Include="Engine\Particle\ParticleForGPU.h" />
     <ClInclude Include="Engine\Particle\ParticleManager.h" />
     <ClInclude Include="Engine\Audio\Audio.h" />
@@ -197,6 +198,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\base\GraphicsPipelineState.h" />
     <ClInclude Include="Engine\Scene\IScene\IScene.h" />
     <ClInclude Include="Engine\Framework\MyFramework.h" />
+    <ClInclude Include="Program\Particle\EmitterName.h" />
+    <ClInclude Include="Program\Particle\MakeEmitter.h" />
     <ClInclude Include="Program\Particle\MakeParticle.h" />
     <ClInclude Include="Program\BaseCharacter\BaseCharacter.h" />
     <ClInclude Include="Engine\Collider\AABB\AABB.h" />

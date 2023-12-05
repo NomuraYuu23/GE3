@@ -1,9 +1,9 @@
 #pragma once
 #include "../3D/TransformStructure.h"
-#include "Particle.h"
+#include "IParticle.h"
 #include <list>
 
-class Emitter
+class IEmitter
 {
 
 public:
@@ -19,7 +19,7 @@ public:
 	/// </summary>
 	void Update();
 
-	std::list<Particle*> Emit();
+	std::list<IParticle*> Emit();
 
 public: // アクセッサ
 

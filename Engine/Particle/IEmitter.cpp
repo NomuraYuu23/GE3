@@ -1,8 +1,8 @@
-#include "Emitter.h"
+#include "IEmitter.h"
 #include "../Math/DeltaTime.h"
 #include "../../Program/Particle/MakeParticle.h"
 
-void Emitter::Initialize(const TransformStructure& transform, uint32_t instanceCount,
+void IEmitter::Initialize(const TransformStructure& transform, uint32_t instanceCount,
 	float frequency, float lifeTime, uint32_t particleModelNum, uint32_t paeticleName)
 {
 
@@ -29,7 +29,7 @@ void Emitter::Initialize(const TransformStructure& transform, uint32_t instanceC
 
 }
 
-void Emitter::Update()
+void IEmitter::Update()
 {
 
 	frequencyTime_ += kDeltaTime_;
@@ -44,10 +44,10 @@ void Emitter::Update()
 
 }
 
-std::list<Particle*> Emitter::Emit()
+std::list<IParticle*> IEmitter::Emit()
 {
 
-	std::list<Particle*> particles;
+	std::list<IParticle*> particles;
 	MakeParticle* makeParticle = MakeParticle::GetInstance();
 
 	for (uint32_t count = 0; count < instanceCount_; ++count) {

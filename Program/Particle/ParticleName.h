@@ -1,6 +1,6 @@
 #pragma once
 
 enum ParticleName {
-	kDefault,
-	kCountOfPaeticleName,
+	kDefaultParticle,
+	kCountOfParticleName,
 };

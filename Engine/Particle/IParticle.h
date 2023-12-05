@@ -10,7 +10,7 @@
 #include "ParticleForGPU.h"
 #include "../../Program/Particle/ParticleName.h"
 
-class Particle
+class IParticle
 {
 
 public: // サブクラス
@@ -20,7 +20,7 @@ public:
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	virtual ~Particle();
+	virtual ~IParticle();
 
 	/// <summary>
 	/// 初期化
