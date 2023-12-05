@@ -1,5 +1,5 @@
 #pragma once
-#include "AbstractSceneTransitionFactory.h"
+#include "../../../Engine/SceneTransition/SceneTransitionFactory/AbstractSceneTransitionFactory.h"
 
 class SceneTransitionFactory : public AbstractSceneTransitionFactory{
 

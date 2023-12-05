@@ -1,5 +1,5 @@
 #include "SceneTransitionFactory.h"
-#include "../../Scene/IScene/IScene.h"
+#include "../../../Engine/Scene/IScene/IScene.h"
 #include "../SceneTransitionBlackOut/SceneTransitionBlackOut.h"
 
 SceneTransitionFactory* SceneTransitionFactory::GetInstance()

@@ -1,7 +1,7 @@
 #include "SceneTransitionBlackOut.h"
-#include "../../base/TextureManager.h"
-#include "../../base/DirectXCommon.h"
-#include "../../base/WinApp.h"
+#include "../../../Engine/base/TextureManager.h"
+#include "../../../Engine/base/DirectXCommon.h"
+#include "../../../Engine/base/WinApp.h"
 
 void SceneTransitionBlackOut::Initialize()
 {

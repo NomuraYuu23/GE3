@@ -3,7 +3,7 @@
 #include "../IScene/IScene.h"
 #include "../../../Application/Scene/SceneFactory/SceneFactory.h"
 #include "../../SceneTransition/ISceneTransition/ISceneTransition.h"
-#include "../../SceneTransition/SceneTransitionFactory/SceneTransitionFactory.h"
+#include "../../../Application/SceneTransition/SceneTransitionFactory/SceneTransitionFactory.h"
 
 /// <summary>
 /// シーンマネージャー

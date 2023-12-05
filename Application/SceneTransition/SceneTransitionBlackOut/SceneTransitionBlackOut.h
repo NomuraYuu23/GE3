@@ -1,7 +1,7 @@
 #pragma once
-#include "../ISceneTransition/ISceneTransition.h"
+#include "../../../Engine/SceneTransition/ISceneTransition/ISceneTransition.h"
 #include <memory>
-#include "../../2D/Sprite.h"
+#include "../../../Engine/2D/Sprite.h"
 
 class SceneTransitionBlackOut : public ISceneTransition{
 

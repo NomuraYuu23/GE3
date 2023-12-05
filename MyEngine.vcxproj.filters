@@ -195,10 +195,10 @@
     <ClCompile Include="Engine\SceneTransition\ISceneTransition\ISceneTransition.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\SceneTransition\SceneTransitionFactory\SceneTransitionFactory.cpp">
+    <ClCompile Include="Application\SceneTransition\SceneTransitionFactory\SceneTransitionFactory.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\SceneTransition\SceneTransitionBlackOut\SceneTransitionBlackOut.cpp">
+    <ClCompile Include="Application\SceneTransition\SceneTransitionBlackOut\SceneTransitionBlackOut.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Application\Particle\MakeParticle.cpp">
@@ -407,10 +407,10 @@
     <ClInclude Include="Engine\SceneTransition\SceneTransitionFactory\AbstractSceneTransitionFactory.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\SceneTransition\SceneTransitionFactory\SceneTransitionFactory.h">
+    <ClInclude Include="Application\SceneTransition\SceneTransitionFactory\SceneTransitionFactory.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\SceneTransition\SceneTransitionBlackOut\SceneTransitionBlackOut.h">
+    <ClInclude Include="Application\SceneTransition\SceneTransitionBlackOut\SceneTransitionBlackOut.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Application\Particle\ParticleModelIndex.h">

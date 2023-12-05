@@ -111,8 +111,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Math\Math.cpp" />
     <ClCompile Include="Application\Pause\Pause.cpp" />
     <ClCompile Include="Engine\SceneTransition\ISceneTransition\ISceneTransition.cpp" />
-    <ClCompile Include="Engine\SceneTransition\SceneTransitionBlackOut\SceneTransitionBlackOut.cpp" />
-    <ClCompile Include="Engine\SceneTransition\SceneTransitionFactory\SceneTransitionFactory.cpp" />
+    <ClCompile Include="Application\SceneTransition\SceneTransitionBlackOut\SceneTransitionBlackOut.cpp" />
+    <ClCompile Include="Application\SceneTransition\SceneTransitionFactory\SceneTransitionFactory.cpp" />
     <ClCompile Include="Application\Scene\ClearScene\ClearScene.cpp" />
     <ClCompile Include="Application\Scene\SceneFactory\SceneFactory.cpp" />
     <ClCompile Include="Engine\Scene\SceneManager\SceneManager.cpp" />
@@ -175,10 +175,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Math\Ease.h" />
     <ClInclude Include="Engine\Math\Math.h" />
     <ClInclude Include="Application\Pause\Pause.h" />
-    <ClInclude Include="Engine\SceneTransition\SceneTransitionBlackOut\SceneTransitionBlackOut.h" />
+    <ClInclude Include="Application\SceneTransition\SceneTransitionBlackOut\SceneTransitionBlackOut.h" />
     <ClInclude Include="Engine\SceneTransition\SceneTransitionFactory\AbstractSceneTransitionFactory.h" />
     <ClInclude Include="Engine\SceneTransition\ISceneTransition\ISceneTransition.h" />
-    <ClInclude Include="Engine\SceneTransition\SceneTransitionFactory\SceneTransitionFactory.h" />
+    <ClInclude Include="Application\SceneTransition\SceneTransitionFactory\SceneTransitionFactory.h" />
     <ClInclude Include="Application\Scene\ClearScene\ClearScene.h" />
     <ClInclude Include="Engine\Scene\SceneFactory\AbstractSceneFactory.h" />
     <ClInclude Include="Application\Scene\SceneFactory\SceneFactory.h" />
