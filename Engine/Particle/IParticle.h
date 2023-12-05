@@ -8,7 +8,7 @@
 #include "../3D/ViewProjection.h"
 #include "../Math/Vector4.h"
 #include "ParticleForGPU.h"
-#include "../../Program/Particle/ParticleName.h"
+#include "../../Application/Particle/ParticleName.h"
 
 class IParticle
 {

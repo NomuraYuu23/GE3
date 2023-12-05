@@ -8,7 +8,7 @@
 #include <memory>
 #include <array>
 #include "ParticleForGPU.h"
-#include "../../Program/Particle/ParticleModelIndex.h"
+#include "../../Application/Particle/ParticleModelIndex.h"
 
 class Model;
 

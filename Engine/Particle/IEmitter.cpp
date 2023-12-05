@@ -1,6 +1,6 @@
 #include "IEmitter.h"
 #include "../Math/DeltaTime.h"
-#include "../../Program/Particle/MakeParticle.h"
+#include "../../Application/Particle/MakeParticle.h"
 
 void IEmitter::Initialize(const TransformStructure& transform, uint32_t instanceCount,
 	float frequency, float lifeTime, uint32_t particleModelNum, uint32_t paeticleName)

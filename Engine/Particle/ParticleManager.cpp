@@ -3,7 +3,7 @@
 #include "../base/TextureManager.h"
 #include "../3D/Model.h"
 #include "../Math/DeltaTime.h"
-#include "../../Program/Particle/MakeEmitter.h"
+#include "../../Application/Particle/MakeEmitter.h"
 
 uint32_t ParticleManager::kNumInstanceMax_ = 32768;
 

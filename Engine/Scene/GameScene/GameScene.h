@@ -1,8 +1,8 @@
 #pragma once
 #include "../IScene/IScene.h"
 #include "../../Collider/ColliderDebugDraw/ColliderDebugDraw.h"// コライダーデバッグ描画
-#include"../../../Program/CollisionManager/CollisionManager.h"
-#include "../../Pause/Pause.h"
+#include"../../../Application/CollisionManager/CollisionManager.h"
+#include "../../../Application/Pause/Pause.h"
 
 class GameScene : public IScene
 {

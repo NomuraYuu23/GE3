@@ -1,6 +1,6 @@
 #pragma once
-#include "../Input/Input.h"
-#include "../2D/Sprite.h"
+#include "../../Engine/Input/Input.h"
+#include "../../Engine/2D/Sprite.h"
 #include <array>
 
 /// <summary>
