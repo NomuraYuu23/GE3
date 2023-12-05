@@ -79,10 +79,10 @@ bool Collision::IsCollision(const OBB& obb, const Sphere& sphere)
 	Vector3 centerInOBBLocalSpace = matrix4x4Calc_->Transform(sphere.center_, obbWorldMatrixInverse);
 
 	AABB aabbOBBLocal;
-	aabbOBBLocal.Initialize(Vector3{ -obb.size_.x,-obb.size_.y, -obb.size_.z }, obb.size_);
+	aabbOBBLocal.Initialize(Vector3{ -obb.size_.x,-obb.size_.y, -obb.size_.z }, obb.size_, nullptr);
 
 	Sphere sphereOBBLocal;
-	sphereOBBLocal.Initialize(centerInOBBLocalSpace, sphere.radius_);
+	sphereOBBLocal.Initialize(centerInOBBLocalSpace, sphere.radius_, nullptr);
 
 	//ローカル空間で衝突
 	return IsCollision(aabbOBBLocal, sphereOBBLocal);

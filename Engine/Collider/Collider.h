@@ -25,12 +25,12 @@ public: //メンバ関数 (衝突)
 	uint32_t GetCollisionMask() { return collisionMask_; }
 	// 衝突マスク(相手)を設定
 	void SetCollisionMask(uint32_t collisionMask) { collisionMask_ = collisionMask; }
-
-	WorldTransform GetWorldTransform() { return worldTransform_; }
-	void SetWorldTransform(const WorldTransform& worldTransform) { worldTransform_ = worldTransform; }
 	
 	void* GetParentObject() { return parentObject_; }
 
+public:
+	// ワールドトランスフォーム
+	WorldTransform worldTransform_;
 protected:
 
 	//衝突属性(自分)
@@ -38,9 +38,6 @@ protected:
 
 	// 衝突マスク(相手)
 	uint32_t collisionMask_ = 0xffffffff;
-
-	// ワールドトランスフォーム
-	WorldTransform worldTransform_;
 
 	// 親オブジェクト
 	void* parentObject_ = nullptr;
