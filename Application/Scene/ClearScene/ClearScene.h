@@ -1,6 +1,7 @@
 #pragma once
-#include "../IScene/IScene.h"
-class SelectScene : public IScene{
+#include "../../../Engine/Scene/IScene/IScene.h"
+class ClearScene : public IScene
+{
 
 public: // メンバ関数
 
@@ -37,4 +38,3 @@ private: // メンバ関数
 	void TextureLoad() override;
 
 };
-

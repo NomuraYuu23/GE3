@@ -1,7 +1,6 @@
 #pragma once
-#include "../IScene/IScene.h"
-class TitleScene : public IScene
-{
+#include "../../../Engine/Scene/IScene/IScene.h"
+class SelectScene : public IScene{
 
 public: // メンバ関数
 
