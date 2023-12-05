@@ -11,7 +11,7 @@ class Collider
 
 public: // メンバ関数
 
-	void Initialize();
+	void Initialize(void* parentObject);
 
 	virtual void worldTransformUpdate() = 0;
 
@@ -26,7 +26,12 @@ public: //メンバ関数 (衝突)
 	// 衝突マスク(相手)を設定
 	void SetCollisionMask(uint32_t collisionMask) { collisionMask_ = collisionMask; }
 
-public:
+	WorldTransform GetWorldTransform() { return worldTransform_; }
+	void SetWorldTransform(const WorldTransform& worldTransform) { worldTransform_ = worldTransform; }
+	
+	void* GetParentObject() { return parentObject_; }
+
+protected:
 
 	//衝突属性(自分)
 	uint32_t collisionAttribute_ = 0xffffffff;
@@ -34,7 +39,11 @@ public:
 	// 衝突マスク(相手)
 	uint32_t collisionMask_ = 0xffffffff;
 
+	// ワールドトランスフォーム
 	WorldTransform worldTransform_;
+
+	// 親オブジェクト
+	void* parentObject_ = nullptr;
 
 };
 
