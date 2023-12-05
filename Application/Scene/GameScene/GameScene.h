@@ -2,7 +2,7 @@
 
 #include "../../../Engine/Scene/IScene/IScene.h"
 #include "../../../Engine/Collider/ColliderDebugDraw/ColliderDebugDraw.h"// コライダーデバッグ描画
-#include"../../CollisionManager/CollisionManager.h"
+#include"../../../Engine/Collision/CollisionManager.h"
 #include "../../Pause/Pause.h"
 
 class GameScene : public IScene

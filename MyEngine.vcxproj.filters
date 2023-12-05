@@ -120,7 +120,7 @@
     <ClCompile Include="Application\Skydome\Skydome.cpp">
       <Filter>AL\ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Application\CollisionManager\CollisionManager.cpp">
+    <ClCompile Include="Engine\Collision\CollisionManager.cpp">
       <Filter>AL\ソースファイル</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Collider\Collider.cpp">
@@ -132,7 +132,7 @@
     <ClCompile Include="Engine\Collider\Plane\Plane.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Application\CollisionManager\Collision.cpp">
+    <ClCompile Include="Engine\Collision\Collision.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Collider\Triangle\Triangle.cpp">
@@ -320,7 +320,7 @@
     <ClInclude Include="Application\Skydome\Skydome.h">
       <Filter>AL\ヘッダーファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Application\CollisionManager\CollisionManager.h">
+    <ClInclude Include="Engine\Collision\CollisionManager.h">
       <Filter>AL\ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Collider\Collider.h">
@@ -332,7 +332,7 @@
     <ClInclude Include="Engine\Collider\Plane\Plane.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Application\CollisionManager\Collision.h">
+    <ClInclude Include="Engine\Collision\Collision.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Collider\Triangle\Triangle.h">

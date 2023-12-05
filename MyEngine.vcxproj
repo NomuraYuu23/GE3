@@ -139,8 +139,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Collider\Collider.cpp" />
     <ClCompile Include="Engine\Collider\OBB\OBB.cpp" />
     <ClCompile Include="Engine\Collider\Triangle\Triangle.cpp" />
-    <ClCompile Include="Application\CollisionManager\Collision.cpp" />
-    <ClCompile Include="Application\CollisionManager\CollisionManager.cpp" />
+    <ClCompile Include="Engine\Collision\Collision.cpp" />
+    <ClCompile Include="Engine\Collision\CollisionManager.cpp" />
     <ClCompile Include="Engine\Collider\Plane\Plane.cpp" />
     <ClCompile Include="Application\Skydome\Skydome.cpp" />
     <ClCompile Include="Engine\Collider\Sphere\Sphere.cpp" />
@@ -207,8 +207,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Collider\Collider.h" />
     <ClInclude Include="Engine\Collider\OBB\OBB.h" />
     <ClInclude Include="Engine\Collider\Triangle\Triangle.h" />
-    <ClInclude Include="Application\CollisionManager\Collision.h" />
-    <ClInclude Include="Application\CollisionManager\CollisionManager.h" />
+    <ClInclude Include="Engine\Collision\Collision.h" />
+    <ClInclude Include="Engine\Collision\CollisionManager.h" />
     <ClInclude Include="Engine\Collider\Plane\Plane.h" />
     <ClInclude Include="Application\Particle\ParticleModelIndex.h" />
     <ClInclude Include="Application\Particle\ParticleName.h" />
