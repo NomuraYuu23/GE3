@@ -21,8 +21,6 @@ public:
 
 	std::list<Particle*> Emit();
 
-	Particle* MakeParticle();
-
 public: // アクセッサ
 
 	bool GetToEmit() { return toEmit_; }

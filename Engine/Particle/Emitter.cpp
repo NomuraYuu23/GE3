@@ -1,6 +1,6 @@
 #include "Emitter.h"
 #include "../Math/DeltaTime.h"
-#include <cassert>
+#include "../../Program/Particle/MakeParticle.h"
 
 void Emitter::Initialize(const TransformStructure& transform, uint32_t instanceCount,
 	float frequency, float lifeTime, uint32_t particleModelNum, uint32_t paeticleName)
@@ -48,30 +48,11 @@ std::list<Particle*> Emitter::Emit()
 {
 
 	std::list<Particle*> particles;
+	MakeParticle* makeParticle = MakeParticle::GetInstance();
+
 	for (uint32_t count = 0; count < instanceCount_; ++count) {
-		particles.push_back(MakeParticle());
+		particles.push_back(makeParticle->Run(paeticleName_,transform_.translate, transform_.scale));
 	}
 
 	return particles;
-}
-
-Particle* Emitter::MakeParticle()
-{
-
-	Particle* particle = nullptr;
-
-	switch (paeticleName_)
-	{
-	case kDefault:
-		particle = new Particle();
-		particle->Initialize(transform_.translate, transform_.scale);
-		break;
-	case kCountOfPaeticleName:
-	default:
-		assert(0);
-		break;
-	}
-
-	return particle;
-
 }
