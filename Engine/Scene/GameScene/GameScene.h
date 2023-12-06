@@ -7,6 +7,7 @@
 #include"../../../Program/CollisionManager/CollisionManager.h"
 #include"../../../Engine/Camera/FollowCamera/FollowCamera.h"
 #include "../../Pause/Pause.h"
+#include "../../Math/Quaternion.h"
 
 class GameScene : public IScene
 {
@@ -81,12 +82,15 @@ private:
 	//std::unique_ptr<Model> particleCircleModel_ = nullptr;
 
 	// MT4
-	Vector3 from0;
-	Vector3 to0;
-	Vector3 from1;
-	Vector3 to1;
-	Matrix4x4 rotateMatrix0;
-	Matrix4x4 rotateMatrix1;
-	Matrix4x4 rotateMatrix2;
+	Quaternion q1;
+	Quaternion q2;
+	Quaternion identity;
+	Quaternion conj;
+	Quaternion inv;
+	Quaternion normal;
+	Quaternion mul1;
+	Quaternion mul2;
+	float norm;
+
 
 };

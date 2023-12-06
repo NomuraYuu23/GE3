@@ -43,15 +43,16 @@ void GameScene::Initialize() {
 	Vector3Calc* vector3Calc = Vector3Calc::GetInstance();
 	Matrix4x4Calc* matrix4x4Calc = Matrix4x4Calc::GetInstance();
 	
-	from0 = vector3Calc->Normalize(Vector3{1.0f, 0.7f, 0.5f});
-	to0 = vector3Calc->Multiply(-1.0f, from0);
-	from1 = vector3Calc->Normalize(Vector3{ -0.6f, 0.9f, 0.2f });
-	to1 = vector3Calc->Normalize(Vector3{ 0.4f, 0.7f, -0.5f });
-	rotateMatrix0 = matrix4x4Calc->DirectionToDirection(
-		vector3Calc->Normalize(Vector3{ 1.0f, 0.0f, 0.0f }),
-		vector3Calc->Normalize(Vector3{ -1.0f, 0.0f, 0.0f }));
-	rotateMatrix1 = matrix4x4Calc->DirectionToDirection(from0,to0);
-	rotateMatrix2 = matrix4x4Calc->DirectionToDirection(from1, to1);
+
+	q1 = {2.0f, 3.0f, 4.0f, 1.0f};
+	q2 = {1.0f, 3.0f, 5.0f, 2.0f};
+	identity = QuaternionCalc::IdentityQuaternion();
+	conj = QuaternionCalc::Conjugate(q1);
+	inv = QuaternionCalc::Inverse(q1);
+	normal = QuaternionCalc::Normalize(q1);
+	mul1 = QuaternionCalc::Multiply(q1,q2);
+	mul2 = QuaternionCalc::Multiply(q2, q1);
+	norm = QuaternionCalc::Norm(q1);
 
 }
 
@@ -155,19 +156,14 @@ void GameScene::ImguiDraw(){
 #endif // _DEBUG
 
 	//MT4
-	ImGui::Begin("MT01_02確認課題");
-	ImGui::Text("RotateMatrix0");
-	for (uint32_t i = 0; i < 4; i++) {
-		ImGui::Text("%.3f,	%.3f,	%.3f,	%.3f", rotateMatrix0.m[i][0], rotateMatrix0.m[i][1], rotateMatrix0.m[i][2], rotateMatrix0.m[i][3]);
-	}
-	ImGui::Text("RotateMatrix1");
-	for (uint32_t i = 0; i < 4; i++) {
-		ImGui::Text("%.3f,	%.3f,	%.3f,	%.3f", rotateMatrix1.m[i][0], rotateMatrix1.m[i][1], rotateMatrix1.m[i][2], rotateMatrix1.m[i][3]);
-	}
-	ImGui::Text("RotateMatrix2");
-	for (uint32_t i = 0; i < 4; i++) {
-		ImGui::Text("%.3f,	%.3f,	%.3f,	%.3f", rotateMatrix2.m[i][0], rotateMatrix2.m[i][1], rotateMatrix2.m[i][2], rotateMatrix2.m[i][3]);
-	}
+	ImGui::Begin("MT01_03確認課題");
+	ImGui::Text("%7.2f %7.2f %7.2f %7.2f	:Identity",identity.x, identity.y, identity.z, identity.w);
+	ImGui::Text("%7.2f %7.2f %7.2f %7.2f	:Conjugate",conj.x, conj.y, conj.z, conj.w);
+	ImGui::Text("%7.2f %7.2f %7.2f %7.2f	:Inverse", inv.x, inv.y, inv.z, inv.w);
+	ImGui::Text("%7.2f %7.2f %7.2f %7.2f	:Normalize", normal.x, normal.y, normal.z, normal.w);
+	ImGui::Text("%7.2f %7.2f %7.2f %7.2f	:Multiply(q1,q2)", mul1.x, mul1.y, mul1.z, mul1.w);
+	ImGui::Text("%7.2f %7.2f %7.2f %7.2f	:Multiply(q2,q1)", mul2.x, mul2.y, mul2.z, mul2.w);
+	ImGui::Text("%7.2f										:Norm", norm);
 	ImGui::End();
 
 }
