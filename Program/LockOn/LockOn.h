@@ -4,6 +4,7 @@
 #include "../../Engine/2D/Sprite.h"
 #include "../Enemy/Enemy.h"
 #include "../../Engine/3D/ViewProjection.h"
+#include "../Player/Player.h"
 
 /// <summary>
 /// ロックオン
@@ -21,7 +22,7 @@ public: // メンバ関数
 	/// <summary>
 	/// 更新
 	/// </summary>
-	void Update(const std::list<Enemy*>& enemies, const ViewProjection& viewProjection);
+	void Update(const std::list<Enemy*>& enemies, Player* player, const ViewProjection& viewProjection);
 
 	/// <summary>
 	/// 描画
@@ -50,7 +51,7 @@ private: // メンバ関数
 	/// <summary>
 	/// 範囲外判定
 	/// </summary>
-	bool OutOfRangeJudgment(const ViewProjection& viewProjection);
+	bool OutOfRangeJudgment(Player* player, const ViewProjection& viewProjection);
 
 	/// <summary>
 	/// ロックオンモード変更
@@ -71,7 +72,7 @@ private: // メンバ変数
 	Enemy* target_ = nullptr;
 
 	// 最小距離
-	float minDistance_ = 50.0f;
+	float minDistance_ = 0.0f;
 
 	// 最大距離
 	float maxDistance_ = 150.0f;

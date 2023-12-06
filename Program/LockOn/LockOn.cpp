@@ -13,7 +13,7 @@ void LockOn::Initialize(uint32_t textureHandle)
 
 }
 
-void LockOn::Update(const std::list<Enemy*>& enemies, const ViewProjection& viewProjection)
+void LockOn::Update(const std::list<Enemy*>& enemies, Player* player, const ViewProjection& viewProjection)
 {
 
 	Input* input = Input::GetInstance();
@@ -34,38 +34,42 @@ void LockOn::Update(const std::list<Enemy*>& enemies, const ViewProjection& view
 			target_ = nullptr;
 		}
 		// 範囲外判定
-		else if (OutOfRangeJudgment(viewProjection)) {
+		else if (OutOfRangeJudgment(player,viewProjection)) {
 			// ロックオンを外す
 			target_ = nullptr;
 		}
 		else if (input->TriggerJoystick(5)) {
 			// ロックオン対象の検索
-// ロックオン対象の絞り込み
-// 目標
+			// ロックオン対象の絞り込み
+			// 目標
 			std::list<std::pair<float, Enemy*>> targets;
 
 			// 全ての敵に対して順にロックオン判定
 			for (Enemy* enemy : enemies) {
 				// 敵ロックオン座標取得
-				Vector3 positionWorld = {
+				Vector3 enemyWorldPosition = {
 					enemy->GetWorldTransform().worldMatrix_.m[3][0],
 					enemy->GetWorldTransform().worldMatrix_.m[3][1],
 					enemy->GetWorldTransform().worldMatrix_.m[3][2]
 				};
-				// ワールドからビュー座標変換
-				Vector3 positionView = m4Calc->Transform(positionWorld, viewProjection.viewMatrix_);
 
+				//プレイヤー
+				Vector3 playerWorldPosition = {
+					player->GetWorldTransform().worldMatrix_.m[3][0],
+					player->GetWorldTransform().worldMatrix_.m[3][1],
+					player->GetWorldTransform().worldMatrix_.m[3][2]
+				};
+
+
+				Vector3 dirEnemy = v3Calc->Normalize(v3Calc->Subtract(enemyWorldPosition, viewProjection.transform_.translate));
+				Vector3 dirPlayer = v3Calc->Normalize(v3Calc->Subtract(playerWorldPosition, viewProjection.transform_.translate));
+				float dot = v3Calc->Dot(dirEnemy, dirPlayer);
+
+				float distance = v3Calc->Length(v3Calc->Subtract(enemyWorldPosition, playerWorldPosition));
 				// 距離条件チェック
-				if (minDistance_ <= positionView.z && positionView.z <= maxDistance_ && enemy != target_) {
+				if (minDistance_ <= distance && distance <= maxDistance_ && dot > 0.0f && enemy != target_) {
 
-					// カメラ前方との角度を計算
-					//float arcTargent = std::atan2(
-					//std::sqrtf(positionView.x * positionView.x + positionView.y * positionView.y), positionView.z);
-					//if (std::fabsf(arcTargent) <= angleRange_) {
-					//	targets.emplace_back(std::make_pair(positionView.z, enemy));
-					//}
-
-					targets.emplace_back(std::make_pair(positionView.z, enemy));
+					targets.emplace_back(std::make_pair(distance, enemy));
 
 				}
 
@@ -92,27 +96,31 @@ void LockOn::Update(const std::list<Enemy*>& enemies, const ViewProjection& view
 			// 全ての敵に対して順にロックオン判定
 			for (Enemy* enemy : enemies) {
 				// 敵ロックオン座標取得
-				Vector3 positionWorld = {
-					enemy->GetWorldTransform().worldMatrix_.m[3][0],
-					enemy->GetWorldTransform().worldMatrix_.m[3][1],
-					enemy->GetWorldTransform().worldMatrix_.m[3][2]
+					Vector3 enemyWorldPosition = {
+						enemy->GetWorldTransform().worldMatrix_.m[3][0],
+						enemy->GetWorldTransform().worldMatrix_.m[3][1],
+						enemy->GetWorldTransform().worldMatrix_.m[3][2]
 				};
-				// ワールドからビュー座標変換
-				Vector3 positionView = m4Calc->Transform(positionWorld, viewProjection.viewMatrix_);
 
+				//プレイヤー
+				Vector3 playerWorldPosition = {
+					player->GetWorldTransform().worldMatrix_.m[3][0],
+					player->GetWorldTransform().worldMatrix_.m[3][1],
+					player->GetWorldTransform().worldMatrix_.m[3][2]
+				};
+
+				Vector3 dirEnemy = v3Calc->Normalize(v3Calc->Subtract(enemyWorldPosition, viewProjection.transform_.translate));
+				Vector3 dirPlayer = v3Calc->Normalize(v3Calc->Subtract(playerWorldPosition, viewProjection.transform_.translate));
+				float dot = v3Calc->Dot(dirEnemy, dirPlayer);
+
+				float distance = v3Calc->Length(v3Calc->Subtract(enemyWorldPosition, playerWorldPosition));
 				// 距離条件チェック
-				if (minDistance_ <= positionView.z && positionView.z <= maxDistance_) {
+				if (minDistance_ <= distance && distance <= maxDistance_ && dot > 0.0f) {
 
-					// カメラ前方との角度を計算
-					//float arcTargent = std::atan2(
-					//std::sqrtf(positionView.x * positionView.x + positionView.y * positionView.y), positionView.z);
-					//if (std::fabsf(arcTargent) <= angleRange_) {
-					//	targets.emplace_back(std::make_pair(positionView.z, enemy));
-					//}
-
-					targets.emplace_back(std::make_pair(positionView.z, enemy));
+					targets.emplace_back(std::make_pair(distance, enemy));
 
 				}
+
 
 				// ロックオン対象をリセット
 				target_ = nullptr;
@@ -191,31 +199,33 @@ void LockOn::Restart()
 
 }
 
-bool LockOn::OutOfRangeJudgment(const ViewProjection& viewProjection)
+bool LockOn::OutOfRangeJudgment(Player* player, const ViewProjection& viewProjection)
 {
 
 	Vector3Calc* v3Calc = Vector3Calc::GetInstance();
 	Matrix4x4Calc* m4Calc = Matrix4x4Calc::GetInstance();
 
-	// 敵のロックオン座標取得
-	Vector3 positionWorld = {
+	// 敵ロックオン座標取得
+	Vector3 enemyWorldPosition = {
 		target_->GetWorldTransform().worldMatrix_.m[3][0],
 		target_->GetWorldTransform().worldMatrix_.m[3][1],
 		target_->GetWorldTransform().worldMatrix_.m[3][2]
 	};
 
-	// ワールドからビュー座標変換
-	Vector3 positionView = m4Calc->Transform(positionWorld, viewProjection.viewMatrix_);
+	//プレイヤー
+	Vector3 playerWorldPosition = {
+		player->GetWorldTransform().worldMatrix_.m[3][0],
+		player->GetWorldTransform().worldMatrix_.m[3][1],
+		player->GetWorldTransform().worldMatrix_.m[3][2]
+	};
 
+	Vector3 dirEnemy = v3Calc->Normalize(v3Calc->Subtract(enemyWorldPosition, viewProjection.transform_.translate));
+	Vector3 dirPlayer = v3Calc->Normalize(v3Calc->Subtract(playerWorldPosition, viewProjection.transform_.translate));
+	float dot = v3Calc->Dot(dirEnemy, dirPlayer);
+
+	float distance = v3Calc->Length(v3Calc->Subtract(enemyWorldPosition, playerWorldPosition));
 	// 距離条件チェック
-	if (minDistance_ <= positionView.z && positionView.z <= maxDistance_) {
-	
-		// カメラ前方との角度を計算
-		//float arcTargent = std::atan2(
-		//	std::sqrtf(positionView.x * positionView.x + positionView.y * positionView.y), positionView.z);
-		//if (std::fabsf(arcTargent) <= angleRange_) {
-		//	return false;
-		//}
+	if (minDistance_ <= distance && distance <= maxDistance_ && dot > 0.0f) {
 
 		return false;
 

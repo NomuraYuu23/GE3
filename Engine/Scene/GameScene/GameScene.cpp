@@ -194,7 +194,7 @@ void GameScene::Update(){
 	collisionManager_->AllCollision();
 
 	// ロックオン
-	lockOn_->Update(enemyManager_->GetEnemies(), viewProjection_);
+	lockOn_->Update(enemyManager_->GetEnemies(),player_.get(), viewProjection_);
 
 	// デバッグ描画
 	colliderDebugDraw_->Update();
