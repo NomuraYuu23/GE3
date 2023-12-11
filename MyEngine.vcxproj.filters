@@ -88,6 +88,9 @@
     <Filter Include="Application\SceneTransition">
       <UniqueIdentifier>{6a275db4-3602-45c1-a06e-3c7b1ace8b0e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Line">
+      <UniqueIdentifier>{6558aabd-3cbd-4ea1-bcdb-5f63ade457ba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="externals\imgui\imgui.cpp">
@@ -259,6 +262,18 @@
       <Filter>Application\SceneTransition</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Engine\Line\Segment.cpp">
+      <Filter>Engine\Line</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Collider\Capsule\Capsule.cpp">
+      <Filter>Engine\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Line\Line.cpp">
+      <Filter>Engine\Line</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Math\ShortestDistance.cpp">
+      <Filter>Engine\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imgui.h">
@@ -479,6 +494,18 @@
     </ClInclude>
     <ClInclude Include="Application\Scene\TitleScene\TitleScene.h">
       <Filter>Application\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Line\Segment.h">
+      <Filter>Engine\Line</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Collider\Capsule\Capsule.h">
+      <Filter>Engine\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Line\Line.h">
+      <Filter>Engine\Line</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Math\ShortestDistance.h">
+      <Filter>Engine\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
