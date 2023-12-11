@@ -155,7 +155,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\2D\Sprite.cpp" />
     <ClCompile Include="Engine\base\TextureManager.cpp" />
     <ClCompile Include="Engine\Math\Vector3.cpp" />
-    <ClCompile Include="Engine\3D\ViewProjection.cpp" />
     <ClCompile Include="Engine\base\WinApp.cpp" />
     <ClCompile Include="Engine\3D\WorldTransform.cpp" />
   </ItemGroup>
@@ -230,7 +229,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Math\Vector2.h" />
     <ClInclude Include="Engine\Math\Vector3.h" />
     <ClInclude Include="Engine\Math\Vector4.h" />
-    <ClInclude Include="Engine\3D\ViewProjection.h" />
     <ClInclude Include="Engine\base\WinApp.h" />
     <ClInclude Include="Engine\3D\VertexData.h" />
     <ClInclude Include="Engine\3D\WorldTransform.h" />
