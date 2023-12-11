@@ -79,11 +79,5 @@ public: // メンバ関数
 	static bool IsCollision(const Capsule& capsule, const OBB& obb, Vector3& p1, Vector3& p2, float& t1, float& t2, float& pushBackDist);
 	static bool IsCollision(const OBB& obb, const Capsule& capsule, Vector3& p1, Vector3& p2, float& t1, float& t2, float& pushBackDist);
 
-private: // メンバ変数
-
-	static Vector3Calc* vector3Calc_;
-
-	static Matrix4x4Calc* matrix4x4Calc_;
-
 };
 

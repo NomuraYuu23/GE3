@@ -4,9 +4,6 @@
 void CollisionManager::Initialize()
 {
 
-	v3Calc = Vector3Calc::GetInstance();
-	m4Calc = Matrix4x4Calc::GetInstance();
-
 	ListClear();
 
 }
@@ -64,18 +61,5 @@ void CollisionManager::CheckCollisionPair(ColliderShape colliderA, ColliderShape
 			// 衝突処理
 		}
 		}, colliderA, colliderB);
-
-}
-
-bool CollisionManager::Filtering(Collider* colliderA, Collider* colliderB)
-{
-
-	// 衝突フィルタリング
-	if (!(colliderA->GetCollisionAttribute() & colliderB->GetCollisionMask()) ||
-		!(colliderB->GetCollisionAttribute() & colliderA->GetCollisionMask())) {
-		return true;
-	}
-
-	return false;
 
 }

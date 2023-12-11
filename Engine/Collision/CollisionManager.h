@@ -37,17 +37,10 @@ public: // メンバ関数
 
 private:
 
-	// 計算
-	Vector3Calc* v3Calc;
-	Matrix4x4Calc* m4Calc;
-
 	// コライダーリスト
 	std::list<ColliderShape> colliders_;
 
 	// コライダー2つの衝突判定と応答
 	void CheckCollisionPair(ColliderShape colliderA, ColliderShape colliderB);
-
-	// フィルタリング
-	bool Filtering(Collider* colliderA, Collider* colliderB);
 
 };
