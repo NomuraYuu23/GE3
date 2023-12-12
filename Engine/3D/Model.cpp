@@ -246,13 +246,13 @@ void Model::Update() {
 /// <summary>
 /// 描画
 /// </summary>
-void Model::Draw(WorldTransform& worldTransform, const Matrix4x4& viewProjectionMatrix) {
+void Model::Draw(WorldTransform& worldTransform, BaseCamera& camera) {
 
 	// nullptrチェック
 	assert(sDevice);
 	assert(sCommandList);
 
-	worldTransform.Map(viewProjectionMatrix);
+	worldTransform.Map(camera.GetViewProjectionMatrix());
 
 	sCommandList->IASetVertexBuffers(0, 1, &vbView_); //VBVを設定
 
@@ -261,6 +261,9 @@ void Model::Draw(WorldTransform& worldTransform, const Matrix4x4& viewProjection
 
 	//マテリアルCBufferの場所を設定
 	sCommandList->SetGraphicsRootConstantBufferView(0, defaultMaterial_->GetMaterialBuff()->GetGPUVirtualAddress());
+
+	// カメラCBufferの場所を設定
+	sCommandList->SetGraphicsRootConstantBufferView(4, camera.GetWorldPositionBuff()->GetGPUVirtualAddress());
 
 	//SRVのDescriptorTableの先頭を設定。2はrootParamenter[2]である
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(sCommandList, 2, textureHandle_);
@@ -273,13 +276,13 @@ void Model::Draw(WorldTransform& worldTransform, const Matrix4x4& viewProjection
 /// <summary>
 /// 描画
 /// </summary>
-void Model::Draw(WorldTransform& worldTransform, const Matrix4x4& viewProjectionMatrix, Material* material) {
+void Model::Draw(WorldTransform& worldTransform, BaseCamera& camera, Material* material) {
 
 	// nullptrチェック
 	assert(sDevice);
 	assert(sCommandList);
 
-	worldTransform.Map(viewProjectionMatrix);
+	worldTransform.Map(camera.GetViewProjectionMatrix());
 
 	sCommandList->IASetVertexBuffers(0, 1, &vbView_); //VBVを設定
 
@@ -288,6 +291,9 @@ void Model::Draw(WorldTransform& worldTransform, const Matrix4x4& viewProjection
 
 	//マテリアルCBufferの場所を設定
 	sCommandList->SetGraphicsRootConstantBufferView(0, material->GetMaterialBuff()->GetGPUVirtualAddress());
+
+	// カメラCBufferの場所を設定
+	sCommandList->SetGraphicsRootConstantBufferView(4, camera.GetWorldPositionBuff()->GetGPUVirtualAddress());
 
 	//SRVのDescriptorTableの先頭を設定。2はrootParamenter[2]である
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(sCommandList, 2, textureHandle_);

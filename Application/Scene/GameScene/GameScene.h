@@ -77,4 +77,9 @@ private:
 	std::unique_ptr<Model> particleUvcheckerModel_ = nullptr;
 	std::unique_ptr<Model> particleCircleModel_ = nullptr;
 
+	// モデル
+	std::unique_ptr<Model> model_ = nullptr;
+	std::unique_ptr<Material> material_ = nullptr;
+	WorldTransform worldTransform_;
+
 };

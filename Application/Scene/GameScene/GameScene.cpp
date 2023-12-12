@@ -42,6 +42,19 @@ void GameScene::Initialize() {
 
 	isDebugCameraActive_ = true;
 
+	model_.reset(Model::Create("Resources/default/", "Ball.obj", dxCommon_));
+	material_.reset(Material::Create());
+	material_->Initialize();
+	TransformStructure uvTransform = {
+	{1.0f,1.0f,1.0f},
+	{0.0f,0.0f,0.0f},
+	{0.0f,0.0f,0.0f},
+	};
+	Vector4 color = { 1.0f,1.0f,1.0f,1.0f };
+	material_->Update(uvTransform, color, PhongReflection, 0.02f);
+
+	worldTransform_.Initialize();
+
 }
 
 /// <summary>
@@ -52,7 +65,7 @@ void GameScene::Update(){
 	//光源
 	DirectionalLightData directionalLightData;
 	directionalLightData.color = { 1.0f,1.0f,1.0f,1.0f };
-	directionalLightData.direction = { 0.0f, -1.0f, 0.0f };
+	directionalLightData.direction = { 1.0f, -1.0f, 0.0f };
 	directionalLightData.intencity = 1.0f;
 	directionalLight_->Update(directionalLightData);
 
@@ -65,7 +78,7 @@ void GameScene::Update(){
 	colliderDebugDraw_->Update();
 	
 	//パーティクル
-	particleManager_->Update(debugCamera_->GetTransformMatrix());
+	//particleManager_->Update(debugCamera_->GetTransformMatrix());
 
 	// ポーズ機能
 	pause_->Update();
@@ -100,10 +113,12 @@ void GameScene::Draw() {
 	directionalLight_->Draw(dxCommon_->GetCommadList());
 	//3Dオブジェクトはここ
 
+	model_->Draw(worldTransform_, camera_, material_.get());
+
 #ifdef _DEBUG
 
 	// デバッグ描画
-	colliderDebugDraw_->Draw(camera_.GetViewProjectionMatrix());
+	colliderDebugDraw_->Draw(camera_);
 
 #endif // _DEBUG
 
@@ -116,7 +131,7 @@ void GameScene::Draw() {
 	directionalLight_->Draw(dxCommon_->GetCommadList());
 
 	// パーティクルはここ
-	particleManager_->Draw();
+	//particleManager_->Draw();
 
 	Model::PostDraw();
 
