@@ -161,7 +161,7 @@ Model::ModelData Model::LoadObjFile(const std::string& directoryPath, const std:
 		if (identifier == "v") {
 			Vector4 position;
 			s >> position.x >> position.y >> position.z;
-			position.z *= -1;
+			position.x *= -1.0f;
 			position.w = 1.0f;
 			positions.push_back(position);
 		}
@@ -174,6 +174,7 @@ Model::ModelData Model::LoadObjFile(const std::string& directoryPath, const std:
 		else if (identifier == "vn") {
 			Vector3 normal;
 			s >> normal.x >> normal.y >> normal.z;
+			normal.x *= -1.0f;
 			normals.push_back(normal);
 		}
 		else if (identifier == "f") {

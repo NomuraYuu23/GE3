@@ -51,7 +51,7 @@ void GameScene::Initialize() {
 	{0.0f,0.0f,0.0f},
 	};
 	Vector4 color = { 1.0f,1.0f,1.0f,1.0f };
-	material_->Update(uvTransform, color, PhongReflection, 0.02f);
+	material_->Update(uvTransform, color, PhongReflection, 100.0f);
 
 	worldTransform_.Initialize();
 
@@ -65,8 +65,8 @@ void GameScene::Update(){
 	//光源
 	DirectionalLightData directionalLightData;
 	directionalLightData.color = { 1.0f,1.0f,1.0f,1.0f };
-	directionalLightData.direction = { 1.0f, -1.0f, 0.0f };
-	directionalLightData.intencity = 1.0f;
+	directionalLightData.direction = Vector3Calc::Normalize(direction);
+	directionalLightData.intencity = intencity;
 	directionalLight_->Update(directionalLightData);
 
 	camera_.Update();
@@ -156,6 +156,12 @@ void GameScene::Draw() {
 
 void GameScene::ImguiDraw(){
 #ifdef _DEBUG
+
+	ImGui::Begin("Light");
+	ImGui::DragFloat3("direction", &direction.x, 0.1f);
+	ImGui::DragFloat("i", &intencity, 0.01f);
+	ImGui::End();
+
 #endif // _DEBUG
 }
 
