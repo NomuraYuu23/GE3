@@ -1,5 +1,5 @@
 #include "Quaternion.h"
-#include "Vector3.h"
+#include <cmath>
 
 QuaternionCalc* QuaternionCalc::GetInstance()
 {
@@ -100,4 +100,61 @@ Quaternion QuaternionCalc::Inverse(const Quaternion& quaternion)
 	}
 
 	return result;
+}
+
+Quaternion QuaternionCalc::MakeRotateAxisAngleQuaternion(const Vector3& axis, float angle)
+{
+
+	Quaternion result = { };
+	Vector3 vector = Vector3Calc::GetInstance()->Multiply(std::sinf(angle / 2.0f), axis);
+	result = { vector.x, vector.y, vector.z, std::cosf(angle / 2.0f) };
+
+	return result;
+
+}
+
+Vector3 QuaternionCalc::RotateVector(const Vector3& vector, const Quaternion& quaternion)
+{
+
+	Vector3 result = {};
+
+	Quaternion r = { vector.x, vector.y, vector.z, 0.0f };
+	Quaternion conjugate = Conjugate(quaternion);
+	Quaternion newQuaternion = Multiply(Multiply(quaternion, r), conjugate);
+
+	result.x = newQuaternion.x;
+	result.y = newQuaternion.y;
+	result.z = newQuaternion.z;
+
+	return result;
+}
+
+Matrix4x4 QuaternionCalc::MakeRotateMatrix(const Quaternion& quaternion)
+{
+
+	Matrix4x4 result = {};
+	float x = quaternion.x;
+	float y = quaternion.y;
+	float z = quaternion.z;
+	float w = quaternion.w;
+
+	result.m[0][0] = std::powf(w, 2.0f) + std::powf(x, 2.0f) - std::powf(y, 2.0f) - std::powf(z, 2.0f);
+	result.m[0][1] = 2 * (x * y + w * z);
+	result.m[0][2] = 2 * (x * z - w * y);
+	result.m[0][3] = 0.0f;
+	result.m[1][0] = 2 * (x * y - w * z);
+	result.m[1][1] = std::powf(w, 2.0f) - std::powf(x, 2.0f) + std::powf(y, 2.0f) - std::powf(z, 2.0f);
+	result.m[1][2] = 2 * (y * z + w * x);
+	result.m[1][3] = 0.0f;
+	result.m[2][0] = 2 * (x * z + w * y);
+	result.m[2][1] = 2 * (y * z - w * x);
+	result.m[2][2] = std::powf(w, 2.0f) - std::powf(x, 2.0f) - std::powf(y, 2.0f) + std::powf(z, 2.0f);
+	result.m[2][3] = 0.0f;
+	result.m[3][0] = 0.0f;
+	result.m[3][1] = 0.0f;
+	result.m[3][2] = 0.0f;
+	result.m[3][3] = 1.0f;
+
+	return result;
+
 }
