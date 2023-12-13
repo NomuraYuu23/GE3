@@ -36,9 +36,9 @@ void GameScene::Initialize() {
 	particleModel[ParticleModelIndex::kCircle] = particleCircleModel_.get();
 	particleManager_->ModelCreate(particleModel);
 	TransformStructure emitter = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{-3.0f,0.0f,0.0f} };
-	particleManager_->MakeEmitter(emitter, 3, 0.5f, 300.0f, ParticleModelIndex::kUvChecker, 0, 0);
+	particleManager_->MakeEmitter(emitter, 1000, 0.5f, 300.0f, ParticleModelIndex::kUvChecker, 0, 0);
 	emitter.translate.x = 3.0f;
-	particleManager_->MakeEmitter(emitter, 3, 0.5f, 300.0f, ParticleModelIndex::kCircle, 0, 0);
+	particleManager_->MakeEmitter(emitter, 1000, 0.5f, 300.0f, ParticleModelIndex::kCircle, 0, 0);
 
 	isDebugCameraActive_ = true;
 
@@ -78,7 +78,7 @@ void GameScene::Update(){
 	colliderDebugDraw_->Update();
 	
 	//パーティクル
-	//particleManager_->Update(debugCamera_->GetTransformMatrix());
+	particleManager_->Update(debugCamera_->GetTransformMatrix());
 
 	// ポーズ機能
 	pause_->Update();
@@ -131,7 +131,7 @@ void GameScene::Draw() {
 	directionalLight_->Draw(dxCommon_->GetCommadList());
 
 	// パーティクルはここ
-	//particleManager_->Draw();
+	particleManager_->Draw();
 
 	Model::PostDraw();
 
@@ -160,9 +160,11 @@ void GameScene::ImguiDraw(){
 	ImGui::Begin("Light");
 	ImGui::DragFloat3("direction", &direction.x, 0.1f);
 	ImGui::DragFloat("i", &intencity, 0.01f);
+	ImGui::Text("Frame rate: %6.2f fps", ImGui::GetIO().Framerate);
 	ImGui::End();
 
 #endif // _DEBUG
+
 }
 
 void GameScene::DebugCameraUpdate()
