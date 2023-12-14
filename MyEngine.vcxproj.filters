@@ -275,7 +275,7 @@
       <Filter>Engine\Math</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\ITextureHandleManager.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Engine\Base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -514,7 +514,7 @@
       <Filter>Engine\Camera</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\ITextureHandleManager.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Engine\Base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
