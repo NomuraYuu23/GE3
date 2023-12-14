@@ -72,6 +72,8 @@ void GameScene::Update(){
 
 	camera_.Update();
 
+	worldTransform_.UpdateMatrix();
+
 	// デバッグカメラ
 	DebugCameraUpdate();
 	
@@ -160,6 +162,7 @@ void GameScene::ImguiDraw(){
 
 	ImGui::Begin("Light");
 	ImGui::DragFloat3("direction", &direction.x, 0.1f);
+	ImGui::DragFloat3("worldtransform", &worldTransform_.transform_.scale.x, 0.1f);
 	ImGui::DragFloat("i", &intencity, 0.01f);
 	ImGui::Text("Frame rate: %6.2f fps", ImGui::GetIO().Framerate);
 	ImGui::End();
