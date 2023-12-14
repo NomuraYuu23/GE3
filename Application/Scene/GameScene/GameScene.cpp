@@ -52,7 +52,7 @@ void GameScene::Initialize() {
 	{0.0f,0.0f,0.0f},
 	};
 	Vector4 color = { 1.0f,1.0f,1.0f,1.0f };
-	material_->Update(uvTransform, color, PhongReflection, 100.0f);
+	material_->Update(uvTransform, color, BlinnPhongReflection, 100.0f);
 
 	worldTransform_.Initialize();
 
