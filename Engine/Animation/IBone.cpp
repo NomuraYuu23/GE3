@@ -20,7 +20,7 @@ void IBone::Initialize(Model* model, const std::string& objectName, const std::s
 
 	RegistrationAnimationFile();
 
-	//ApplyAnimationFile(motionNames);
+	ApplyAnimationFile(motionNames);
 
 }
 
@@ -43,7 +43,7 @@ void IBone::Update(uint32_t frameCount, const std::vector<std::string>& motionNa
 
 #ifdef _DEBUG
 
-	//ApplyAnimationFile(motionNames);
+	ApplyAnimationFile(motionNames);
 
 #endif // _DEBUG
 
