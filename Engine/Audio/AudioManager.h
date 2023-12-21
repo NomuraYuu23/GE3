@@ -34,6 +34,8 @@ class AudioManager
 
 public: // メンバ関数
 
+	~AudioManager() = default;
+
 	/// <summary>
 	/// 静的メンバの初期化
 	/// </summary>
@@ -77,7 +79,7 @@ public: // メンバ関数
 	/// </summary>
 	/// <param name="PlayingSoundDataHandle"></param>
 	/// <returns></returns>
-	bool IsPlayAudio(uint32_t playingSoundDataHandle);
+	//bool IsPlayAudio(uint32_t playingSoundDataHandle);
 
 	/// <summary>
 	/// 音量設定

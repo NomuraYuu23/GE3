@@ -67,22 +67,21 @@ void AudioManager::StaticApplyGlobalVariables()
 void AudioManager::StopWave(uint32_t playingSoundDataHandle)
 {
 
-	playingSoundDatas_[playingSoundDataHandle].handle_ = audio_->kMaxSoundData;
 	playingSoundDatas_[playingSoundDataHandle].pSourceVoice_->DestroyVoice();
 	playingSoundDatas_[playingSoundDataHandle].pSourceVoice_ = nullptr;
 
 }
 
-bool AudioManager::IsPlayAudio(uint32_t playingSoundDataHandle)
-{
-
-	//if (playingSoundDatas_[playingSoundDataHandle].pSourceVoice_) {
-	//	return false;
-	//}
-
-	//return true;
-
-}
+//bool AudioManager::IsPlayAudio(uint32_t playingSoundDataHandle)
+//{
+//
+//	if (playingSoundDatas_[playingSoundDataHandle].pSourceVoice_) {
+//		return false;
+//	}
+//
+//	return true;
+//
+//}
 
 void AudioManager::SetVolume(uint32_t playingSoundDataHandle, float volume)
 {

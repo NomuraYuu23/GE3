@@ -101,6 +101,9 @@ void GameScene::Update(){
 	GoToTheTitle();
 
 	// オーディオ
+	if (input_->TriggerKey(DIK_SPACE)) {
+		audioManager_->PlayWave(GameAudioNameIndex::kSample);
+	}
 	audioManager_->Update();
 
 }

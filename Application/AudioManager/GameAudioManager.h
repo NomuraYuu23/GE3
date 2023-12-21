@@ -11,6 +11,8 @@ class GameAudioManager : public AudioManager
 
 public: // メンバ関数
 
+	~GameAudioManager();
+
 	/// <summary>
 	/// 初期化
 	/// </summary>

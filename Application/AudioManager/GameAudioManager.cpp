@@ -1,5 +1,10 @@
 #include "GameAudioManager.h"
 
+GameAudioManager::~GameAudioManager()
+{
+
+}
+
 void GameAudioManager::Initialize()
 {
 
@@ -20,14 +25,6 @@ void GameAudioManager::Initialize()
 void GameAudioManager::Update()
 {
 
-	// なり終わったのを削除
-	//for (uint32_t i = 0; i < kMaxPlayingSoundData; ++i) {
-	//	if (!IsPlayAudio(i)) {
-	//		playingSoundDatas_[i].pSourceVoice_->DestroyVoice();
-	//		playingSoundDatas_[i].pSourceVoice_ = nullptr;
-	//	}
-	//}
-
 }
 
 void GameAudioManager::PlayWave(uint32_t audioIndex)
@@ -44,10 +41,17 @@ void GameAudioManager::PlayWave(uint32_t audioIndex)
 	IXAudio2SourceVoice* pSourceVoice = audio_->PlayWave(audioDatas_[audioIndex].handle_, audioDatas_[audioIndex].isLoop_, volume);
 	assert(pSourceVoice);
 	for (uint32_t i = 0; i < kMaxPlayingSoundData; ++i) {
-		if (playingSoundDatas_[i].pSourceVoice_ == nullptr) {
+		if (playingSoundDatas_[i].handle_ == audioDatas_[audioIndex].handle_) {
+			if (playingSoundDatas_[i].pSourceVoice_ != nullptr) {
+				playingSoundDatas_[i].pSourceVoice_->DestroyVoice();
+			}
+			playingSoundDatas_[i].pSourceVoice_ = pSourceVoice;
+			return;
+		}
+		if (playingSoundDatas_[i].handle_ == audio_->kMaxSoundData) {
 			playingSoundDatas_[i].handle_ = audioDatas_[audioIndex].handle_;
 			playingSoundDatas_[i].pSourceVoice_ = pSourceVoice;
-			break;
+			return;
 		}
 	}
 
