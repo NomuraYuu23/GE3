@@ -97,6 +97,9 @@
     <Filter Include="Application\SampleBone">
       <UniqueIdentifier>{725bd115-0d5f-49d4-b607-cf4602735a78}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Application\Collider">
+      <UniqueIdentifier>{6e8db13d-e007-4744-a040-88bc34cd30d8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="externals\imgui\imgui.cpp">
@@ -542,6 +545,9 @@
     </ClInclude>
     <ClInclude Include="Application\SampleBone\SampleBone.h">
       <Filter>Application\SampleBone</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Collider\ColliderParentObject.h">
+      <Filter>Application\Collider</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
