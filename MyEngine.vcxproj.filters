@@ -100,6 +100,9 @@
     <Filter Include="Application\Collider">
       <UniqueIdentifier>{6e8db13d-e007-4744-a040-88bc34cd30d8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Application\Audio">
+      <UniqueIdentifier>{d427ee17-8f5a-4077-9b9a-194749a45066}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="externals\imgui\imgui.cpp">
@@ -294,6 +297,12 @@
     </ClCompile>
     <ClCompile Include="Application\SampleBone\SampleBone.cpp">
       <Filter>Application\SampleBone</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Audio\AudioManager.cpp">
+      <Filter>Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\AudioManager\GameAudioManager.cpp">
+      <Filter>Application\Audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -548,6 +557,15 @@
     </ClInclude>
     <ClInclude Include="Application\Collider\ColliderParentObject.h">
       <Filter>Application\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio\AudioManager.h">
+      <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Collider\ColliderShape.h">
+      <Filter>Engine\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\AudioManager\GameAudioManager.h">
+      <Filter>Application\Audio</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
