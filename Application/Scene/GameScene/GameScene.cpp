@@ -170,7 +170,6 @@ void GameScene::Draw() {
 }
 
 void GameScene::ImguiDraw(){
-#ifdef _DEBUG
 
 	ImGui::Begin("Light");
 	ImGui::DragFloat3("direction", &direction.x, 0.1f);
@@ -181,22 +180,20 @@ void GameScene::ImguiDraw(){
 
 	debugCamera_->ImGuiDraw();
 
-#endif // _DEBUG
 
 }
 
 void GameScene::DebugCameraUpdate()
 {
 
-#ifdef _DEBUG
-	if (input_->TriggerKey(DIK_RETURN)) {
-		if (isDebugCameraActive_) {
-			isDebugCameraActive_ = false;
-		}
-		else {
-			isDebugCameraActive_ = true;
-		}
-	}
+	//if (input_->TriggerKey(DIK_RETURN)) {
+	//	if (isDebugCameraActive_) {
+	//		isDebugCameraActive_ = false;
+	//	}
+	//	else {
+	//		isDebugCameraActive_ = true;
+	//	}
+	//}
 
 	// カメラの処理
 	if (isDebugCameraActive_) {
@@ -207,8 +204,6 @@ void GameScene::DebugCameraUpdate()
 		// ビュー行列の転送
 		camera_.Update();
 	}
-#endif
-
 }
 
 void GameScene::GoToTheTitle()
