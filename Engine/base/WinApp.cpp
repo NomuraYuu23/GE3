@@ -6,7 +6,7 @@
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 //#endif
 
-const wchar_t WinApp::kWindowClassName[] = L"DirectXGame";
+const wchar_t WinApp::kWindowClassName[] = L"LE2A_16_ノムラ_ユウ";
 
 //	シングルトンインスタンスの取得
 WinApp* WinApp::GetInstance() {

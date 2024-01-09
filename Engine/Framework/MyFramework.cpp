@@ -5,7 +5,7 @@ void MyFramework::Initialize()
 
 	//ゲームウィンドウの作成
 	win = WinApp::GetInstance();
-	win->CreateGameWindow();
+	win->CreateGameWindow(L"LE2A_16_ノムラ_ユウ");
 
 	//DirectX初期化
 	dxCommon = DirectXCommon::GetInstance();
