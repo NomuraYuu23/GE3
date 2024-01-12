@@ -40,15 +40,15 @@ void GameScene::Initialize() {
 	isDebugCameraActive_ = true;
 
 	// MT4
-	Vector3Calc* vector3Calc = Vector3Calc::GetInstance();
-	Matrix4x4Calc* matrix4x4Calc = Matrix4x4Calc::GetInstance();
-	
-	rotation = QuaternionCalc::MakeRotateAxisAngleQuaternion(
-		vector3Calc->Normalize({1.0f, 0.4f, -0.2f}), 0.45f);
-	pointY = {2.1f, -0.9f, 1.3f};
-	rotateMatrix = QuaternionCalc::MakeRotateMatrix(rotation);
-	rotateByQuaternion = QuaternionCalc::RotateVector(pointY, rotation);
-	rotateByMatrix = matrix4x4Calc->Transform(pointY, rotateMatrix);
+	QuaternionCalc* quaternionCalc = QuaternionCalc::GetInstance();
+	rotation0 = quaternionCalc->MakeRotateAxisAngleQuaternion({ 0.71f, 0.71f, 0.0f }, 0.3f);
+	rotation1 = quaternionCalc->MakeRotateAxisAngleQuaternion({ 0.71f, 0.0f, 0.71f }, 3.141592f);
+
+	interpolate0 = quaternionCalc->Slerp(rotation0, rotation1, 0.0f);
+	interpolate1 = quaternionCalc->Slerp(rotation0, rotation1, 0.3f);
+	interpolate2 = quaternionCalc->Slerp(rotation0, rotation1, 0.5f);
+	interpolate3 = quaternionCalc->Slerp(rotation0, rotation1, 0.7f);
+	interpolate4 = quaternionCalc->Slerp(rotation0, rotation1, 1.0f);
 
 }
 
@@ -152,16 +152,12 @@ void GameScene::ImguiDraw(){
 #endif // _DEBUG
 
 	//MT4
-	ImGui::Begin("MT01_04確認課題");
-	ImGui::Text("%7.2f %7.2f %7.2f %7.2f	: rotation", rotation.x, rotation.y, rotation.z, rotation.w);
-	ImGui::Text("rotateMatrix");
-	ImGui::Text("%7.3f %7.3f %7.3f %7.3f", rotateMatrix.m[0][0], rotateMatrix.m[0][1], rotateMatrix.m[0][2], rotateMatrix.m[0][3]);
-	ImGui::Text("%7.3f %7.3f %7.3f %7.3f", rotateMatrix.m[1][0], rotateMatrix.m[1][1], rotateMatrix.m[1][2], rotateMatrix.m[1][3]);
-	ImGui::Text("%7.3f %7.3f %7.3f %7.3f", rotateMatrix.m[2][0], rotateMatrix.m[2][1], rotateMatrix.m[2][2], rotateMatrix.m[2][3]);
-	ImGui::Text("%7.3f %7.3f %7.3f %7.3f", rotateMatrix.m[3][0], rotateMatrix.m[3][1], rotateMatrix.m[3][2], rotateMatrix.m[3][3]);
-	ImGui::Text("%7.2f %7.2f %7.2f	:rotateByQuaternion", rotateByQuaternion.x, rotateByQuaternion.y, rotateByQuaternion.z);
-	ImGui::Text("%7.2f %7.2f %7.2f	:rotateByMatrix", rotateByMatrix.x, rotateByMatrix.y, rotateByMatrix.z);
-
+	ImGui::Begin("MT01_05確認課題");
+	ImGui::Text("%7.2f %7.2f %7.2f %7.2f	: interpolate0, Slerp(q0, q1, 0.0f)", interpolate0.x, interpolate0.y, interpolate0.z, interpolate0.w);
+	ImGui::Text("%7.2f %7.2f %7.2f %7.2f	: interpolate1, Slerp(q0, q1, 0.3f)", interpolate1.x, interpolate1.y, interpolate1.z, interpolate1.w);
+	ImGui::Text("%7.2f %7.2f %7.2f %7.2f	: interpolate2, Slerp(q0, q1, 0.5f)", interpolate2.x, interpolate2.y, interpolate2.z, interpolate2.w);
+	ImGui::Text("%7.2f %7.2f %7.2f %7.2f	: interpolate3, Slerp(q0, q1, 0.7f)", interpolate3.x, interpolate3.y, interpolate3.z, interpolate3.w);
+	ImGui::Text("%7.2f %7.2f %7.2f %7.2f	: interpolate4, Slerp(q0, q1, 1.0f)", interpolate4.x, interpolate4.y, interpolate4.z, interpolate4.w);
 	ImGui::End();
 
 }

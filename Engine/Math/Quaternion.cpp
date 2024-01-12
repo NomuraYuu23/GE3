@@ -7,6 +7,19 @@ QuaternionCalc* QuaternionCalc::GetInstance()
 	return &instance;
 }
 
+Quaternion QuaternionCalc::Add(const Quaternion& q0, const Quaternion& q1)
+{
+
+	Quaternion result = {};
+
+	result.x = q0.x + q1.x;
+	result.y = q0.y + q1.y;
+	result.z = q0.z + q1.z;
+	result.w = q0.w + q1.w;
+
+	return result;
+}
+
 Quaternion QuaternionCalc::Multiply(const Quaternion& lhs, const Quaternion& rhs)
 {
 
@@ -23,6 +36,23 @@ Quaternion QuaternionCalc::Multiply(const Quaternion& lhs, const Quaternion& rhs
 	result.w = lhs.w * rhs.w - v3Calc->Dot(q, r);
 
 	return result;
+}
+
+Quaternion QuaternionCalc::Multiply(const Quaternion& q, float s)
+{
+
+	Quaternion result = {};
+	result.x = q.x * s;
+	result.y = q.y * s;
+	result.z = q.z * s;
+	result.w = q.w * s;
+
+	return result;
+}
+
+Quaternion QuaternionCalc::Multiply(float s, const Quaternion& q)
+{
+	return Multiply(q, s);
 }
 
 Quaternion QuaternionCalc::IdentityQuaternion()
@@ -154,6 +184,31 @@ Matrix4x4 QuaternionCalc::MakeRotateMatrix(const Quaternion& quaternion)
 	result.m[3][1] = 0.0f;
 	result.m[3][2] = 0.0f;
 	result.m[3][3] = 1.0f;
+
+	return result;
+
+}
+
+Quaternion QuaternionCalc::Slerp(const Quaternion& q0, const Quaternion& q1, float t)
+{
+
+	float dot = q0.x * q1.x + q0.y * q1.y + q0.z * q1.z + q0.w * q1.w; // q0とq1の内積
+	
+	Quaternion use_q0 = q0;
+
+	if (dot < 0.0f) {
+		use_q0 = Multiply(q0, -1.0f);
+		dot = -dot;
+	}
+
+	// なす角を求める
+	float theta = std::acosf(dot);
+
+	// thetaとsinを使って補間係数scale0,scale1を求める
+	float scale0 = std::sinf((1.0f - t) * theta) / std::sinf(theta);
+	float scale1 = std::sinf(t * theta) / std::sinf(theta);
+
+	Quaternion result = Add(Multiply(use_q0, scale0), Multiply(q1, scale1));
 
 	return result;
 

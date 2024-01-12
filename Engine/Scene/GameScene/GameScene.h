@@ -82,10 +82,13 @@ private:
 	//std::unique_ptr<Model> particleCircleModel_ = nullptr;
 
 	// MT4
-	Quaternion rotation;
-	Vector3 pointY;
-	Matrix4x4 rotateMatrix;
-	Vector3 rotateByQuaternion;
-	Vector3 rotateByMatrix;
+	Quaternion rotation0;
+	Quaternion rotation1;
+
+	Quaternion interpolate0;
+	Quaternion interpolate1;
+	Quaternion interpolate2;
+	Quaternion interpolate3;
+	Quaternion interpolate4;
 
 };
