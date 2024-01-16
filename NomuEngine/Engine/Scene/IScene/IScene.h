@@ -14,6 +14,7 @@
 
 #include "../../../Application/Scene/SceneName.h"
 #include "../../base/ITextureHandleManager.h"
+#include "../../Light/PointLight/PointLight.h"
 
 /// <summary>
 /// シーンの元になるクラス
@@ -41,6 +42,9 @@ protected: // 静的メンバ変数
 
 	//光源
 	static std::unique_ptr<DirectionalLight> directionalLight_;
+
+	// ポイントライト
+	static std::unique_ptr<PointLight> pointLight_;
 
 public: // メンバ関数
 

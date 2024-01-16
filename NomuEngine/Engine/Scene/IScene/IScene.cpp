@@ -18,6 +18,8 @@ bool IScene::isDebugCameraActive_;
 //光源
 std::unique_ptr<DirectionalLight> IScene::directionalLight_;
 
+// ポイントライト
+std::unique_ptr<PointLight> IScene::pointLight_;
 
 void IScene::StaticInitialize()
 {
@@ -37,6 +39,9 @@ void IScene::StaticInitialize()
 
 	//光源
 	directionalLight_.reset(DirectionalLight::Create());
+
+	// ポイントライト
+	pointLight_.reset(PointLight::Create());
 
 }
 

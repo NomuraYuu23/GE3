@@ -74,9 +74,16 @@ void GameScene::Update(){
 	//光源
 	DirectionalLightData directionalLightData;
 	directionalLightData.color = { 1.0f,1.0f,1.0f,1.0f };
-	directionalLightData.direction = Vector3Calc::Normalize(direction);
-	directionalLightData.intencity = intencity;
+	directionalLightData.direction = Vector3Calc::Normalize(directionDirectionalLight);
+	directionalLightData.intencity = intencityDirectionalLight;
 	directionalLight_->Update(directionalLightData);
+
+	//光源
+	PointLightData pointLightData;
+	pointLightData.color = { 1.0f,1.0f,1.0f,1.0f };
+	pointLightData.position = positionPointLight;
+	pointLightData.intencity = intencityPointLight;
+	pointLight_->Update(pointLightData);
 
 	camera_.Update();
 
@@ -125,6 +132,7 @@ void GameScene::Draw() {
 
 	//光源
 	directionalLight_->Draw(dxCommon_->GetCommadList());
+	pointLight_->Draw(dxCommon_->GetCommadList());
 	//3Dオブジェクトはここ
 
 	model_->Draw(worldTransform_, camera_, material_.get());
@@ -173,9 +181,15 @@ void GameScene::ImguiDraw(){
 #ifdef _DEBUG
 
 	ImGui::Begin("Light");
-	ImGui::DragFloat3("direction", &direction.x, 0.1f);
-	ImGui::DragFloat3("worldtransform", &worldTransform_.transform_.scale.x, 0.1f);
-	ImGui::DragFloat("i", &intencity, 0.01f);
+	ImGui::Text("DirectionalLight");
+	ImGui::DragFloat3("directionDirectionalLight", &directionDirectionalLight.x, 0.1f);
+	ImGui::DragFloat("intencityDirectionalLight", &intencityDirectionalLight, 0.01f);
+	ImGui::Text("PointLight");
+	ImGui::DragFloat3("positionPointLight", &positionPointLight.x, 0.1f);
+	ImGui::DragFloat("intencityPointLight", &intencityPointLight, 0.01f);
+	ImGui::End();
+
+	ImGui::Begin("Frame rate");
 	ImGui::Text("Frame rate: %6.2f fps", ImGui::GetIO().Framerate);
 	ImGui::End();
 

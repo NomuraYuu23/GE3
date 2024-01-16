@@ -8,6 +8,8 @@
 #include "../../SampleBone/SampleBone.h"
 #include "../../AudioManager/GameAudioManager.h"
 
+#include "../../../Engine/Light/PointLight/PointLight.h"
+
 class GameScene : public IScene
 {
 
@@ -84,8 +86,11 @@ private:
 	std::unique_ptr<Model> model_ = nullptr;
 	std::unique_ptr<Material> material_ = nullptr;
 	WorldTransform worldTransform_;
-	Vector3 direction = { 1.0f, -1.0f, 0.0f};
-	float intencity = 1.0f;
+	Vector3 directionDirectionalLight = { 1.0f, -1.0f, 0.0f};
+	float intencityDirectionalLight = 1.0f;
+
+	Vector3 positionPointLight = { 1.0f, -1.0f, 0.0f };
+	float intencityPointLight = 1.0f;
 
 	// サンプルボーン
 	std::unique_ptr<SampleBone> sampleBone_;
