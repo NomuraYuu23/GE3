@@ -500,6 +500,50 @@ Matrix4x4 Matrix4x4Calc::MakeViewportMatrix(
 
 }
 
+Matrix4x4 Matrix4x4Calc::MakeRotateAxisAngle(const Vector3& axis, float angle)
+{
+
+	//S
+	Matrix4x4 matrixS = MakeIdentity4x4();
+	matrixS.m[0][0] = std::cosf(angle);
+	matrixS.m[1][1] = std::cosf(angle);
+	matrixS.m[2][2] = std::cosf(angle);
+
+	//P
+	Matrix4x4 matrixP = MakeIdentity4x4();
+	matrixP.m[0][0] = axis.x * axis.x;
+	matrixP.m[0][1] = axis.x * axis.y;
+	matrixP.m[0][2] = axis.x * axis.z;
+	matrixP.m[1][0] = axis.y * axis.x;
+	matrixP.m[1][1] = axis.y * axis.y;
+	matrixP.m[1][2] = axis.y * axis.z;
+	matrixP.m[2][0] = axis.z * axis.x;
+	matrixP.m[2][1] = axis.z * axis.y;
+	matrixP.m[2][2] = axis.z * axis.z;
+	matrixP.m[3][3] = 0.0f;
+	matrixP = Multiply((1.0f - std::cosf(angle)), matrixP);
+
+	//C
+	Matrix4x4 matrixC = MakeIdentity4x4();
+	matrixC.m[0][0] = 0.0f;
+	matrixC.m[0][1] = -axis.z;
+	matrixC.m[0][2] = axis.y;
+	matrixC.m[1][0] = axis.z;
+	matrixC.m[1][1] = 0.0f;
+	matrixC.m[1][2] = -axis.x;
+	matrixC.m[2][0] = -axis.y;
+	matrixC.m[2][1] = axis.x;
+	matrixC.m[2][2] = 0.0f;
+	matrixC.m[3][3] = 0.0f;
+	matrixC = Multiply(-std::sinf(angle), matrixC);
+
+	// result
+	Matrix4x4 resultMatrix = Add(Add(matrixS, matrixP), matrixC);
+
+	return resultMatrix;
+
+}
+
 Matrix4x4 Matrix4x4Calc::DirectionToDirection(const Vector3& from, const Vector3& to)
 {
 
