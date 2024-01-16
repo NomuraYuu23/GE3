@@ -1,12 +1,12 @@
 #include "DirectionalLight.h"
-#include "../base/TextureManager.h"
-#include "../base/WinApp.h"
+#include "../../base/TextureManager.h"
+#include "../../base/WinApp.h"
 #include <cassert>
 
 #include <fstream>
 #include <sstream>
 #include <format>
-#include "../base/BufferResource.h"
+#include "../../base/BufferResource.h"
 
 using namespace DirectX;
 using namespace Microsoft::WRL;

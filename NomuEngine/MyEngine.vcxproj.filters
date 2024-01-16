@@ -132,7 +132,7 @@
     <ClCompile Include="Engine\2D\Sprite.cpp">
       <Filter>Engine\2D</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3D\DirectionalLight.cpp">
+    <ClCompile Include="Engine\Light\DirectionalLight\DirectionalLight.cpp">
       <Filter>Engine\3D</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3D\Material.cpp">
@@ -339,10 +339,10 @@
     <ClInclude Include="Engine\2D\ImGuiManager.h">
       <Filter>Engine\2D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3D\DirectionalLight.h">
+    <ClInclude Include="Engine\Light\DirectionalLight\DirectionalLight.h">
       <Filter>Engine\3D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3D\DirectionalLightData.h">
+    <ClInclude Include="Engine\Light\DirectionalLight\DirectionalLightData.h">
       <Filter>Engine\3D</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3D\Material.h">
@@ -581,6 +581,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Math\Quaternion.h">
       <Filter>Engine\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Light\PointLightData.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

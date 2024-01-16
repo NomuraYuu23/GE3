@@ -9,7 +9,7 @@
 #include "../../2D/Sprite.h"
 #include "../../3D/Model.h"
 #include "../../3D/Material.h"
-#include "../../3D/DirectionalLight.h"
+#include "../../Light/DirectionalLight/DirectionalLight.h"
 #include "../../Particle/ParticleManager.h"
 
 #include "../../../Application/Scene/SceneName.h"
