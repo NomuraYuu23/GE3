@@ -24,6 +24,8 @@ public:
     static Matrix4x4 Subtract(const Matrix4x4& m1, const Matrix4x4& m2);
     //積
     static Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2);
+    // スカラー積
+    static Matrix4x4 Multiply(float scalar, const Matrix4x4& m);
     //逆行列
     static Matrix4x4 Inverse(const Matrix4x4& m);
     //転置行列

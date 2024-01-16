@@ -71,6 +71,22 @@ Matrix4x4 Matrix4x4Calc::Multiply(const Matrix4x4& m1, const Matrix4x4& m2) {
 
 }
 
+// スカラー積
+Matrix4x4 Matrix4x4Calc::Multiply(float scalar, const Matrix4x4& m)
+{
+
+	Matrix4x4 result;
+
+	for (int y = 0; y < 4; y++) {
+		for (int x = 0; x < 4; x++) {
+			result.m[y][x] = scalar * m.m[y][x];
+		}
+	}
+
+	return result;
+
+}
+
 //逆行列
 Matrix4x4 Matrix4x4Calc::Inverse(const Matrix4x4& m) {
 
