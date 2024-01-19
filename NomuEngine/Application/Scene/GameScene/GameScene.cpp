@@ -92,7 +92,7 @@ void GameScene::Update(){
 	colliderDebugDraw_->Update();
 	
 	//パーティクル
-	particleManager_->Update(debugCamera_->GetTransformMatrix());
+	particleManager_->Update(*static_cast<BaseCamera*>(debugCamera_.get()));
 
 	// ポーズ機能
 	pause_->Update();
