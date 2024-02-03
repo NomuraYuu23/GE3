@@ -205,7 +205,7 @@ void GameScene::ImguiDraw(){
 void GameScene::DebugCameraUpdate()
 {
 
-#ifdef _DEBUG
+//#ifdef _DEBUG
 	if (input_->TriggerKey(DIK_RETURN)) {
 		if (isDebugCameraActive_) {
 			isDebugCameraActive_ = false;
@@ -224,7 +224,7 @@ void GameScene::DebugCameraUpdate()
 		// ビュー行列の転送
 		camera_.Update();
 	}
-#endif
+//#endif
 
 }
 
