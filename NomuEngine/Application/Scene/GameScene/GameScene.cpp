@@ -177,10 +177,10 @@ void GameScene::ImguiDraw(){
 	
 	ImGui::Text("Light");
 	ImGui::DragFloat3("direction", &direction.x, 0.1f);
-	ImGui::DragFloat("i", &intencity, 0.01f);
+	ImGui::DragFloat("intencity", &intencity, 0.01f);
 	
 	ImGui::Text("Obj");
-	ImGui::DragFloat3("worldtransform", &worldTransform_.transform_.scale.x, 0.1f);
+	ImGui::DragFloat3("ObjScale", &worldTransform_.transform_.scale.x, 0.1f);
 	
 	ImGui::Text("enableLighting");
 	ImGui::RadioButton("None", &enableLighting_, EnableLighting::None);
