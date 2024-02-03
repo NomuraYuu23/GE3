@@ -36,10 +36,10 @@ void GameScene::Initialize() {
 	particleModel[ParticleModelIndex::kUvChecker] = particleUvcheckerModel_.get();
 	particleModel[ParticleModelIndex::kCircle] = particleCircleModel_.get();
 	particleManager_->ModelCreate(particleModel);
-	TransformStructure emitter = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{-3.0f,0.0f,0.0f} };
+	/*TransformStructure emitter = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{-3.0f,0.0f,0.0f} };
 	particleManager_->MakeEmitter(emitter, 1, 0.5f, 300.0f, ParticleModelIndex::kUvChecker, 0, 0);
 	emitter.translate.x = 3.0f;
-	particleManager_->MakeEmitter(emitter, 1, 0.5f, 300.0f, ParticleModelIndex::kCircle, 0, 0);
+	particleManager_->MakeEmitter(emitter, 1, 0.5f, 300.0f, ParticleModelIndex::kCircle, 0, 0);*/
 
 	isDebugCameraActive_ = true;
 
@@ -62,7 +62,7 @@ void GameScene::Initialize() {
 	audioManager_ = std::make_unique<GameAudioManager>();
 	audioManager_->StaticInitialize();
 	audioManager_->Initialize();
-	audioManager_->PlayWave(GameAudioNameIndex::kSample);
+	//audioManager_->PlayWave(GameAudioNameIndex::kSample);
 
 }
 
@@ -81,6 +81,7 @@ void GameScene::Update(){
 	camera_.Update();
 
 	worldTransform_.UpdateMatrix();
+	material_->SetEnableLighting(enableLighting_);
 
 	// デバッグ
 	sampleBone_->Update();
@@ -170,18 +171,34 @@ void GameScene::Draw() {
 }
 
 void GameScene::ImguiDraw(){
-#ifdef _DEBUG
+//#ifdef _DEBUG
 
-	ImGui::Begin("Light");
+	ImGui::Begin("ImGui");
+	
+	ImGui::Text("Light");
 	ImGui::DragFloat3("direction", &direction.x, 0.1f);
-	ImGui::DragFloat3("worldtransform", &worldTransform_.transform_.scale.x, 0.1f);
 	ImGui::DragFloat("i", &intencity, 0.01f);
+	
+	ImGui::Text("Obj");
+	ImGui::DragFloat3("worldtransform", &worldTransform_.transform_.scale.x, 0.1f);
+	
+	ImGui::Text("enableLighting");
+	ImGui::RadioButton("None", &enableLighting_, EnableLighting::None);
+	ImGui::SameLine();
+	ImGui::RadioButton("Lambert", &enableLighting_, EnableLighting::Lambert);
+	ImGui::SameLine();
+	ImGui::RadioButton("HalfLambert", &enableLighting_, EnableLighting::HalfLambert);
+	ImGui::SameLine();
+	ImGui::RadioButton("PhongReflection", &enableLighting_, EnableLighting::PhongReflection);
+	ImGui::SameLine();
+	ImGui::RadioButton("BlinnPhongReflection", &enableLighting_, EnableLighting::BlinnPhongReflection);
+
 	ImGui::Text("Frame rate: %6.2f fps", ImGui::GetIO().Framerate);
 	ImGui::End();
 
 	debugCamera_->ImGuiDraw();
 
-#endif // _DEBUG
+//#endif // _DEBUG
 
 }
 

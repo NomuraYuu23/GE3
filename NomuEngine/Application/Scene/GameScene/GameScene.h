@@ -84,6 +84,7 @@ private:
 	std::unique_ptr<Model> model_ = nullptr;
 	std::unique_ptr<Material> material_ = nullptr;
 	WorldTransform worldTransform_;
+	int enableLighting_;
 	Vector3 direction = { 1.0f, -1.0f, 0.0f};
 	float intencity = 1.0f;
 
