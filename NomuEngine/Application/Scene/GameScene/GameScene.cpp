@@ -214,7 +214,7 @@ void GameScene::DebugCameraUpdate()
 void GameScene::GoToTheTitle()
 {
 
-	if (pause_->GoToTheTitle()) {
+	if (input_->TriggerKey(DIK_SPACE)) {
 		requestSceneNo = kTitle;
 	}
 
