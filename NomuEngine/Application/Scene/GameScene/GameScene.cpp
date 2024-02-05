@@ -214,7 +214,7 @@ void GameScene::DebugCameraUpdate()
 void GameScene::GoToTheTitle()
 {
 
-	if (input_->TriggerKey(DIK_SPACE)) {
+	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerJoystick(JoystickButton::kJoystickButtonA)) {
 		requestSceneNo = kTitle;
 	}
 
