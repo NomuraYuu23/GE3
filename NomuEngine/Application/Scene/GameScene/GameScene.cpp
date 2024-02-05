@@ -62,7 +62,12 @@ void GameScene::Initialize() {
 	audioManager_ = std::make_unique<GameAudioManager>();
 	audioManager_->StaticInitialize();
 	audioManager_->Initialize();
-	audioManager_->PlayWave(GameAudioNameIndex::kSample);
+
+	operationSprite_.reset(
+		Sprite::Create(TextureManager::Load("Resources/GE3/operation.png", dxCommon_, textureHandleManager_.get()),
+			Vector2{ 0.0f,0.0f },
+			Vector4{ 1.0f,1.0f, 1.0f, 1.0f }));
+	operationSprite_->SetAnchorPoint(Vector2{ 0.0f, 0.0f });
 
 }
 
@@ -160,6 +165,7 @@ void GameScene::Draw() {
 	//背景
 	//前景スプライト描画
 	pause_->Draw();
+	operationSprite_->Draw();
 
 
 	// 前景スプライト描画後処理
@@ -172,11 +178,11 @@ void GameScene::Draw() {
 void GameScene::ImguiDraw(){
 #ifdef _DEBUG
 
-	ImGui::Begin("Light");
-	ImGui::DragFloat3("direction", &direction.x, 0.1f);
-	ImGui::DragFloat3("worldtransform", &worldTransform_.transform_.scale.x, 0.1f);
-	ImGui::DragFloat("i", &intencity, 0.01f);
+	ImGui::Begin("確認用");
 	ImGui::Text("Frame rate: %6.2f fps", ImGui::GetIO().Framerate);
+	if (ImGui::Button("Audio")) {
+		audioManager_->PlayWave(GameAudioNameIndex::kSample);
+	}
 	ImGui::End();
 
 	debugCamera_->ImGuiDraw();

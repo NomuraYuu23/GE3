@@ -93,4 +93,7 @@ private:
 	// オーディオマネージャー
 	std::unique_ptr<GameAudioManager> audioManager_;
 
+	// 説明スプライト
+	std::unique_ptr<Sprite> operationSprite_;
+
 };
