@@ -97,7 +97,7 @@ void GameScene::Update(){
 	colliderDebugDraw_->Update();
 	
 	//パーティクル
-	particleManager_->Update(*static_cast<BaseCamera*>(debugCamera_.get()));
+	particleManager_->Update(camera_);
 
 	// ポーズ機能
 	pause_->Update();
@@ -183,6 +183,7 @@ void GameScene::ImguiDraw(){
 	if (ImGui::Button("Audio")) {
 		audioManager_->PlayWave(GameAudioNameIndex::kSample);
 	}
+	ImGui::Checkbox("デバッグカメラ", &isDebugCameraActive_);
 	ImGui::End();
 
 	debugCamera_->ImGuiDraw();
@@ -212,6 +213,14 @@ void GameScene::DebugCameraUpdate()
 		camera_ = static_cast<BaseCamera>(*debugCamera_.get());
 		// ビュー行列の転送
 		camera_.Update();
+	}
+	else {
+		// ビュープロジェクション
+		TransformStructure baseCameraTransform = {
+			1.0f, 1.0f, 1.0f,
+			0.58f,0.0f,0.0f,
+			0.0f, 23.0f, -35.0f };
+		camera_.SetTransform(baseCameraTransform);
 	}
 #endif
 
