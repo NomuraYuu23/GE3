@@ -115,6 +115,8 @@ void TitleScene::TextureLoad()
 void TitleScene::SpriteImgui()
 {
 
+#ifdef _USE_IMGUI
+
 	int32_t textureHandle = sprite_->GetTevtureHandle();
 
 	ImGui::Begin("Sprite");
@@ -145,5 +147,7 @@ void TitleScene::SpriteImgui()
 	sprite_->SetTextureHandle(textureHandle);
 	sprite_->SetTextureLeftTop(spriteTextureLeftTop_);
 	sprite_->SetTextureSize(spriteTextureSize_);
+
+#endif // _USE_IMGUI
 
 }

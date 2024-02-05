@@ -135,12 +135,12 @@ void GameScene::Draw() {
 	model_->Draw(worldTransform_, camera_, material_.get());
 	sampleBone_->Draw(camera_);
 
-#ifdef _DEBUG
+#ifdef _USE_IMGUI
 
 	// デバッグ描画
 	colliderDebugDraw_->Draw(camera_);
 
-#endif // _DEBUG
+#endif // _USE_IMGUI
 
 	Model::PostDraw();
 
@@ -176,7 +176,7 @@ void GameScene::Draw() {
 }
 
 void GameScene::ImguiDraw(){
-#ifdef _DEBUG
+#ifdef _USE_IMGUI
 
 	ImGui::Begin("確認用");
 	ImGui::Text("Frame rate: %6.2f fps", ImGui::GetIO().Framerate);
@@ -187,14 +187,14 @@ void GameScene::ImguiDraw(){
 
 	debugCamera_->ImGuiDraw();
 
-#endif // _DEBUG
+#endif // _USE_IMGUI
 
 }
 
 void GameScene::DebugCameraUpdate()
 {
 
-#ifdef _DEBUG
+#ifdef _USE_IMGUI
 	if (input_->TriggerKey(DIK_RETURN)) {
 		if (isDebugCameraActive_) {
 			isDebugCameraActive_ = false;
